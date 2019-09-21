@@ -15,7 +15,7 @@ return [
 			'name' => 'SNS_INFO',
 			'title' => '信息管理',
 			'url' => 'sns://sitehome/info/infolist',
-			'parent' => '',
+			'parent' => 'SNS_INFO_ROOT',
 			'is_menu' => 1,
 			'icon' => '',
 			'icon_selected' => '',

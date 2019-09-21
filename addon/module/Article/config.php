@@ -15,7 +15,7 @@ return [
 			'name' => 'NC_CMS',
 			'title' => '文章管理',
 			'url' => 'article://sitehome/article/articlelist',
-			'parent' => '',
+			'parent' => 'WEBSITE_ROOT',
 			'is_menu' => 1,
 			'icon' => 'addon/module/Article/sitehome/view/public/img/menu_icon/article_management.png',
 			'child_list' => [
