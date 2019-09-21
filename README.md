@@ -7,7 +7,8 @@ NiuCloud官方网站：[https://www.niucloud.com](https://www.niucloud.com)
 
 NiuCloud官方论坛：[https://bbs.niucloud.com](https://bbs.niucloud.com)
 
-请关注Niushop官方网址了解产品最新咨询、功能升级、BUG修复。
+请关注NiuCloud官方网址了解产品最新咨询、功能升级、BUG修复。
+请尊重NiuTeam团队劳动成果，严禁使用本系统转卖、销售等商业行为！
 
 #### 软件架构
 NiuCloud开源云应用市场是一个基于ThinkPHP5的免费开源框架,适合敏捷开发,插件封装性强内置集成多种基础应用组件，面向对象的应用研发架构,是为了企业或者个人快速研发应用程序而诞生。程序100%开源，可自由定制开发，全面支持‘互联网+’产品：PC，手机，微信，小程序，APP，H5，内置强大的可视化智能DIY自定义插件。
@@ -35,5 +36,3 @@ NiuCloud开源云应用市场是一个基于ThinkPHP5的免费开源框架,适�
 #### 参与贡献
 
 1. NiuTeam团队
-
-请尊重NiuTeam团队劳动成果，严禁使用本系统转卖、销售等商业行为！
