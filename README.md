@@ -28,12 +28,6 @@ NiuCloud开源云应用市场是一个基于ThinkPHP5的免费开源框架,适�
 3. 按照系统提示进行安装 
 4. 进入后台  后台地址：http://域名/index.php/admin
 
-#### 使用说明
-
-1. xxxx
-2. xxxx
-3. xxxx
-
 #### 技术交流
 
 QQ群：316964623
