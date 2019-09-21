@@ -1,0 +1,197 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+    .layui-elem-quote{margin-bottom: 0;}
+    .application-social-adv{display: flex;justify-content: space-between;}
+    .application-social-adv .application-adv-item{position: relative;width: 33%;height:150px;padding: 20px;vertical-align: middle;color: #fff;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;margin-right:10px;box-sizing: border-box;}
+    .application-social-adv .application-adv-item:nth-child(1){background: url("SITEHOME_IMG/social_adv_one.png") no-repeat center/100% 100%;background-clip: padding-box;}
+    .application-social-adv .application-adv-item:nth-child(2){background: url("SITEHOME_IMG/social_adv_two.png") no-repeat center/100% 100%;background-clip: padding-box;}
+    .application-social-adv .application-adv-item:nth-child(3){background: url("SITEHOME_IMG/social_adv_three.png") no-repeat center/100% 100%;background-clip: padding-box;}
+    .application-social-adv .application-adv-item i{display: inline-block;width: 15px;height: 6px;background-color: #fff;box-shadow: 2px 3px 2px rgba(0,0,0,.1);}
+	.application-social-adv .application-adv-item .application-adv-title{font-size: 22px;font-weight: bold;line-height: 1.4;}
+    .application-social-adv .application-adv-item .application-adv-content{position: absolute;bottom:20px;display: flex; justify-content: space-between;width: 85%;align-items: center;}
+    .application-social-adv .application-adv-item:hover{color: #fff !important;}
+	.nc-item-float a{margin:0 10px;}
+	.nc-ml10{margin-left: 10px;}
+	.has-been-installed {display: inline-block;width: 8px;height: 8px;border-radius: 50%;background-color: #12b7f5;margin-right: 10px;}
+	.not-installed{display: inline-block; width: 8px; height: 8px;border-radius: 50%;background-color: red;margin-right: 10px;}
+	.nc-item-block > a{display: inline-block; width: 100%;}
+	.nc-item-block.fl .nc-item-block-wrap{box-sizing: border-box;}
+	.empty{width: 100%;margin-top: 15px;text-align: center;}
+</style>
+{/block}
+{block name='title'}{/block}
+{block name="main"}
+<div class="nc-quote-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">牛云应用市场</blockquote>
+    <div class="application-social-adv ">
+        <a class="application-adv-item" href="https://www.niucloud.com/cases/index.html" target="_blank">
+            <h3 class="application-adv-title">牛云应用市场,总有您需要的</h3>
+			<div class="application-adv-content">
+				<i class="application-adv-icon"></i>
+				<img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+			</div>
+		</a>
+		<a class="application-adv-item" href="https://www.niucloud.com/authorization.html#Tab1" target="_blank">
+			<h3 class="application-adv-title">购买牛云相关授权</h3>
+			<div class="application-adv-content">
+				<i class="application-adv-icon"></i>
+				<img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+			</div>
+		</a>
+		<a class="application-adv-item" href="https://www.niucloud.com" target="_blank">
+			<h3 class="application-adv-title">注册成为开发人员,开发销售模块</h3>
+			<div class="application-adv-content">
+				<i class="application-adv-icon"></i>
+				<img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+			</div>
+        </a>
+    </div>
+</div>
+<div class="nc-quote-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">业务应用</blockquote>
+	<div class="nc-item-block-parent">
+		{volist name="$addons_list" id="vo"}
+		<div class="nc-item-block fl size-lg">
+			<a href="{if $vo.status==1}{:addon_url('ncapplet://sitehome/app/index', [ 'addon_name' => $vo['name'] ])}{else/}javascript:;{/if}"  target="_blank">
+				<div class="nc-item-block-wrap">
+					{if $vo['icon'] == ''}
+					<img class="nc-item-pic" src="SITEHOME_IMG/sitehome/tc1_91.png">
+					{else /}
+					<img class="nc-item-pic" src='__ROOT__{$vo.icon}'>
+					{/if}
+					<div class="nc-item-content">
+						<div class="nc-content-title">{$vo.title}</div>
+						<p class="nc-content-desc">{$vo.description}</p>
+					</div>
+					{if $vo.status==0}
+					<div class="nc-item-poa-pic">
+						<img src="SITEHOME_IMG/not_installed.png" alt="">
+					</div>
+					{/if}
+				</div>
+			</a>
+			{if condition="$is_system == 1"}
+			<div class="nc-item-float">
+				<div>
+					{if $vo.status==1}
+						<span class="nc-ml10"><i class="nc-mr10 has-been-installed"></i>已安装</span>
+						<a class="nc-assist-fr" href="javascript:uninstall('{$vo.name}');">卸载</a>
+						{if condition="$vo.is_exist"}
+							<a href="javascript:deleteAppMenu('{$vo.name}')" class="nc-mr10 nc-assist-fr">移出菜单</a>
+							<a href="javascript:stickApp('{$vo.name}');" class="nc-mr10 nc-assist-fr">置顶</a>
+						{else/}
+							<a href="javascript:addAppMenu('{$vo.name}')" class="nc-mr10 nc-assist-fr">显示到菜单</a>
+						{/if}
+					{else/}
+						<span class="nc-ml10"><i class="nc-mr10 not-installed"></i>未安装</span>
+						<a class="nc-assist-fr" href="javascript:install('{$vo.name}');">安装</a>
+					{/if}
+				</div>
+			</div>
+			{/if}
+		</div>
+		{/volist}
+		{empty name="$addons_list"}
+		<p class="empty nc-text-color-999">暂无数据</p>
+		{/empty}
+	</div>
+</div>
+{/block}
+
+{block name="script"}
+{if condition="$is_system == 1"}
+<script>
+	//添加应用菜单
+	function addAppMenu(addon_name,is_reload) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('ncapplet://sitehome/app/addAppMenu')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				if(is_reload == undefined) {
+					layer.msg(res.message);
+					location.reload();
+					layer.closeAll();
+				}
+			}
+		});
+	}
+	
+	//置顶应用
+	function stickApp(addon_name){
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('ncapplet://sitehome/app/stickApp')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				layer.msg(res.message);
+				location.reload();
+				layer.closeAll();
+			}
+		});
+	}
+	
+	//移除应用菜单
+	function deleteAppMenu(addon_name,is_reload) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('ncapplet://sitehome/app/deleteAppMenu')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				if(is_reload == undefined) {
+					layer.msg(res.message);
+					location.reload();
+					layer.closeAll();
+				}
+			}
+		});
+	}
+	
+	function uninstall(module){
+		layer.confirm('该插件在卸载的同时，也会将相关的数据清除，您确定继续卸载吗？', {title:'提示'}, function(index){
+			layer.closeAll();
+			$.ajax({
+				type: "post",
+				url: nc.url('sitehome/addons/unsetup'),
+				data: {"name" : module},
+				beforeSend : function(){
+					var index = layer.load(2);
+				},
+				success: function (res) {
+					if(res.code==0) {
+						//移除该插件的快捷入口
+						deleteAppMenu(module,true);
+					}
+					layer.msg(res.message,{ time : 500 },function () {
+						if(res.code==0) location.reload();
+						layer.closeAll();
+					});
+				}
+			});
+		});
+	}
+	
+	function install(module) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: nc.url('sitehome/addons/setup'),
+			data :{"name" : module},
+			success: function (res) {
+				if(res.code==0){
+					addAppMenu(module,true);
+				}
+				layer.msg(res.message,{ time : 500 },function () {
+					if(res.code==0) location.reload();
+					layer.closeAll();
+				});
+			}
+		});
+	}
+</script>
+{/if}
+{/block}

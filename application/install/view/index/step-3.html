@@ -1,0 +1,181 @@
+{extend name="base"/} 
+{block name="main"}
+<div id='postloader' class='waitpage'></div>
+<form action="{$root_url}/install.php/index/index?step=4" method="post" name="form_install">
+<div class="main">
+    <div class="pleft">
+        <dl class="setpbox t1">
+            <dt>安装步骤</dt>
+            <dd>
+                <ul>
+                    <li class="succeed">许可协议</li>
+                    <li class="succeed">环境检测</li>
+                    <li class="now">参数配置</li>
+                    <li>正在安装</li>
+                    <li>安装完成</li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+    <div class="pright">
+        <div class="pr-title"><h3>数据库设定</h3></div>
+        <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
+            <tr>
+                <td class="onetd"><strong>数据库主机：</strong></td>
+                <td>
+                    <input name="dbhost" id="dbhost" type="text" value="localhost" class="input-txt" onChange="TestDb()" />
+                    <small>一般为localhost</small>
+                </td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>Mysql端口：</strong></td>
+                <td>
+                    <input name="dbport" id="dbport" type="text" value="3306" class="input-txt"/>
+                    <small>一般为3306</small>
+                </td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>数据库用户：</strong></td>
+                <td>
+                    <input name="dbuser" id="dbuser" type="text" value="root" class="input-txt" onChange="TestDb()"/>
+                    <small>默认root</small>
+                </td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>数据库密码：</strong></td>
+                <td>
+                  <div style='float:left;margin-right:3px;'>
+                      <input name="dbpwd" id="dbpwd" type="text" class="input-txt" onChange="TestDb()" />
+                  </div>
+                  <div style='float:left' id='dbpwdsta'></div>
+                </td>
+            </tr>
+			<tr>
+                <td class="onetd"><strong>数据库名称：</strong></td>
+                <td>
+                    <div style='float:left;margin-right:3px;'><input name="dbname" id="dbname" type="text" value="" class="input-txt" onChange="HaveDB()" /></div>
+					<div style='float:left' id='havedbsta'></div>
+                </td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>数据库编码：</strong></td>
+                <td>
+                        <label class="install-code">UTF8</label>
+
+                </td>
+            </tr>
+        </table>
+        <div class="pr-title"><h3>管理员设定</h3></div>
+        <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
+            <tr>
+                <td class="onetd"><strong>站点名称：</strong></td>
+                <td><input name="site_name" id="site_name" type="text" value="" class="input-txt"/>
+                    <small id="mess_site_name">必填</small></td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>管理员用户名：</strong></td>
+                <td><input name="admin_name" id="admin_name" type="text" value="admin" class="input-txt" disabled="disabled"/>
+                <small id="mess_admin_name">默认admin,不可修改</small></td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>密码：</strong></td>
+                <td><input name="admin_pwd" id="admin_pwd" type="password" value="" class="input-txt"/>
+                <small id="mess_admin_pwd">必填</small></td>
+            </tr>
+            <tr>
+                <td class="onetd"><strong>确认密码：</strong></td>
+                <td><input name="admin_pwd2" id="admin_pwd2" type="password" value="" class="input-txt"/>
+                <small id="mess_admin_pwd2">必填</small></td>
+            </tr>
+        </table>
+
+        <div class="btn-box">
+            <input type="button" class="btn-back" value="后退" onclick="window.location.href='{$root_url}/install.php/index/index?step=2'" />
+            <input type="button" class="btn-next" value="开始安装" onclick="doInstall();" id="form_submit" />
+      </div>
+    </div>
+</div>
+<div class="foot">
+</div>
+</form>
+
+{/block}
+{block name='script'}
+<script language="javascript" type="text/javascript">
+    function inputBoxPointer(id){
+        return document.getElementById(id);
+    }
+    function TestDb()
+    {
+        var dbhost = inputBoxPointer('dbhost').value;
+        var dbuser = inputBoxPointer('dbuser').value;
+        var dbpwd = inputBoxPointer('dbpwd').value;
+        var dbport = inputBoxPointer('dbport').value;
+        inputBoxPointer('dbpwdsta').innerHTML='<img src="INSTALL_IMG/ajax-loader.gif">';
+        $.get('{$root_url}/install.php/index/testdb?step=10&dbhost='+dbhost+'&dbport='+ dbport +'&dbuser='+dbuser+'&dbpwd='+dbpwd,function(data,status){
+            if(data.code == 0){
+                inputBoxPointer('dbpwdsta').innerHTML = data.data;
+            }
+
+        });
+    }
+
+    function HaveDB()
+    {
+        var dbhost = inputBoxPointer('dbhost').value;
+        var dbname = inputBoxPointer('dbname').value;
+        var dbuser = inputBoxPointer('dbuser').value;
+        var dbpwd = inputBoxPointer('dbpwd').value;
+        var dbport = inputBoxPointer('dbport').value;
+        inputBoxPointer('havedbsta').innerHTML='<img src="INSTALL_IMG/ajax-loader.gif">';
+        $.get('{$root_url}/install.php/index/testdb?step=10&dbhost='+dbhost+'&dbport='+ dbport +'&dbuser='+dbuser+'&dbpwd='+dbpwd+'&dbname='+dbname,function(data,status){
+            if(data.code == 0){
+                inputBoxPointer('havedbsta').innerHTML = data.data;
+            }
+        });
+    }
+
+    function GetRemoteDemo()
+    {
+        inputBoxPointer('_remotesta').innerHTML='<img src=\'images/ajax-loader.gif\'>';
+        var myajax = new DedeAjax(inputBoxPointer('_remotesta'),false,true,'-','-','...');
+        myajax.SendGet2('index.php?step=11');
+        DedeXHTTP = null;
+    }
+
+    /**
+     * 去安装
+     * @returns {boolean}
+     * @constructor
+     */
+    function doInstall()
+    {
+        var site_name = inputBoxPointer('site_name').value;
+        var admin_name = inputBoxPointer('admin_name').value;
+        var admin_pwd = inputBoxPointer('admin_pwd').value;
+        var admin_pwd2 = inputBoxPointer('admin_pwd2').value;
+        if(site_name == ''){
+            inputBoxPointer('mess_site_name').innerHTML = '<font color="#ff3d00">×站点名称不能为空</font>';
+            return false;
+        }
+        if(admin_name == ''){
+            inputBoxPointer('mess_admin_name').innerHTML = '<font color="#ff3d00">×管理员用户名不能为空</font>';
+            return false;
+        }
+        if(admin_pwd == ''){
+            inputBoxPointer('mess_admin_pwd').innerHTML = '<font color="#ff3d00">×管理员密码不能为空</font>';
+            return false;
+        }
+        if(admin_pwd != admin_pwd2){
+            inputBoxPointer('mess_admin_pwd2').innerHTML = '<font color="#ff3d00">×管理员密码输入不一致</font>';
+            return false;
+        }
+        document.getElementById('form_submit').disabled= true;
+
+        $("#form_submit").val("正在安装...");
+        $("#form_submit").addClass("installimg-btn");
+        document.form_install.submit();
+    }
+
+</script>
+{/block}

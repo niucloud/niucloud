@@ -1,0 +1,267 @@
+{extend name="sitehome@style/base" /}
+{block name="main"}
+<style>
+.order-status{
+	margin: 20px 0;
+}
+.layui-col-xs5 .layui-bg-blue, hr{
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: 12px;
+    padding: 0 6px;
+    margin: 0;
+    z-index:1;
+}
+.schedule {
+    width: 120px;
+    background: #fff;
+    z-index: 10;
+    text-align: center;
+    position: relative;
+}
+.icon-circle {
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #0d73f9;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 20px;
+    margin-bottom: 3px;
+}
+.schedule .layui-icon,.status {
+    font-weight: bold;
+}
+.schedule.select label {
+    color: #666;
+}
+.before .icon-circle{
+    color: #0d73f9;
+}
+.after .icon-circle, .after .icon-circle{
+    color: #999;
+    border-color: #999;
+}
+.schedule.select .icon-circle,.schedule.select .icon-circle {
+    color: #fff;
+    background: #0d73f9;
+}
+.before .status,.after .status {
+     color: #999;
+ }
+.select .status {
+    color: #666;
+}
+.order-content .layui-row {
+    margin: 64px 0 27px 10px;
+}
+.pay-box {
+    text-align: right;
+	background:#f8f8f8;
+	padding:6px 20px;
+}
+.pay-box .invoice-item{
+	display:none;
+}
+.pay-box .pay-item .item-key{
+	display:inline-block;
+	width:160px;
+}
+.pay-box .pay-item .item-val{
+	display:inline-block;
+	width:160px;
+}
+.pay-money-item{
+	color:#f44;
+}
+.invoice-content{
+	display:none;
+}
+</style>
+<div class="layui-form">
+	<!-- 订单状态 -->
+    <div class="layui-row order-status">
+        <div class="layui-col-xs5">
+            <div class="schedule before">
+                <div class="icon-circle"><i class="layui-icon layui-icon-ok"></i></div>
+                <label class="status">选择服务</label>
+            </div>
+            <hr class="layui-bg-blue">
+        </div>
+        <div class="layui-col-xs5">
+            <div class="schedule before">
+                <div class="icon-circle"><i class="layui-icon layui-icon-ok"></i></div>
+                <label class="status">确认订单</label>
+            </div>
+            <hr >
+        </div>
+        <div class="layui-col-xs1">
+            <div class="schedule after">
+                <div class="icon-circle"><i class="layui-icon ">3</i></div>
+                <label class="status">订购成功</label>
+            </div>
+        </div>
+    </div>
+    <!-- 订单项数据 -->
+    <label>订购服务:{$info['data']['title']}</label>
+    <div class="layui-tab">
+        <table class="layui-table">
+		    <colgroup>
+		      <col width="33%">
+		      <col width="33%">
+		      <col>
+		    </colgroup>
+		    <thead>
+		      <tr>
+		        <th>服务名称</th>
+		        <th>时间</th>
+		        <th>金额</th>
+		      </tr> 
+		    </thead>
+		    <tbody>
+		      <tr>
+		        <td>{$info.order_item.title}</td>
+		        <td>{$info.order_item.type_name}</td>
+		        <td>{$info.order_item.price}</td>
+		      </tr>
+		    </tbody>
+		  </table>
+    </div>
+
+   	<!-- 用户协议 -->
+    <div class="layui-form-item">
+        <div>
+            <input id="select_terms" value="1" type="checkbox" name="is_agree" title="我已阅读并同意   <a href='###' class='default'>《服务协议》</a>" lay-skin="primary"  lay-filter="select_terms">
+        </div>
+    </div>
+    
+    <!-- 发票 -->
+    <div class="invoice  module-content-box" style="display:none;">
+		<div class="layui-form" >
+			<div class="layui-form-item">
+				<input  type="checkbox" name="is_invoice" id="is_invoice" title="是否使用发票" lay-skin="primary"  lay-filter="is_invoice"  {if empty($invoice_info)}disabled{/if}>
+			</div>
+		</div>
+		<div class="layui-form invoice-content">
+			<div class="layui-form-item">
+				<label class="layui-form-label">发票抬头</label>
+				<div class="layui-input-inline invoice-input">
+					<input type="text" name="invoice_title" placeholder="请输入发票抬头" autocomplete="off" class="layui-input">
+				</div>
+				<div class="layui-form-mid layui-word-aux">收取<span id="invoice_tax">{$info.invoice_tax * 100}%</span>的发票税率</div>
+
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">纳税人识别号</label>
+				<div class="layui-input-inline invoice-input">
+					<input type="text" name="invoice_number" placeholder="请输入纳税人识别号" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">发票内容</label>
+				<div class="layui-input-inline invoice-input">
+					{volist name="$invoice_info.order_invoice_content_arr" id="$item"}
+						<input type="radio" name="invoice_content" value="{$item}"title="{$item}"lay-skin="primary" >
+					{/volist}
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">寄件地址</label>
+				<div class="layui-input-inline invoice-input">
+					<input type="text" name="address"  placeholder="请输入详细寄件地址" autocomplete="off" class="layui-input">
+				</div>
+			</div>
+		</div>
+	</div>
+    
+    <!-- 支付信息 -->
+    <div class="pay-box">
+    	<div class="pay-item">
+    		<label class="item-key">合计</label>
+    		<label class="item-val"><span id="total_price">{$info['total_price']}</span>元</label>
+    	</div>
+    	<div class="pay-item invoice-item">
+    		<label class="item-key">发票金额</label>
+    		<label class="item-val"><span id="invoice_money">{$info.invoice_money}</span>元</label>
+    	</div>
+    	<div class="pay-item">
+    		<label class="item-key">优惠金额</label>
+    		<label class="item-val"><span id="coupon_money">0.00</span></label>
+    	</div>
+    	<div class="pay-item pay-money-item">
+    		<label class="item-key">应付金额</label>
+        	<label class="item-val"><span id="pay_money">{$info['pay_money']}</span>元</label>
+    	</div> 
+    </div>
+
+    <div class="pay-box layui-form">
+        <button class="layui-btn layui-btn-primary pay-btn"  lay-submit lay-filter="save" id="pay_btn">立即付款</button>
+    </div>
+ </div>   
+ 
+<input type="hidden" id="addon_name" value="{$addon_name}">
+<input type="hidden" id="type" value="{$type}">
+<input type="hidden" id="addon_type_hook" value="{$info.addon_type_hook}">
+<script>
+layui.use([ 'form' ], function() {
+    var form = layui.form;
+    form.on('checkbox(is_invoice)', function(data){
+        
+        var total_price = parseFloat($("#total_price").text());
+        var invoice_money = parseFloat($("#invoice_money").text());
+        var pay_money = 0;
+        
+        if(data.elem.checked) {
+			$(".invoice-content").show();
+            $(".invoice-item").show();
+            pay_money = total_price + invoice_money;
+        }else {
+            $(".invoice-content").hide();
+            $(".invoice-item").hide();
+            pay_money = total_price;
+        }
+        
+        $("#pay_money").text(pay_money);
+    });
+	
+	var repeat_flag = false;//防重复标识
+    form.on('submit(save)', function(data){
+        
+        var addon_name = $("#addon_name").val();
+        var type = $("#type").val();
+        var addon_type_hook = $("#addon_type_hook").val();
+        //用户协议
+        var is_agree = $("input[name='is_agree']").prop('checked');
+        if(!is_agree){
+            layer.msg("请同意用户协议");
+            return;
+        }
+        if(repeat_flag) return;
+		repeat_flag = true;
+        $.ajax({
+            type : "post",
+            url : '{:url("sitehome/addons/orderCreate")}',
+            data : {
+                'addon_name' : addon_name,
+                'type' : type,
+                'addon_type_hook' : addon_type_hook,
+            },
+            dataType : "JSON",
+            success : function(res) {
+                layer.msg(res.message);
+                if(res.code == 0){
+                    window.location.href = res.data.url;
+                }else {
+					repeat_flag = false;
+                }
+            }
+        });
+    })
+
+});
+</script>
+{/block}

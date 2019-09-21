@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<title>{$title} - {$system_site_config_info['title']}</title>
+	<meta name="keywords" content="{$system_site_config_info['keywords']}">
+	<meta name="description" content="{$system_site_config_info['description']}">
+	<meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1"/>
+	<link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css"/>
+	<link rel="stylesheet" type="text/css" href="__STATIC__/ext/font-awesome/css/font-awesome.css"/>
+	<link rel="stylesheet" href="SITEHOME_CSS/common.css">
+	<link rel="stylesheet" href="SITEHOME_STYLE/applet/theme.css">
+	<link rel="stylesheet" href="SITEHOME_STYLE/applet/common.css">
+	<script src="__STATIC__/js/jquery-2.2.js"></script>
+	<script src="__STATIC__/ext/layui/layui.js"></script>
+	<script>
+		layui.use(['layer','element'], function () {
+		});
+		window.nc_url = {
+			baseUrl: "{:request()->root(true)}/",
+			route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+		};
+	</script>
+	<script src="__STATIC__/js/common.js"></script>
+	{block name="resources"}{/block}
+</head>
+
+<body>
+{block name='body'}
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-header">
+		<div class="layui-header-box">
+			<div class="layui-logo">
+				<a href="https://www.niucloud.com" target="_black">
+					<img src="SITEHOME_IMG/logo.png" class="layui-logo-icon"/>
+				</a>
+			</div>
+			<ul class="layui-nav layui-layout-left niu-side-nav">
+				{if condition="$site_info['addon_app']=='NcApplet'"}
+				<li class="layui-nav-item {if condition="strpos($current_url,'sitehome/index/index') !== false"}layui-this{/if}">
+				<a href="{:addon_url('ncapplet://sitehome/index/index')}">
+					<!--<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>-->
+					<span>首页</span>
+				</a>
+				</li>
+				{/if}
+			</ul>
+			<div class="layui-layout-right nc-user-info" id="nc-user-info">
+                <div class="user-name">
+					<div class="headframe" style="display:inline-block;vertical-align:middle;">
+                    {if condition="$user_info['headimg'] neq ''"}
+                    	<img src="{:img($user_info['headimg'])}" />
+                    {else/}
+                    	<img src="SITEHOME_IMG/personal_4.png"/>
+                    {/if}
+					</div>
+                    <span>{$user_info['username']}</span>
+                </div>
+                <div class="user-dropdown">
+                    <div class="user-dropdown-meta nc-bg-color-f9">
+                        <div>{$user_info['username']}</div>
+                        <div>{$user_info['mobile']}</div>
+                    </div>
+                    <div class="user-dropdown-select">
+                        <a href="{:url('admin/index/security', ['site_id' => 0])}">帐号设置</a>
+                        <a href="{:url('admin/index/index', ['site_id' => 0])}">切换站点</a>
+                        <a href="{:url('home/login/logout')}">退出登录</a>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+	<div class="niu-box">
+		
+		{block name="sidebar"}
+		<!-- 左侧菜单 -->
+		{notempty name='$menu'}
+		<ul class="layui-nav layui-nav-tree layui-children-menu layui-layout-left">
+			
+			<li class="nc-site-info">
+				<div class="site-img">
+					<a href="{:addon_url('ncapplet://sitehome/index/index')}">
+						{notempty name="$app_addon_info"}
+						<img src="{:img($app_addon_info.icon)}" class="layui-logo-icon"/>
+						{else/}
+						{if condition="$site_info.icon neq ''"}
+						<img src="{:img($site_info.icon)}" class="layui-logo-icon"/>
+						{else/}
+						<img src="{$icon}"/>
+						{/if}
+						{/notempty}
+					</a>
+				</div>
+				
+				{notempty name="$app_addon_info"}
+				<div class="site-name nc-text-color-black">{$app_addon_info['title']}</div>
+				<div class="nc-support-port">
+					{foreach $app_addon_info["support_app_type"] as $k => $v}
+					<img src="__ROOT__/{$v['logo']}" title="{$v['name']}">
+					{/foreach}
+				</div>
+				<div class="operation nc-border-color-e5">
+					{if condition="$site_info['addon_app']=='NcApplet'"}
+					<a href="{:addon_url('ncapplet://sitehome/index/index')}" class="nc-text-color-999">返回平台</a>
+					<span class="nc-text-color-999">|</span>
+					<a href="{:addon_url('ncapplet://sitehome/app/moreapp')}" class="nc-text-color-999">切换应用</a>
+					{/if}
+				</div>
+				{else/}
+				<div class="site-name nc-text-color-black">{$site_info['site_name']}</div>
+				<div class="operation-box">
+					<div class="operation-pic" style="display: none;">
+						{foreach name="$app_support_port" item="vo" key="k"}
+						<div class="wx-box">
+							<img alt="" src="__ROOT__/{$vo.logo}">
+							<div class="small-procedures-content wx-content">
+								<h3 class="small-title">手机扫描访问</h3>
+								<p class="small-desc">"扫一扫"进入{$vo.name}</p>
+								<div class="small-pic-box">
+									{notempty name="$vo['qrcode']"}
+									<img src="{:img($vo['qrcode'])}" layer-src="{:img($vo['qrcode'])}" alt="">
+									{else/}
+									<img src="SITEHOME_IMG/wx_code.png" alt="">
+									{/notempty}
+								</div>
+								{if condition="$k == 'wap'"}
+								<!--<p class="small-desc small-desc-copy">复制推广链接</p>-->
+								<!--<div class="nc-function-search">-->
+									<!--<div class="layui-input-inline nc-len-mid nc-search-btn">-->
+										<!--<input class="layui-input" type="text" value="{:addon_url('wap/index')}" id="wechat_wap">-->
+										<!--<button class="layui-icon-search" onclick="nc.copy('wechat_wap')">复制</button>-->
+									<!--</div>-->
+								<!--</div>-->
+								<!--<button class="layui-btn" onclick="window.open('{:addon_url('wap/index')}')" >访问</button>-->
+								{/if}
+							</div>
+						</div>
+						{/foreach}
+						
+					</div>
+					<span class="operation-divider" style="display: none;">|</span>
+					<div class="operation-btn nc-border-color-e5">
+						<a href="{:url('admin/index/index', ['site_id' => 0])}" class="nc-text-color-999">切换站点</a>
+					</div>
+				</div>
+				{/notempty}
+			
+			</li>
+			
+			{foreach name="$menu" item="vo"}
+			
+			<li class="layui-nav-item
+			{if condition="$vo['is_show_menu']==1 || ($vo['child_list'] && (!empty($current_menu) && $current_menu[0]['name'] == $vo['name'] && $current_menu[0]['selected']))"} layui-nav-itemed{/if}
+			{if condition="$vo['is_app'] && $vo['child_list']"} nc-itemd-arrow{/if}
+			{if condition="!$vo['child_list'] && (!empty($current_menu) && $current_menu[0]['name'] == $vo['name'] && $current_menu[0]['selected']) "} layui-this{/if}
+			{if condition="$vo['name']=='WEAPP_ROOT'"} nc-weapp-color{/if}
+			{if condition="$vo['name']=='WECHAT_ROOT'"} nc-public-wechat-color{/if}
+			{if condition="$vo['name']=='NC_ALI_APPLET'"} nc-public-ali-color{/if}
+			{if condition="$vo['name']=='NC_BAIDU_APPLET'"} nc-public-baidu-color{/if}
+			"
+			{if condition="!$vo['is_app']"} lay-disabled{/if}>
+			
+			<a href="{if condition="!$vo['child_list'] && $vo['url']"}{:addon_url($vo['url'])}{else/}javascript:;{/if}" >
+			<span>{$vo['title']}</span>
+			</a>
+			
+			{notempty name="$vo['child_list']"}
+			<dl class="layui-nav-child">
+				{foreach name="$vo['child_list']" item="child"}
+				
+				<dd {if condition="!empty($current_menu[1]) && $current_menu[1]['name'] == $child['name'] && $current_menu[1]['selected'] "}class='layui-this'{/if}>
+				
+				<a href="{:addon_url($child['url'])}" {if condition="$child['is_blank'] eq 1" }target="_blank"{/if}>
+				<div class="icon">
+					{notempty name="$child['icon']"}
+					<img src="__ROOT__/{$child['icon']}" alt="">
+					{else/}
+					<img src="SITEHOME_IMG/menu.png" alt="">
+					{/notempty}
+				</div>
+				<span>{$child['title']}</span>
+				</a>
+				</dd>
+				{/foreach}
+			</dl>
+			{/notempty}
+			
+			</li>
+			{/foreach}
+		
+		</ul>
+		{/notempty}
+		{/block}
+		<div class="{notempty name='$menu'}niu-side-right{/notempty}">
+			<div class="nc-side-right-box">
+				{block name='title'}
+				{notempty name="$current_menu[1]['title']"}
+				<h3 class="niu-side-content-title">{$current_menu[1]['title']}</h3>
+				{/notempty}
+				{/block}
+				<div class='layui-fluid'>
+					
+					{if condition="$bread_crumb"}
+						<span class="layui-breadcrumb">
+							{foreach name="$bread_crumb" item="vo" key="k"}
+								{if condition="($k+1)==count($bread_crumb)"}
+							    <a><cite>{$vo['title']}</cite></a>
+								{else/}
+							    <a href="{:addon_url($vo.url)}">{$vo['title']}</a>
+								{/if}
+							{/foreach}
+						</span>
+					{elseif condition="!empty($current_menu[1]['child_list']) "}
+						<div class="layui-tab-brief">
+							<ul class="layui-tab-title">
+								{foreach name="$current_menu[1]['child_list']" item="vo"}
+								<li {if condition="$vo['selected']"}class='layui-this'{/if}>
+									<a href="{:addon_url($vo.url)}">{$vo.title}</a>
+								</li>
+								{/foreach}
+							</ul>
+						</div>
+					{else/}
+						<div class="nc-tab-title" style="padding: 10px;"></div>
+					{/if}
+					
+					{block name='main'}{/block}
+				</div>
+			</div>
+			<div class='nui-footer'>
+				<a href='https://www.niucloud.com' target="_black">
+					<img src="SITEHOME_IMG/logo-gray.png"/>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+{/block}
+</body>
+</html>

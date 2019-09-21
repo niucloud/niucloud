@@ -1,0 +1,34 @@
+{extend name="style/base"/}
+{block name="main"}
+<a href="{:url('sitehome/auth/addUser')}" class="layui-btn">添加用户</a>
+<table id="treeTable" lay-filter="user"></table>
+
+<!-- <script type="text/html" id="operation">
+	<a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs" lay-event="locking">锁定</a>
+	<a class="layui-btn layui-btn-xs" lay-event="config">删除</a>
+</script> -->
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__STATIC__/js/treeGrid.js"></script>
+<script>
+layui.use(['element', 'layer', 'form', 'upload', 'treeGrid'], function () {
+	var treeGrid = layui.treeGrid; //很重要
+	var treeTable = treeGrid.render({
+		elem: '#treeTable',
+		url: "{:url('sitehome/auth/menu')}",
+		cellMinWidth: 100,
+		treeId: 'menu_id',//树形id字段名称
+		treeUpId: 'menu_pid',//树形父id字段名称
+		treeShowName: 'title',//以树形式显示的字段
+		cols: [[
+			{type: 'checkbox'}
+			, {field: 'title', edit: 'text', width: '400', title: '水果'}
+			, {field: 'menu_id', edit: 'text', width: '300', title: 'id'}
+			, {field: 'menu_pid', edit: 'text', width: '300', title: 'pId'}
+		]],
+		page: false
+	});
+});
+</script>
+{/block}

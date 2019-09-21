@@ -1,0 +1,10 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="layui-tab">
+	<div class="layui-tab-content" style="padding:0;">
+		<div class="layui-tab-item layui-show">{:hook("diy", ['name' => $name,'addon_name'=>$addon_name],[],true)}</div>
+	</div>
+</div>
+{/block}

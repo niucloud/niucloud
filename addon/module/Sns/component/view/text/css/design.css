@@ -1,0 +1,4 @@
+@CHARSET "UTF-8";
+/*标题组件*/
+.component-title h2 {margin: 0;font-size: 16px;overflow: hidden;text-overflow: ellipsis;}
+.component-title p {font-size: 12px;color: #8c8c8c;padding: 5px 0 0;overflow: hidden;text-overflow: ellipsis;}

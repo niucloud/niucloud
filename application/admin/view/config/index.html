@@ -1,0 +1,77 @@
+{extend name="base"/}
+{block name="main"}
+<div class="nc-list style1">
+    <div class="head">
+        <h2>系统信息</h2>
+    </div>
+    <ul>
+        <li>
+            <label>程序版本</label>
+            <span>{$niu_version.$niu_version_name}</span>
+            <p class="operation">
+                <a href="javascript:;" class="personal-log-update nc-text-color">查看最新版本</a>
+            </p>
+        </li>
+        <li>
+            <label class="personal-content-top">产品系列</label>
+            <span>您的产品是开源版, 没有购买商业授权, 不能用于商业用途</span>
+        </li>
+        <li>
+            <label>服务器操作系统</label>
+            <span>{$system_config['os']}</span>
+        </li>
+        <li>
+            <label>PHP版本</label>
+            <span>{$system_config['php_version']}</span>
+        </li>
+        <li>
+            <label>服务器环境</label>
+            <span>{$system_config['server_software']}</span>
+        </li>
+        <li>
+            <label>服务器 MySQL 版本</label>
+            <span>{$system_config['sql_version']}</span>
+        </li>
+        <li>
+            <label>上传许可</label> 
+            <span>{$system_config['upload_max_filesize']}</span>
+        </li>
+        <li>
+            <label>当前数据库尺寸</label>
+            <span>{$system_config['db_size']}</span>
+        </li>
+        <li>
+            <label>当前附件根目录</label>
+            <span>{$system_config['annex_root_catalogue']}/attachment</span>
+        </li>
+        <li>
+            <label>当前附件尺寸</label>
+            <span><a href="javascript:;" class="default" id="annexSize"lay-util="size">查看</a></span>
+        </li>
+    </ul>
+</div>
+{/block}
+{block name="script"}
+<script>
+layui.use(['util'], function(){
+	  var util = layui.util;
+		//按钮事件
+		util.event('lay-util', {
+			size: function(othis){
+				//loading层
+				var index = layer.load(2, {
+				  shade: [0.1,'#fff'] //0.1透明度的白色背景
+				});
+				$.ajax({
+					type: "post",
+					url: nc.url("admin/config/annexSize"),
+					success: function (res) {
+						layer.close(index);
+						$("#annexSize").text(res.data);
+					}
+				}) 
+		  }
+		});
+})
+</script>
+{/block}

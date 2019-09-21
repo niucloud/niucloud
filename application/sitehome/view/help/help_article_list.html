@@ -1,0 +1,103 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}{/block}
+{block name="main"}
+
+<div class='nc-function-search'>
+	<button class="layui-btn nc-mb15"  onclick="location.href ='{:addon_url('sitehome/help/addhelparticle')}'">新建帮助</button>
+	<button class="layui-btn nc-mb15"  onclick="location.href ='{:addon_url('sitehome/help/helpCategory')}'">帮助类型</button>
+</div>
+<div class="nc-table-box">
+	<table id="help_article_list" lay-filter="article" class="layui-table"></table>
+</div>
+
+<script type="text/html" id="sort_info">
+<input type="number" value="{{d.sort}}" class="layui-input nc-len-short" onchange="sortChange({{d.id}}, this)"/>
+</script>
+
+<script type="text/html" id="operation">
+	<a class="default" lay-event="edit">编辑</a>
+	<a class="default" lay-event="del">删除</a>
+</script>
+{/block}
+{block name="script"}
+<script>
+var table = new Table({
+	elem: '#help_article_list',
+	filter : "article",
+	url : '{:addon_url("sitehome/help/index")}',
+	cols: [
+		[{
+			type: 'checkbox'
+		}, {
+			field: 'title',
+			width: '25%',
+			title: '标题'
+		},  {
+			field: 'class_name',
+			width: '20%',
+			title: '分类',
+		},{
+			field: '',
+			width: '20%',
+			title: '排序',
+			templet: '#sort_info'
+		},{
+			title: '操作',
+			toolbar: '#operation',
+			align: 'right'
+		}]
+	]
+});
+
+//监听工具条
+table.tool(function(obj) {
+	var data = obj.data;
+	var event = obj.event;
+	if (event === 'edit') {
+		window.location.href = nc.url('sitehome/help/editHelpArticle', {"id": data.id});
+	} else if (event === 'del') {
+		deleteArticle(data.id)
+	}
+});
+
+//删除
+function deleteArticle(id) {
+	layer.confirm('确定删除吗?', {
+		btn: ['确定', '取消']
+	}, function () {
+		$.ajax({
+			type: "post",
+			async: false,
+			url: '{:addon_url("sitehome/help/deleteHelpArticle")}',
+			data: {'id': id},
+			dataType: "JSON",
+			success: function (res) {
+				layer.msg(res.message);
+				if (res.code == 0) {
+					table.reload();
+				}
+			}
+		});
+	}, function () {
+		layer.close();
+	});
+}
+
+function sortChange(id, event){
+	var sort = $(event).val();
+	$.ajax({
+		type:"post",
+        async:false,
+        url : '{:addon_url("sitehome/help/sortHelpArticle")}',
+		data:{'id':id, 'sort': sort},
+		dataType : "JSON",
+		success: function (res) {
+			layer.msg(res.message);
+			if(res.code == 0){
+				table.reload();
+        	}
+		}
+	});
+}
+</script>
+{/block}

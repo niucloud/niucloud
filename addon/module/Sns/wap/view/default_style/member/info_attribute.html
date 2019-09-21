@@ -1,0 +1,288 @@
+
+<form class="hui-form" id="form1">
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">圈子</div>
+        <div class="hui-form-select">
+            <select name="province" class="province">
+                <option value="">选择省份</option>
+                {foreach $province as $key=>$vo }
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/foreach}
+            </select>
+            <select name="city" class="city">
+                <option value="">选择城市</option>
+            </select>
+        </div>
+    </div>
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">联系人</div>
+        <input type="text" class="hui-input hui-input-clear" required="1" name="linkman" placeholder="请输入联系人"
+            value="{$info_detail['linkman'] ?? ''}" />
+    </div>
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">联系电话</div>
+        <input type="number" data-reg="/^1(3|4|5|6|7|8|9)\d{9}$/" required="1" class="hui-input" placeholder="请输入联系电话"
+            name="contact" value="{$info_detail['contact']}" />
+    </div>
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">价格{:empty($category_info.price_unit) ? '' : '/'.$category_info.price_unit}</div>
+        <input type="text" name="price" class="hui-input" data-reg="/\d/" required="1"
+             value="{$info_detail['price'] ?? ''}" />
+    </div>
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">{$category_info['title_label'] ?: '标题'}</div>
+        <input type="text" name="title" class="hui-input" required="1" placeholder="{$category_info['title_label'] ?: '请输入标题'}"
+            value="{$info_detail['title'] ?? ''}" />
+    </div>
+
+    {volist name = "list['data']" id = "vo" key = "k"}
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">{$vo.name}</div>
+        {switch name="$vo['input_type']" }
+
+        {case value="text"}
+        <input type="text" data-reg="{$vo.reg}" required="{$vo.required}" name="attribute_field_{$vo.attribute_id}"
+            class="hui-input">
+        {/case}
+
+        {case value="textarea"}
+        <div class="hui-form-textarea">
+            <textarea data-reg="{$vo.reg}" required="{$vo.required}" name="desc_{$vo.attribute_id}"
+                placeholder="请输入内容">{$vo.args.textarea_default_value}</textarea>
+        </div>
+        {/case}
+
+        {case value="editor"}
+        <div class="hui-form-textarea">
+            <textarea data-reg="{$vo.reg}" required="{$vo.required}" name="editor_{$vo.attribute_id}"
+                id="editor"></textarea>
+        </div>
+        {/case}
+
+        {case value="select"}
+        <div class="hui-form-select">
+            <select name="select_{$vo.attribute_id}">
+                {volist name = "$vo.args.select_option" id = "option"}
+                <option value="{$option}" {if condition="$option eq $vo.args.select_default_value" } selected {elseif
+                    condition="$option eq $vo.args.old_value" } selected {/if}>{$option} </option> {/volist} </select>
+                    </div> {/case} {case value="radio" } {volist name="$vo.args.radio_option" id="radio" } <div
+                    class="hui-form-radios" style="line-height:38px;">
+                    <input type="radio" value="{$radio}" name="radio_{$vo.attribute_id}" id="g{$radio}"
+                        onchange="showSelectRes(this);" {if $radio eq $vo.args.radio_default_value } checked {/if}>
+                        <label for="g{$radio}">{$radio}</label><br />
+        </div>
+        {/volist}
+        {/case}
+
+        {case value="checkbox"}
+        {volist name = "$vo.args.checkbox_option" id = "checkbox"}
+        <div class="hui-form-radios">
+            <input type="checkbox" name="checkbox_{$vo.attribute_id}" id="c{$checkbox}" value="{$checkbox}"
+                onchange="showCheckRes(this);" {if $checkbox eq $vo.args.checkbox_default_value} checked {/if}> <label
+                for="c{$checkbox}">{$checkbox}</label>
+        </div>
+        {/volist}
+        {/case}
+
+        {case value="img"}
+        <div id="hui-img-cuter-select">
+            <div id="hui-img-cuter-t1">+</div>
+            <div id="hui-img-cuter-t2">请选择图片</div>
+        </div>
+        {/case}
+
+        {case value="imgs"}
+        <div id="hui-img-cuter-select">
+            <div id="hui-img-cuter-t1">+</div>
+            <div id="hui-img-cuter-t2">请选择图片</div>
+        </div>
+        {/case}
+
+        {case value="file"}
+        {:hook("fileUpload", ['name' => 'article', 'type' => 'common', 'file_type' => 'ATTACHMENT'], '', true)}
+        <div>
+            <button type="button" class="layui-btn layui-btn-sm" onclick="uploadEnclosurearticle()">上传附件</button>
+        </div>
+        <input type="hidden" name="attachment_path" autocomplete="off" placeholder="" class="layui-input nc-len-long"
+            style="margin-top:10px;">
+        {/case}
+
+        {case value="files"}
+        {:hook("fileUpload", ['name' => 'article', 'type' => 'common', 'file_type' => 'ATTACHMENT'], '', true)}
+        <div>
+            <button type="button" class="layui-btn layui-btn-sm" onclick="uploadEnclosurearticle()">上传附件</button>
+        </div>
+        <input type="hidden" name="attachment_path" autocomplete="off" placeholder="" class="layui-input nc-len-long"
+            style="margin-top:10px;">
+        {/case}
+
+        {case value="number"}
+        <div class="hui-common-title" style="margin-top:15px;">
+            <div class="hui-common-title-line"></div>
+            <div class="hui-common-title-txt">数值限定 : -{$vo.args.number_min} - {$vo.args.number_max}</div>
+            <div class="hui-common-title-line"></div>
+        </div>
+        <div style="padding:28px 50px;">
+            <div class="hui-number-box" min="{$vo.args.number_min}" max="{$vo.args.number_max}">
+                <div class="reduce">-</div>
+                <input type="number" name="attribute_field_{$vo.attribute_id}" data-reg="{$vo.reg}"
+                    required="{$vo.required}" value="{$vo.args.number_default_value}" />
+                <div class="add">+</div>
+            </div>
+        </div>
+        {/case}
+
+        {case value="time"}
+        时间
+        {/case}
+
+        {case value="map"}
+        地图坐标
+        {/case}
+
+        {case value="area"}
+        地区选择框
+        {/case}
+        {/switch}
+    </div>
+    {/volist}
+
+    <div class="hui-form-items">
+        <div class="hui-form-items-title">{$category_info['content_label'] ?: '内容'}</div>
+        <div class="hui-form-textarea">
+            <textarea placeholder="{$category_info['title_label'] ?? '请输入内容'}" name="content"
+                value="">{$info_detail.content ?: $info_detail['content']}</textarea>
+        </div>
+    </div>
+
+    <div class="hui-title">
+        {$category_info['icon_label'] ?: '封面图'}
+    </div>
+    <div class="hui-form-items">
+        <ul class="nc-uploader__files" id="uploaderFiles">
+
+        </ul>
+        <div class="nc-uploader__input-box">
+            <input id="uploaderInput" class="nc-uploader__input" type="file" accept="image/*" multiple=""
+                onchange="file_upload(this)">
+        </div>
+    </div>
+    <div style="padding:15px 8px;">
+        <input type="hidden" id="category_id" value="{$info_detail.category_id}" name="category_id">
+        <button type="button" class="hui-button hui-button-large hui-primary" id="submitBtn">确认发布</button>
+    </div>
+</form>
+
+<script>
+    //获取城市
+    hui('.province').change(function () {
+        var province = $(this).val()
+
+        hui.post(
+            "{:addon_url('Sns://wap/category/getProvinces')}", {
+                province: province
+            },
+            function (msg) {
+                var data = JSON.parse(msg);
+                var html = '';
+                for ($i = 0; $i < data.length; $i++) {
+                    html += "<option value='" + data[$i]['id'] + "'>" + data[$i]['name'] + "</option>";
+                }
+
+                $(".city option").remove(); //清空城市
+                $(".city").append(html); //追加城市
+            },
+            function (e) {
+                hui.iconToast('读取消息失败', 'warn');
+            }
+        );
+    });
+
+    // 正则验证
+    $("[data-reg^='/']").blur(function () {
+        console.log($(this).parents('.hui-form-items'));
+        var reg = eval($(this).attr('data-reg'));
+        if (!reg.test($(this).val())) {
+            hui.toast($(this).parents('.hui-form-items').find(".hui-form-items-title").text() + '格式错误');
+            return false;
+        }
+    })
+    $("[required='1']").blur(function () {
+        if ($(this).val() == '' || $(this).val() == ' ') {
+            hui.toast($(this).parents('.hui-form-items').find(".hui-form-items-title").text() + '为必填项');
+            return false;
+        }
+    })
+    var info_id = '';
+    hui.formInit();
+    hui('#submitBtn').click(function () {
+        var submit_switch = true;
+        // hui.alert('请观察控制台');
+        // JSON.stringify(data)
+        // 验证
+        $("[data-reg^='/']").each(function () {
+            var reg = eval($(this).attr('data-reg'));
+            if (!reg.test($(this).val())) {
+                hui.toast($(this).parents('.hui-form-items').find(".hui-form-items-title").text() +
+                    '格式错误');
+            submit_switch = false;
+            }
+        })
+        $("[required='1']").each(function () {
+            if ($(this).val() == '' || $(this).val() == ' ') {
+                hui.toast($(this).parents('.hui-form-items').find(".hui-form-items-title").text() +
+                    '为必填项');
+             submit_switch = false;
+            }
+        })
+        if(submit_switch == false){
+            return false;
+        }
+        var data = hui.getFormData('#form1');
+        var img_arr = new Array();
+        $('#uploaderFiles li').each(function () {
+            img_arr.push($(this).attr('path'));
+        })
+        data.img_cover = img_arr[0];
+        data.imgs = img_arr.toString();
+        data.access_token = "{$access_token}";
+        data.info_id = info_id;
+        nc.api("Sns.Member.publish", data, function (res) {
+            if (res.code == 0) {
+                hui.iconToast('发布成功', 'success');
+                window.history.go(-1);
+            }
+        }, false);
+    });
+
+    if ("{$info_detail}") {
+        var province = "{$info_detail.circle}".substr(0, 2) + '0000';
+        var city = parseInt(province) + parseInt("{$info_detail.circle}".substr(2, 4));
+        var info_id = "{$info_detail.info_id}";
+        $("option[value=" + province + "]").attr("selected", "selected");
+        hui.post(
+            "{:addon_url('Sns://wap/category/getProvinces')}", {
+                province: province
+            },
+            function (msg) {
+                var data = JSON.parse(msg);
+                var html = '';
+                for ($i = 0; $i < data.length; $i++) {
+                    html += "<option value='" + data[$i]['id'] + "'>" + data[$i]['name'] + "</option>";
+                }
+
+                $(".city option").remove(); //清空城市
+                $(".city").append(html); //追加城市
+                $("option[value=" + city + "]").attr("selected", "selected");
+            },
+            function (e) {
+                hui.iconToast('读取消息失败', 'warn');
+            }
+        );
+    }
+    var imgs = "{$info_detail.imgs}".split(',');
+    for (var i = 0; i < imgs.length; i++) {
+        $('#uploaderFiles').append('<li class="nc-uploader__file" style="background-image:url(' + nc.img(imgs[i]) +
+            ')" path = "' + imgs[i] + '"></li>')
+    }
+</script>

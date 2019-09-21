@@ -1,0 +1,74 @@
+<div class="layui-header nc-bg-color-black {if condition='!$menus[1]'} not-children-menus{/if}">
+	<div class="layui-header-box">
+		<div class="layui-logo" lay-href="">
+			<!-- <span>NiuCloud</span> -->
+			<a href="https://www.niucloud.com" target="_black">
+				{if condition="$site_info.icon neq ''"}
+					<img src="{:img($site_info.icon)}" class="layui-logo-icon"/>
+				{else/}
+					<img src="SITEHOME_IMG/logo.png" />
+				{/if}
+			</a>
+		</div>
+		<ul class="layui-nav layui-layout-left niu-side-nav">
+			<li class="layui-nav-item{if condition="strpos($current_url,'sitehome/index/index') !== false"} layui-this{/if}">
+				<a href="{:addon_url('sitehome/index/index')}">
+					<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>
+					<span>概况</span>
+				</a>
+			</li>
+			{notempty name='$menus[0]'}
+				{foreach name="$menus[0]" item="vo"}
+					{if $vo['name'] != 'APPLET_ROOT' and $vo['name'] != 'ADDON_ROOT'}
+					<li class="layui-nav-item{notempty name='$vo.selected'} layui-this{/notempty}">
+						<a href="{:addon_url($vo.url)}">
+							{notempty name="$vo['icon']"}
+							<img src="__ROOT__/{$vo.icon}"/>
+							{else/}
+							<img src="SITEHOME_IMG/menu.png" />
+							{/notempty}
+							<span>{$vo.title}</span>
+						</a>
+					</li>
+					{elseif $vo['name'] == 'APPLET_ROOT'}
+					<li class="layui-nav-item{if condition="$crumbs[0]['name']=='APPLET_ROOT'"} layui-this{/if}">
+						<a href="{:addon_url($vo.url)}">
+							<img src="SITEHOME_IMG/application_renovation.png" />
+							<span>{$vo.title}</span>
+						</a>
+					</li>
+					{/if}
+				{/foreach}
+			{/notempty}
+			<li class="layui-nav-item{if condition="$crumbs[0]['name']=='ADDON_ROOT'"} layui-this{/if}">
+				<a href="{:addon_url('sitehome/addons/lists')}">
+					<img src="SITEHOME_IMG/application_center.png" />
+					<span>应用</span>
+				</a>
+			</li>
+		</ul>
+		<div class="topbar-nav-item layui-layout-right">
+			<div id="nc-user-info" class="nc-user-info">
+				<div class="user-name">
+					{if condition="$user_info['headimg'] neq ''"}
+						<img src="{:img($user_info['headimg'])}" class="user-headimg"/>
+					{else/}
+						<img src="SITEHOME_IMG/personal_4.png"/>
+					{/if}
+					<span>{$user_info['username']}</span>
+				</div>
+				<div class="user-dropdown">
+					<div class="user-dropdown-meta nc-bg-color-gray">
+						<div>{$user_info['username']}</div>
+						<div>{$user_info['mobile']}</div>
+					</div>
+					<div class="user-dropdown-select">
+						<a href="{:url('admin/index/security', ['site_id' => 0])}">帐号设置</a>
+						<a href="{:url('admin/index/index', ['site_id' => 0])}">切换站点</a>
+						<a href="{:url('home/login/logout')}">退出登录</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

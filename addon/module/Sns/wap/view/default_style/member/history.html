@@ -1,0 +1,189 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<style>
+    body {
+        background: #fff;
+    }
+
+    .bar {
+        height: 44px;
+        margin-bottom: 10px;
+    }
+
+    .hui-media-content p,
+    .hui-media-content h1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .hui-media-list li {
+        padding: 8px 12px !important;
+        position: relative;
+    }
+
+    .hui-media-content {
+        width: 80%;
+    }
+
+    .hui-media-list-img {
+        width: 16vw !important;
+        height: 16vw !important;
+        border-radius: 3px;
+    }
+
+    .hui-media-list-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .collection {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .hui-media-list a {
+        width: auto !important;
+    }
+
+    .collection span {
+        font-size: 13px;
+        line-height: 1.5em;
+        color: #999999;
+        word-break: break-word;
+    }
+
+    .time {
+        margin-top: 2vw;
+    }
+</style>
+{/block}
+
+{block name="main"}
+<div class="bar"></div>
+<div class="hui-wrap">
+    <div id="refreshContainer" class="hui-refresh">
+        <div class="hui-refresh-icon"></div>
+        <div class="hui-refresh-content hui-media-list">
+            <ul id="list"></ul>
+        </div>
+    </div>
+</div>
+</div>
+{/block}
+
+{block name="script"}
+<script src="__STATIC__/ext/hui/js/hui-refresh-load-more.js"></script>
+<script>
+    // 上拉加载下拉刷新
+    var page = 1;
+    var page_size = 10;
+    hui.refresh('#refreshContainer', refresh);
+    hui.loadMore(getMore);
+    // 渲染页面
+    function listShow(data) {
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += '<li><a href="{:addon_url(\'Sns://wap/category/info\')}?info_id=' + data[i]
+                .info_id + '">'
+            html += '<div class="hui-media-list-img"><img src="' + nc.img(data[i].info_array
+                    .img_cover) +
+                '" /></div></a>'
+            html += '<div class="hui-media-content">'
+            html += '<div class="collection">'
+            html += '<a href="{:addon_url(\'Sns://wap/category/info\')}?info_id=' + data[i].info_id + '">'
+            html += '<h1>' + data[i].info_array.title + '</h1>'
+            html += '</a>'
+            html += '<span onclick="isCollection(this,' + data[i].info_id + ')" data-collection="' + data[i]
+                .is_collection + '">加入收藏</span>'
+            html += '</div>'
+            html += '<p class="time">' + nc.time_to_date(data[i].info_array.add_time,'Y-M-D') + '</p>'
+            html += '</div>'
+            html += '</li>'
+        }
+        $('#list').append(html);
+    }
+    //加载更多
+    function getMore() {
+        nc.api("Sns.Member.getHistoryList", {
+                "page": page,
+                "page_size": page_size,
+                "access_token": "{$access_token}"
+            },
+            function (res) {
+                console.log(data);
+                var data = res.list;
+                listShow(data);
+                //判断加载完毕
+                if (data.length < page_size) {
+                    hui.endLoadMore(true, '我是有底线的 ...');
+                    return false;
+                }
+                page++;
+                hui.endLoadMore();
+            }, true)
+    }
+    // 下拉刷新
+    function refresh() {
+        hui.loading('加载中...');
+        nc.api("Sns.Member.getHistoryList", {
+                "page": 1,
+                "page_size": page_size,
+                "access_token": "{$access_token}"
+            },
+            function (res) {
+                $('#list').empty();
+                hui.closeLoading();
+                console.log(res);
+                var data = res.list;
+                listShow(data);
+                $("span[data-collection]").each(function () {
+                    if ($(this).attr('data-collection') == 1) {
+                        $(this).text("已收藏");
+                        $(this).css("color", "#F4D130");
+                    }
+                })
+                page = 2;
+                //结束刷新
+                hui.endRefresh();
+                //重置加载更多状态
+                hui.resetLoadMore();
+                if (data.length == 0) {
+                    hui.endLoadMore(true, '暂无浏览记录');
+                    return false;
+                }
+                if (data.length < page_size) {
+                    hui.endLoadMore(true, ' ');
+                    return false;
+                }
+            }, true)
+    }
+    // 收藏效果
+    function isCollection(obj, info_id) {
+        if ($(obj).text() == "加入收藏") {
+            is_collection = 1;
+            isCollectionPost(info_id, 1);
+            $(obj).text("已收藏");
+            $(obj).css("color", "#F4D130");
+            hui.toast('收藏成功');
+        } else {
+            hui.confirm('您确认要取消收藏吗？', ['取消', '确定'], function () {
+                isCollectionPost(info_id, 0);
+                $(obj).text("加入收藏");
+                $(obj).css("color", "#999");
+                hui.toast('已取消收藏');
+            })
+        }
+    }
+    // 收藏功能
+    function isCollectionPost(info_id, is_collection) {
+        nc.api("Sns.Category.isCollection", {
+                "info_id": info_id,
+                "is_collection": is_collection,
+                'access_token': "{$access_token}"
+            },
+            function (res) {},
+            true);
+    }
+</script>
+{/block}

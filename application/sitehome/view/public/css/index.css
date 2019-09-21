@@ -1,0 +1,20 @@
+@CHARSET "UTF-8";
+
+header{position: fixed;top: 0px; left: 0px;width: 100%;background: #0072D2;color: #fff;display: block;padding: 15px 0px;}
+.header-container{width: 1100px; margin: auto;}
+.header-container>div{float: left;}
+.header-container>div.header-l{width: 15%; }
+.header-container>div.header-c{width: 50%;}
+.header-container>div.header-c li{float: left; min-width: 20%;display: block;line-height: 35px;}
+.header-container>div.header-r{width: 25%;float: right;    line-height: 35px;}
+.header-container>div.header-r a{padding-right: 20px;}
+.main{background:#fff;display:block;width:100%;margin-top:65px;overflow:hidden;text-align:center}
+
+/* 首页统计 */
+.chart-main{height:450px;width:100%}
+.daterange-input{position:absolute;width:200px;z-index:10}
+.chart-content{position:relative}
+.layui-card{box-shadow: initial;}
+.layui-fluid{padding-top: 10px !important;}
+.nc-tab-title{padding: 0 !important;}
+.daterange-input-wrap{position: absolute;height: 34px;width: 250px;display: inline-block;}

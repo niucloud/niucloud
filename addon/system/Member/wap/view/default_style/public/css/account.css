@@ -1,0 +1,16 @@
+.account-head{margin-top:40px;padding:60px 0;background:url(../img/account_head.png)}
+.account-block{text-align:center}
+.account-big{font-size:40px}
+.account-sm{font-size:20px}
+.account-nav{padding:15px;background-color:#fff}
+.account-nav-block{border-left:3px solid red;padding:0px 5px;font-weight:600;font-size:13px;}
+.date-account-item{margin-top:10px}
+.account-item{background-color:#fff;overflow:hidden;padding:15px;margin-bottom:10px}
+.account-item-title{height:25px;line-height:25px;font-size:14px}
+.account-item-time{height:25px;line-height:30px;font-size:12px;color:#b3b3b3}
+.account-item-num{height:50px;line-height:50px;font-weight:700}
+.date-month{padding:5px 15px;font-size:12px;color:#b3b3b3}
+.account-list-more{text-align:center;color:#b3b3b3;padding:10px;font-size:12px;}
+.account-list-more a{text-align:center;color:#03a9f4;font-size:12px;}
+.pull-left{float:left}
+.pull-right{float:right}

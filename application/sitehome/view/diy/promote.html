@@ -1,0 +1,194 @@
+<link rel="stylesheet" href="SITEHOME_CSS/promote.css"/>
+<div class="layui-tab layui-tab-brief promote" lay-filter="promote-port">
+	<ul class="layui-tab-title">
+		{foreach name="$list" item="vo" key="k"}
+		<li {if $k==0}class="layui-this"{/if} data-port="{$vo.port}" data-qrcode="{notempty name='$vo.qrcode'}{:img($vo.qrcode)}{/notempty}">{$vo.name}</li>
+		{/foreach}
+		<a href="javascript:;" class="edit-promote-setting nc-text-color">修改推广设置</a>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			
+			<div class="edit-header">
+				<span>样式预览：</span>
+				<span>推广设置：</span>
+			</div>
+			
+			<div class="preview-wrap">
+				
+				<div class="posters-style">
+					<div class="top-wrap">
+						{notempty name="$value['share_image']"}
+						<img src="{:img($value['share_image'])}"/>
+						{else/}
+						<img src="{:img($icon)}"/>
+						{/notempty}
+						<h1 data-share-title>{$value['share_title']}</h1>
+						<p data-share-desc>{$value['share_desc']}</p>
+					</div>
+					
+					<div class="bottom-wrap">
+						<img src="{$site_info['icon']}" />
+						<div class="info">
+							<label>{$site_info['site_name']}</label>
+							<span>扫描或长按二维码</span>
+						</div>
+						
+						<img src="SITEHOME_IMG/wx_code.png" alt="二维码" data-qrcode />
+					</div>
+				</div>
+				
+				<div class="wechat-style">
+					<img src="SITEHOME_IMG/promote_wechat_bg.png" class="chat-bg"/>
+					<div class="head">{$site_info['site_name']}</div>
+					<div class="info">
+						<h4 data-share-title>{$value['share_title']}</h4>
+						<p data-share-desc>{$value['share_desc']}</p>
+						{notempty name="$value['share_image']"}
+						<img src="{:img($value['share_image'])}"/>
+						{else/}
+						<img src="{:img($icon)}"/>
+						{/notempty}
+					</div>
+					<img src="{$site_info['icon']}" class="user-logo" />
+				</div>
+				
+				<div class="wechat-applet-style">
+					<img src="SITEHOME_IMG/promote_wechat_bg.png" class="chat-bg"/>
+					<div class="head">{$site_info['site_name']}</div>
+					<div class="info">
+						<div class="head">
+							<img src="{$site_info['icon']}"/>
+							<span>{$site_info['site_name']}</span>
+						</div>
+						<h4 data-share-title>{$value['share_title']}</h4>
+						{notempty name="$value['share_image']"}
+						<img src="{:img($value['share_image'])}"/>
+						{else/}
+						<img src="{:img($icon)}"/>
+						{/notempty}
+						<span class="footer">小程序</span>
+					</div>
+					<img src="{$site_info['icon']}" class="user-logo" />
+				</div>
+				
+				<div class="wechat-friends-style">
+					<img src="SITEHOME_IMG/promote_wechat_friends_bg.png" class="friends-bg"/>
+					<div class="position-info">
+						<span>{$site_info['site_name']}</span>
+						<img src="{$site_info['icon']}"/>
+					</div>
+					<div class="chat-info">
+						<img src="{$site_info['icon']}" class="user-logo"/>
+						<span class="user-name">{$site_info['site_name']}</span>
+						<div class="title">
+							{notempty name="$value['share_image']"}
+							<img src="{:img($value['share_image'])}"/>
+							{else/}
+							<img src="{:img($icon)}"/>
+							{/notempty}
+							<span data-share-title>{$value['share_title']}</span>
+						</div>
+					</div>
+					
+				</div>
+			
+			</div>
+			
+			<div class="edit-wrap">
+				
+				<span class="copy-tip">复制 H5 推广链接</span>
+				<div class="layui-form-item">
+					<div class="layui-input-inline">
+						<input class="layui-input nc-len-mid" type="text" value="" id="promote_url" readonly>
+					</div>
+					<input type="button" value="复制" class="layui-btn" onclick="nc.copy('promote_url')">
+				</div>
+				<div class="copy-option">
+					<a href="javascript:;" class="nc-text-color">下载完整海报</a>
+					<span class="split">|</span>
+					<a href="{:img($value['qrcode'])}" download="二维码" class="nc-text-color download-qrcode">仅下载二维码</a>
+				</div>
+				
+				<div class="layui-form">
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label sm">路径</label>
+						<div class="layui-input-inline">
+							{foreach name="$list" item="vo" key="k"}
+							<input type="radio" name="port_type" lay-filter="port_type" value="{$vo.port}" title="{$vo.name}" {if $k==0}checked{/if}>
+							{/foreach}
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label sm">分享样式</label>
+						<div class="layui-input-inline">
+							<input type="radio" name="share_type" lay-filter="share_type" value="1" title="海报" checked>
+							<input type="radio" name="share_type" lay-filter="share_type" value="2" title="微信好友" >
+							<input type="radio" name="share_type" lay-filter="share_type" value="3" title="微信朋友圈">
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label sm"><span class="required">*</span>分享标题</label>
+						<div class="layui-inline">
+							<div class="layui-input-inline nc-len-mid">
+								<input type="text" name="share_title" required lay-verify="required" placeholder="请输入分享标题" class="layui-input" value="{$value['share_title']}" maxlength="30"/>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label sm"><span class="required">*</span>分享描述</label>
+						<div class="layui-inline">
+							<div class="layui-input-inline nc-len-mid">
+								<textarea name="share_desc" required lay-verify="required" placeholder="请输入分享描述" class="layui-textarea" maxlength="50">{$value['share_desc']}</textarea>
+							</div>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label img-upload-lable sm">分享图片</label>
+						<div class="layui-inline img-upload">
+							{notempty name="$value['share_image']"}
+							<input type="hidden" class="layui-input" name = "share_image" value="{$value['share_image']}" />
+							{else/}
+							<input type="hidden" class="layui-input" name = "share_image" value="{$icon}" />
+							{/notempty}
+							<div class="upload-img-block share_image">
+								<div class="upload-img-box has-choose-image">
+									<div>
+										{notempty name="$value['share_image']"}
+										<img src="{:img($value['share_image'])}" layer-src="{:img($value['share_image'])}">
+										{else/}
+										<img src="{:img($icon)}" layer-src="{:img($icon)}">
+										{/notempty}
+									</div>
+									<span onclick="uploadSingleshare_image();">修改</span>
+								</div>
+							</div>
+							<span class="upload-tip">建议图片比例 1:1</span>
+							{:hook("fileUpload", ['name' => 'share_image', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000', 'thumb_type' => 'pic'], '', true)}
+						
+						</div>
+					</div>
+					<input type="hidden" value="{$data['name']}" name="name">
+					
+					<div class="nc-form-row">
+						<button class="layui-btn layui-btn-primary js-go-back">返回</button>
+						<button type="button" class="layui-btn" lay-submit lay-filter="save">保存</button>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+</div>
+<script>
+	var promote_data = {$data|json_encode};
+	var default_qrcode = 'SITEHOME_IMG/wx_code.png';
+</script>
+<script src="SITEHOME_JS/promote.js"></script>

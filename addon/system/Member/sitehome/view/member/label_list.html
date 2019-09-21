@@ -1,0 +1,270 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+	<button class="layui-btn" onclick="addLabel()">添加标签</button>
+</div>
+<div class="nc-table-box">
+	<table id="label_list" lay-filter="label_list"></table>
+</div>
+<script type="text/html" id="create_time">
+	<span>{{nc.time_to_date(d.create_time)}}</span>
+</script>
+
+<script type="text/html" id="sort">
+	<label><input value="{{ d.sort }}" type="number" min="0" class="layui-input sm" onchange="setSort(this, {{ d.label_id }})"/></label>
+</script>
+
+<script type="text/html" id="operation">
+	<a class="default" lay-event="edit">编辑</a> |
+	<a class="default" lay-event="delete">删除</a> <br/>
+</script>
+
+<script type="text/html" id="batchOperation">
+	<button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+</script>
+
+{/block}
+{block name="script"}
+<script>
+	var table;
+	var form;
+	$(function () {
+		
+		table = new Table({
+			elem: "#label_list",
+			filter: "label_list",
+			url: '{:addon_url("Member://sitehome/member/labellist")}',
+			cols: [[
+				{type: 'checkbox',unresize : 'true'},
+				{field: 'label_name', width: '25%', title: '标签名称',unresize : 'true'},
+				{field: 'remark', width: '15%', title: '备注',unresize : 'true'},
+				{field: 'create_time', width: '25%', title: '创建时间', templet: '#create_time',unresize : 'true'},
+				{field: 'sort', width: '10%', title: '排序', templet: '#sort',unresize : 'true'},
+				{title: '操作', toolbar: '#operation', align: 'right',unresize : 'true'}
+			]],
+			bottomToolbar: "#batchOperation"
+		});
+		
+		table.bottomToolbar(function (obj) {
+			
+			if(obj.data.length < 1){
+				layer.msg('请选择要操作的数据');
+				return;
+			}
+			
+			switch (obj.event) {
+				case "delete":
+					var id_array = new Array();
+					for (i in obj.data) id_array.push(obj.data[i].label_id);
+					deleteLabel(id_array.toString());
+					break;
+			}
+		});
+		
+		table.tool(function (obj) {
+			var data = obj.data;
+			switch (obj.event) {
+				case 'edit':
+					editLabel(data);
+					break;
+				case 'delete':
+					deleteLabel(data.label_id);
+					break;
+			}
+			
+		});
+		
+	});
+	
+	/**
+	 * 修改会员标签
+	 */
+	function editLabel(data) {
+		$.ajax({
+			type: "post",
+			url: '{:addon_url("Member://sitehome/member/labelinfo")}',
+			async: false,
+			data: {'label_id': data.label_id},
+			dataType: 'json',
+			success: function (data) {
+				if (data.code != 0) {
+					layer.msg(data.message);
+				}
+				data = data.data;
+				var html = '';
+				html += '<div class="layui-form member-form" id="label_info" lay-filter="label_info">' +
+					'<div class="layui-form-item">' +
+					'<label class="layui-form-label">标签名称</label>' +
+					'<div class="layui-input-inline nc-len-mid">' +
+					'<input type="text" name="label_name" id="label_name" value="' + data.label_name + '" required lay-verify="required" autocomplete="off" class="layui-input" maxlength="16">' +
+					'</div>' +
+					'</div>' +
+					'<div class="layui-form-item">' +
+					'<label class="layui-form-label">排序</label>' +
+					'<div class="layui-input-inline">' +
+					'<input type="number" name="sort" id="sort" value="' + data.sort + '" required lay-verify="number" placeholder="请输入序号" autocomplete="off" class="layui-input nc-len-tiny" min="0" max="100000">' +
+					'</div>' +
+					'</div>' +
+					'<div class="layui-form-item">' +
+					'<label class="layui-form-label">备注</label>' +
+					'<div class="layui-input-inline nc-len-mid">' +
+					'<textarea name="remark" id="remark" placeholder="请输入标签备注" class="layui-textarea" max-length="300"></textarea>' +
+					'</div>' +
+					'</div>' +
+					'<div class="nc-form-row">' +
+					'<button class="layui-btn" lay-submit lay-filter="editMemberLabel" onclick="editMemberLabel(' + data.label_id + ')">保存</button>' +
+					'<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>' +
+					'</div>' +
+					'</div>';
+				layer.open({
+					type: 1,
+					title: '修改会员标签',
+					skin: 'layer-tips-class',
+					area: ['550px'],
+					closeBtn: 1,
+					content: html,
+					success: function (layero, index) {
+						editMemberLabel();
+						form.val("label_info", {
+							"remark": data.remark
+						});
+					}
+				})
+			}
+		})
+	}
+	
+	/**
+	 * 删除会员标签
+	 */
+	function deleteLabel(label_id) {
+		layer.confirm('确定删除吗?', {
+			btn: ['确定', '取消']
+		}, function (index) {
+			$.ajax({
+				type: "post",
+				async: false,
+				url: '{:addon_url("Member://sitehome/member/deletelabel")}',
+				data: {'label_id': label_id},
+				dataType: 'json',
+				success: function (res) {
+					layer.msg(res.message);
+					if (res.code == 0) {
+						table.reload();
+					}
+				}
+			});
+		}, function () {
+			layer.close();
+		});
+	}
+	
+	/**
+	 * 添加会员标签
+	 */
+	function addLabel() {
+		var html = '';
+		html += '<div class="layui-form member-form" lay-filter="form">' +
+			'<div class="layui-form-item">' +
+			'<label class="layui-form-label"><span class="required">*</span>标签名称</label>' +
+			'<div class="layui-input-inline nc-len-mid">' +
+			'<input type="text" name="label_name" id="label_name" value="" required lay-verify="required" placeholder="请输入标签名称" autocomplete="off" class="layui-input" maxlength="16">' +
+			'</div>' +
+			'</div>' +
+			'<div class="layui-form-item">' +
+			'<label class="layui-form-label">排序</label>' +
+			'<div class="layui-input-inline">' +
+			'<input type="number" name="sort" id="sort" value="0" required lay-verify="number" placeholder="请输入序号" autocomplete="off" class="layui-input nc-len-tiny" min="0" max="100000">' +
+			'</div>' +
+			'</div>' +
+			'<div class="layui-form-item">' +
+			'<label class="layui-form-label">备注</label>' +
+			'<div class="layui-input-inline nc-len-mid">' +
+			'<textarea name="remark" id="remark" placeholder="请输入标签备注" class="layui-textarea" max-length="300"></textarea>' +
+			'</div>' +
+			'</div>' +
+			'<div class="nc-form-row">' +
+			'<button class="layui-btn" lay-submit lay-filter="editMemberLabel">保存</button>' +
+			'<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>' +
+			'</div>' +
+			'</div>';
+		layer.open({
+			type: 1,
+			title: '添加会员标签',
+			skin: 'layer-tips-class',
+			area: ['550px'],
+			closeBtn: 1,
+			content: html,
+			success: function (layero, index) {
+				editMemberLabel();
+			}
+		})
+	}
+	
+	/**
+	 * 调整排序
+	 */
+	function setSort(element, label_id) {
+		var value = $(element).val();
+		if (value != '' && /\D/.test(value)) {
+			layer.msg("排序序号请输入正整数");
+			$(element).focus();
+			return;
+		}
+		$.ajax({
+			type: "post",
+			url: '{:addon_url("Member://sitehome/member/setsort")}',
+			data: {'sort': value, label_id},
+			dataType: 'json',
+			success: function (data) {
+				layer.msg(data.message);
+				table.reload();
+			}
+		});
+	}
+	
+	/**
+	 * 表单提交
+	 */
+	var repeat_flag = false;//防重复标识
+	function editMemberLabel(label_id = 0) {
+		layui.use('form', function () {
+			form = layui.form;
+			form.verify({
+				number: function (value, item) {
+					if (value == '') {
+						return '请输入排序序号';
+					}
+					if (value != '' && /\D/.test(value)) {
+						return "排序序号请输入正整数";
+					}
+				},
+			});
+			
+			form.render();
+			form.on('submit(editMemberLabel)', function (data) {
+				var field = data.field;
+				if (repeat_flag) return;
+				repeat_flag = true;
+				$.ajax({
+					type: "post",
+					url: '{:addon_url("Member://sitehome/member/addlabel")}',
+					data: {field, label_id},
+					dataType: 'json',
+					success: function (data) {
+						layer.msg(data.message);
+						if (data.code == 0) {
+							table.reload();
+							layer.closeAll('page');
+						}
+						repeat_flag = false;
+					}
+				});
+			});
+		});
+	}
+
+</script>
+{/block}

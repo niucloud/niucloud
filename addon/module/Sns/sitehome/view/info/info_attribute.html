@@ -1,0 +1,209 @@
+<div class="layui-form">
+<div class="layui-form-item ">
+    <label class="layui-form-label">当前分类</label>
+    <div class="layui-input-inline category_name">
+        <span id="category_name">{$category_name}</span>
+    </div>
+</div>
+<div class="layui-form-item ">
+    <label class="layui-form-label">
+        <span class="required">*</span>圈子</label>
+    <div class="layui-input-inline">
+        <select name="province" lay-filter="province" lay-verify="province">
+            <option value="0">选择省份</option>
+        </select>
+    </div>
+    <div class="layui-input-inline">
+        <select name="city" lay-filter="city" lay-verify="city">
+            <option value="0">选择城市</option>
+        </select>
+    </div>
+</div>
+
+<div class="layui-form-item ">
+    <label class="layui-form-label"><span class="required">*</span>联系人</label>
+    <div class="layui-input-inline">
+        <input type="text" name="linkman" autocomplete="off" placeholder="请输入联系人" class="layui-input nc-len-long"  lay-verify="linkman">
+    </div>
+</div>
+
+<div class="layui-form-item ">
+    <label class="layui-form-label"><span class="required">*</span>联系电话</label>
+    <div class="layui-input-inline">
+        <input type="text" name="contact" autocomplete="off" placeholder="请输入联系电话" class="layui-input nc-len-long" lay-verify="contact">
+    </div>
+</div>
+
+<div class="layui-form-item ">
+    <label class="layui-form-label"><span class="required">*</span>价格</label>
+    <div class="layui-input-inline">
+        <input type="text" name="price" autocomplete="off" placeholder="" class="layui-input price" lay-verify="price">
+    </div>
+    <div class="layui-form-mid layui-word-aux">{:empty($category_info.price_unit) ? '' : '/'.$category_info.price_unit}</div>
+
+    <div class="layui-input-inline checkbox_my">
+        <input type="checkbox" name="checkbox_price" value="面议" title="面议" >
+        <input type="hidden" class="checkbox_price" value="1" >
+    </div>
+</div>
+
+<div class="layui-form-item ">
+    <label class="layui-form-label"><span class="required">*</span>{$category_info['title_label'] ?: '标题'}</label>
+    <div class="layui-input-inline">
+        <input type="text" name="title" autocomplete="off" placeholder="{$category_info['title_placeholder'] ?: '请输入标题'}" class="layui-input nc-len-long" lay-verify="title">
+    </div>
+</div>
+
+{volist name = "list['data']" id = "vo" key = "k"}
+<div class="layui-form-item ">
+    <label class="layui-form-label">{$vo.name}</label>
+    <div class="layui-input-inline">
+        {switch name="$vo['input_type']" }
+
+        {case value="text"}
+
+        <input type="text" name="attribute_field_{$vo.attribute_id}"
+               {if condition="$vo.required eq 1"} lay-verify="title" {/if}
+        {if condition="$vo.args.text_length neq ''"} maxlength="{$vo.args.text_length}" {/if}
+        {if condition="$vo.args.text_default_value neq ''"} value="{$vo.args.text_length}" {/if}
+        autocomplete="off" placeholder="" class="layui-input nc-len-long">
+
+        {/case}
+
+        {case value="textarea"}
+        <textarea name="desc_{$vo.attribute_id}" placeholder="请输入内容" class="layui-textarea"
+                  style = "width:{$vo.args.textarea_width =='' ? '200px' : $vo.args.textarea_width};
+                          height:{$vo.args.textarea_height =='' ? '200px' : $vo.args.textarea_height};"
+        ">{$vo.args.textarea_default_value}</textarea>
+        {/case}
+
+        {case value="editor"}
+        <textarea id="editor"></textarea>
+        <script>
+            var editor = new Editor("editor",{});
+        </script>
+        {/case}
+
+        {case value="select"}
+
+        <select name="select_{$vo.attribute_id}" lay-verify="required">
+            {volist name = "$vo.args.select_option" id = "option"}
+            <option value="{$option}"  {if condition ="$option eq $vo.args.select_default_value"}selected{/if}>{$option}</option>
+            {/volist}
+        </select>
+        {/case}
+
+        {case value="radio"}
+        {volist name = "$vo.args.radio_option" id = "radio"}
+        <input type="radio" name="radio_{$vo.attribute_id}" value="{$radio}" title="{$radio}" {if condition ="$radio eq $vo.args.radio_default_value"}checked{/if}>
+        {/volist}
+        {/case}
+
+        {case value="checkbox"}
+        {volist name = "$vo.args.checkbox_option" id = "checkbox"}
+        <input type="checkbox" name="checkbox_{$vo.attribute_id}" value="{$checkbox}" title="{$checkbox}" {if condition ="$checkbox eq $vo.args.checkbox_default_value"}checked{/if}>
+        {/volist}
+        {/case}
+
+        {case value="img"}
+        <div class="img-upload">
+            <input type="hidden" class="layui-input" name = "title_img_{$vo.attribute_id}" value="" />
+            <div class="upload-img-inline title_img">
+                <div class="upload-img-box" onclick="uploadSingletitle_img()" >
+                    <div>
+                        <i class="add">+</i>
+                    </div>
+                </div>
+            </div>
+            {:hook("fileUpload", ["name" => "title_img", "file_type" => "IMAGE", "type" => "common"], '', true)}
+        </div>
+        <div style="clear: both"></div>
+        {/case}
+
+        {case value="imgs"}
+        <div class="img-upload">
+            <input type="hidden" class="layui-input" name = "title_img_{$vo.attribute_id}" value="" />
+            <div class="upload-img-inline title_img">
+                <div class="upload-img-box" onclick="uploadSingletitle_img()" >
+                    <div>
+                        <i class="add">+</i>
+                    </div>
+                </div>
+            </div>
+            {:hook("fileUpload", ["name" => "title_img", "file_type" => "IMAGE", "type" => "common"], '', true)}
+        </div>
+        <div style="clear: both"></div>
+        {/case}
+
+        {case value="file"}
+        {:hook("fileUpload", ['name' => 'article', 'type' => 'common', 'file_type' => 'ATTACHMENT'], '', true)}
+        <div>
+            <button type="button" class="layui-btn layui-btn-sm" onclick="uploadEnclosurearticle()">上传附件</button>
+        </div>
+        <input type="hidden" name="attachment_path" autocomplete="off" placeholder="" class="layui-input nc-len-long" style="margin-top:10px;">
+        {/case}
+
+        {case value="files"}
+        {:hook("fileUpload", ['name' => 'article', 'type' => 'common', 'file_type' => 'ATTACHMENT'], '', true)}
+        <div>
+            <button type="button" class="layui-btn layui-btn-sm" onclick="uploadEnclosurearticle()">上传附件</button>
+        </div>
+        <input type="hidden" name="attachment_path" autocomplete="off" placeholder="" class="layui-input nc-len-long" style="margin-top:10px;">
+        {/case}
+
+        {case value="number"}
+
+        <input type="number" name="attribute_field_{$vo.attribute_id}"
+               {if condition="$vo.args.number_min neq ''"} min="{$vo.args.number_min}" {/if}
+        {if condition="$vo.args.number_max neq ''"} max="{$vo.args.number_max}" {/if}
+        {if condition="$vo.args.number_default_value neq ''"} value="{$vo.args.number_default_value}" {/if}
+        autocomplete="off" placeholder="" class="layui-input nc-len-long">
+        {/case}
+
+        {case value="time"}
+        时间
+        {/case}
+
+        {case value="map"}
+        地图坐标
+        {/case}
+
+        {case value="area"}
+        地区选择框
+        {/case}
+        {/switch}
+    </div>
+</div>
+{/volist}
+
+<div class="layui-form-item ">
+    <label class="layui-form-label">{$category_info['content_label'] ?: '内容'}</label>
+    <div class="layui-input-inline">
+        <textarea id="content" name="content"  class="layui-textarea"></textarea>
+    </div>
+</div>
+
+<!-- 上传图片 -->
+<div class="layui-form-item ">
+    <label class="layui-form-label img-upload-lable">{$category_info['icon_label'] ?: '封面图'}</label>
+    <div  class="layui-input-inline article img-upload" id="layer-photos">
+        <div>
+            <input type="hidden" class="layui-input" name = "title_img" value="{$info_detail['icon']}" />
+            <div class="upload-wrap">
+                <div>
+                    <button class="layui-btn layui-btn-sm"  onclick="upload()">上传图片</button>
+                </div>
+                {:hook("fileUpload", ["name" => "", 'type' => 'multiple', 'file_type' => 'IMAGE','size' => '2000', 'thumb_type' => 'big,mid,small'], '', true)}
+            </div>
+        </div>
+        <div style="clear: both"></div>
+    </div>
+</div>
+<div class="layui-row" id="t_customerInfo"></div>
+
+<div class="nc-form-row active ">
+    <button class="layui-btn" lay-util="last_step">上一步</button>
+    <button class="layui-btn" lay-submit lay-filter="btnInfo" type="button">保存</button>
+</div>
+</div>
+

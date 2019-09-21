@@ -1,0 +1,174 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<style>
+    body {
+        background: #fff;
+    }
+
+    .bar {
+        height: 44px;
+    }
+
+    .my-comment li {
+        padding: 15px 10px;
+        border-bottom: 1px solid #f5f5f5;
+    }
+
+    .my-info {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .my-img {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        align-items: center;
+    }
+
+    .my-img img {
+        width: 32px;
+        height: 32px;
+        font-size: 0;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .my-img span {
+        font-size: 16px;
+    }
+
+    .my-time {
+        color: #c7c7c7;
+        font-size: 12px;
+    }
+
+    .comment-content {
+        padding-top: 8px;
+    }
+
+    .nice-num {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        justify-content: flex-end;
+        line-height: 52px;
+    }
+
+    .nice-num div,
+    .nice-num span {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .shop {
+        color: #999;
+        background: #f5f5f5;
+        padding: 0 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        line-height: 32px;
+        font-size: 12px;
+    }
+    .hui-media-list li{
+        display: block;
+    }
+</style>
+{/block}
+
+{block name="main"}
+<div class="bar"></div>
+<!-- <ul class="my-comment" id="list"></ul> -->
+<div class="hui-wrap">
+        <div id="refreshContainer" class="hui-refresh">
+            <div class="hui-refresh-icon"></div>
+            <div class="hui-refresh-content hui-media-list">
+                <ul class="my-comment" id="list"></ul>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block name="script"}
+<script src="__STATIC__/ext/hui/js/hui-refresh-load-more.js"></script>  
+<script>
+    // 上拉加载下拉刷新
+    var page = 1;
+    var page_size = 10;
+    hui.refresh('#refreshContainer', refresh);
+    hui.loadMore(getMore);
+    // 渲染页面
+    function listShow(data) {
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += '<li>'
+            html += '<div class="my-info">'
+            html += '<div class="my-img">'
+            html += '<img src="'+nc.img(data[i].member_array.headimg ? data[i].member_array.headimg : 'ADDON_WAP_SNS_IMG/default_headimg.png') +'" alt="">'
+            html += '<span>'+data[i].member_array.username +'</span>'
+            html += '</div>'
+            html += '<div class="my-time">'+nc.time_to_date(data[i].create_time,'YMD')+'</div>'
+            html += '</div>'
+            html += '<div class="comment-content">'+data[i].content+'</div>'
+            html += '<div class="nice-num">'
+            html += '<div>获赞&nbsp;&nbsp;(<span>'+data[i].fabulous+'</span>)</div>'
+            html += '</div>'
+            html += '<a href="{:addon_url(\'Sns://wap/category/info\')}?info_id=' + data[i].info_id + '"><div class="shop">'+data[i].member_array.title+'</div></a>'
+            html += '</li>'
+        }
+        $('#list').append(html);
+    }
+    //加载更多
+    function getMore() {
+        nc.api("Sns.Category.getCommentList", {
+                "page": page,
+                "page_size": page_size,
+                "access_token": "{$access_token}"
+            },
+            function (res) {
+                console.log(data);
+                var data = res.data.comment;
+                listShow(data);
+                //判断加载完毕
+                if (data.length < page_size) {
+                    hui.endLoadMore(true, '我是有底线的 ...');
+                    return false;
+                }
+                page++;
+                hui.endLoadMore();
+            }, true)
+    }
+    // 下拉刷新
+    function refresh() {
+        hui.loading('加载中...');
+        nc.api("Sns.Category.getCommentList", {
+                "page": 1,
+                "page_size": page_size,
+                "access_token": "{$access_token}"
+            },
+            function (res) {
+                $('#list').empty();
+                hui.closeLoading();
+                console.log(res);
+                var data = res.data.comment;
+                listShow(data);
+                page = 2;
+                //结束刷新
+                hui.endRefresh();
+                //重置加载更多状态
+                hui.resetLoadMore();
+                if (data.length == 0) {
+                    hui.endLoadMore(true, '暂无评论');
+                    return false;
+                }
+                if (data.length < page_size) {
+                    hui.endLoadMore(true, ' ');
+                    return false;
+                }
+            }, true)
+    }
+</script>
+{/block}

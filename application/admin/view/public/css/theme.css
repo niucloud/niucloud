@@ -1,0 +1,120 @@
+.nc-bg-color {
+  background-color: #12b7f5 !important;
+}
+.nc-bg-color-black {
+  background-color: #000 !important;
+}
+.nc-bg-color-black-f7 {
+  background-color: #f7f7f7 !important;
+}
+.layui-nav.nc-nav .layui-this::after {
+  background-color: #12b7f5 !important;
+}
+.layui-btn-disabled:hover {
+  background-color: #12b7f5 !important;
+}
+.layui-card-header:after {
+  background-color: #12b7f5 !important;
+}
+.create-progress-bar .layui-progress-bar,
+.create-site-content-btn {
+  background-color: #12b7f5 !important;
+}
+.nc-border-color {
+  border-color: #12b7f5 !important;
+}
+.nc-border-color-block {
+  border-color: #000 !important;
+}
+a:hover {
+  color: #12b7f5;
+}
+.nc-text-color {
+  color: #12b7f5 !important;
+}
+.nc-text-color-black {
+  color: #000 !important;
+}
+.nc-text-color-black-99 {
+  color: #999999 !important;
+}
+.nc-list .head > span,
+.layui-text em,
+.layui-word-aux {
+  color: #999999 !important;
+}
+.nc-text-color-hover {
+  color: #12b7f5 !important;
+}
+.niu-base .layui-nav .layui-this > a span,
+.niu-base .layui-nav.nc-nav .layui-this > a,
+.niu-base .layui-nav .layui-this > a {
+  color: #12b7f5 !important;
+}
+.layui-nav.nc-nav .layui-nav-item a {
+  color: #333333 !important;
+}
+.layui-btn {
+  background-color: #12b7f5 !important;
+}
+.layui-btn.layui-btn-primary {
+  border-color: #e6e6e6 !important;
+  color: #666666 !important;
+}
+.layui-form-onswitch {
+  border-color: #12b7f5 !important;
+  background-color: #12b7f5 !important;
+}
+.required {
+  color: red !important;
+}
+.layui-form-checked[lay-skin=primary] i {
+  border-color: #12b7f5 !important;
+  background-color: #12b7f5 !important;
+}
+.layui-form-select dl dd:hover {
+  color: #12b7f5 !important;
+}
+.layui-form-select dl dd.layui-this {
+  background: #f7f7f7 !important;
+  color: #12b7f5 !important;
+}
+.layui-table tbody tr:hover,
+.layui-table thead tr,
+.layui-table-click,
+.layui-table-header,
+.layui-table-hover,
+.layui-table-mend,
+.layui-table-patch,
+.layui-table-tool,
+.layui-table[lay-even] tr:nth-child(even) {
+  background-color: #f9f9f9 !important;
+}
+.layui-table td,
+.layui-table th {
+  border-bottom-color: #e4e4e4 !important;
+}
+.layui-table-page .layui-laypage a,
+.layui-table-page .layui-laypage span.layui-laypage-curr {
+  border-color: #dedede !important;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  background-color: #12b7f5 !important;
+}
+.nc-list.style1 .head {
+  background-color: #f7f7f7 !important;
+}
+.nc-list > ul > li {
+  border-color: #e6e6e6;
+}
+.nc-list > ul > li > .operation {
+  color: #12b7f5 !important;
+}
+.layui-nav .layui-nav-item a:hover,
+.layui-nav .layui-this a {
+  color: #12b7f5 !important;
+}
+.layui-breadcrumb a:hover {
+  color: #12b7f5 !important;
+}
+/*# sourceMappingURL=theme.css.map */

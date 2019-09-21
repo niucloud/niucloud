@@ -1,0 +1,268 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+	.layui-table .img-wrap{line-height: 40px;text-align: center;}
+	.layui-table span{vertical-align: middle;}
+	.nc-list.style1 .head{border-bottom: 1px solid #e5e5e5;}
+</style>
+{/block}
+{block name="main"}
+<div class="nc-module-display">
+	<div class="nc-module-pic">
+		{if condition="$local_user_info['headimg'] eq ''"}
+		<img src="ADMIN_IMG/user_img.png" name="headimg">
+		{else /}
+		<img src="{:img($local_user_info['headimg'])}" name="headimg">
+		{/if}
+	</div>
+	<div class="nc-module-content">
+		<h2 class="nc-module-title">{$local_user_info['username']}</h2>
+	</div>
+</div>
+
+<div class="layui-tab" lay-filter="edit_user_tab">
+	<ul class="layui-tab-title">
+		<li lay-id="basic_info">基础信息</li>
+		<li lay-id="site_manage">站点管理</li>
+		<li lay-id="group">管理组设置</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item">
+			<div class="nc-list style1">
+				<div class="head">
+					<h2>用户基础信息</h2>
+				</div>
+				<ul class="layui-form">
+					<li>
+						<label>头像</label>
+						<span>
+							<div class="headframe">
+								{empty name="$local_user_info['headimg']"}
+								<img src="ADMIN_IMG/user_img.png" name="headimg" class="icon" width="45px" height="45px">
+								{else /}
+								<img src="{:img($local_user_info['headimg'])}" name="headimg" class="icon" width="45px" height="45px">
+								{/empty}
+							</div>
+						</span>
+						<a class="operation" href="javascript:uploadSingleicon();">修改头像</a>
+						{:hook("fileUpload", ["name" => "icon", 'type' => 'common', 'file_type' => 'IMAGE'], '', true)}
+					</li>
+					<li>
+						<label>用户名</label>
+						<span>{$local_user_info['username']}</span>
+						<a href="javascript:;" class="operation" onclick="editLayer('editUserName', '修改用户名', '450px')">修改</a>
+					</li>
+					<li>
+						<label>密码</label>
+						<span>******</span>
+						<a href="javascript:;" class="operation" onclick="editLayer('editPassword', '修改密码', '550px')">修改</a>
+					</li>
+					<li>
+						<label>用户昵称</label>
+						<span>{$local_user_info['nick_name']}</span>
+						<a href="javascript:;" class="operation" onclick="editLayer('editNickName', '修改昵称', '450px')">修改</a>
+					</li>
+					<li>
+						<label>真实姓名</label>
+						<span>{$local_user_info['real_name']}</span>
+						<a href="javascript:;" class="operation" onclick="editLayer('editRealName', '修改真实名称', '450px')">修改</a>
+					</li>
+					<li>
+						<label>手机号</label>
+						<span>
+							{notempty name="$local_user_info['mobile']"}
+							{$local_user_info['mobile']}
+							{/notempty}
+						</span>
+						<a href="javascript:;" class="operation" onclick="editLayer('editMobile', '修改手机号', '450px')">修改</a>
+					</li>
+					<li>
+						<label>注册时间</label>
+						<span>
+							{if $local_user_info['register_time'] == 0  }
+							{else/}
+							{$local_user_info['register_time']| date="Y-m-d H:i:s",###}
+							{/if}
+						</span>
+					</li>
+					<li>
+						<label>上次登录时间</label>
+						<span>
+							{if $local_user_info['last_login_time'] == 0  }
+							{else/}
+							{$local_user_info['last_login_time']| date="Y-m-d H:i:s",###}
+							{/if}
+						</span>
+					</li>
+					<li>
+						<label>上次登录ip</label>
+						<span>{$local_user_info['last_login_ip']}</span>
+					</li>
+					<li>
+						<label>用户短信条数</label>
+						<span>{$local_user_info['sms_num']}</span>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="layui-tab-item">
+			<table class="layui-table" id="site_list" lay-filter="site_list"></table>
+		</div>
+		<div class="layui-tab-item">
+			<div class="nc-list style1">
+				<div class="head">
+					<h2>管理组基础信息</h2>
+				</div>
+				<ul class="layui-form">
+					<li>
+						<label>管理组</label>
+						{volist name="$group_list" id="vo"}
+						{if $vo.group_id== $site_user_info.group_id }
+						<span data-group-id="{$vo.group_id}">{$vo.group_name}</span>
+						{/if}
+						{/volist}
+						<a href="javascript:;" class="operation" onclick="editLayer('editGroup', '修改管理组', '550px')">修改</a>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="editPassword">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">原密码</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="password" name="old_pass" class="layui-input" value="" lay-verify="oldPass">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">新密码</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="password" name="new_pass" class="layui-input" value="" lay-verify="password">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">确认新密码</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="password" name="c_new_pass" class="layui-input" value="" lay-verify="cPassword">
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editPassSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="editUserName">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="username" class="layui-input nc-len-short" value="{$local_user_info['username']}" lay-verify="required">
+			</div>
+		</div>
+		
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editUserName">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="editNickName">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">昵称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="nick_name" class="layui-input nc-len-short" value="{$local_user_info.nick_name}" lay-verify="required">
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editNickName">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="editRealName">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">真实姓名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="real_name" class="layui-input nc-len-short" value="{$local_user_info.real_name}" lay-verify="required">
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editRealName">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="editMobile">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机</label>
+			<div class="layui-input-inline">
+				<input type="text" name="mobile" class="layui-input nc-len-short" value="{$local_user_info.mobile}" lay-verify="mobile">
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editMobile">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="editGroup">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">管理组</label>
+			<div class="layui-input-inline nc-len-mid">
+				<select name="group_id" lay-verify="groupId">
+					<option value="">选择管理组</option>
+					{volist name="$group_list" id="vo"}
+					<option value="{$vo.group_id}" {if $vo.group_id== $site_user_info.group_id }selected{/if}>{$vo.group_name}</option>
+					{/volist}
+				</select>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="editGroup">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="site_name">
+	<div class="img-wrap">
+		{{# if(d.icon == ''){ }}
+		<img src="ADMIN_IMG/site_img.png">
+		{{# } else { }}
+		<img src="{{nc.img(d.icon)}}">
+		{{# } }}
+	</div>
+	<span>{{d.site_name}}</span>
+</script>
+<script type="text/html" id="site_style">
+	<span>{{d.title}}</span>
+</script>
+
+<script type="text/html" id="operation">
+	<a href="javascript:;" class="default primary" lay-filter="sitedetail" lay-event="sitedetail">详情</a>
+	<a href="javascript:;" class="default primary" lay-filter="deleteSite" lay-event="deleteSite">删除</a>
+</script>
+
+{/block}
+
+{block name="script"}
+<script>
+var tab = "{$tab}";
+var uid = {$uid};
+</script>
+<script src="ADMIN_JS/edit_user.js"></script>
+{/block}

@@ -1,0 +1,72 @@
+{extend name="admin@base"/}
+{block name="main"}
+<div class="layui-form">
+
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span class="required">*</span>Accesskey</label>
+    <div class="layui-input-block">
+      <input type="text" name="access_key" required  lay-verify="access_key" placeholder="请输入Accesskey"  value="{$config_info['access_key']}" autocomplete="off" class="layui-input  nc-len-long">
+    </div>
+    <div class="layui-form-mid layui-word-aux">用于签名的公钥</div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label" ><span class="required">*</span>Secretkey</label>
+    <div class="layui-input-block">
+      <input type="text" name="secret_key" required  lay-verify="secret_key" placeholder="请输入Secretkey"  value="{$config_info['secret_key']}" autocomplete="off" class="layui-input  nc-len-long">
+    </div>
+    <div class="layui-form-mid layui-word-aux">用于签名的私钥</div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label"><span class="required">*</span>Bucket</label>
+    <div class="layui-input-block">
+      <input type="text" name="bucket" required  lay-verify="bucket" placeholder="请输入Bucket"  value="{$config_info['bucket']}" autocomplete="off" class="layui-input  nc-len-long">
+    </div>
+    <div class="layui-form-mid layui-word-aux">请保证bucket为可公共读取的</div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">Url</label>
+    <div class="layui-input-block">
+      <input type="text" name="domain" placeholder=""  value="{$config_info['domain']}" autocomplete="off" class="layui-input  nc-len-long">
+    </div>
+    <div class="layui-form-mid layui-word-aux">七牛支持用户自定义访问域名。注：url开头加http://或https://，结尾不加 ‘/’，例：http://abc.com</div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label" >是否启用</label>
+    <div class="layui-input-block">
+      <input type="checkbox" required name="status" value="1" lay-skin="switch" lay-filter="switch" {if condition='$status' eq 1}checked{/if}>
+    </div>
+  </div>
+  
+  <div class="nc-form-row">
+      <button type="button" class="layui-btn" lay-submit lay-filter="save">保存</button>
+      <button onclick="window.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+  </div>
+</div>
+<script>
+layui.use('form', function(){
+  var form = layui.form;
+	
+	var repeat_flag = false;//防重复标识
+  form.on('submit(save)', function(data){
+      if(repeat_flag) return;
+	  repeat_flag = true;
+      $.ajax({
+          type : "post",
+          url : '{:addon_url("fileqiniu://admin/config/config")}',
+          data : data.field,
+          dataType : "JSON",
+          success : function(res) {
+          	if(res.code == 0){
+                window.location.reload();
+             }else {
+				repeat_flag = false;
+             }
+             layer.msg(res.message);
+             
+          }
+      }); 
+  });
+
+});
+</script>
+{/block}

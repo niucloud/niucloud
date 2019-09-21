@@ -1,0 +1,55 @@
+{extend name="admin@base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="layui-form" >
+  	<div class="layui-form-item">
+    	<label class="layui-form-label"><span class="required">*</span>SMTP服务器</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="server" required placeholder="请输入SMTP 服务器" autocomplete="off" class="layui-input nc-len-long" lay-verify="server" value="{$list['server']}">
+	    </div>
+	    <div class="layui-form-mid layui-word-aux">设置 SMTP 服务器的地址，如 smtp.163.com</div>
+  	</div>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label" ><span class="required">*</span>SMTP端口</label>
+	    <div class="layui-input-block">
+	      <input type="number" name="port" required lay-verify="port" placeholder="请输入SMTP 端口" autocomplete="off" class="layui-input nc-len-long" value="{$list['port']}">
+	    </div>
+	    <div class="layui-form-mid layui-word-aux">设置 SMTP 服务器的端口，默认为 25</div>
+  	</div>
+  	<div class="layui-form-item">
+	    <label class="layui-form-label"><span class="required">*</span>发信人邮件地址</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="email" required  placeholder="请输入邮件地址" autocomplete="off" class="layui-input nc-len-long" lay-verify="email" value="{$list['email']}">
+	    </div>
+	    <div class="layui-form-mid layui-word-aux">使用SMTP协议发送的邮件地址，如 niucloud@163.com</div>
+  	</div>
+  	<div class="layui-form-item">
+  		<label class="layui-form-label"><span class="required">*</span>SMTP身份验证用户名</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="username" autocomplete="off" class="layui-input nc-len-long" required lay-verify="username" placeholder="请输入SMTP 身份验证用户名" value="{$list['username']}">
+	    </div>
+	  <div class="layui-form-mid layui-word-aux">如 niucloud@163.com</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label"><span class="required">*</span>SMTP身份验证密码</label>
+	    <div class="layui-input-block">
+	      	<input type="password" name="password" autocomplete="off" class="layui-input nc-len-long" required lay-verify="password" placeholder="请输入SMTP 身份验证密码" value="{$list['password']}">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">niucloud@163.com邮件的密码，如 123456</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否开启</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="status" value="1" lay-skin="switch" lay-filter="switchTest" {if condition="$status  eq '1'"}checked{/if}>
+		</div>
+	</div>
+	<div class="nc-form-row">
+		<button class="layui-btn" lay-submit lay-filter="*">保存</button>
+		<a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script src="ADDON_EMAIL_JS/config.js"></script>
+{/block}

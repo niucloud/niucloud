@@ -1,0 +1,67 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_NC_WAP_ARTICLE_CSS/my_reward.css"/>
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back" onclick="window.history.back();"></div>
+    <h1>我的赞赏</h1>
+</header>
+{/block}
+{block name="main"}
+
+<div class="reward-list">
+	<div class="reward-ul">
+		
+	</div>
+	<div class="reward-list-more" ><a onclick="loadList();">加载更多</a></div>
+</div>
+
+<script>
+var page = 1;
+$(function(){
+    loadList();
+});
+
+/**
+ * 加载评论
+ */
+function loadList() {
+	var condition = {};
+	condition = JSON.stringify(condition);
+	var table = $('.reward-ul');
+	nc.api("Article.Reward.getRewardPageList", {
+		"page": page,
+		"condition": condition,
+		"access_token": '{$access_token}'
+	}, function (res) {
+		var html = "";
+		if (res.code == 0) {
+			if (res.data.list.length > 0) {
+				page++;
+				for (i in res.data.list) {
+					var item = res.data.list[i];
+					
+					html += '<section class="reward-item">';
+					html += '<div class="reward-user-info">';
+					html += '<span class="reward-user-name">' + item.nick_name + '</span>';
+					html += '<span class="reward-user-time">' + nc.time_to_date(item.create_time) + '</span>';
+					html += '</div>';
+					html += '<div class="reward-money">' + item.money + '元</div>';
+					html += '<div class="clear-botn"></div>';
+					html += '<div class="reward-from">';
+					html += '<a class="reward-title-from" href="' + nc.url('Article://wap/article/detail?article_id=' + item.article_id) + '">原文：' + item.title + '</a>';
+					html += '</div>';
+					html += '</section>';
+				}
+			} else {
+				$(".reward-list-more a").remove();
+				$(".reward-list-more").text("没有更多赞赏记录了！");
+			}
+		}
+		table.append(html);
+	}, false);
+	
+}
+</script>
+{/block}

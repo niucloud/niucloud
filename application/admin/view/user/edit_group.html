@@ -1,0 +1,36 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .tree-line{padding:10px 0;background:#ededed;margin-bottom:2px;}
+    .tree-line .layui-form-checkbox{margin-top:0 !important;margin-right:10px;margin-left:10px;vertical-align:middle;}
+    .tree-line label{margin-right:30px;display:inline-block;cursor:pointer;}
+    #tree_box{width: 85%;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label sm"><span class="required">*</span>用户组名称</label>
+        <div class="layui-input-inline">
+            <input type="text" name="group_name" required lay-verify="title" placeholder="请输入用户组名称" autocomplete="off" class="layui-input" value="{$group_name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label sm"><span class="required">*</span>权限</label>
+        <div class="layui-input-inline" id="tree_box"></div>
+    </div>
+    <div class="nc-form-row sm">
+        <input type="hidden" value="{$group_id}" name="group_id"/>
+        <input type="hidden" value="{$site_id}" name="site_id"/>
+        <input type="button" value="保存" class="layui-btn"  lay-submit="" lay-filter="save"/>
+        <a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+var tree_data = JSON.parse('{$tree_data}');
+var submit_url = nc.url('admin/user/editGroup');
+</script>
+<script src="ADMIN_JS/manager_group_edit.js"></script>
+{/block}

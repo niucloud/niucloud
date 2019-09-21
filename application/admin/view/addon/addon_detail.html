@@ -1,0 +1,144 @@
+{extend name="base"/}
+{block name="resources"}
+{/block}
+{block name='crumbs'}
+    <span class="layui-breadcrumb">
+        <a href="{:addon_url($crumbs[0]['url'])}">{$crumbs[0]['title']}</a>
+        <a><cite>{$crumbs[1]['title']}</cite></a>
+    </span>
+{/block}
+{block name="main"}
+<div class="nc-module-display">
+    <div class="nc-module-pic">
+        <img class="nc-item-pic" src="__ROOT__{$info.icon}" alt="应用图标">
+    </div>
+    <div class="nc-module-content">
+        <h2 class="nc-module-title">{$info.title}</h2>
+        <div>
+            {notempty name="$info.support_app_type_arr"}
+                {foreach name="$info.support_app_type_arr" item="vo"}
+                    <div class="nc-module-icon"><img src="__ROOT__/{$vo.logo}" alt="logo"></div>
+                {/foreach}
+            {/notempty}
+        </div>
+    </div>
+    <div class="nc-module-operation">
+        {if $info.status elt 0}
+        <a class="nc-item-btn layui-btn" href="javascript:install('{$info.name}')">安装</a>
+        {else/}
+        <a class="nc-item-btn layui-btn" href="javascript:uninstall('{$info.name}')">卸载</a>
+        {/if}
+    </div>
+</div>
+
+<div class="layui-tab" lay-filter="addon_tab">
+    <ul class="layui-tab-title">
+        <li lay-id="basic_info">基本信息</li>
+        <li lay-id="upgrade_manage">升级管理</li>
+        <li lay-id="associated_site">关联站点</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="15%">
+                    <col width="85%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2">应用基本信息展示</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="label">应用名称</td>
+                        <td>{$info.title}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">应用标识</td>
+                        <td>{$info.name}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">作者</td>
+                        <td>{$info.author}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">版本</td>
+                        <td>{$info.version}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">支持端口</td>
+                        <td>
+                            {notempty name="$info.support_app_type_arr"}
+                                {foreach name="$info.support_app_type_arr" item="vo"}
+                                    {$vo.name}
+                                {/foreach}
+                            {/notempty}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="label">应用描述</td>
+                        <td>{$info.description}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">安装时间</td>
+                        <td>{notempty name="$info.create_time"}{$info.create_time|date="Y-m-d H:i:s",###}{else/}--{/notempty}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">应用图标</td>
+                        <td>
+                            <div class="addon-icon">
+                                <img src="__ROOT__{$info.icon}" alt="">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-tab-item">
+            <table class="layui-table">
+                <colgroup>
+                    <col width="25%">
+                    <col width="25%">
+                    <col width="25%">
+                    <col width="25%">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th>版本名称</th>
+                        <th>当前版本</th>
+                        <th>最新版本</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>--</td>
+                        <td>{$info.version}</td>
+                        <td>{$info.version}</td>
+                        <td><a href="javascript:;">无需升级</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="layui-tab-item">
+            <table class="layui-table" id="site_list"></table>
+            <script type="text/html" id="status">
+                {{#  if(d.status == 1){ }}
+                   <span>正常</span>
+                {{#  } }}
+                {{#  if(d.status == 0){ }}
+                   <span>体验期</span>
+                {{#  } }}
+                {{#  if(d.status == 0){ }}
+                   <span>已到期</span>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+var name = '{$info.name}';
+</script>
+<script src="ADMIN_JS/addon_detail.js"></script>
+{/block}

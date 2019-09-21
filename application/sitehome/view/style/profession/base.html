@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit">
+		<title>{$title} - {$system_site_config_info['title']}</title>
+		<meta name="keywords" content="{$system_site_config_info['keywords']}">
+		<meta name="description" content="{$system_site_config_info['description']}">
+		<meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1" />
+		<link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
+		<link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css" />
+		<link rel="stylesheet" type="text/css" href="__STATIC__/ext/font-awesome/css/font-awesome.css" />
+		<link rel="stylesheet" href="SITEHOME_CSS/common.css">
+		<link rel="stylesheet" href="SITEHOME_STYLE/profession/common.css">
+		<link rel="stylesheet" href="SITEHOME_STYLE/profession/theme.css">
+		<script src="__STATIC__/js/jquery-2.2.js"></script>
+		<script src="__STATIC__/ext/layui/layui.js"></script>
+		<script>
+			layui.use(['layer','element'], function () {
+			});
+			window.nc_url = {
+				baseUrl: "{:request()->root(true)}/",
+				route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+			};
+		</script>
+		<script src="__STATIC__/js/common.js"></script>
+		{block name="resources"}{/block}
+	</head>
+
+	<body>
+	{block name='body'}
+		<div class="layui-layout layui-layout-admin profession-box">
+
+			<!-- 左侧菜单 -->
+			{block name="sidebar"} {include file="sitehome@style/profession/sidebar" /} {/block}
+
+			<div class="layui-body{if condition='empty($menus[1])'} not-children-menus{/if}">
+				<div class="topbar nc-border-color-gray clear">
+					<div class="layui-tab-brief left">
+						{if condition='$crumbs && count($crumbs) > 3'}
+						<span class="layui-breadcrumb">
+							{foreach name="$crumbs" item="vo" key="k"}
+								{if condition="$k>1"}
+									{if condition="($k+1)==count($crumbs)"}
+										<a><cite>{$vo['title']}</cite></a>
+									{else/}
+										<a href="{:addon_url($vo.url)}">{$vo['title']}</a>
+									{/if}
+								{/if}
+							{/foreach}
+						</span>
+						{else/}
+						<ul class="layui-tab-title">
+							<li>
+								{if condition='$crumbs'}
+								<a href="{:addon_url($crumbs[count($crumbs)-1]['url'])}"><cite>{$crumbs[count($crumbs)-1]['title']}</cite></a>
+								{elseif condition="strpos($current_url,'sitehome/index/index') !== false"}
+								<a href="{:addon_url('sitehome/index/index')}"><cite>概况</cite></a>
+								{/if}
+							</li>
+						</ul>
+						{/if}
+						{if condition='$crumbs && count($crumbs) eq 1 && $crumbs[0]["name"] eq "SITEHOME_INDEX"'}
+							{if condition="$site_info['status'] eq 2"}
+							<div class="layui-row">
+									<div class="niu-site-close nui-siteinfo">
+									<span>店铺<i>已歇业</i>，无法正常营业</span>
+									<span class="niu-site-close-mobile">官方咨询电话：<i>400-886-7993</i></span>
+									<a href="{:url('sitehome/addons/buy', ['site_id'=>$site_info['site_id'], 'name' => $site_info['addon_app']])}" class="layui-btn layui-btn-danger niu-site-close-renewal">立即续费</a>
+									<a href="" class="layui-btn layui-btn-primary niu-site-close-help">什么是歇业</a>
+								</div>
+							</div>
+							{/if}
+						{/if}
+					</div>
+
+					<div class="right">
+						<div class="topbar-nav">
+							<!-- <div class="topbar-nav-item">
+								<a href="">使用帮助</a>
+							</div><div class="topbar-nav-item">
+								<a href="">社区</a>
+							</div><div class="topbar-nav-item">
+								<a href="">消息</a>
+							</div> -->
+							<div class="topbar-nav-item nc-border-color-gray">
+								<div id="nc-user-info" class="nc-user-info">
+
+									<div class="user-name">
+										<div class="headframe" style="display:inline-block;vertical-align:middle;">
+											{if condition="$user_info['headimg'] neq ''"}
+											<img src="{:img($user_info['headimg'])}"/>
+											{else/}
+											<img src="SITEHOME_IMG/personal_4.png"/>
+											{/if}
+										</div>
+										<span>{$user_info['username']}</span>
+									</div>
+									<div class="user-dropdown">
+										<div class="user-dropdown-meta nc-bg-color-f9f9f9">
+											<div>{$user_info['username']}</div>
+											<div>{$user_info['mobile']}</div>
+										</div>
+										<div class="user-dropdown-select">
+											<a href="{:url('admin/index/security', ['site_id' => 0])}">帐号设置</a>
+											<a href="{:url('admin/index/index', ['site_id' => 0])}">切换站点</a>
+											<a href="{:url('home/login/logout')}">退出登录</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class='layui-fluid'>
+					{if condition="$crumbs && count($crumbs)>3 && $fourth_menu"}
+						<div class="layui-tab-brief left clearfix">
+							<ul class="layui-tab-title">
+								{foreach name="$fourth_menu" item="vo"}
+									<li class="{if condition="$crumbs[3]['name'] == $vo['name']"}layui-this{/if}"><a href="{:addon_url($vo.url)}">{$vo.title}</a></li>
+								{/foreach}
+							</ul>
+						</div>
+						<div style="clear:both;"></div>
+					{/if}
+
+					{block name='main'}{/block}
+
+				</div>
+				<div class='nui-footer'>
+					<a href='javascript:;' target="_black">
+						<img src="SITEHOME_IMG/logo-gray.png"/>
+					</a>
+				</div>
+			</div>
+		</div>
+		{block name='nc_pop'}{/block}
+		{/block}
+		{block name="script"}
+		{/block}
+	</body>
+
+</html>

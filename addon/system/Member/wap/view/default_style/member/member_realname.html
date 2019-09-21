@@ -1,0 +1,51 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back" onclick="window.history.back();"></div>
+    <h1>{$title}</h1>
+</header>
+{/block}
+{block name="main"}
+<div class="hui-wrap">
+    <form style="padding:0px 10px;" class="hui-form" id="form_real_name">
+        <div class="hui-form-items">
+            <div class="hui-form-items-title">我的姓名</div>
+            <input type="text" class="hui-input hui-input-clear" name="real_name" value="{$member_info.data.real_name}"  placeholder="请填写姓名" checkType="string" checkData="1," checkMsg="姓名不能为空" />
+        </div>
+    </form>
+</div>
+
+<div style="margin-top:28px;">
+    <button type="button" class="hui-button hui-button-large" id="submit" style="background:#FFFFFF; " >
+        保存
+    </button>
+</div>
+
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="__STATIC__/ext/hui/js/hui-form.js"></script>
+<script>
+    hui.formInit();
+    //表单验证
+    hui('#submit').click(function(){
+        var res = huiFormCheck('#form_real_name');
+        //提交
+        if(res){
+            var data = hui.getFormData('#form_real_name');
+            data.access_token = ACCESS_TOKEN;
+            nc.api("Member.Member.modifyRealname", data, function (res) {
+                hui.iconToast(res.message);
+                if(res.code == 0){
+                    window.history.go(-1);
+                }
+            }, false);
+
+        }
+    });
+</script>
+
+{/block}

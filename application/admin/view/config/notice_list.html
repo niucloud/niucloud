@@ -1,0 +1,58 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+	.layui-table-view .layui-table td{cursor: pointer;}
+	.notice-title{overflow: hidden;text-overflow: ellipsis; cursor: pointer;white-space: pre;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-tab">
+	<div class="layui-tab-content">
+		  <div class="layui-tab-item layui-show">
+            <table class="layui-table" id="notice_list" lay-filter="notice_list"></table>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script>
+var table = new Table({
+	elem: '#notice_list',
+	filter: "notice_list",
+	url: nc.url("admin/config/noticelist"),
+	cols: [
+		[
+			{
+				field: 'title',
+				width: '75%',
+				title: '标题',
+				align: 'left',
+				templet: function (data) {
+					return '<div class="notice-title">'+ data.title +'</div>';
+				}
+			},
+			{
+				field: 'notice_category_title',
+				width: '10%',
+				title: '公告分类',
+				align: 'center',
+			},
+			{
+				field: 'create_time',
+				width: '15%',
+				title: '发布时间',
+				align: 'right',
+				templet: function (data) {
+					return nc.time_to_date(data.create_time);
+				}
+			}
+		]
+	],
+});
+
+table.on('row', function(obj){
+	window.open(nc.url("admin/Config/previewNotice", {notice_id: obj.data.notice_id}));
+});
+
+</script>
+{/block}

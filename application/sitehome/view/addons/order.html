@@ -1,0 +1,142 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<style type="text/css">
+.nui_input{
+    width: 200px;
+}
+.layui-table thead tr th{
+    text-align: center;
+}
+td{
+    text-align: center;
+}
+.layui-table-body{
+    overflow-x:hidden;
+}
+.layui-inline.btn-right{
+    float: right;
+}
+</style>
+{/block}
+{block name="main"}
+<div style="padding: 20px; background-color: #F2F2F2;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12 layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="addon_name" placeholder="请输入服务名称" class="layui-input search_text nui_input" id="addon_name">
+            </div>
+            <div class="layui-input-inline">
+                <input type="text" name="username" placeholder="请输入订购人姓名/手机号码" class="layui-input search_text nui_input" id="username">
+            </div>
+
+            <div class="layui-inline">
+                <div class="layui-input-inline">
+                    <select name="modules" lay-search="" class="search_type nui_input" id="status">
+                        <option value="">请选择订购状态</option>
+                        <option value="0">全部</option>
+                        <option value="1">待支付</option>
+                        <option value="2">已支付</option>
+                        <option value="3">已关闭</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline btn-right">
+                <button class="layui-btn" onclick="load()">搜索</button>
+                <button type="reset" lay-submit lay-filter="clear" class="layui-btn layui-btn-primary">清除条件</button>
+                <!-- <button class="layui-btn" onclick="clear()">清除条件</button> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-tab">
+    <table id="service_list" lay-filter="addonslist"></table>
+</div>
+<script type="text/html" id="status_name">
+    {{# if(d.status == '0') { }}
+    <span class="layui-table-cell laytable-cell-1-status_name" style="color: red;">待支付</span>
+    {{# } }}
+    {{# if(d.status == '1') { }}
+    <span class="layui-table-cell laytable-cell-1-status_name">已支付</span>
+    {{# } }}
+    {{# if(d.status == '-1') { }}
+    <span class="layui-table-cell laytable-cell-1-status_name">已关闭</span>
+    {{# } }}
+</script>
+<script type="text/html" id="operation">
+    <a class="default" lay-event="detail" title="">查看</a>
+    {{# if(d.status == '0') { }}
+    &nbsp;&nbsp;&nbsp;&nbsp;<a class="default" lay-event="invalid" title="">作废</a>
+    {{# } }}
+</script>
+{/block}
+{block name="script"}
+<script>
+$(function(){
+    load();
+});
+function load(){
+    var addon_name = $('#addon_name').val();
+    var username = $('#username').val();
+    var status = $("#status").val();
+    var table = new Table({
+        elem: '#service_list',
+        filter : "addonslist",
+        url : '{:url("sitehome/addons/order")}',
+        where : {'addon_name':addon_name, 'username': username, 'status' : status},
+        cols: [[
+            {type : 'checkbox'},
+            {field: 'create_time', width: '20%', title: '创建时间'},
+            {field: 'title', width: '15%', title: '服务名称'},
+            {field: 'total_price', width: '15%', title: '订单金额（元）'},
+            {field: 'username', width: '15%', title: '订购人'},
+            {field: 'status_name', width: '15%', title: '订购状态',templet: '#status_name'},
+            {field: '', title: '操作', toolbar: '#operation', 'style': 'color: #f00'}
+        ]]
+    });
+    
+    //监听操作
+    table.tool(function(obj){
+        var data = obj.data;
+        var layEvent = obj.event;
+        if(layEvent === 'detail'){
+            window.location.href = nc.url('sitehome/addons/orderInfo', {"id" : data.id});
+        }else if(layEvent === 'invalid'){
+            if(data.status == 0){
+                layer.confirm('该订单还未支付,确定作废吗?', function(index){
+                    $.ajax({
+                        type : "post",
+                        url : "{:url('sitehome/addons/closeOrder')}",
+                        data : {
+                            'id' : data.id,
+                        },
+                        dataType : "JSON",
+                        success : function(data) {
+                            window.location.reload();
+                        }
+                    });
+                    // obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    // layer.close(index);
+                    // //向服务端发送删除指令
+                });
+            }else if(data.status == 1){
+                layer.confirm('该订单已支付,不可以作废！');
+            }else if(data.status == -1){
+                layer.confirm('该订单已是作废状态！');
+            }
+        }
+    });
+    
+    layui.use(['form'], function() {
+        var form = layui.form;
+           //监听清除条件
+        form.on('submit(clear)', function(data){
+            $("#addon_name").val('');
+            $("#username").val('');
+            $("#status").val('');
+            form.render("select");
+        });
+
+    })
+}
+</script>
+{/block}

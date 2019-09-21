@@ -1,0 +1,263 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+    .div_del{
+        /*width: 120px;*/
+        /*height: 35px;*/
+        position: relative;
+        border: 1px solid;
+        display:inline-block;
+        margin: 2px 0px 0px 10px;
+    }
+    .div_del > i {
+        display: none;
+        position: absolute;
+        right: -10px;
+        top: -10px;
+        line-height: 16px;
+        cursor: pointer;
+        color: #fff;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.3);
+        width: 16px;
+        text-align: center;
+        font-style: inherit;
+        font-size: 12px;
+    }
+
+    .h2_name > a.del {
+        cursor: pointer;
+        color: #12b7f5;
+        font-size: 12px;
+        position: absolute;
+        top: 3px;
+        right: 13px;
+        display:none;
+    }
+    .h2_name > a.edit {
+        cursor: pointer;
+        color: #12b7f5;
+        font-size: 12px;
+        position: absolute;
+        top: 3px;
+        right: 50px;
+        display:none;
+    }
+    .layui-btn-sm {
+        margin-left: 10px;
+        margin-top: 2px;
+    }
+    /*.nc-table-box .layui-btn {
+         padding-top: 8px;
+    }*/
+    .layui-layer-prompt textarea.layui-layer-input {
+        color: #585858;
+    }
+</style>
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+    <button type="button" class="layui-btn" onclick="add_category(0)">添加栏目</button>
+</div>
+<div class="nc-table-box">
+    <div class="layui-collapse" lay-filter="test">
+        {foreach $list as $key=>$vo }
+        <div class="layui-colla-item">
+            <h2 class="layui-colla-title h2_name">
+                {$vo.name}
+                <a class="edit" onclick="location.href = nc.url('Sns://sitehome/info/categorymanage?category_id={$vo.category_id}')" >编辑</a>
+                <a class="del" data-id="{$vo.category_id}" >删除</a>
+            </h2>
+            <div class="layui-colla-content layui-show category_{$vo.category_id}" id="category_{$vo.category_id}" data-id="{$vo.category_id}">
+                {foreach $vo.p_category as $key=>$val }
+                <div draggable="true" class="layui-btn layui-btn-primary div_del" {eq name="$val.visible" id="0"}style="background-color:#eee !important;" {/eq}>
+                    <span onclick="location.href = nc.url('Sns://sitehome/info/categorymanage?category_id={$val.category_id}')">{$val.name}</span>
+                    <i class="del" data-id="{$val.category_id}" sku-data-generate="">×</i>
+                </div>
+                {/foreach}
+                <a type="button" href="javascript:;" onclick="add_category({$vo.category_id})" class="layui-btn layui-btn-sm layui-btn-primary"><i class="layui-icon"></i></a>
+            </div>
+        </div>
+        {/foreach}
+    </div>
+</div>
+{/block}
+{block name="script"}
+
+<script type="text/javascript">
+    layui.use(['form','layer'], function () {
+        var form = layui.form, layer = layui.layer;
+        dom_drop();
+
+        add_category = function(parent){
+
+            var cat = '添加栏目';
+            if(parent > 0){
+                cat = '添加';
+            }
+
+            layer.prompt({title: cat,value: '注：换行输入为多栏目添加！',formType: 2}, function(text, index){
+
+                $.ajax({
+                    type: "post",
+                    url: nc.url('sns://sitehome/info/addCategory'),
+                    data:{'name':text, 'parent':parent},
+                    success: function (res) {
+
+                        var list = JSON.parse(res)
+
+                        // location.reload();
+
+                        layer.close(index);
+
+                        //添加二级分类
+                        if(parent > 0){
+                            var html = ``;
+                            for(var i = 0; i < list.length; i++){
+
+                                html += `<div draggable="true" class="layui-btn layui-btn-primary div_del">`
+                                    +`<span onclick="location.href = nc.url('Sns://sitehome/info/categorymanage?category_id=`+list[i]['category_id']+`')">`+list[i]['name']+`</span>`
+                                    + `<i class="del" data-id="`+list[i]['category_id']+`" sku-data-generate="add_category">×</i>`
+                                    +`</div>`;
+                            }
+
+                            $('.category_'+parent+' > a').before(html)
+                            // $('.category_'+parent).prepend(html);
+
+                            dom_drop();
+                            return false;
+                        }
+
+                        var html = ``;
+                        for(var i = 0; i < list.length; i++){
+
+                            html += `<div class="layui-colla-item">`
+                                        +`<h2 class="layui-colla-title h2_name">`
+                                            +list[i]['name']
+                                            +`<a class="edit" onclick="location.href = nc.url('Sns://sitehome/info/categorymanage?category_id=`+list[i]['category_id']+`')" >编辑</a>`
+                                            +`<a class="del" data-id="`+list[i]['category_id']+`" >删除</a>`
+                                            +`<i class="layui-icon layui-colla-icon"></i>`
+                                        +`</h2>`
+                                        +`<div class="layui-colla-content layui-show category_`+list[i]['category_id']+`" id="category_`+list[i]['category_id']+`" data-id="`+list[i]['category_id']+`">`
+                                            +`<a type="button" href="javascript:;" onclick="add_category(`+list[i]['category_id']+`)" class="layui-btn layui-btn-sm layui-btn-primary"><i class="layui-icon"></i></a>`
+                                        +`</div>`
+                                    +`</div>`;
+                        }
+
+                        //添加一级分类
+                        $('.layui-collapse').append(html);
+                        dom_drop();
+                    }
+                });
+
+                form.render(null, 'test');
+            });
+        }
+    })
+
+    $('body').on('click', '.layui-layer-input', function () {
+        var val = $(this).val();
+        if(val == '注：换行输入为多栏目添加！'){
+            $(this).val('');
+        }
+    });
+
+    //一级分类点击隐藏与显示
+   /* $('body').on('click','.layui-icon', function () {
+        var html = $(this).attr('class');
+
+        var len = $(this).parent().parent().find('div').attr('class').length;
+
+        console.log($(this).parent().parent().find('div').attr('class').length);
+
+        if(len > 30 && len < 40){
+            $(this).parent().parent().find('div').attr("class","layui-colla-content");
+        }
+    });*/
+
+
+    //二级分类鼠标移入显示删除按钮
+    $('body').on('mouseover', '.div_del', function () {
+        $(this).children(".del").show();
+    });
+
+    //二级分类鼠标移出隐藏删除按钮
+    $('body').on('mouseout', '.div_del',function () {
+        $(this).children(".del").hide();
+
+    });
+
+    //一级分类鼠标移入显示删除按钮
+    $('body').on('mouseover','.h2_name',function () {
+        $(this).children(".del").show();
+        $(this).children(".edit").show();
+    });
+
+    //一级分类鼠标移出隐藏删除按钮
+    $('body').on('mouseout','.h2_name',function () {
+        $(this).children(".del").hide();
+        $(this).children(".edit").hide();
+    });
+
+    //删除
+    $('body').on('click','.del',function () {
+        var categoryId = $(this).data('id');
+
+        layer.confirm('确定删除吗?', {
+            btn: ['确定', '取消']
+        }, function () {
+            $.ajax({
+                type: "post",
+                url: nc.url("sns://sitehome/info/deleteCategory"),
+                data: {
+                    'category_id': categoryId,
+                },
+                dataType: "JSON",
+                success: function (res) {
+                    layer.msg(res.message);
+                    location.reload();
+                }
+            });
+        }, function () {
+            layer.close();
+        });
+    });
+
+    //栏目名称拖拽交换     
+    function  dom_drop() {
+        // 得到需要进行拖动变换的所有dom元素
+        var div = document.getElementsByClassName("div_del");
+        let container = null;
+
+        for(let i = 0; i < div.length; i++) {
+            div[i].ondragstart = function() {
+                // 当拖动其中一个元素时，this的指向便是你所拖动的元素，将它存在container
+                container = this;
+            }
+            // 默认的当你dragover的时候会阻止你做drop的操作，所以需要取消这个默认
+            div[i].ondragover = function() {
+                event.preventDefault();
+            }
+            // 当拖动结束时，给拖动div所在位置下面的div做drop事件，注意drop时this的指向发生改变
+            div[i].ondrop = function(){
+
+                var parent_id = $(this).parent().data('id');
+                var this_id = $(container).parent().data('id');
+
+                //同一个元素可以切换
+                if(parent_id == this_id){
+                    if(container != null && container != this){
+                        let temp = document.createElement("div"); //创建一个空元素来保存要替换的元素
+                        var id = document.getElementById("category_"+this_id) ; //获取要替换的父级元素
+
+                        //开始替换
+                        id.replaceChild(temp,this);
+                        id.replaceChild(this,container);
+                        id.replaceChild(container,temp);
+                    }
+                }
+            }
+        }
+    }                                                                                 
+</script>                          
+{/block}

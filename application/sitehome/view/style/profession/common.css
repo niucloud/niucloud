@@ -1,0 +1,60 @@
+/* 一级菜单 */
+.layui-layout-admin .layui-side.not-children-menus,.layui-layout-admin .layui-side.not-children-menus .layui-side-scroll{width: 120px;}
+.layui-layout-admin .layui-side{top: 0; width: 240px; z-index: -100}
+.layui-side-scroll{width: 240px;}
+.layui-layout-admin .layui-top-menu{width: 120px; height: 100%;}
+.layui-layout-admin .layui-top-menu .layui-logo{position: static; width: 120px; height: 65px;}
+.layui-layout-admin .layui-top-menu .layui-logo img{max-width: 100%; max-height: 100%}
+.layui-layout-admin .layui-top-menu .layui-first-menu{width: 100%;}
+.nc-app-top{margin-top: 20px;}
+.nc-app-center{margin-top: 40px;}
+.layui-layout-admin .layui-top-menu .layui-first-menu .layui-nav-child dd.layui-this a{background-color: transparent !important;}
+.layui-nav-child dd a{margin-right: 10px;}
+.layui-nav-tree .layui-nav-child a > img{width: 22px; height: 22px; margin-right: 5px;}
+.layui-nav-tree .layui-nav-child a > span{vertical-align: middle;color: #fff;}
+.layui-nav-bar,.layui-nav-more{display: none;}
+.watermark{position: absolute; bottom: 20px; text-align: center; width: 120px;}
+.topbar .layui-tab-brief{margin-bottom: 0 !important;}
+.headframe{height: 30px;width: 30px;line-height: 30px;}
+
+/* 二级菜单 */
+.layui-layout-admin .layui-children-menu{position: absolute; left: 120px; top: 0; width: 120px; height: 100%; background-color: #fff; border-right: 1px solid;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-itemed > .layui-nav-child{padding-left: 10px; width: 100%; box-sizing: border-box;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-itemed > .layui-nav-child, .layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item > .layui-nav-child .layui-this{background-color: #fff !important;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .nc-title a{height: 44px; line-height: 44px; border-bottom: 1px solid;}
+.profession-pic img{width: 14px !important; height: 14px !important;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a.second-level{padding: 0 10px 0 27px;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a.second-level.layui-this{background-color: #f2f2f2;}
+.layui-layout-admin .layui-body{min-width: 850px;top: 0; bottom: 0px; left: 240px;position: absolute;}
+.layui-layout-admin .layui-body.not-children-menus{left: 120px;}
+.topbar{background-color: #FFF; border-bottom: 1px solid;}
+.layui-layout-admin .layui-body .layui-tab-brief{background-color: #fff;}
+.left{float: left;}
+.topbar .layui-tab-title{height: 44px; margin-top: 0; border-bottom: none;}
+.topbar .layui-tab-brief{height: 45px; line-height: 45px;margin-left: 15px;}
+.layui-layout-admin .layui-body .layui-tab-brief .layui-tab-title li{height: 45px; padding: 0px; margin: 0px 15px;}
+.layui-tab-title li a{display: inline-block;position: relative;}
+.right{float: right;}
+.topbar .topbar-nav .topbar-nav-item{line-height: 44px; border-left: 1px solid #e6e6e6; display: inline-block; vertical-align: middle;}
+.nc-user-info{width: 170px; height: 44px; line-height: 44px; word-break: break-word;}
+.nc-user-info .user-name{display: block; padding: 0 20px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;}
+.nc-user-info .user-name .user-headimg{width: 25px; height: 25px; background-size: cover; background-position: 50% 50%; background-color: #fff; border: 1px solid #fff;margin-right: 5px; border-radius: 50%;}
+.nc-user-info .user-dropdown{top: 45px;}
+.clear:after{content:""; display: block; clear: both;}
+.layui-nav-tree .layui-nav-item a:hover{background-color: transparent;}
+.layui-nav-tree .layui-nav-child a{padding-right: 0;}
+.layui-nav-itemed .second-level-triangle:after{transform: rotate(-135deg);}
+.second-level-triangle:after{position: absolute; content: ''; width: 5px; height: 5px; border: 1px solid transparent;right: 8px; top: 18px; transform: rotate(-225deg); transition: all .3s;}
+.layui-nav-tree .layui-this{background-color: transparent;}
+
+/* 底部 */
+/*.layui-body{overflow: initial;}*/
+
+/* 主要内容 */
+.layui-fluid{min-height: 420px;background-color: #fff; margin: 10px 10px 85px; padding: 15px 15px 35px; overflow: hidden}
+
+/* 面包屑 */
+.layui-tab-brief>.layui-breadcrumb{display: block;height: 45px;line-height: 45px;}
+.layui-breadcrumb a{color: #333 !important;}
+.layui-tab-brief>.layui-breadcrumb a cite{color: #999 !important;cursor: initial;}
+

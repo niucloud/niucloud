@@ -1,0 +1,207 @@
+@base: #12b7f5; //主色调
+@color-red: red; //表单必填提醒
+@color-black: #333;
+@color-gray: #e5e5e5;
+
+@base-assist-one: #fec34f;
+@color-black-444: #444;
+@color-gray-c7c7c7: #c7c7c7;
+@color-gray-f9f9f9: #f9f9f9;
+
+body {
+  color: @color-black;
+}
+
+//******************** 背景颜色 *******************
+.nc-bg-color {
+  background-color: @base !important;
+}
+
+.nc-bg-color-black {
+  background-color: @color-black !important;
+}
+
+.nc-bg-color-gray {
+  background-color: @color-gray !important;
+}
+
+.nc-bg-color-f9f9f9 {
+  background-color: @color-gray-f9f9f9 !important;
+}
+
+.layui-body {
+  background-color: @color-gray-f9f9f9 !important;
+}
+
+.layui-form-select dl dd.layui-this {
+  background-color: @base !important;
+}
+
+.template-list li:hover .theme, .template-list li.selected .theme, .template-list li .theme {
+  background-color: @base !important;
+}
+
+//******************** 文字颜色 *******************
+.nc-text-color {
+  color: @base !important;
+}
+
+.nc-text-color-black {
+  color: @color-black !important;
+}
+
+.nc-text-color-c7c7c7 {
+  color: @color-gray-c7c7c7 !important;
+}
+
+.layui-tab-brief > .layui-tab-title .layui-this, .layui-tab-brief > .layui-tab-title .layui-this > a {
+  color: @base !important;
+}
+
+.upload-img-box {
+  color: @color-gray-c7c7c7 !important;
+}
+
+.attachment-container .layui-col-md2 a, .search-wrap .sort-wrap dl dd.selected a {
+  color: @base !important;
+}
+
+.graphic-navigation .add-item, .image-ads .add-item p {
+  color: @base !important;
+}
+
+.edit-attribute .bottom-menu-config .add-item, .notice .add-item {
+  color: @base !important;
+}
+
+.layui-tab-brief .layui-this a:after {
+  border-color: @base;
+}
+
+//******************** 边框颜色 *******************
+.nc-border-color {
+  border-color: @base !important;
+}
+
+.nc-border-color-selected:hover, .nc-border-color-selected.selected {
+  border-color: @base !important;
+}
+
+.nc-border-color-gray {
+  border-color: @color-gray !important;
+}
+
+.layui-table td, .layui-table th, .layui-table-fixed-r, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row] {
+  border-color: @color-gray !important;
+}
+
+.layui-tab-brief > .layui-tab-more li.layui-this:after, .layui-tab-brief > .layui-tab-title .layui-this:after {
+  border-bottom-color: @base !important;
+}
+
+.second-level-triangle:after {
+  border-left-color: darken(@color-gray, 40%) !important;
+  border-top-color: darken(@color-gray, 40%) !important;
+}
+
+.draggable-element.selected, .draggable-element:hover {
+  border-color: @base !important;
+}
+
+/******************** 一级菜单 *******************/
+.layui-nav-itemed > .layui-nav-child {
+  background-color: @color-black-444 !important;
+}
+
+.layui-children-menu a {
+  color: @color-black !important;
+}
+
+.layui-layout-admin .layui-top-menu .layui-first-menu .layui-nav-child dd.layui-this {
+  background: @base !important;
+}
+
+.layui-nav .layui-nav-child dd.layui-this a, .layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item.layui-this > a {
+  background: #f2f2f2;
+}
+
+//******************** 按钮 *******************
+.layui-btn {
+  background-color: @base !important;
+}
+
+.layui-btn.layui-btn-primary {
+  border-color: lighten(@color-black, 70%) !important;
+  color: @color-black !important;
+}
+
+.layui-form-onswitch {
+  background-color: @base !important;
+}
+
+.layui-laypage button, .layui-laypage input {
+  background-color: #fff !important;
+}
+
+//******************** 表单 *******************
+.layui-form-select dl dd.layui-this {
+  background-color: @base !important;
+}
+
+.layui-form-radio > i:hover, .layui-form-radioed > i {
+  color: @base !important;
+}
+
+.required {
+  color: @color-red;
+}
+
+//******************** 表格 *******************
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table-total, .layui-table-total tr, .layui-table[lay-even] tr:nth-child(even) {
+  background-color: lighten(@color-black, 78%) !important;
+}
+
+.layui-table td, .layui-table th {
+  border-bottom-color: lighten(@color-black, 70%) !important;
+}
+
+.layui-form-checked[lay-skin=primary] i {
+  background-color: @base !important;
+  border-color: @base !important;
+}
+
+.layui-table-box .operation {
+  background-color: @color-red;
+}
+
+//******************** 分页 *******************
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  background-color: @base !important;
+}
+
+.layui-laypage input:focus, .layui-laypage select:focus {
+  border-color: @base !important;
+}
+
+//******************** 应用区块 *******************
+.layui-elem-quote {
+  border-color: @base !important;
+}
+
+//******************** 站点切换 *******************
+.nc-user-info .user-dropdown-select a:hover {
+  background-color: @base !important;
+}
+
+.layui-nav .layui-nav-mored, .layui-nav-itemed > a .layui-nav-more {
+  border-color: transparent transparent shade(@color-gray);
+}
+
+.layui-nav .layui-nav-more {
+  border-color: shade(@color-gray) transparent transparent;
+}
+
+.wx-menu-item.active, .wx-sub-menu-item.active {
+  border-color: @base !important;
+  color: @base;
+}

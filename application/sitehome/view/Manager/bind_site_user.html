@@ -1,0 +1,478 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+	.tree-line{padding:10px 0;background:#ededed;margin-bottom:2px;}
+	.tree-line .layui-form-checkbox{margin-top:0 !important;margin-right:10px;margin-left:10px;vertical-align:middle;}
+	.tree-line label{margin-right:30px;display:inline-block;cursor:pointer;}
+	.layui-input-block{margin-left: 150px; }
+	.user-info-item{display:none;}
+    .next-step{margin-top:100px;}
+	.layui-form-item .layui-form-checkbox[lay-skin=primary]{margin-top: 0;}
+</style>
+<script type="text/javascript">
+    var tree_data = {};
+</script>
+{/block}
+{block name="main"}
+<div class="nc-step">
+	<span class="layui-breadcrumb" lay-separator="|">
+		  <a class="nc-step-tab nc-step-active">1 检测用户</a>
+		  <a class="nc-step-tab">2 注册或绑定</a>
+		  <a class="nc-step-tab">3 权限设置</a>
+	</span>
+</div>
+<div class="nc-step-content">
+	<div class="nc-step-item layui-show layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label sm"><span class="required">*</span>用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" id="search_username" name="search_username" {notempty name="$current_user_info"}value="{$current_user_info.username}"{/notempty} autocomplete="off" placeholder="请输入用户名或手机号用于查询用户" class="layui-input nc-len-long"  {if $uid > 0}disabled{/if}>
+
+			</div>
+			<button class="layui-btn layui-btn-primary" lay-util="check">搜索</button>
+		</div>
+		{if $uid == 0}
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"></label>
+				<div class="layui-input-inline nc-len-long">
+					<button class="layui-btn" lay-util="next_step">注册</button>
+				</div>
+			</div>
+		{/if}
+	</div>
+	<div  class="nc-step-item">
+		<div id="second_step"></div>
+	</div>
+	<div class="nc-step-item">
+		<div class="layui-form" lay-filter="user">
+			<div class="layui-tab layui-tab-brief group-type" lay-filter="group_type">
+				<ul class="layui-tab-title">
+					<li class="layui-this" data-type="1">用户组权限</li>
+					<li data-type="2">自定义权限</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-form-item">
+							<label class="layui-form-label sm">管理组</label>
+							<div class="layui-input-block">
+								<div class="layui-input-inline nc-len-short">
+									<select name="group_id" lay-verify="group_id" >
+										<option value="0">选择管理组</option>
+										{volist name="group_list" id="vo"}
+										<option value="{$vo.group_id}" {if $current_user_info.group_id == $vo.group_id}selected{/if} {if $vo.is_system == 1}disabled{/if}>{$vo.group_name}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<div class="layui-form-mid layui-word-aux hint">分配用户所属用户权限组后，该用户会自动拥有此用户权限组内的模块操作权限</div>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-form-item">
+							<label class="layui-form-label sm">用户组名称</label>
+							<div class="layui-input-inline nc-len-long">
+								<input type="text" name="group_name" value="" lay-verify="group_name" autocomplete="off" placeholder="请输入用用户组名称" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label sm">权限</label>
+							<div class="layui-input-block tree-box" id="tree_box">
+								<div class="layui-tab  layui-tab-brief">
+									<ul class="layui-tab-title">
+										<li class="layui-this">系统权限</li>
+										<li>应用权限</li>
+									</ul>
+									<div class="layui-tab-content">
+										<div class="layui-tab-item layui-show">
+											<div class="layui-collapse">
+												<script type="text/javascript">
+                                                    tree_data["system"] = JSON.parse('{$tree["system"]["tree"]}');
+												</script>
+												<div class="layui-colla-item">
+													<h2 class="layui-colla-title">{$tree["system"]["info"]["title"]}</h2>
+													<div class="layui-colla-content layui-show group-box group_box_system"></div>
+												</div>
+											</div>
+										</div>
+										<div class="layui-tab-item">
+											<div class="layui-collapse">
+												{foreach $tree as $tree_k => $tree_v}
+												{if $tree_k != "system" }
+												<script type="text/javascript">
+                                                    tree_data["{$tree_k}"] = JSON.parse('{$tree_v["tree"]}');
+												</script>
+												<div class="layui-colla-item">
+													<h2 class="layui-colla-title" style="position:relative;">
+
+														<div style="position:absolute;right:0;z-index:100;">
+															<input type="checkbox" class="addon-checkbox"  lay-skin="primary"  value="{$tree_k}"lay-filter="addon_form" title="{$tree_v["info"]["title"]}" />
+														</div>
+													</h2>
+													<div class="layui-colla-content group-box group_box_{$tree_k}"></div>
+												</div>
+												{/if}
+												{/foreach}
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+            <div class="nc-form-row sm">
+                <button class="layui-btn" lay-util="the_last_step">上一步</button>
+                <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{/block}
+{block name="script"}
+<!-- 用户注册 -->
+<script type="text/html" id="user_html">
+	<div class="layui-form" lay-filter="add_user">
+		<div class="layui-form-item">
+			<label class="layui-form-label form-label-required"><span class="required">*</span>用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="username" value="{{ d.user_name || '' }}" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label form-label-required"><span class="required">*</span>手机号</label>
+			<div class="layui-input-inline">
+				<input type="text" name="mobile" value="" lay-verify="phone" autocomplete="off" placeholder="请输入手机号" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		{if !empty($sms_type)}
+			<div class="layui-form-item">
+				<label class="layui-form-label form-label-required"><span class="required">*</span>短信验证码</label>
+				<div class="layui-input-inline">
+					<input type="text" name="sms_code" value="" lay-verify="sms_code" autocomplete="off" placeholder="请输入短信验证码" class="layui-input nc-len-mid">
+				</div>
+				<button class="layui-btn"lay-util="code" >发送验证码</button>
+				<button class="layui-btn layui-hide code-time">60s</button>
+			</div>
+		{/if}
+		<div class="layui-form-item">
+			<label class="layui-form-label form-label-required"><span class="required">*</span>姓名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="nick_name" value="" lay-verify="required" autocomplete="off" placeholder="请输入昵称" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label form-label-required"><span class="required">*</span>密码</label>
+			<div class="layui-input-block">
+				<input type="password" id="password" name="password" value="" lay-verify="password" autocomplete="off" placeholder="请输入密码" class="layui-input nc-len-mid">
+			</div>
+			<div class="layui-form-mid layui-word-aux">密码最少为6个字符</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label form-label-required"><span class="required">*</span>确认密码</label>
+			<div class="layui-input-block">
+				<input type="password" name="repassword" value="" lay-verify="repassword" autocomplete="off" placeholder="请输入确认密码" class="layui-input nc-len-mid">
+			</div>
+			<div class="layui-form-mid layui-word-aux">重复输入密码，确认正确输入</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-util="the_last_step_serond">上一步</button>
+			<button class="layui-btn" lay-submit lay-filter="addUser">保存</button>
+		</div>
+	</div>
+</script>
+<!-- 用户信息 -->
+<script type="text/html" id="user_info_html">
+	<!-- 用户信息查看 -->
+	<blockquote class="layui-card-header">确认用户信息</blockquote>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">当前用户名</label>
+		<div class="layui-input-inline nc-len-long">
+			<input class="layui-input" type="text" value="{{ d.username || '' }}"  readonly/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">用户昵称</label>
+		<div class="layui-input-inline nc-len-long">
+			<input class="layui-input" type="text" value="{{ d.nick_name || '' }}"  readonly/>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">用户手机号</label>
+		<div class="layui-input-inline nc-len-long">
+			<input class="layui-input" type="text" value="{{ d.mobile || '' }}"  readonly/>
+		</div>
+	</div>
+	<div class="nc-form-row sm">
+		<button class="layui-btn" lay-util="the_last_step_serond">上一步</button>
+		<button class="layui-btn" lay-util="last_step">下一步</button>
+	</div>
+</script>
+<script type="text/javascript">
+	var laytpl;
+	var userinfo = {:json_encode($current_user_info)};
+	var uid = {$uid};
+	var form;
+    layui.use(['form', 'laytpl', 'util'], function () {
+        laytpl = layui.laytpl;
+        form = layui.form;
+        var util = layui.util;
+        form.verify({
+            group_name: function (value) {
+                if($(".group-type .layui-this").data("type") == 2 && $(".nc-step .nc-step-active").index() == 4){
+                    if (value == '') {
+                        return '自定义权限,用户组名称不可为空!';
+                    }
+				}
+            },
+            group_id: function (value) {
+                if($(".group-type .layui-this").data("type") == 1 && $(".nc-step .nc-step-active").index() == 4){
+                    if (value == 0) {
+                        return '用户组权限,用户组必须选择!';
+                    }
+                }
+            },
+            password: [/(.+){6,20}$/, '密码必须在6~20位'],
+    		repassword: function (value) {
+    			if (value != $('#password').val()) {
+    				return '两次密码不一致';
+    			}
+    		},
+    		phone: [/^1[3|4|5|7|8]\d{9}$/, '手机必须11位，只能是数字！'],
+            sms_code: function (value) {
+				if (value == '') {
+					return '请输入正确的验证码!';
+				}
+            },
+        });
+	
+		var repeat_flag = false;//防重复标识
+        form.on('submit(save)', function (data) {
+            var field = data.field;
+            field.group_type = $(".group-type .layui-this").data("type");
+            var group_array = [];
+            if( field.group_type == 2){
+                var obj = $("#tree_box input:checked.group-checkbox");
+                var group_array = [];
+                for (var i = 0; i < obj.length; i++) {
+                    group_array.push(obj.eq(i).val());
+                }
+                if(group_array.length  == 0){
+                    return '自定义权限,用户组权限不可为空!';
+				}
+
+                //submit_url和 jump_url 在引用该js的页面规定
+                var addon_obj = $("#tree_box input:checked.addon-checkbox");
+                var addon_array = [];
+                for (var i = 0; i < addon_obj.length; i++) {
+                    addon_array.push(addon_obj.eq(i).val());
+                }
+                field.addon_array = addon_array.toString();
+
+                //应用公共装修页权限
+                var diyview_page_array = [];
+                var addon_diyview_obj = $("#tree_box input[value='ADDON_DIYVIEW']:checked");
+                for (var i = 0; i < addon_diyview_obj.length; i++) {
+                    diyview_page_array.push(addon_diyview_obj.eq(i).data("tag"));
+                }
+                field.diyview_page_array = diyview_page_array.toString();
+                //应用公共装修页权限
+                var auth_page_array = [];
+                var addon_auth_obj = $("#tree_box input[value='ADDON_AUTH']:checked");
+                for (var i = 0; i < addon_auth_obj.length; i++) {
+                    auth_page_array.push(addon_auth_obj.eq(i).data("tag"));
+                }
+                field.auth_page_array = auth_page_array.toString();
+
+			}
+            field.group_array = group_array.toString();
+            data.field.uid = uid;
+            if (repeat_flag) return;
+			repeat_flag = true;
+            $.ajax({
+                type: "post",
+                url: nc.url("sitehome/manager/bindSiteUser"),
+                data: data.field,
+                dataType: "JSON",
+                success: function (res) {
+                    if (res.code == 0) {
+                        layer.msg(res.message, function () {
+                     		location.href = nc.url("sitehome/manager/index");
+                        });
+                    } else {
+						repeat_flag = false;
+                        layer.msg(res.message);
+                    }
+                }
+            });
+            //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+            return false;
+        });
+
+		/**
+		 *添加用户
+		 **/
+		var repeat_flag_is_register = false;//防重复标识
+        form.on('submit(addUser)', function(data){
+            //发送短信验证码
+            if (repeat_flag_is_register) return;
+			repeat_flag_is_register = true;
+            var field = data.field;
+            $.ajax({
+                type : 'get',
+                url  : "{:url('sitehome/manager/addUser')}",
+                data : field,
+                dataType : "JSON",
+                success : function(res) {
+                    layer.msg(res.message);
+					repeat_flag_is_register = false;
+                    if(res.code == 0){
+                        layer.closeAll();
+                        $("#search_username").val(field.username);
+                        userinfo = {username:field.username, nick_name:field.nick_name, mobile: field.mobile };
+                        uid = res.data;
+                        userinfoShow();
+                    }
+                }
+            })
+        });
+        
+		var repeat_flag_is_send = false;//防重复标识
+        //按钮事件
+        util.event('lay-util', {
+            next_step: function(){
+                userStep();
+            }
+            ,last_step: function(){
+                if(uid > 0){
+                    stepChange(2);
+				}
+            }
+            ,the_last_step: function(){
+                stepChange(0);
+
+            }
+            ,the_last_step_serond: function(){
+                stepChange(0);
+
+            },
+            code:function(){
+                var code_obj = $(this);
+                //发送短信验证码
+
+                var mobile = $("input[name='mobile']").val();
+                if(mobile == ""){
+                    layer.msg('请输入正确的手机号', {time: 2000, icon:2});
+                    return;
+                }
+                
+				if (repeat_flag_is_send) return;
+				repeat_flag_is_send = true;
+                $.ajax({
+                    type: "post",
+                    url: nc.url("sitehome/manager/sendCode"),
+                    data: {mobile : $("input[name='mobile']").val()},
+                    dataType: "JSON",
+                    success: function (res) {
+                        layer.msg(res.message);
+						if(res.code == 0){
+                            //示例
+							var serverTime = new Date().getTime();
+							var endTime = serverTime + 60*1000;
+                            code_obj.addClass("layui-hide");
+                            $(".code-time").removeClass("layui-hide");
+                            util.countdown(endTime, serverTime, function(date, serverTime, timer){
+                                var time_num = date[2]*60 + date[3];
+                                $(".code-time").text(time_num+"s");
+                                if(date[0] == 0 && date[1] == 0 && date[2] == 0 && date[3] == 0){
+                                    $(".code-time").addClass("layui-hide");
+                                    code_obj.text("重新发送");
+                                    code_obj.removeClass("layui-hide");
+									repeat_flag_is_send = false;
+								}
+                            });
+						}else{
+							repeat_flag_is_send = false;
+						}
+
+                    }
+                });
+				// console.log($(this));
+			}
+            ,check: function(){
+                //检测用户
+                var username = $("#search_username").val();
+                if(username == ""){
+                    return;
+				}
+                var index = layer.load(2, {shade: false}); //0代表加载的风格，支持0-2
+                $.ajax({
+                    type: "post",
+                    url: nc.url("sitehome/manager/getUserInfo"),
+                    data: {username : username},
+                    dataType: "JSON",
+                    success: function (res) {
+                        layer.close(index);
+                        $(".user-info-item").removeClass(" layui-show");
+                        if (res.data == null) {
+                            //询问框
+                            layer.confirm('当前用户名/手机号 ( '+ username +' ) 尚未注册为系统账号,您可以点击确定进入下一步用户注册。', {
+                                btn: ['确定'], //按钮
+                                title: "未注册系统账号"
+                            }, function(){
+                                $("button[lay-util='next_step']").click();
+                                layer.closeAll();
+                            });
+                            userinfo = [];
+                            uid = 0;
+                        } else {
+                            userinfo = res.data;
+                            uid = res.data.uid;
+                            userinfoShow();
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+    });
+    
+    /**
+     * 切换步骤
+     */
+    function stepChange(sort){
+        $(".nc-step .nc-step-tab").removeClass("nc-step-active");
+        $(".nc-step .nc-step-tab:eq("+ sort +")").addClass("nc-step-active");
+        $(".nc-step-content .nc-step-item").removeClass("layui-show");
+        $(".nc-step-content .nc-step-item:eq("+ sort +")").addClass("layui-show");
+    }
+
+    /**
+	 * 用户操作步骤
+     */
+    function userStep(){
+        stepChange(1);
+        var tpl_html = $("#user_html").html();//没有用户id 去注册
+		var user_name = $("#search_username").val();
+		//填充html信息
+		laytpl(tpl_html).render({user_name : user_name}, function(html){
+			$("#second_step").html(html);
+		})
+
+	}
+    
+    function userinfoShow(){
+    	stepChange(1);
+    	var tpl_html = $("#user_info_html").html();//存在用户id 则显示用户信息
+    	//填充html信息
+		laytpl(tpl_html).render(userinfo, function(html){
+			$("#second_step").html(html);
+		})
+    }
+</script>
+<script src="SITEHOME_JS/tree.js" type="text/javascript" charset="utf-8"></script>
+{/block}

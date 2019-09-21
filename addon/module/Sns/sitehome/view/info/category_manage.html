@@ -1,0 +1,250 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+    .details-wrap {
+        position: relative;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 20px 20px;
+        line-height: 24px;
+        display: flex;
+    }
+    .basic-info .customer-pic {
+        width: 80px;
+        height: 80px;
+        margin-right: 20px;
+        line-height: 80px;
+        text-align: center;
+    }
+    .basic-info .customer-pic img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+    .basic-info .customer-info {
+        flex-grow: 3;
+    }
+    .basic-info .customer-info li {
+        margin-bottom: 10px;
+        height: 20px;
+        line-height: 20px;
+    }
+    .basic-info .customer-info li div {
+        /*float: left;*/
+        width: 33.33%;
+    }
+    .customer-info-title {
+        display: inline-block;
+        width: 92px;
+    }
+    .customer-info-content {
+        max-width: 152px;
+        display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        vertical-align: bottom;
+    }
+    .layui-tab .layui-tab-title li {
+        border: 1px solid #e5e5e5;
+        border-right: none;
+        height: 36px;
+        line-height: 36px;
+    }
+    .layui-tab .layui-tab-title li:first-of-type {
+        border-top-left-radius: 3px;
+        border-bottom-left-radius: 3px;
+    }
+    .layui-tab .layui-tab-title .layui-this {
+        border-color: #12b7f5;
+        background-color: #12b7f5;
+        color: #fff;
+    }
+    .layui-tab .layui-tab-title li:last-of-type {
+        border-right: 1px solid #e5e5e5;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
+    }
+    .dis{
+        display: {$category.parent > 0 ? 'block' : 'none'};
+    }
+    a.list {
+        cursor: pointer;
+        color: #12b7f5;
+        font-size: 8px;
+        position: absolute;
+        top: 20px;
+        right: 350px;
+    }
+</style>
+{/block}
+{block name="main"}
+<div class="details-wrap basic-info">
+    <div class="customer-pic">
+        <div class="headframe" style="display:inline-block;vertical-align:middle;">
+            <img src="{:img($category['icon'])}" alt="图片">
+        </div>
+    </div>
+    <ul class="customer-info">
+        <li>
+            <div>
+                <span class="customer-info-title">栏  目：</span>
+                <span class="customer-info-content">{$category.pname_name}</span>
+            </div>
+        </li>
+        {if $category.parent > 0}
+            <li>
+                <div>
+                    <span class="customer-info-title">价  格：</span>
+                    <span class="customer-info-content">{$category.price}</span>
+                </div>
+            </li>
+            <li style="margin-top: -60px; margin-left: 400px;">
+                <div>
+                    <span class="customer-info-title">属性：</span>
+                    <span class="customer-info-content">{$category.attribute_count}</span>
+<!--                    <a class="list" href="javascript:;">列表</a>-->
+                </div>
+            </li>
+            <li style="margin-top: 0px; margin-left: 400px;">
+                <div>
+                    <span class="customer-info-title">信息：</span>
+                    <span class="customer-info-content">{$category.category_info_count}</span>
+                </div>
+            </li>
+        {/if}
+    </ul>
+</div>
+
+<div class="layui-tab" style="margin:20px 21px;">
+    <ul class="layui-tab-title">
+        <li class="layui-this">编辑</li>
+        {if $category.parent > 0}
+            <li>属性</li>
+        {/if}
+        <li>设置</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <div class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" lay-verify="name" placeholder="请输入名称" value="{$category.name}" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>排序</label>
+                    <div class="layui-input-inline">
+                        <input type="number" name="sort" lay-verify="sort" placeholder="排序" value="{$category.sort}" autocomplete="off" class="layui-input nc-len-short">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="required">*</span>是否显示</label>
+                    <div class="layui-input-inline">
+                        <input type="checkbox" required name="visible" value="1" lay-skin="switch" lay-filter="switch" {if $category.visible == 1 }checked{/if}>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label img-upload-lable">图标</label>
+                    <div  class="layui-input-inline article img-upload" id="layer-photos">
+                        <div>
+                            <input type="hidden" class="layui-input" name = "icon" value="{$category['icon']}" />
+                            <div class="upload-img-inline icon_img">
+                                {if empty($category['icon'])}
+                                <div class="upload-img-box" onclick="uploadSingleicon_img()" >
+                                    <div>
+                                        <i class="add">+</i>
+                                    </div>
+                                </div>
+                                {else/}
+                                <div class="upload-img-box has-choose-image">
+                                    <div>
+                                        <img src="{:img($category['icon'])}" layer-src="{:img($category['icon'])}">
+                                    </div>
+                                    <span onclick="uploadSingleicon_img();">修改</span>
+                                </div>
+                                {/if}
+                            </div>
+                            {:hook("fileUpload", ["name" => "icon_img", "file_type" => "IMAGE", "type" => "common"], '', true)}
+                        </div>
+                        <div style="clear: both"></div>
+                    </div>
+                </div>
+
+                <div class="layui-form-item dis">
+                    <label class="layui-form-label">价钱单位</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="price_unit" value="{$category.price_unit}" lay-verify="price_unit" placeholder="价钱单位" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+
+                <div class="layui-form-item dis" >
+                    <label class="layui-form-label">封面图片别名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="icon_label" lay-verify="icon_label" placeholder="封面图片别名" value="{$category.icon_label}" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+                <div class="layui-form-item dis" >
+                    <label class="layui-form-label">标题别名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title_label" lay-verify="title_label" placeholder="标题别名" value="{$category.title_label}" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+                <div class="layui-form-item dis" >
+                    <label class="layui-form-label">标题输入框提示</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title_placeholder" lay-verify="title_placeholder" placeholder="标题输入框提示" value="{$category.title_placeholder}"  autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+                <div class="layui-form-item dis" >
+                    <label class="layui-form-label">详情别名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="content_label" lay-verify="content_label" placeholder="详情别名" value="{$category.content_label}" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+                <div class="layui-form-item dis" >
+                    <label class="layui-form-label">详情输入框提示</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="content_placeholder" lay-verify="content_placeholder" placeholder="详情输入框提示" value="{$category.content_placeholder}" autocomplete="off" class="layui-input nc-len-long">
+                    </div>
+                </div>
+                <div class="nc-form-row">
+                    <input type="hidden" name="category_id" lay-verify="category_id"  value="{$category.category_id}">
+                    <input type="hidden" name="parent" lay-verify="parent"  value="{$category.parent}">
+                    <button class="layui-btn" lay-submit lay-filter="saveSms">保存</button>
+                    <button onclick="window.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-tab-item">
+            {include file="info/category_manage_attribute_list" /}
+        </div>
+        <div class="layui-tab-item">内容3</div>
+    </div>
+</div>
+{include file="info/add_category_manage_attribute" /}
+{include file="info/edit_category_manage_attribute" /}
+{/block}
+{block name="script"}
+<script>
+    var category_url_update = "sns://sitehome/info/categoryManage";
+    var attribute_add_edit_url = "sns://sitehome/info/editAndAddAttribute";
+    var laytpl, index, form, laydate;
+
+    $(".list").click(function(){
+        $(".layui-tab-title li").removeClass("layui-this");
+        $(".layui-tab-title li:eq(1)").addClass("layui-this");
+        $(".layui-tab-content .layui-tab-item").removeClass("layui-show");
+        $(".layui-tab-content .layui-tab-item:eq(1)").addClass("layui-tab-item layui-show");
+    });
+</script>
+
+<!--属性列表操作-->
+<script src="SNS_JS/category_attribute_list.js"></script>
+<!--属性编辑添加js-->
+<script src="SNS_JS/category_attribute.js"></script>
+<!--分类编辑操作js-->
+<script src="SNS_JS/category.js"></script>
+{/block}

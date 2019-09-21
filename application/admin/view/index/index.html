@@ -1,0 +1,186 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .empty-site{text-align: center;padding: 120px 0;background: #fff;}
+    .empty-site .empty-img img{width: 100px;margin-bottom: 10px;}
+    .text-content p:nth-child(1){color: #999;margin-bottom: 5px;}
+    .text-content p:nth-child(2), .text-content p a{font-size: 16px;color: #999;}
+    .text-content p a{color: #666;}
+    .nc-function-search{float: right;display: flex;margin-top: 11px;margin-bottom: 0;}
+    .nc-function-search > .layui-btn{margin-left: 10px;}
+	.layui-nav.nc-nav{margin-bottom: 0;padding-top: 0;padding-left: 0;}
+	.layui-field-title{padding-top: 10px;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-field-title clear nc-mb20" style="background-color: #fff; margin-top: 0;">
+    <ul class="layui-nav nc-nav" style="display: inline-block;">
+        <li class="layui-nav-item {eq name='addon_name' value=''}layui-this {/eq}" value="0">
+            <a href="{:url('admin/index/index')}">全部站点</a>
+        </li>
+        {foreach name="app_list" item="v"}
+        <li class="layui-nav-item {eq name='addon_name' value='$v.name'}layui-this {/eq}" value="{$v['name']}">
+            <a href="{:url('admin/index/index', ['addon_name' => $v['name']])}">{$v['title']}</a>
+        </li>
+        {/foreach}
+    </ul>
+    <div class="nc-function-search layui-form">
+        <div class="layui-input-inline nc-len-mid nc-search-btn">
+            <input type="text" placeholder="输入站点名称" name="site_name" class="layui-input">
+            <button class="layui-icon-search" lay-submit lay-filter="search"></button>
+        </div>
+        <div class="layui-btn" onclick="window.location.href='{:url('admin/site/addSite')}'">新建站点</div>
+    </div>
+</div>
+<div class="empty-site" {if condition = "count($site_list) neq 0 "}style="display:none;"{/if}>
+    <div class="empty-img">
+        <img src="SITEHOME_IMG/empty_site.png" alt=""/>
+    </div>
+    <div class="text-content">
+        <p>当前没有站点</p>
+        <p>赶快新建一个自己的站点，<a href="{:url('admin/site/addSite')}" class="nc-text-color">新建站点</a></p>
+    </div>
+</div>
+
+{if condition = "count($site_list) neq 0 "}
+<div id="site_list" class="nc-item-block-parent">
+    {volist name = "site_list" id = "vo"}
+    <div class="nc-item-block fl size-lg">
+        <a class="nc-item-block-wrap" href="{:url( 'sitehome/index/index','site_id='.$vo['site_id'])}">
+            <div class="nc-item-pic">
+                {empty name="$vo['icon']"}
+                <img src="__ROOT__{$vo['app_icon']}" title="{if condition="$vo['title']"}{$vo['title']}{/if}" onerror="this.src='SITEHOME_IMG/site_img.png'"/>
+                {else /}
+                <img src="{:img($vo['icon'])}" title="{if condition="$vo['title']"}{$vo['title']}{/if}" onerror="this.src='SITEHOME_IMG/site_img.png'"/>
+                {/empty}
+            </div>
+            <div class="nc-item-content">
+                <div class="nc-content-title">
+                    {$vo['site_name']}
+<!--                    {notempty name="$vo['style']"}-->
+<!--                    <span class="label" style="background-color:{$vo['style']['background']} !important; color:{$vo['style']['color']} !important;">{if condition="$vo['title']"}{$vo['title']}{/if}</span>-->
+<!--                    {/notempty}-->
+                </div>
+                <p class="nc-content-desc">创建日期：{:time_to_date($vo['create_time'])}</p>
+                <div class="nc-icon">
+                    {foreach $vo["support_app_type"] as $k => $v}
+                    <img src="__ROOT__/{$v['logo']}" title="{$v['name']}">
+                    {/foreach}
+                </div>
+            </div>
+        </a>
+        <div class="nc-item-float">
+            <div style=" text-align: center;">
+                <a href="javascript:copySite({$vo.site_id});" style="display:inline-block; width: 45%;">复制</a>
+                <span style="color: #999;">|</span>
+                <a href="javascript:delSite({$vo.site_id});" style="display:inline-block; width: 45%;">删除</a>
+            </div>
+        </div>
+    </div>
+    {/volist}
+</div>
+{/if}
+{/block}
+{block name='script'}
+<script>
+	function delSite(site_id) {
+		layer.confirm('确定要删除站点？', {icon: 3, title: '提示'}, function (index) {
+			$.ajax({
+				url: "{:url('admin/site/deleteSite')}",
+				type: 'post',
+				data: {site_id: site_id},
+				dataType: "JSON",
+				success: function (res) {
+					layer.msg(res.message);
+					location.href = "{:url('admin/index/index')}";
+				}
+			});
+			layer.close(index);
+		});
+
+	}
+	
+	var repeat_flag_copy_site = false;//防重复标识
+	function copySite(site_id) {
+		layer.confirm('确定要复制站点？', {icon: 3, title: '提示'}, function (index) {
+			if(repeat_flag_copy_site) return;
+			repeat_flag_copy_site = true;
+			$.ajax({
+				url: "{:url('admin/site/copySite')}",
+				type: 'post',
+				data: {site_id: site_id},
+				dataType: "JSON",
+				success: function (res) {
+					layer.msg(res.message);
+					location.href = "{:url('admin/index/index')}";
+				}
+			});
+			layer.close(index);
+		});
+
+	}
+
+	// 搜索
+	layui.use('form', function () {
+		var form = layui.form;
+		form.on("submit(search)",function (data) {
+			$.ajax({
+				url: "{:url('admin/index/index')}",
+				type: 'get',
+				data: {site_name: data.field.site_name,addon_name : "{$addon_name}"},
+				dataType: "JSON",
+				success: function (res) {
+					if (res['data'].length > 0) {
+						var html = '';
+						for (var i = 0; i < res['data'].length; i++) {
+							var data = res['data'][i],
+								dataPort = data['support_app_type'];
+							html += '<div class="nc-item-block fl size-lg">';
+							html += '<a class="nc-item-block-wrap" href=' + nc.url('sitehome/index/index', {site_id: data.site_id}) + '>';
+							html += '<div class="nc-item-pic">';
+							if (data.icon == '') {
+								html += '<img src="__ROOT__' + data.app_icon + '" title="' + data.title + '" onerror="this.src=\'SITEHOME_IMG/site_img.png\'" />';
+							} else {
+								html += '<img src="' + nc.img(data.icon) + '" title="' + data.title + '"  onerror="this.src=\'SITEHOME_IMG/site_img.png\'"/>';
+							}
+							html += '</div>';
+							html += '<div class="nc-item-content">';
+							html += '<div class="nc-content-title">';
+							html += data.site_name;
+							// if(data.style){
+							// 	html += '<span class="label" style="background-color:'+ data.style.background +' !important;color:' + data.style["border-color"] + ' !important;">'+ data.title +'</span>';
+							// }
+							html += '</div>';
+							html += '<div class="nc-content-desc">创建日期：' + nc.time_to_date(data.create_time);
+							html += '</div>';
+							html += '<div class="nc-icon">';
+							for (var item in dataPort)
+							{
+								html += '<img src="__ROOT__/'+dataPort[item].logo+'">';
+							}
+							html += '</div>';
+							html += '</div>';
+							html += '</a>';
+							html += '<div class="nc-item-float">';
+							html += '<div style=" text-align: center;">';
+							html += '<a style="display:inline-block; width: 45%;" href="javascript:copySite(' + data.site_id + ');">复制</a>';
+							html += '<span style="color: #999;">|</span>';
+							html += '<a style="display:inline-block; width: 45%;" href="javascript:delSite(' + data.site_id + ');">删除</a>';
+							html += '</div>';
+							html += '</div>';
+							html += '</div>';
+						}
+						$('#site_list').html(html);
+						$(".empty-site").hide();
+					} else {
+						$(".empty-site").show();
+						$('#site_list').html("");
+					}
+					
+				}
+			});
+		});
+
+	});
+</script>
+{/block}

@@ -1,0 +1,409 @@
+<style type="text/css">
+.audio-manage .album_content{
+    height: 529px;
+	overflow: hidden;
+	width: 100%;
+}
+.audio-manage .category-list{
+	float:left;
+	width:160px;
+	background: #f2f2f2;
+	height:529px;
+	padding: 9px 0;
+	box-sizing: border-box;
+    overflow: hidden;
+}
+.audio-manage .category-list .category-item {
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+    padding: 0 5px 0 5px;
+    margin-right: 1px;
+    cursor: pointer;
+}
+.audio-manage .active{
+	background:#fff
+}
+.audio-manage .category-list .category-name {
+    width: 100px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.audio-manage .category-list .category-num {
+    position: absolute;
+    top: 0;
+    right: 8px;
+    color: #999;
+}
+
+.audio-manage .attachment-container {
+	padding-top:  20px;
+    width: 680px;
+	float:left
+}
+
+.audio-manage .image-box-active{
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    box-sizing: border-box;
+}
+
+.audio-manage .image-box-active:after {
+    position: absolute;
+    display: block;
+    content: " ";
+    right: 0;
+    top: 0;
+    border: 14px solid;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    z-index: 1;
+}
+.audio-manage .image-box-active i{
+	position:absolute;
+	right:0;
+	top:0;
+	font-size: 12px;
+    color: #fff;
+    font-style: normal;
+    font-family: arial;
+    width: 13px;
+    text-align: center;
+    height: 15px;
+	z-index:2;
+}
+.audio-manage .layui-body{
+	z-index: unset;
+}
+.audio-manage .layui-form-item {
+    clear: inherit;
+}
+
+.audio-manage .layui-upload-img {
+    width: 92px;
+    height: 92px;
+    margin: 0 10px 10px 0;
+}
+
+.audio-manage .layui-col-space1>* {
+     padding: 0; 
+}
+.audio-manage .upload-dialog-r{
+	height: 657px;
+	position:relative;
+	padding:0
+}
+.audio-manage .upload-dialog-top{
+	padding: 15px 0 15px 15px;
+	margin-right: 20px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.audio-manage .upload-dialog-serach{
+	float:right;
+	position: relative;
+	width:250px;
+}
+.audio-manage .upload-dialog-icon{
+	position: absolute;
+	z-index: 1;
+	top: 10%;
+	left:2px;
+}
+.audio-manage .layui-quote-nm {
+    border-width: 1px;
+}
+.audio-manage #pagedablum_contain{
+	float:left
+}
+.audio-manage .layui-elem-quote{
+	margin-top: 10px;
+	max-height: 300px; 
+	overflow: auto;
+}
+
+/* 语音 */
+.audio-manage .layui-col-md2 {
+    width: auto;
+    margin: 0 0 20px 20px;
+	overflow: hidden;
+    float: left;
+}
+.audio-manage .voice  .voice-item {
+    float: left;
+    width: 300px;
+    border: 1px solid #e5e5e5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.audio-manage .voice .voice-content {
+    position: relative;
+    padding: 10px;
+}
+.audio-manage .voice .voice-icon {
+    width: 40px;
+    height: 40px;
+    background: #ddd;
+    background-size: 40px 40px;
+    background-image: url(https://b.yzcdn.cn/v2/image/showcase/attachment/voice/play.png);
+}
+.audio-manage .voice .voice-name {
+    position: absolute;
+    width: 180px;
+    height: 18px;
+    line-height: 18px;
+    top: 12px;
+    left: 60px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.audio-manage .voice .voice-createtime {
+    position: absolute;
+    top: 34px;
+    left: 60px;
+    color: #999;
+}
+.audio-manage .voice .voice-size {
+    position: absolute;
+    top: 34px;
+    right: 10px;
+    color: #999;
+}
+.audio-manage .voice  .voice-duration {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+}
+</style>
+
+<div class="audio-manage">
+<span onclick="audioManageUpload{$name}()">{$title}</span>
+<div class="upload-dialog-r" id="audioManage{$name}">
+    <div  class="upload-dialog-top">
+		<button class="layui-btn layui-btn-primary layui-btn-sm">我的语音</button>
+		<div  class="upload-dialog-serach">
+			<div  class="upload-dialog-icon">  
+				 <button class="layui-btn layui-btn-primary layui-btn-sm" style="border:none"><i class="layui-icon">&#xe615;</i></button>
+			</div>
+			<input type="text" class="layui-input" style="padding: 0 40px;">
+		</div>
+	</div>
+
+	<div class="album_content">
+		<div class="category-list" >
+		       {volist name="category_list" id="vo"}
+		       <div class="category-item">
+			       <span class="category-name">{$vo.name}</span>
+			       <span class="category-num">{$vo.num}</span>
+			       <input type="hidden" value="{$vo.id}" class="category-id"/>
+		       </div>
+		       {/volist}
+		</div>
+		
+		<div class="attachment-container">
+			<div class="layui-row layui-col-space1"  id="audioList{$name}" style="height:440px;margin-left: 5px;"></div>
+			<button class="layui-btn layui-btn-sm"  onclick="uploadAudio{$name}()" style="float:left;margin-top: 10px;margin-left:20px;">上传音频</button>
+			<div id="paged{$name}" class="page" style="float:right;"></div>
+		</div>
+	</div>
+
+    <div style="text-align: center;padding: 14px 15px 15px;border-top: 1px solid #ddd;">
+		   <button type="button" class="layui-btn layui-btn-primary" onclick="audioBtnOk()">确定</button>
+	</div>
+	
+</div>
+
+<!-- 音频上传开始 -->
+<div class="layui-form"  id="uploadAudio{$name}" style="display:none;margin-top: 15px;font-size:12px;">
+	   <div class="layui-form-item">
+		    <label class="layui-form-label">本地音频</label>
+		    <div class="layui-upload"  style="width:575px">
+				  <button type="button" class="layui-btn"  id="audio{$name}"><i class="layui-icon"></i>音频上传</button>
+				  <blockquote class="layui-elem-quote layui-quote-nm">
+				     预览：<div class="layui-upload-list" id="audioShow{$name}"></div>
+				  </blockquote>
+				  <div>仅支持 amr、 mp3、 mpeg 3种格式, 大小不超过6.0 MB</div>
+			</div>
+	  </div>
+	  <div style="text-align: center;">
+		   <button type="button" class="layui-btn layui-btn-primary" id="btnAudio{$name}">确定</button>
+	  </div>
+</div>
+<!-- 音频上传结束 -->
+</div>
+<script>
+var index;
+var active_array = new Array();
+
+function audioManageUpload{$name}(){
+	index = layer.open({
+		type: 1,
+		area: ['860px', '700px'], //宽高
+		content:  $('#audioManage{$name}'),
+		cancel: function(){
+			//右上角关闭回调
+			$("#audioManage{$name}").hide();
+			//return false 开启该代码可禁止点击该按钮关闭
+		}
+	});
+}
+
+$('#audioManage{$name} .album_content').on('click',".category-item",function() {
+	$(this).siblings().removeClass('active');
+	$(this).addClass('active');
+	getAudioManagePageList(1, 15);
+	toPage(total_count);
+});
+ 
+$(document).ready(function() {
+	$('.category-item:first-child').addClass('active');
+	//ajax请求后台数据
+	getAudioManagePageList(1, 15);
+	toPage(total_count);
+	
+	$("#audioManage{$name}").on("click", ".layui-col-md2", function () {
+		
+		var active_html = '<div class="image-box-active"></div>';
+		$('.layui-col-md2').find(".voice-item").find('.image-box-active').remove();
+		$(this).find(".voice-item").append(active_html);
+		
+	});
+	
+});
+
+//ajax请求后台数据
+function getAudioManagePageList(page, limit) {
+	var category_id = $("#audioManage{$name} .active>.category-id").val();
+	$.ajax({
+		type: "get",
+		async: false,
+		url: '{:addon_url("File://sitehome/File/fileManage")}',
+		data: {page: page, limit: limit, type: 'AUDIO', category_id: category_id},
+		dataType: "JSON",
+		success: function (data) {
+			getAudioList(data.data);
+			total_count = data.data.count;//总页数(后台返回)
+		}
+	});
+	
+}
+
+        function getAudioList(data){
+            var s = "";
+            for (var i = 0; i < data["list"].length; i++) {
+                    s+='<div class="layui-col-md2 voice">';
+                    
+                    s+='<div class="voice-item">';
+                    s+='<div class="voice-content">';
+                    s+='<div class="voice-icon"></div>';
+                    s+='<div class="voice-name">鹿予 - 可能否.mp3</div>';
+                    s+='<div class="voice-createtime">2018-06-21 10:24:16</div>';
+                    s+='<div class="voice-size">3.6 MB</div>';
+                    s+='<div class="voice-duration">03:50</div>';
+                    s+='</div>';
+                    s+='</div>';
+                 
+                   	s+='</div>';
+            }
+            if(data["list"].length>0){
+                $("#audioManage{$name} #audioList{$name}").html(s);
+            }else{
+                $("#audioManage{$name} #audioList{$name}").html("<br/><span style='width:10%;height:30px;display:block;margin:0 auto;'>暂无数据</span>");
+            }
+
+        }
+        
+        function toPage(total_count){
+        	
+	        layui.use(['form', 'laypage'], function() {
+
+	        	var form = layui.form,
+	                laypage = layui.laypage;
+	          	    form.render('checkbox');
+	            //调用分页
+	            laypage.render({
+	            	elem: 'paged{$name}'
+	                ,count: total_count //得到总页数，在layui2.X中使用count替代了，并且不是使用"总页数"，而是"总记录条数"
+					,layout: nc.get_page_param()
+	            	,limit : 15
+	                ,jump: function(obj, first){
+	                    if(!first){ //一定要加此判断，否则初始时会无限刷新
+	                    	getAudioManagePageList(obj.curr, obj.limit);//一定要把翻页的ajax请求放到这里，不然会请求两次。
+	                        form.render('checkbox');
+	                     }
+	                 }
+	              });
+		        
+	        });
+        }
+
+        // 保存选中的图片
+         function audioBtnOk(){
+        	 var active_pic = '';
+             active_pic += '<div class="voice-wrapper" data-voice-src="">';
+             active_pic += '<span class="voice-player">';
+             active_pic += '<a href="javascript:;" class="close--circle js-delete-complex">×</a>';
+             active_pic += '<span class="stop">点击播放</span>';
+             active_pic += '<span class="second"></span>';
+             active_pic += '<i class="play" style="display:none;"></i>';
+             active_pic += '</span>';
+             active_pic += '</div>';
+             parent.$("#add_reply").find(".complex-content").html(active_pic);
+             parent.$('.complex-backdrop').css("display","block");
+           //  $("#add_reply").find("textarea[name='reply_content']").val();
+        	
+        	var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+          
+        }
+        
+       //音频
+     	function uploadAudio{$name}(){
+     			
+     			layer.open({
+     	  		  type: 1,
+     	  		  area: ['860px', '700px'], //宽高
+     	  		  content:  $('#uploadAudio{$name}'),
+     	  		  cancel: function(){ 
+     	  		    //右上角关闭回调
+     	  		    $("#uploadAudio{$name}").hide();
+     	  		    //return false 开启该代码可禁止点击该按钮关闭
+     	  		  }
+     	  	});
+     	     
+     	}
+     	
+     	layui.use('upload', function(){
+  		  var upload = layui.upload;
+  	  
+  		 //音频
+  		  upload.render({
+  		    elem: '#audio{$name}'
+  			,url: '{:addon_url("File://sitehome/File/ajaxUploadAudio")}'
+  		    ,accept: 'audio' //音频
+  			,data: {category_id: function(){return $(".active>.category-id").val();}}
+  	    	,auto: false
+  		    ,bindAction: '#btnAudio{$name}'
+  	    	,choose: function(obj){
+  			      //预读本地文件示例，不支持ie8
+  			      obj.preview(function(index, file, result){
+  			        $('#audioShow{$name}').append('<embed height="100" width="100" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img"/>')
+  			      });
+  			 }
+  		    ,done: function(res){
+				  location.reload();
+  		    }
+   			,error: function(index, upload){
+  		        
+  		    }
+  		  });
+
+  		});
+</script>

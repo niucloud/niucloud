@@ -1,0 +1,280 @@
+{extend name="style/base"/}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="SITEHOME_CSS/sitehome.css">
+{/block}
+{block name="main"}
+	<div class="nui-main">
+		<div>
+			<div class="layui-row">
+			    <div class="layui-col-md12 nui-siteinfo">
+			    	<div class="nui-site-info">
+			    		<div class="nui-site-info-name">
+			    			<span>{$site_info['site_name']}</span>
+			    			{foreach $addon_info['support_app_type'] as $k => $v}
+			    				<a href="javascript:;">{$v.name}</a>
+			    			{/foreach}
+
+			    			<!-- <a href="{:url( 'wap/index/index','site_id='.$site_id)}" target="_blank"><i class="niu-phone-icon"></i></a>
+			    			<a style="display:none" href="{:url( 'web/index/default_index','site_id='.$site_id)}" target="_blank"><i class="niu-pc-icon"></i></a> -->
+			    		</div>
+			    	</div>
+
+			    </div>
+		  	</div>
+	  	</div>
+	  	<!-- 左边内容 -->
+	  	<div class="niu-site-module">
+	  		<div class="layui-row layui-col-space20">
+	  			<div class="layui-col-md10">
+	  				<!-- 完善信息 -->
+	  				<div class=" nui-perfect-info">
+	  				<div class="layui-col-md9 layui-col-sm9 layui-col-xs9">
+				      	<p>完善站点信息</p>
+				      	<span>需要你补充一些相关信息，以便我们提供更有针对性的站点诊断和运营服务</span>
+				    </div>
+				    <div class="layui-col-md3  layui-col-sm3 layui-col-xs3 nui-align-right">
+				    	<a href="{:url('sitehome/manager/sitesetting',['site_id'=>$site_id])}" class="layui-btn layui-btn-primary layui-btn-sm"> 站点设置</a>
+				    </div>
+				    </div>
+	  				<!-- 常用功能 -->
+	  				<div>
+	  					<label>常用功能</label>
+				     	<div class="niu-commonly-functions-list">
+				     		{volist name="addon_list['data']" id="list" offset="0" length='9'}
+				     		<div class="niu-commonly-function-info">
+				     				<img src="__ROOT__{$list['icon']}">
+  								<p>{$list['title']}</p>
+				     		</div>
+				     		{/volist}
+				     		<div style="clear:both"></div>
+				     	</div>
+	  				</div>
+	  				<div>
+	  					<label>数据统计<span>您需要关注的站点信息以及待处理事项</span></label>
+				     	<div class="niu-commonly-functions-list niu-default-statistical-list layui-row  layui-col-space10">
+				     		<div class="niu-default-statistical-info layui-col-xs6 layui-col-sm6 layui-col-md6">
+				     			<div class="niu-default-statistical-left layui-col-xs3 layui-col-sm3 layui-col-md3">
+				     				<div class="niu-default-statistical-left-img layui-col-xs4 layui-col-sm4 layui-col-md4">
+				     					<img src="SITEHOME_IMG/sitehome/statistical-icon1.png">
+				     				</div>
+				     				<div class="niu-default-statistical-left-funs layui-col-xs8 layui-col-sm8 layui-col-md8">
+											<p>{$visit_count['total']['visit_count']}/{$visit_count['total']['visit_ip_count']}</p>
+											<p>访问数/用户数</p>
+				     				</div>
+				     			</div>
+				     			<div class="niu-default-statistical-right layui-col-xs9 layui-col-sm9 layui-col-md9">
+				     				<span>今日访问数/用户数 <i>{$visit_count['today_count']['visit_count']}/{$visit_count['today_count']['visit_ip_count']}</i></span>
+									<span>本周访问数/用户数 <i>{$visit_count['week_count']['visit_count']}/{$visit_count['week_count']['visit_ip_count']}</i></span>
+									<span>上周访问数/用户数 <i>{$visit_count['lastweek_count']['visit_count']}/{$visit_count['lastweek_count']['visit_ip_count']}</i></span>
+				     				<span>本月访问数/用户数 <i>{$visit_count['month_count']['visit_count']}/{$visit_count['month_count']['visit_ip_count']}</i></span>
+				     			</div>
+				     		</div>
+				     		<div class="niu-default-statistical-info layui-col-xs6 layui-col-sm6 layui-col-md6">
+				     			<div class="niu-default-statistical-left layui-col-xs3 layui-col-sm3 layui-col-md3">
+				     				<div  class="niu-default-statistical-left-img layui-col-xs4 layui-col-sm4 layui-col-md4">
+				     					<img src="SITEHOME_IMG/sitehome/statistical-icon2.png">
+				     				</div>
+
+				     				<div class="niu-default-statistical-left-funs layui-col-xs8 layui-col-sm8 layui-col-md8">
+				     					<p>{$member_count['total']}</p>
+				     					<p>会员数</p>
+				     				</div>
+				     			</div>
+				     			<div class="niu-default-statistical-right layui-col-xs9 layui-col-sm9 layui-col-md9">
+				     				<span>今日新增 <i>{$member_count['today_count']}</i></span>
+									<span>本周新增 <i>{$member_count['week_count']}</i></span>
+									<span>上周新增 <i>{$member_count['lastweek_count']}</i></span>
+				     				<span>本月新增 <i>{$member_count['month_count']}</i></span>
+				     			</div>
+				     		</div>
+				     		<div style="clear:both"></div>
+				     	</div>
+	  				</div>
+
+
+					<!-- 折线图 -->
+					<div class="layui-col-item layui-col-item-line-chart">
+						<div class="layui-col-md6 layui-col-inner" >
+							<div class="charts">
+								<h3>
+									<i class="i-circular"></i>访问量统计
+								</h3>
+								<div id="visitCharts" class="visit-chart" style="height:210px;">
+
+								</div>
+							</div>
+						</div>
+						<div class="layui-col-md6 layui-col-inner" style="float:right">
+							<div class="charts">
+								<h3>
+									<i class="i-circular"></i>访问人数统计
+								</h3>
+								<div id="ipVisitCharts" class="visit-chart" style="height:210px;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="nc-quote-box  notice">
+				    	<blockquote class="layui-elem-quote layui-quote-nm">系统公告
+							<a href="{:url('admin/config/noticelist')}" target="_blank" class="nc-text-color" style=" float:right;">更多&nbsp;></a>
+						</blockquote>
+						<ul>
+						    {volist name="notice_list" id="vo"  length='3'}
+							<li>
+								<a href="{:url('admin/config/previewnotice?notice_id='.$vo.notice_id)}" target="_blank">
+									<div class="niu-right-announcement-info">
+										<span  class="niu-right-announcement-info-title">{$vo['title']}</span>
+										<span  class="niu-right-announcement-info-time">{:time_to_date($vo['create_time'])}</span>
+									</div>
+								</a>
+							</li>
+							{/volist}
+						</ul>
+					</div>
+
+	  			</div>
+	  			<div class="layui-col-md2">
+	  				<!-- 客服 -->
+	  				<div class="niu-right-customer" style="background:#f8f8f8">
+	  					<a href="javascript:;">
+	  					<div class="niu-right-customer-service">
+	  						<img src="SITEHOME_IMG/sitehome/customer-service-icon.png">
+	  						<p>在线客服</p>
+	  					</div>
+	  					</a>
+	  					<p>电话客服：400-886-7993</p>
+	  				</div>
+	  				<!-- 应用市场 -->
+	  				<div class="niu-right-customer default">
+	  					<div class="niu-right-announcement">
+	  						<span class="niu-right-announcement-first">应用市场</span>
+	  						<a href="{:url('sitehome/addons/lists')}"><span class="niu-right-announcement-last">更多</span></a>
+	  					</div>
+	  					{volist name="addon_list['data']" id="list" offset="0" length='3'}
+	  					<div class="niu-right-application-info">
+	  						<div class="niu-right-application-img">
+		  						<img src="SITEHOME_IMG/sitehome/app-icon.png">
+		  					</div>
+		  					<div class="niu-right-application-title">
+		  						<h2>{$list['title']}</h2>
+		  						<p>{$list['description']}</p>
+		  					</div>
+	  					</div>
+	  					{/volist}
+	  				</div>
+	  			</div>
+	  		</div>
+	  	</div>
+	</div>
+
+{/block}
+{block name="script"}
+<script src="__STATIC__/js/echarts.js"></script>
+<script src="SITEHOME_JS/index.js"></script>
+
+<script>
+    var option_visit = {};
+    var chart_visit = {};
+    var option_ip_visit = {};
+    var chart_ip_visit = {};
+    $(function(){
+        createChart();
+    })
+
+    /**
+     * 创建统计图
+     * @param type
+     */
+    function createChart(){
+        chart_visit = echarts.init(document.getElementById("visitCharts"));
+        chart_ip_visit = echarts.init(document.getElementById("ipVisitCharts"));
+        chart_visit.showLoading();
+        chart_ip_visit.showLoading();
+        getChartData("ALL");
+
+    }
+
+    /**
+     * 获取统计数据
+     * @param type
+     */
+    function getChartData(type){
+        var result = {};
+        $.ajax({
+            type : "post",
+            url : "{:addon_url('sitehome/index/getVisitStatisticsData')}",
+            dataType : "JSON",
+            data : {date_type : "month", type : type},
+            success : function(res) {
+                chart_data = res.data;
+
+                option_visit = {
+                    legend: {
+                        x: 'right',
+                        right: '20',
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '20',
+                        right: '20',
+                        bottom: '20',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: chart_data.date
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: chart_data.data.count_data,
+                            type: 'line',
+                            name: "访问量",
+                            smooth: true,
+                        }
+                    ]
+                };
+                option_ip_visit = {
+                    legend: {
+                        x: 'right',
+                        right: '20',
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '20',
+                        right: '20',
+                        bottom: '20',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: chart_data.date
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: chart_data.data.ip_count_data,
+                            type: 'line',
+                            name: "访问人数",
+                            smooth: true,
+                        }
+                    ]
+                };
+
+                chart_visit.hideLoading();
+                chart_visit.setOption(option_visit);
+                chart_ip_visit.hideLoading();
+                chart_ip_visit.setOption(option_ip_visit);
+            }
+        });
+        return result;
+    }
+</script>
+{/block}

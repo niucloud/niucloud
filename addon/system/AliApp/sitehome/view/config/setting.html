@@ -1,0 +1,34 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="function-setting nc-quote-box">
+	<blockquote class="layui-elem-quote layui-quote-nm">支付宝小程序入口</blockquote>
+	<ul class="layui-card-body-box  nc-item-block-parent">
+		<li class="nc-item-block">
+			<a class="nc-item-block-wrap" href="{:addon_url('aliapp://sitehome/config/config')}">
+				<div class="nc-item-pic">
+					<img src="NC_ALIAPP_IMG/administration.png">
+				</div>
+				<div class="nc-item-content">
+					<div class="nc-content-title">小程序管理</div>
+					<p class="nc-content-desc">小程序管理</p>
+				</div>
+			</a>
+		</li>
+		<li class="nc-item-block">
+			<a class="nc-item-block-wrap" href="{:addon_url('aliapp://sitehome/menu/version')}">
+				<div class="nc-item-pic">
+					<img src="NC_ALIAPP_IMG/edition.png">
+				</div>
+				<div class="nc-item-content">
+					<div class="nc-content-title">版本管理</div>
+					<p class="nc-content-desc">版本管理</p>
+				</div>
+			</a>
+		</li>
+	</ul>
+</div>
+{/block}
+{block name="script"}
+{/block}

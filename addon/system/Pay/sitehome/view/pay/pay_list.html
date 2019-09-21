@@ -1,0 +1,110 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+  <div class="layui-col-md2">
+    总支付条数<span style="margin-left: 8px;">{$statistics_arr['count']}</span>
+  </div>
+  <div class="layui-col-md2">
+   总金额<span style="margin-left: 8px;">{$statistics_arr['sum_money']}</span>
+  </div>
+</div>
+<div class="nc-table-box">
+    <table id="pay_list" lay-filter="pay_list"></table>
+</div>
+<script type="text/html" id="status">
+	{{ d.status==1 ? '成功' : '失败' }}
+</script>
+
+<script type="text/html" id="out_trade_no">
+	<label><span>{{d.out_trade_no}}</span></label><br />
+</script>
+<script type="text/html" id="trade_no">
+	<label><span>{{d.trade_no}}</span></label><br />
+</script>
+<script type="text/html" id="pay_no">
+	<label><span>{{d.pay_no}}</span></label><br />
+</script>
+<script type="text/html" id="pay_body">
+	<label><span>{{d.pay_body}}</span></label><br />
+</script>
+<script type="text/html" id="pay_detail">
+	<label><span>{{d.pay_detail}}</span></label><br />
+</script>
+<script type="text/html" id="pay_money">
+	<label><span>{{d.pay_money}}</span></label><br />
+</script>
+<script type="text/html" id="pay_type">
+	{{ d.pay_type=='ALIPAY' ? '支付宝' : '' }}
+	{{ d.pay_type=='WECHATPAY' ? '微信' : '' }}
+	{{ d.pay_type=='UNIONPAY' ? '银联' : '' }}
+</script>
+<script type="text/html" id="create_time">
+	<label><span>{{ nc.time_to_date(d.create_time) }} </span></label>
+</script>
+
+{/block}
+ 
+{block name="script"}
+<script type="text/javascript">
+var table = new Table({
+	elem: '#pay_list',
+	filter: "pay_list",
+	url: '{:addon_url("Pay://sitehome/pay/payList")}',
+	cols: [[{
+        width: '5%',
+		type: 'checkbox'
+	}, {
+		field: '',
+		width: '10%',
+		title: '商家编号',
+		templet: "#out_trade_no",
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '10%',
+		title: '交易号',
+		templet: '#trade_no',
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '10%',
+		title: '支付账号',
+		templet: '#pay_no',
+        unresize : 'true'
+	}, {
+		field: 'status',
+		width: '10%',
+		title: '支付简介',
+		templet: '#pay_body',
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '15%',
+		title: '支付详情',
+		templet: '#pay_detail',
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '10%',
+		title: '支付金额',
+		templet: '#pay_money',
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '10%',
+		title: '支付类型',
+		templet: '#pay_type',
+        unresize : 'true'
+	}, {
+		field: '',
+		width: '20%',
+		title: '支付时间',
+		templet: '#create_time',
+		align: 'right',
+        unresize : 'true'
+	}]]
+});
+</script>
+{/block}

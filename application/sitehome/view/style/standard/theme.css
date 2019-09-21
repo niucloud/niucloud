@@ -1,0 +1,129 @@
+body {
+  color: #333;
+  background-color: #f9f9f9 !important;
+}
+/******************** 背景颜色 *******************/
+.nc-bg-color {
+  background-color: #12b7f5 !important;
+}
+.nc-bg-color-black {
+  background-color: #333 !important;
+}
+.nc-bg-color-f9f9f9 {
+  background-color: #f9f9f9;
+}
+.nc-bg-color-gray {
+  background-color: #e5e5e5;
+}
+.nc-bg-color-e9e9e9 {
+  background-color: #e9e9e9 !important;
+}
+/******************** 文字颜色 *******************/
+.nc-text-color {
+  color: #12b7f5 !important;
+}
+.nc-text-color-black {
+  color: #333 !important;
+}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a {
+  color: #333 !important;
+}
+/******************** 边框颜色 *******************/
+.nc-border-color {
+  border-color: #12b7f5 !important;
+}
+.nc-border-color-selected:hover,
+.nc-border-color-selected.selected {
+  border-color: #12b7f5 !important;
+}
+.nc-border-color-gray {
+  border-color: #e5e5e5 !important;
+}
+/******************** 一级菜单 *******************/
+.layui-nav .layui-this {
+  background-color: #12b7f5 !important;
+}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed .layui-this a {
+  background-color: #e9e9e9 !important;
+  border-left-color: #12b7f5 !important;
+}
+.layui-btn {
+  background-color: #12b7f5 !important;
+}
+.layui-btn.layui-btn-primary {
+  border-color: #e5e5e5 !important;
+  color: #333 !important;
+}
+.layui-form-onswitch {
+  background-color: #12b7f5 !important;
+}
+.layui-laypage button,
+.layui-laypage input {
+  background-color: #fff !important;
+}
+.layui-form-select dl dd.layui-this {
+  background-color: #12b7f5 !important;
+}
+.layui-form-radio > i:hover,
+.layui-form-radioed > i {
+  color: #12b7f5 !important;
+}
+.required {
+  color: red;
+}
+.layui-table tbody tr:hover,
+.layui-table thead tr,
+.layui-table-click,
+.layui-table-header,
+.layui-table-hover,
+.layui-table-mend,
+.layui-table-patch,
+.layui-table-tool,
+.layui-table-total,
+.layui-table-total tr,
+.layui-table[lay-even] tr:nth-child(even) {
+  background-color: #fafafa !important;
+}
+.layui-table td,
+.layui-table th {
+  border-bottom-color: #e5e5e5 !important;
+}
+.layui-form-checked[lay-skin=primary] i {
+  background-color: #12b7f5 !important;
+  border-color: #12b7f5 !important;
+}
+.layui-table-box .operation {
+  background-color: red;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  background-color: #12b7f5 !important;
+}
+.layui-laypage input:focus,
+.layui-laypage select:focus {
+  border-color: #12b7f5 !important;
+}
+.nc-user-info .user-dropdown-select a:hover {
+  background-color: #12b7f5 !important;
+}
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed > a .layui-nav-more {
+  border-color: transparent transparent #737373;
+}
+.layui-nav .layui-nav-more {
+  border-color: #737373 transparent transparent;
+}
+.layui-nav-itemed > .layui-nav-child {
+  background-color: initial !important;
+}
+a:hover {
+  color: #12b7f5 !important;
+}
+.wx-menu-item.active,
+.wx-sub-menu-item.active {
+  border-color: #12b7f5 !important;
+  color: #12b7f5;
+}
+.layui-elem-quote {
+  border-left-color: #12b7f5 !important;
+}
+/*# sourceMappingURL=theme.css.map */

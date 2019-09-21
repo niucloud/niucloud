@@ -1,0 +1,39 @@
+<nc-component v-bind:data="data[index]" class="bottom-menu">
+
+	<!-- 预览 -->
+	<template slot="preview">
+
+		<ul>
+			<li v-for="(item,index) in nc.list" v-bind:style="{ width : ((100/nc.list.length) + '%') }">
+				<div v-show="nc.bottomMenuType == 1 || nc.bottomMenuType == 2">
+					<img v-bind:src="item.imageUrl? changeImgUrl(item.imageUrl) : 'DIYVIEW_IMG/crack_figure.png'"/>
+				</div>
+				<span v-bind:style="{ fontSize : ( nc.fontSize + 'px'), color : nc.textColor}" v-show="nc.bottomMenuType == 1 || nc.bottomMenuType == 3">{{ item.title }}</span>
+			</li>
+		</ul>
+
+	</template>
+	
+	<!-- 编辑 -->
+	<template slot="edit">
+
+		<template v-if="nc.lazyLoad">
+			<bottom-menu ></bottom-menu>
+		</template>
+		
+	</template>
+	
+	<!-- 资源 -->
+	<template slot="resource">
+
+		<css src="RESOURCE_PATH/component/view/bottom_menu/css/design.css"></css>
+		<js src="RESOURCE_PATH/component/view/bottom_menu/js/design.js"></js>
+		
+	</template>
+	
+	<!-- 验证 -->
+	<template slot="verify">
+	
+	</template>
+	
+</nc-component>

@@ -1,0 +1,58 @@
+{extend name="base"/}
+
+{block name="main"}
+<div class="nc-list style1">
+	<div class="head">
+		<h2>缓存管理</h2>
+	</div>
+	<ul>
+		<li>
+			<label>数据表缓存</label>
+			<span>数据表缓存是针对系统数据表结构进行缓存，这样系统查询就不用进行数据表字段查询，这样大大提高了系统数据库的执行效率</span>
+			<p class="operation">
+				<a href="javascript:renewCache('table');" class="personal-log-update nc-text-color">更新</a>
+			</p>
+		</li>
+		<li>
+			<label class="personal-content-top">类库缓存</label>
+			<span>类库缓存是将系统命名空间中类文件进行整体换缓存，这样命名空间加载不用进行文件查询直接加载即可，可以大大提高文件的加载效率</span>
+			<p class="operation">
+				<a href="javascript:renewCache('class');" class="personal-log-update nc-text-color">更新</a>
+			</p>
+		</li>
+	</ul>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+function renewCache(type){
+	switch (type) {
+		case 'table':
+			var url = '{:url("admin/system/tableCache")}';
+		break;
+		case 'class':
+			var url = '{:url("admin/system/classCache")}';
+		break;
+	}
+	var index;
+	$.ajax({
+		url: url,
+		type: 'POST',
+		beforeSend : function(){
+			index = layer.load(2);
+		},
+		complete : function(){
+			layer.close(index);
+		},
+		success : function(res){
+			if (res.code == 0) {
+				layer.msg('更新成功');
+			} else {
+				layer.msg('更新失败');
+			}
+		}
+	})
+}
+</script>
+{/block} 

@@ -1,0 +1,78 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .nc-function-search{margin-top: 0;}
+    .notice-title{overflow: hidden;text-overflow: ellipsis; cursor: pointer;white-space: pre;}
+    .layui-tab-content{padding-top: 0;}
+</style>
+{/block}
+{block name='second_menu'}
+{notempty name="$menu[2]"}
+<ul class="layui-nav nc-nav">
+	{foreach name="$menu[2]" item="second_menu"}
+	<li class="layui-nav-item {$second_menu['selected']}">
+		<a href="{$second_menu['url']}" {$second_menu['target']}>{$second_menu['title']}</a>
+	</li>
+	{/foreach}
+</ul>
+{/notempty}
+{/block}
+
+{block name='crumbs'}{/block}
+{block name="main"}
+<div class="layui-tab">
+	<div class="layui-tab-content">
+		  <div class="layui-tab-item layui-show">
+                <div class="nc-function-search">
+                    <button class="layui-btn" onclick="location.href = nc.url('admin/config/addNotice')">添加公告</button>
+                    <div class="layui-form">
+                        <div class="layui-input-inline nc-len-short">
+                            <select name="select_notice_category_id" lay-filter="select_notice_category_id">
+                              <option value="">公告分类</option>
+                              {volist name="category_list" id="vo"}
+                              <option value="{$vo.notice_category_id}">{$vo.title}</option>
+                              {/volist}
+                            </select>
+                        </div>
+                        <div class="layui-input-inline nc-len-short">
+                            <select name="select_create_time" id="select_create_time" lay-filter="select_create_time" class="search_status">
+                              <option value="">添加时间</option>
+                              <option value="3">三天内</option>
+                              <option value="7">一周内</option>
+                              <option value="30">一月内</option>
+                              <option value="90">三月内</option>
+                            </select>
+                        </div>
+                        <div class="layui-input-inline nc-len-mid nc-search-btn">
+                          <input type="text" id="title" name="title" placeholder="标题" autocomplete="off" class="layui-input">
+                          <button class="layui-icon-search" lay-filter="search" lay-submit ></button>
+                        </div>
+                    </div>
+                </div>
+                <table class="layui-table" id="notice_list" lay-filter="notice_list"></table>
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="is_display">
+	<input type="checkbox" name="is_display" value="{{d.notice_id}}" lay-skin="switch" title="是" lay-text="" lay-filter="is_display" {{ d.is_display==1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="is_recommend">
+	<input type="checkbox" name="is_recommend" value="{{d.notice_id}}" lay-skin="switch" title="是" lay-text=" " lay-filter="is_recommend" {{ d.is_recommend==1 ? 'checked' : '' }}>
+</script>
+
+<script type="text/html" id="operation">
+    <a href="javascript:;" class="default primary" lay-event="preview">预览</a>
+	<a href="javascript:;" class="default primary" lay-event="edit">编辑</a>
+	<a href="javascript:;" class="default primary" lay-event="delete">删除</a>
+</script>
+
+
+<script type="text/html" id="title_html">
+    <div class="notice-title" lay-event="preview">{{d.title}}</div>
+</script>
+
+{/block}
+{block name="script"}
+<script src="ADMIN_JS/notice.js"></script>
+{/block}

@@ -1,0 +1,65 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+    .application-title{font-size: 16px; font-weight: 600;}
+    .ump-dashboard{padding: 0 20px;}
+    .ump-dashboard .template-list{text-align:center;}
+    .ump-dashboard .img img{max-width: 100%;max-height: 100%;width: auto; height: auto;}
+    .ump-dashboard .template-desc{height: 30px;line-height: 30px;}
+    .ump-dashboard .layui-btn{margin-top: 10px;}
+    .template-list{display: flex; flex-wrap: wrap;}
+    .template-list .template-list-item{margin-right: 50px; margin-top: 20px;}
+    .template-list .template-list-item .img{height: 320px; line-height: 300px;background: url(DIYVIEW_IMG/handset-white.png) no-repeat center; }
+    .template-list .template-list-item.selected .img{height: 320px; line-height: 300px;background: url(DIYVIEW_IMG/handset-ash.png) no-repeat center; }
+</style>
+{/block}
+{block name="main"}
+{notempty name="$template_arr"}
+<div class="ump-dashboard">
+    <div class="application-list">
+        <p class="application-title">
+            <span>模板选择</span>
+        </p>
+
+        <ul class="template-list">
+            {foreach name="$template_arr" item="vo"}
+
+            <li class=" template-list-item {if $vo['style'] == $wap_template['style']} selected {/if}">
+                <div class="img" {if $vo['style'] != $wap_template} onclick="templateSetting('{$vo["style"]}');" {/if}>
+                    <img width="170" height="353" alt="template" src="{$vo.picture}">
+                </div>
+                <div class="template-desc">{$vo.introduce}</div>
+                <button class="layui-btn {if $vo['style'] != $wap_template['style']} layui-btn-primary {/if}">{$vo.template_name}</button>
+            </li>
+            {/foreach}
+        </ul>
+    </div>
+</div>
+{/notempty}
+
+<script type="text/javascript">
+layui.use('form', function(){
+    var form = layui.form;
+});
+
+function templateSetting(value){
+     var data = {
+        style : value
+    };
+    $.ajax({
+        type : "post",
+        url :  "{:addon_url('DiyView://sitehome/design/templateSetting')}",
+        data : {
+            wap_template : JSON.stringify(data)
+        },
+        success : function(res){
+            if(res.code == 0){
+                location.reload();
+            }else{
+                layer.msg(res.message);
+            }
+        }
+    });
+}
+</script>
+{/block}

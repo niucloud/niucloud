@@ -1,0 +1,100 @@
+{extend name="style/base"/}
+{block name="resources"}
+{/block}
+
+{block name="main"}
+<div class="layui-form">
+	<div class="layui-form-item">
+	    <label class="layui-form-label">站点域名</label>
+	    <div class="layui-input-block">
+	         <input type="text" name="domain" value="{$info.domain}" lay-verify="domain" placeholder="请输入站点域名" class="layui-input nc-len-long" >
+	    </div>
+		<div class="layui-form-mid layui-word-aux">站点域名为站点独立访问域名，例如：http(s)://www.xxx.com（表示访问该域名为直接访问站点）</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">默认链接</label>
+		<div class="layui-input-block">
+			<div>
+				<span style="margin-right: 10px;" class="nc-input-text" id="default_link">{$info.default_link}</span>
+				<button class="layui-btn layui-btn-primary sm" onclick="selectLink()">选择</button>
+			</div>
+		</div>
+		<div class="layui-form-mid layui-word-aux">默认链接为站点访问域名时打开的页面</div>
+	</div>
+	
+    <div class="nc-form-row">
+	    <input type="hidden" class="layui-input"  name = "qrcode_url" value="{$info.qrcode_url}"/>
+		<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+		<button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+	function selectLink(){
+		nc.select_link($("#default_link").text(),function (data) {
+			$("#default_link").text(data.h5_url);
+		});
+	}
+	
+    layui.use(['form'], function () {
+		var form = layui.form;
+		qrcode();
+		var repeat_flag = false;//防重复标识
+		form.on('submit(save)', function (data) {
+			var val = data.field;
+			val.default_link = $("#default_link").text();
+			if (repeat_flag) return;
+			repeat_flag = true;
+			$.ajax({
+				url: "{:url('sitehome/manager/sitesetdomain')}",
+				data: {
+					value: JSON.stringify(val),
+				},
+				type: "post",
+				dataType: "JSON",
+				success: function (res) {
+					repeat_flag = false;
+					layer.msg(res.message);
+				}
+			})
+		});
+	
+		/**
+		 * 更新站点域名对应的二维码
+		 */
+		function qrcode() {
+			var domain = $('[name="domain"]').val();
+			if (domain == '') {
+				return;
+			}
+			var layer_index = layer.load(2, {
+				shade: [0.1, '#fff'] //0.1透明度的白色背景
+			});
+			$.ajax({
+				url: "{:url('sitehome/manager/updateSiteQrcode')}",
+				data: {
+					domain: domain,
+				},
+				type: "post",
+				dataType: "JSON",
+				async: false,
+				success: function (res) {
+					layer.close(layer_index);
+					$("input[name='qrcode_url']").val(res.data);
+				}
+			})
+		}
+	
+		form.verify({
+			domain: function (value, item) {
+				var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+				if (!reg.test(value)) {
+					return '请输入正确的域名';
+				}
+			}
+		});
+	});
+</script>
+{/block}

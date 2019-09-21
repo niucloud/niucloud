@@ -1,0 +1,141 @@
+<div class="layui-side layui-side-menu{if condition='empty($menus[1])'} not-children-menus{/if}">
+	<div class="layui-side-scroll">
+		<div class="layui-top-menu nc-bg-color-black"	>
+			<div class="layui-logo" lay-href="">
+				{if condition="$site_info.icon neq ''"}
+					<img src="{:img($site_info.icon)}" class="layui-logo-icon"/>
+				{else/}
+					<img src="SITEHOME_IMG/logo1.png" width="100px"/>
+				{/if}
+			</div>
+			<ul class="layui-nav layui-nav-tree layui-inline layui-first-menu nc-bg-color-black">
+				<li class="layui-nav-item layui-nav-itemed">
+					<dl class="layui-nav-child">
+						<dd class="layui-nav-itemed{if condition="strpos($current_url,'sitehome/index/index') !== false"} layui-this{/if}">
+							<a href="{:addon_url('sitehome/index/index')}">
+								<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>
+								<span>概况</span>
+							</a>
+						</dd>
+						{notempty name='$menus[0]'}
+							{foreach name="$menus[0]" item="vo"}
+								{if $vo['name'] != 'APPLET_ROOT' and $vo['name'] != 'ADDON_ROOT'}
+								<dd class="layui-nav-itemed{notempty name='$vo.selected'} layui-this{/notempty}">
+									<a href="{:addon_url($vo.url)}">
+										{if condition="$vo.icon"}
+										<img src="__ROOT__/{$vo.icon}"/>
+										{else/}
+										<img src="SITEHOME_IMG/menu.png" />
+										{/if}
+										<span>{$vo.title}</span>
+									</a>
+								</dd>
+								{elseif $vo['name'] == 'APPLET_ROOT'}
+								<dd class="nc-app-top layui-nav-itemed{if condition="$crumbs[0]['name']=='APPLET_ROOT'"} layui-this{/if}">
+									<a href="{:addon_url($vo.url)}">
+										<img src="SITEHOME_IMG/application_renovation.png" />
+										<span>{$vo.title}</span>
+									</a>
+								</dd>
+								{/if}
+							{/foreach}
+						{/notempty}
+					</dl>
+				</li>
+
+				<li class="layui-nav-item layui-nav-itemed nc-app-center">
+					<dl class="layui-nav-child">
+						<dd class="layui-nav-itemed{if condition="strpos($current_url,'sitehome/addons/lists') !== false"} layui-this{/if}">
+							<a href="{:addon_url('sitehome/addons/lists')}">
+								<img src="SITEHOME_IMG/application_center.png" />
+								<span>应用</span>
+							</a>
+						</dd>
+					</dl>
+				</li>
+
+			</ul>
+			<div class="watermark">
+				<a href="https://www.niucloud.com" target="_black">
+					<img src="SITEHOME_IMG/watermark.png" />
+				</a>
+			</div>
+		</div>
+
+		{notempty name='$menus[1]'}
+		<ul class="layui-nav layui-nav-tree layui-inline layui-children-menu nc-border-color-gray" lay-filter="demo">
+			<li class="layui-nav-item layui-nav-itemed">
+				<dl class="layui-nav-child nc-title">
+					<dd>
+						<a href="javascript:;" class="profession-pic nc-border-color-gray nc-text-color-black">
+							<img src="SITEHOME_IMG/shrinkage_01.png" />
+							<span>{$crumbs[0]['title']}</span>
+						</a>
+					</dd>
+				</dl>
+			</li>
+			{if $crumbs[0]['name'] !='ADDON_ROOT'}
+				{foreach name="$current_menu" item="vo"}
+
+					<li class="layui-nav-item layui-nav-itemed">
+
+						{if condition="$vo['name'] == 'DIYVIEW_MODULE_ROOT'"}
+							<a href="javascript:;" {notempty name="$addon_diy_view_list"} class="second-level second-level-triangle"{/notempty}>{$vo['title']}</a>
+							{notempty name="$addon_diy_view_list"}
+							<dl class="layui-nav-child">
+								{foreach name="$addon_diy_view_list" item="diy_view"}
+									{if $diy_view['addon_info']['name'] !='DiyView'}
+									<dd class='layui-nav-itemed {if !empty($addon_name) && $addon_name == $diy_view['addon_info']['name'] }layui-this{/if}'>
+										<a href="{:addon_url('diyview://sitehome/design/diyview',['name'=>strtolower($diy_view['view_list'][0]['name']),'addon_name'=>$diy_view['addon_info']['name']])}">{$diy_view['addon_info']['title']}</a>
+									</dd>
+									{/if}
+								{/foreach}
+							</dl>
+							{/notempty}
+						{else/}
+							<a href="{empty name="$vo['child_list']"}{:addon_url($vo['url'])}{else/}javascript:;{/empty}" class="second-level  {notempty name="$vo['child_list']"}second-level-triangle {/notempty}">{$vo['title']}</a>
+							{notempty name="$vo['child_list']"}
+							<dl class="layui-nav-child">
+							{foreach name="$vo['child_list']" item="child"}
+
+								{if condition="$crumbs[0]['name']=='APPLET_ROOT'"}
+								<dd class='layui-nav-itemed{if condition="$crumbs[2]['name'] == $child['name'] && (empty($addon_name) || $addon_name == $addon_app)" } layui-this{/if}'>
+									<a href="{:addon_url($child['url'])}" {if condition="$child['is_blank'] eq 1" }target="_blank" {/if}>{$child['title']}</a>
+								</dd>
+								{else/}
+									<dd class='layui-nav-itemed{if condition="$crumbs[2]['name'] == $child['name']"} layui-this{/if}'>
+									<a href="{:addon_url($child['url'])}" {if condition="$child['is_blank'] eq 1" }target="_blank" {/if}>{$child['title']}</a>
+								</dd>
+								{/if}
+							{/foreach}
+							</dl>
+							{/notempty}
+						{/if}
+					</li>
+
+				{/foreach}
+
+			{else/}
+				{foreach name="$current_menu" item="vo"}
+					{if $vo['module'] == $site_info['addon_app'] OR $vo['module'] == $request_addon}
+					<li class="layui-nav-item layui-nav-itemed">
+						<a href="{empty name="$vo['child_list']"}{:addon_url($vo['url'])}{else/}javascript:;{/empty}" class="second-level {if condition="$crumbs[1]['name'] == $vo['name']"}layui-this{/if} {notempty name="$vo['child_list']"}second-level-triangle {/notempty}">{$vo['title']}</a>
+						{notempty name="$vo['child_list']"}
+						<dl class="layui-nav-child">
+							{foreach name="$vo['child_list']" item="child"}
+							<dd class='layui-nav-itemed{if condition="$crumbs[2]['name'] == $child['name']"} layui-this{/if}'>
+								<a href="{:addon_url($child['url'])}" {if condition="$child['is_blank'] eq 1"}target="_blank"{/if}>{$child['title']}</a>
+							</dd>
+							{/foreach}
+						</dl>
+						{/notempty}
+					</li>
+					{/if}
+				{/foreach}
+			{/if}
+
+		</ul>
+		{/notempty}
+
+	</div>
+</div>

@@ -1,0 +1,57 @@
+<nc-component v-bind:data="data[index]" v-bind:style="{ backgroundColor : nc.backgroundColor }" class="notice">
+
+	<!-- 预览 -->
+	<template slot="preview">
+		
+		<template v-if="nc.lazyLoad">
+			<notice></notice>
+		</template>
+		
+	</template>
+
+	<!-- 编辑 -->
+	<template slot="edit">
+		
+		<template v-if="nc.lazyLoad">
+			<notice-edit></notice-edit>
+		</template>
+	
+	</template>
+	
+	<!-- 资源 -->
+	<template slot="resource">
+		
+		<js>
+			var RESOURCEPATH = "RESOURCE_PATH";
+		</js>
+		<css src="RESOURCE_PATH/component/view/notice/css/design.css"></css>
+		<js src="RESOURCE_PATH/component/view/notice/js/design.js"></js>
+		
+	</template>
+	
+	<!-- 验证 -->
+	<template slot="verify">
+		function verify(){
+			var res = { code : true, message : "" };
+			if(vue.data[{{index}}].image_url == null || vue.data[{{index}}].image_url == ""){
+				//res.code =false;
+				//res.message = "请上传左侧图片";
+				//return res;
+			}
+			if(vue.data[{{index}}].list.length >0){
+				for(var i=0;i < vue.data[{{index}}].list.length;i++){
+					if(vue.data[{{index}}].list[i].title == ""){
+						res.code = false;
+						res.message = "公告内容不能为空";
+						break;
+					}
+				}
+			}else{
+				res.code = false;
+				res.message = "请添加一条公告";
+			}
+			return res;
+		}
+	</template>
+
+</nc-component>

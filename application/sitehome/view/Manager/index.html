@@ -1,0 +1,187 @@
+{extend name="style/base"/}
+
+{block name="resources"}
+<style>
+	.operation-desc{display: inline-block;padding: 2px 3px;background-color: red;color: #fff !important;}
+	.layui-disabled, .layui-disabled:hover{color: #fff !important;}
+</style>
+{/block}
+
+{block name="main"}
+<div class="nc-function-search">
+	<button class="layui-btn" onclick="location.href = '{:url('sitehome/manager/bindSiteUser')}'">添加</button>
+</div>
+<div class="nc-table-box">
+	<table id="user_list" lay-filter="user"></table>
+</div>
+
+<script type="text/html" id="status">
+	{{# if(d.uid == uid){ }}
+	<p class="operation-desc layui-disabled">管理员不能编辑</p>
+	{{# }else{ }}
+	<input type="checkbox" name="status" value="{{d.uid}}" lay-skin="switch" lay-filter="status" lay-text="" {{ d.status==1 ? 'checked' : '' }}>
+	{{# } }}
+</script>
+<script type="text/html" id="operation">
+	{{# if(d.uid == uid){ }}
+	<p class="operation-desc layui-disabled">管理员不能编辑或删除</p>
+	{{# }else{ }}
+	<a class="default" lay-event="edit">编辑</a>
+	<a class="default" lay-event="delete">删除</a>
+	{{# } }}
+</script>
+<script type="text/html" id="batchOperation">
+	<button class="layui-btn layui-btn-primary" lay-event="enable">启用</button>
+	<button class="layui-btn layui-btn-primary" lay-event="locking">锁定</button>
+	<button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+</script>
+{/block}
+
+{block name="script"}
+
+
+<script>
+	var form,laytpl;
+	var uid = "{$user_info.uid}";
+	var table = new Table({
+		elem : '#user_list',
+		filter : "user",
+		url : '{:url("sitehome/manager/index")}',
+		cols : [
+			[
+				{
+					width : '5%',
+					type : 'checkbox',
+					unresize : 'true'
+				},
+				{
+					field : 'username',
+					width : '20%',
+					title : '用户名',
+					unresize : 'true'
+				},
+				{
+					field : 'mobile',
+					width : '20%',
+					title : '手机号',
+					unresize : 'true'
+				},
+				{
+					field : 'group_name',
+					width : '20%',
+					title : '所属用户组',
+					unresize : 'true'
+				},
+				{
+					field : 'status',
+					title : '状态',
+					width : '15%',
+					templet: '#status',
+					unresize : 'true'
+				},
+				{
+					width : '20%',
+					title : '操作',
+					toolbar : '#operation',
+					align: 'right',
+					unresize : 'true'
+				}
+			]
+		],
+		bottomToolbar : "#batchOperation"
+	});
+	
+	//监听工具条
+	table.tool(function(obj){
+		var data = obj.data;
+		switch (obj.event) {
+			case "delete":
+				deleteUser(data.uid);
+				break;
+            case "edit":
+                location.href = nc.url("sitehome/manager/bindSiteUser", {"uid":data.uid});
+                break;
+		}
+	});
+	
+	//批量操作
+	table.bottomToolbar(function(obj){
+		if(obj.data.length < 1){
+			layer.msg('请选择要操作的数据');
+			return;
+		}
+		
+		switch(obj.event){
+			case "delete":
+				var id_array = new Array();
+				for(i in obj.data) id_array.push(obj.data[i].uid);
+				deleteUser(id_array.toString());
+				break;
+			case "enable":
+				var id_array = new Array();
+				for(i in obj.data) id_array.push(obj.data[i].uid);
+				changeUserStatus(id_array.toString(), 1);
+				break;
+			case "locking":
+				var id_array = new Array();
+				for(i in obj.data) id_array.push(obj.data[i].uid);
+				changeUserStatus(id_array.toString(), 0);
+				break;
+		}
+	});
+	
+	layui.use([ 'laytpl', 'form'], function(){
+		form = layui.form;
+		laytpl = layui.laytpl;
+		//监听状态操作
+		form.on('switch(status)', function(obj) {
+			var status = obj.elem.checked ? 1 : 0;
+			changeUserStatus(this.value, status);
+		});
+
+	});
+	
+	/**
+	 * 删除管理员
+	 */
+	function deleteUser(uid){
+		layer.confirm('确定删除吗?', {
+			btn: ['确定','取消']
+		}, function(){
+			$.ajax({
+				type:"post",
+				async:false,
+				url: '{:url("sitehome/manager/deleteUser")}',
+				data: { 'uid' : uid },
+				dataType : "JSON",
+				success:function(res){
+					layer.msg(res.message);
+					if(res.code == 0){
+						table.reload();
+					}
+				}
+			});
+		}, function(){
+			layer.close();
+		});
+	}
+	
+	function changeUserStatus(uids, status){
+		$.ajax({
+			type : "post",
+			url : '{:url("sitehome/manager/setUserStatus")}',
+			data : {
+				'uid' : uids,
+				'status' : status
+			},
+			dataType : "JSON",
+			success : function(res) {
+				layer.msg(res.message);
+				if(res.code == 0){
+					table.reload();
+				}
+			}
+		});
+	}
+</script>
+{/block}

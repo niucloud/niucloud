@@ -1,0 +1,520 @@
+@CHARSET "UTF-8";
+/* 公共css开始 */
+.layui-body {
+    z-index: unset;
+}
+
+.layui-form-item {
+    clear: inherit;
+    margin: 0;
+}
+
+.layui-upload-img {
+    width: 80px;
+    height: 80px;
+    margin: 0 10px 10px 0;
+}
+
+.layui-quote-nm {
+    border-width: 1px;
+}
+
+.layui-elem-quote {
+    margin-top: 10px;
+    max-height: 195px;
+    overflow: auto;
+}
+
+.layui-upload {
+    overflow: hidden;
+    height: 295px;
+}
+.nc-function-search .layui-form{
+    float: initial;
+    display: block;
+}
+
+
+/* 公共css结束*/
+
+/* 图片css开始 */
+
+.category-list, .attachment-container {
+    font-size: 12px;
+}
+
+.category-list {
+    float: left;
+    width: 230px;
+    min-height: 350px;
+    padding: 29px 0 25px;
+    margin-left: 20px;
+    background: #f8f8f8;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.category-list .category-item {
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+    padding: 0 10px 0 10px;
+    margin-right: 1px;
+    cursor: pointer;
+}
+
+.active {
+    background: #fff
+}
+
+.category-list .category-name {
+    width: 80px;
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-size: 14px;
+}
+
+.category-list .category-num {
+    position: absolute;
+    top: 0;
+    right: 8px;
+    color: #999;
+}
+
+.category-menu {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.attachment-container {
+    position: relative;
+    overflow: hidden;
+    margin-left: 269px;
+    padding-right: 20px;
+}
+
+.image-box {
+    overflow: hidden;
+    margin: auto;
+    width: 110px;
+    height: 110px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+    line-height:110px;
+}
+
+.image-title {
+    padding: 13px 0;
+}
+
+.opts-seprate {
+    padding: 0 3px;
+    color: #a9a9a9;
+}
+
+.delete_packet, .rename {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+#operation .delete_packet {
+    display: none
+}
+
+.zent-pop-inner {
+    background: #fff;
+    border-radius: 2px;
+    padding: 10px 20px;
+    z-index: 2;
+    color: #333;
+    width: 400px;
+    margin: auto;
+}
+.layui-btn .layui-icon{
+    vertical-align: middle;
+}
+#t_customerInfo .layui-col-md2{
+    margin-bottom: 20px;
+}
+.layui-col-md2 {
+    width: auto;
+    margin-right: 20px;
+    text-align: center;
+}
+.action-bar {
+    background: #f8f8f8;
+    padding: 6px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-height: 28px;
+    line-height: 28px;
+}
+
+.group_name {
+    font-size: 16px;
+}
+
+.image-title span {
+    width: 92px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.group-portal {
+    padding: 10px 20px;
+    max-height: 200px;
+    width: 190px;
+    overflow-y: auto;
+}
+
+.upload-image-item-box {
+    position: relative;
+    float: left;
+    margin: 0 10px 10px 0;
+    width: 80px;
+    height: 80px;
+}
+
+.upload-image-item {
+    width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.upload-close-modal {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(0, 0, 0, .3);
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    line-height: 16px;
+    border-radius: 9px;
+}
+
+/* 图片css结束 */
+
+/* 音频css开始  */
+.attachment-container .voice-item {
+    float: left;
+    width: 300px;
+    border: 1px solid #e5e5e5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.attachment-container .voice-content {
+    position: relative;
+    padding: 10px;
+}
+
+.attachment-container .voice-icon {
+    width: 40px;
+    height: 40px;
+    background: #ddd;
+    background-size: 40px 40px;
+    background-image: url(https://b.yzcdn.cn/v2/image/showcase/attachment/voice/play.png);
+}
+
+.attachment-container .voice-name {
+    position: absolute;
+    width: 180px;
+    height: 18px;
+    line-height: 18px;
+    top: 12px;
+    left: 60px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.attachment-container .voice-createtime {
+    position: absolute;
+    top: 34px;
+    left: 60px;
+    color: #999;
+}
+
+.attachment-container .voice-size {
+    position: absolute;
+    top: 34px;
+    right: 10px;
+    color: #999;
+}
+
+.attachment-container .voice-duration {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+}
+
+.attachment-container .voice-opt {
+    padding: 10px;
+    background: #f8f8f8;
+    overflow: hidden;
+}
+
+/* 音频结束  */
+
+/* 视频开始 */
+.video-summary-container {
+    position: relative;
+    font-size: 12px;
+}
+
+.video-summary {
+    position: relative;
+    padding: 10px 0;
+    background: #f8f8f8;
+    margin: 20px 20px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+.video-summary__item.item1 {
+    -webkit-flex-basis: 20%;
+    -ms-flex-preferred-size: 20%;
+    flex-basis: 20%;
+}
+
+.video-summary__item.item2, .video-summary__item.item3 {
+    -webkit-flex-basis: 40%;
+    -ms-flex-preferred-size: 40%;
+    flex-basis: 40%;
+}
+
+.video-summary__item {
+    position: relative;
+    padding: 10px 20px 10px 35px;
+    border-right: 1px solid #e5e5e5;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.video-summary__item-info {
+    margin-top: 10px;
+}
+
+.video-summary__item-info .sum {
+    font-size: 18px;
+}
+
+.video-summary__item-title span {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.video-summary__item-title > span {
+    font-size: 19px;
+}
+
+.video-summary__item .activity-label {
+    display: inline-block;
+    padding: 0 5px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    background: #f44;
+    color: #fff;
+    border-radius: 2px;
+    margin-left: 5px;
+}
+
+.video-summary__item-title span {
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.video-summary__item:last-child {
+    border-right: none;
+}
+
+/* 视频列表 */
+.tr {
+    border-bottom: 1px solid #e5e5e5;
+    display: flex;
+}
+
+.tr .layui-col-md2 {
+    min-height: 30px;
+    display: flex;
+    padding: 10px 0;
+    text-align: left;
+    font-size: 12px;
+    -webkit-align-items: center;
+}
+
+.tr .material-image-card {
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.tr .cell__child-container {
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tr .image-box {
+    position: relative;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+
+.tr .image-box .image-cover {
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+.tr .info-box {
+    width: 100px;
+    margin-left: 10px;
+}
+
+.tr .info-box .name {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 16px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.tr .info-box .size {
+    color: #999;
+    margin-top: 3px;
+}
+
+.tr .zent-checkbox-wrap {
+    position: absolute;
+    top: 15%;
+    cursor: pointer;
+    font-weight: 400;
+    line-height: 14px;
+    margin: 0;
+    padding: 0;
+    margin-right: 15px;
+    vertical-align: middle;
+}
+
+/* 视频列表 */
+
+/* 视频结束  */
+
+.search-wrap {
+    
+}
+
+.search-wrap:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.upload-wrap {
+    float: left;
+}
+
+.search-wrap .sort-wrap {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 30px;
+    float: right;
+}
+
+.search-wrap .file-name-wrap {
+    float: right;
+	margin-bottom: 0;
+}
+
+.search-wrap .sort-wrap {
+	margin-bottom: 0;
+}
+
+.search-wrap .sort-wrap > span, .search-wrap .sort-wrap > label {
+    padding: 0 20px 0 10px;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    cursor: pointer;
+}
+
+.search-wrap .sort-wrap > label {
+    padding: 0;
+}
+
+.search-wrap .sort-wrap > span i {
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+.search-wrap .sort-wrap dl {
+    top: 30px;
+}
+
+.search-wrap .sort-wrap dl.show {
+    display: block;
+}
+
+.search-wrap .sort-wrap dl a {
+    padding: 0 20px;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+}
+
+.search-wrap .sort-wrap dl a i {
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+.image-box img{
+    display: inline-block;
+    width:auto;
+    height:auto;
+    max-width:100%;
+    max-height:100%;
+
+}
+.file-order{
+    float:right;
+}
+
+.layui-form-item .layui-form-checkbox[lay-skin=primary]{
+    margin-top: 0;
+}
+.layui-layer-btn .layui-layer-btn0:hover{
+    color: #fff !important;
+}
+.image-link > div{
+    display: inline-block;
+    font-size:14px;
+}

@@ -1,0 +1,120 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .layui-field-title{padding-top: 10px;margin-top: 0;}
+    .layui-nav.nc-nav{margin-bottom: 0;padding-left: 0;padding-top: 0;}
+    .nc-item-block-parent{padding: 0;}
+    .nc-quote-box .layui-quote-nm.layui-elem-quote{padding-left: 0;padding-right: 0;margin-bottom: 0;}
+    .layui-field-title .layui-nav{display: inline-block;}
+    .layui-field-title .install{display: inline-block;height: 60px;vertical-align: bottom;line-height: 55px;}
+    .nc-search-wrap{padding-top: 13px;}
+    #application .layui-card{background-color: transparent;}
+    .nc-item-content{line-height: initial;}
+    .not-installed{display: inline-block; width: 8px; height: 8px;border-radius: 50%;background-color: red;}
+    .has-been-installed{display: inline-block; width: 8px; height: 8px;border-radius: 50%;background-color: #12b7f5;}
+    .layui-field-title .nc-function-search{float: right;margin-top: 12px;margin-bottom: 0;}
+    .empty-site{display: none;text-align: center;padding: 120px 0;background: #fff;}
+    .empty-site .empty-img img{width: 100px;margin-bottom: 10px;}
+    .text-content p:nth-child(1){color: #999;margin-bottom: 5px;}
+    .text-content p:nth-child(2), .text-content p a{font-size: 16px;color: #999;}
+    .text-content p a{color: #666;}
+    .nc-item-block.fl .nc-item-block-wrap{cursor: pointer;}
+    .nc-quote-box:last-of-type{padding-bottom: 20px;}
+    .nc-item-block .nc-content-title .nc-content-desc{max-width: 200px;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-field-title nc-mb20 layui-form">
+    <ul class="layui-nav nc-nav">
+        <li class="layui-nav-item {eq name='type' value=''}layui-this {/eq}" value="0">
+            <a href="{:url('admin/addon/addonlist')}">全部应用</a>
+        </li>
+        {volist name="addon_type" id="v" key="k"}
+        <li class="layui-nav-item {eq name='type' value='$key'}layui-this {/eq}" value="{$key}">
+            <a href="{:url('admin/addon/addonlist', ['type' => $key])}">{$v}</a>
+        </li>
+        {/volist}
+    </ul>
+    <span class="install">
+        <input type="checkbox" name="install_type" lay-filter="installType" lay-skin="primary" value="installed" title="已安装">
+        <input type="checkbox" name="install_type" lay-filter="installType" lay-skin="primary" value="notinstalled" title="未安装">
+    </span>
+    <div class="nc-function-search">
+        <div class="layui-input-inline nc-len-mid nc-search-btn">
+            <input type="text" placeholder="输入应用名称" name="addon_name" class="layui-input">
+            <button class="layui-icon-search" lay-submit lay-filter="search"></button>
+        </div>
+    </div>
+</div>
+
+<div id="application"></div>
+
+<div id="page"></div>
+
+<div class="empty-site">
+    <div class="empty-img">
+        <img src="SITEHOME_IMG/empty_site.png" alt=""/>
+    </div>
+    <div class="text-content">
+        <p>当前没有应用</p>
+    </div>
+</div>
+
+<script id="application_module" type="text/html">
+    {{#  layui.each(d, function(index, item){ }}
+    {{# if(item.list.length>0){  }}
+    <div class="nc-quote-box ">
+		<blockquote class="layui-elem-quote layui-quote-nm">{{item.type_name}}</blockquote>
+            <ul class="nc-item-block-parent">
+                {{# layui.each(item.list, function(index, item){ }}
+                <li class="nc-item-block fl size-lg drop">
+                    <div class="nc-item-block-wrap" onclick="location.href=nc.url('admin/addon/addonDetail?name={{item.name}}')">
+                        {{# if(item.icon == null || item.icon == "" || item.icon == undefined){ }}
+                        <img src="SITEHOME_IMG/plug-in-unit.png" class="nc-item-pic">
+                        {{# }else{ }}
+                        <img src="__ROOT__{{ item.icon }}" class="nc-item-pic">
+                        {{# } }}
+                        <div class="nc-item-content">
+                            <div class="nc-content-title">{{ item.title }}</div>
+                            <p class="nc-content-desc">{{ item.description }}</p>
+                            <div class="nc-icon">
+                            {{# layui.each(item.support_app_type, function(key, port_item){ }}
+                                <img src="__ROOT__/{{port_item.logo}}" title="支持{{port_item.name}}端口">
+                            {{# }); }}
+                            </div>
+                        </div>
+                        {{# if(item.status <= 0){ }}
+                        <div class="nc-item-poa-pic">
+                            <img src="SITEHOME_IMG/not_installed.png" alt="">
+                        </div>
+                        {{# } }}
+                    </div>
+
+                    <div class="nc-item-float">
+                        <div>
+                            {{# if(item.status <=0){ }}
+                            <span class="nc-ml10"><i class="nc-mr10 not-installed"></i>未安装</span>
+                            <a class=" nc-assist-fr nc-mr10" lay-event="install" title="安装插件" href="javascript:install('{{ item.name }}','{{ item.is_buy }}','{{ item.version }}');">立即安装</a>
+                            {{# }else{ }}
+                            <span class="nc-ml10"><i class="nc-mr10 has-been-installed"></i>已安装</span>
+                            <a class="nc-assist-fr nc-mr10" href="javascript:uninstall('{{ item.name }}');" title="卸载插件">卸载</a>
+                            <a class="nc-assist-fr nc-mr10" lay-event="init_menu" href="javascript:initMenu('{{item.name}}');" title="刷新">刷新</a>
+                            {{# } }}
+                        </div>
+                    </div>
+
+                </li>
+                {{# }); }}
+            </ul>
+        </div>
+    {{#  } }}
+    {{#  }); }}
+
+</script>
+{/block}
+{block name="script"}
+<script>
+var type = "{$type}";
+</script>
+<script src="ADMIN_JS/addon_list.js"></script>
+{/block}

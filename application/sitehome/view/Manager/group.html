@@ -1,0 +1,147 @@
+{extend name="style/base"/}
+
+{block name="resources"}
+<style>
+	.layui-table-box .operation{display: inline-block;padding: 4px;color: #fff;}
+	.nc-function-btn a:hover{color: #fff !important;}
+    .layui-disabled, .layui-disabled:hover{color: #fff !important;}
+</style>
+{/block}
+
+{block name="main"}
+<div class="nc-function-search">
+	<button class="layui-btn" onclick="location.href = '{:url('sitehome/manager/addGroup')}'">添加</button>
+</div>
+<div class="nc-table-box">
+	<table id="auth_list" lay-filter="auth"></table>
+</div>
+<script type="text/html" id="is_system">
+	<input type="checkbox" name="status" value="{{d.group_id}}" lay-skin="switch" lay-filter="is_system" {{ d.is_system==1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="operation">
+	{{# if(d.is_system == 0){ }}
+	<a class="default" lay-event="edit">编辑</a>
+	<a class="default" lay-event="delete">删除</a>
+	{{# } }}
+	{{#  if(d.is_system == 1){ }}
+	<span class="operation layui-disabled">系统管理组不能编辑或删除</span>
+	{{#  } }}
+</script>
+<script type="text/html" id="batchOperation">
+	<button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+</script>
+{/block}
+
+{block name="script"}
+<script>
+	var table = new Table({
+		elem : '#auth_list',
+		filter : "auth",
+		url : "{:url('sitehome/manager/group')}",
+		cols : [
+			[
+				{
+					type : 'checkbox',
+					unresize : 'true'
+				},
+				{
+					field : 'group_name',
+					width : '50%',
+					title : '用户组',
+					unresize : 'true'
+				},
+				{
+					title : '操作',
+					toolbar : '#operation',
+					align: 'right',
+					width : '45%',
+					unresize : 'true'
+				}
+			]
+		],
+		bottomToolbar : "#batchOperation"
+	});
+	
+	//监听工具条
+	table.tool(function(obj) {
+		var data = obj.data;
+		switch (obj.event) {
+			case "edit":
+				location.href = nc.url('sitehome/manager/editGroup', {
+					"group_id" : data.group_id
+				});
+				break;
+			case "delete":
+				deleteGroup(data.group_id);
+				break;
+		}
+	});
+	
+	//批量操作
+	table.bottomToolbar(function(obj) {
+		
+		if(obj.data.length < 1){
+			layer.msg('请选择要操作的数据');
+			return;
+		}
+		
+		switch (obj.event) {
+			case "delete":
+				var id_array = new Array();
+				for (i in obj.data) {
+					//排除超级管理员
+					if (obj.data[i].is_system == 0) id_array.push(obj.data[i].group_id);
+					layer.msg('超级管理员不可编辑');
+					return false;
+				}
+				deleteGroup(id_array.toString());
+				break;
+		}
+	});
+	
+	function deleteGroup(group_id) {
+		layer.confirm('确定删除吗?', {
+			btn : [ '确定', '取消' ]
+		}, function() {
+			$.ajax({
+				type : 'post',
+				async : false,
+				url : '{:url("sitehome/manager/deleteGroup")}',
+				data : {
+					'group_id' : group_id
+				},
+				dataType : "JSON",
+				success : function(res) {
+					layer.msg(res.message);
+					if (res.code == 0) {
+						table.reload();
+					}
+				}
+			});
+		}, function() {
+			layer.close();
+		});
+	}
+	
+	layui.use('form', function() {
+		var form = layui.form;
+		form.on('switch(is_system)', function(obj) {
+			$.ajax({
+				type : "post",
+				url : '{:url("sitehome/manager/setGroupStatus")}',
+				data : {
+					'group_id' : this.value,
+					'is_system' : obj.elem.checked ? 1 : 0
+				},
+				dataType : "JSON",
+				success : function(res) {
+					layer.msg(res.message);
+					if (res.code == 0) {
+						table.reload();
+					}
+				}
+			});
+		});
+	});
+</script>
+{/block}

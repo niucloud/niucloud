@@ -1,0 +1,48 @@
+.layui-fluid{background: none; border: none;padding:0px;}
+.niu-site-left{float: left; width: 79%; padding-right: 0;}
+.nui-site-info-name{height: 36px; line-height: 36px; font-weight: 600;}
+.nui-site-info-name span{font-size: 20px; color: #333; border: none; display: inline-block;}
+.nui-site-info-name a{display: inline-block; vertical-align: top;}
+.nui-perfect-info .niu-perfect-label{display: inline-block; padding: 3px; margin-bottom: 8px; margin-top: 8px; border: 1px solid; font-size: 12px; border-radius: 3px;}
+.nui-perfect-info time{display: block; font-size: 12px;}
+.nui-perfect-info span{font-size: 14px;}
+.niu-site-module label{height: 30px; line-height: 30px; display: inline-block; font-size: 16px;}
+.niu-col-title h3{display: inline-block; font-weight: 600; font-size: 15px;}
+.niu-col-title span{margin-left: 10px; font-size: 12px;}
+.niu-site-module .niu-site-module-info{display: flex; min-height: 100px; justify-content: space-between;}
+.niu-module-left-list{padding: 20px 0;}
+.niu-module-left-list-info h2{height: 30px; line-height: 30px; font-size: 25px; font-weight: 600;}
+.niu-module-left-list-info span{height: 30px; line-height: 30px; display: inline-block; margin-top: 5px;}
+.layui-col-item{background-color: #fff; padding: 20px; margin-bottom: 10px; overflow: hidden;}
+.layui-col-item-line-chart{padding:0; background:none;}
+.layui-col-inner{width: 49.5%; padding: 20px; background-color: #fff;}
+.charts{height: 264.7px; margin: 15px 0;}
+.charts h3, .niu-right-procedures h3{font-size: 15px;}
+.charts h3 span{float: right; margin-right: 20px; font-size: 14px;}
+.charts h3 span i{width: 12px; display: inline-block; height: 12px; margin-right: 5px; vertical-align: middle;}
+#orderCharts, #focusCharts{height: 210px;}
+.visit-chart{height: 210px;}
+/* 侧边栏 */
+.niu-site-right{float: left; width: 20%; padding-left:0;margin-left: 10px;}
+.niu-right-customer:first-child{margin-top: 0; padding: 25px 30px;}
+.niu-right-customer{background-color: #fff; margin-top: 10px; text-align: center; padding: 20px 10px;}
+.niu-right-customer-service{margin-bottom: 10px;}
+.niu-right-customer-service p{margin-top: 10px; font-size: 16px; font-weight: 600;}
+.niu-right-customer .telephone{font-size: 18px; font-weight: 900;}
+.niu-right-announcement{height: 30px; line-height: 30px; margin-bottom: 10px;}
+.niu-right-announcement-first{float: left; font-size: 14px; font-weight: normal;}
+.niu-right-announcement-first i{display: inline-block; width: 3px; height: 14px; vertical-align: middle; margin-right: 5px;}
+.niu-right-announcement-last{font-size: 12px; display: inline-block; float: right;}
+.niu-right-announcement-info{margin-bottom: 10px; height: 25px; line-height: 25px; font-size: 12px;}
+.niu-right-announcement-info span{font-size: 12px;}
+.niu-right-announcement-info-title{width: 70%; text-align: left; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.niu-right-announcement-info-time{width: 27%; text-align: right; display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.niu-right-announcement-info:nth-last-child(1){margin-bottom: 0;}
+.niu-right-procedures p{margin-top: 3px; margin-bottom: 8px;}
+.niu-left-market .niu-module-left-list-info h2{margin-top: 5px; font-size: 14px; font-weight: normal;}
+.niu-left-market .niu-module-left-list-info span{margin-top: 0; font-size: 12px; line-height: 20px; height: 20px;}
+.niu-wechat-icon{width: 17px; height: 17px; display: inline-block; margin: 0 5px; background: url('../img/sitehome/wechat-icon.png'); vertical-align: middle;}
+.niu-phone-icon{width: 17px; height: 17px; display: inline-block; margin: 0 5px; background: url('../img/sitehome/phone-icon.png'); vertical-align: middle;}
+.niu-pc-icon{width: 17px; height: 17px; display: inline-block; margin: 0 5px; background: url('../img/sitehome/pc-icon.png'); vertical-align: middle;}
+.niu-module-left-list-img{ margin-right: 10px; vertical-align: middle; float: left; padding: 10px 0;}
+.niu-module-left-list-info{float: left;}

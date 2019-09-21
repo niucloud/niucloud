@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.bottom-menu{position: fixed;bottom: 0;width: 100%;z-index: 998;border-top:1px solid #DADADA;}
+.bottom-menu ul{overflow: hidden;}
+.bottom-menu ul li{float: left;text-align: center;}
+.bottom-menu ul li a{color: #333;}
+.bottom-menu ul li div{margin: 2px 0;}
+.bottom-menu ul li img{width: 30px;}
+.bottom-menu ul li span{text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: block;line-height: 20px;}

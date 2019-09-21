@@ -1,0 +1,106 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+    .show-content {
+        line-height: 30px;
+    }
+
+    .layui-form {
+        padding: 10px;
+    }
+    #app_secret{
+        width: 70%;
+        display: inline-block;
+    }
+    .num_bold{    font-size: 14px;  color: #000;}
+</style>
+{/block}
+{block name="main"}
+
+<div class="layui-form">
+
+    <div class="layui-form-item"> 站点秘钥设置</div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">站点公钥</label>
+        <div class="layui-input-inline">
+            <p class="show-content">{$info.app_key}</p>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">站点私钥</label>
+        <div class="layui-input-inline">
+            <input type="text" name="app_secret" id="app_secret" value="{$info.app_secret}" lay-verify="app_secret" autocomplete="off"
+                   placeholder="请输入站点私钥" class="layui-input nc-len-mid">
+            <span class="layui-btn layui-btn-sm" onclick="changeSecret()">重置私钥</span>
+        </div>
+    </div>
+    <div class="layui-form-item">秘钥说明</div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <div class="layui-form-mid layui-word-aux" style="float:none">设置站点秘钥（设置站点秘钥，用户在相应域名上进行输入时不再出现防欺诈盗号等安全提示） </div>
+        </div>
+        <div class="layui-input-block">
+            <div class="layui-form-mid layui-word-aux"  style="float:none"><span class="num_bold">1.</span>站点秘钥作用于网站绑定授权</div>
+        </div>
+        <div class="layui-input-block">
+            <div class="layui-form-mid layui-word-aux"  style="float:none"><span class="num_bold">2.</span>购买插件短信服务等</div>
+        </div>
+    </div>
+    <div class="div-btns">
+        <label class="layui-form-label"></label>
+        <input type="button" value="保存" class="layui-btn" lay-submit="" lay-filter="save"/>
+        <a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+    </div>
+</div>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+
+    //layui 的 form 模块是必须的
+    layui.use(['form'], function () {
+        var form = layui.form;
+
+        form.verify({
+            site_name: function (value) {
+                if (value == '') {
+                    return '请输入站点名称';
+                }
+            }
+        });
+	
+		var repeat_flag = false;//防重复标识
+        form.on('submit(save)', function (data) {
+            var val = data.field;
+            delete val.fetch_image_path;
+            delete val.file;
+            if(repeat_flag) return;
+			repeat_flag = true;
+            $.ajax({
+                url: "{:url('sitehome/manager/siteSetKey')}",
+                data: {
+                    value: JSON.stringify(val),
+                },
+                type: "post",
+                dataType : "JSON",
+                success: function (res) {
+                	if(res.code != 0) repeat_flag = false;
+                    layer.msg(res.message);
+					location.reload();
+                }
+            })
+        });
+    });
+
+    function changeSecret(){
+        $.ajax({
+            type : "get",
+			url : "{:url('sitehome/manager/getRandom')}",
+            data : {},
+            success : function(data) {
+                $("#app_secret").val(data);
+            }
+        });
+    }
+</script>
+{/block}

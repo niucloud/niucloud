@@ -1,0 +1,169 @@
+{extend name="base"/}
+{block name="main"}
+<div class="nc-list style1">
+	<div class="head">
+		<h2>基本设置</h2>
+	</div>
+	<ul class="layui-form">
+		<li>
+			<label>关闭站点</label>
+			<span>关闭站点后，只有系统管理员可以访问，其余用户将无法登录，请慎重操作！</span>
+			<div class="operation">
+				<input type="checkbox" value="1" lay-filter="close_site_status" name="{$system_site_config.close_site_status}"lay-skin="switch" lay-text="|" {if !empty($system_site_config.close_site_status) && $system_site_config.close_site_status eq 1}checked{/if}>
+			</div>
+		</li>
+		<li>
+			<label>关闭原因</label>
+			{notempty name="$system_site_config.reasons_for_closing"}
+			<span>{$system_site_config.reasons_for_closing}</span>
+			{/notempty}
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('reasons_for_closing', '关闭原因', '450px')">修改</a>
+		</li>
+		<li>
+			<label>网站标题</label>
+			<span>{$system_site_config.title}</span>
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('title', '网站标题', '450px')">修改</a>
+		</li>
+		<li>
+			<label>网站关键词</label>
+			<span>{$system_site_config.keywords}</span>
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('keywords', '网站关键词', '450px')">修改</a>
+		</li>
+		<li>
+			<label>网站描述</label>
+			<span>{$system_site_config.description}</span>
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('description', '网站描述', '450px')">修改</a>
+		</li>
+		<li>
+			<label>备案号</label>
+			{notempty name="$system_site_config.icp"}
+			<span>{$system_site_config.icp}&nbsp;&nbsp;&nbsp;直接填写备案号即可,系统已添加工信部链接</span>
+			{/notempty}
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('icp', '备案号', '450px')">修改</a>
+		</li>
+		<li>
+			<label>联网备案信息</label>
+			{notempty name="$system_site_config.police_icp_location && $system_site_config.police_icp_code"}
+			<span>{$system_site_config.police_icp_location}&nbsp;{$system_site_config.police_icp_code}&nbsp;&nbsp;&nbsp;&nbsp;直接填写联网备案信息即可,系统已添加工信部链接</span>
+			{else/}
+			<span>直接填写联网备案信息即可,系统已添加工信部链接</span>
+			{/notempty}
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('police_icp', '联网备案信息', '450px')">修改</a>
+		</li>
+		<li>
+			<label>调试模式</label>
+			<p class="operation">
+				<input type="checkbox" value="1" lay-filter="develop_status" class="develop_status" {$develop_status ?'checked' : '' } name="develop_status" lay-skin="switch" lay-text="|">
+			</p>
+		</li>
+		<li>
+			<label>日志开关</label>
+			<p class="operation">
+				<input type="checkbox" value="1" lay-filter="log_status" class="log_status" {$log_status== "File" ? 'checked' : '' } name="log_status" lay-skin="switch" lay-text="|">
+			</p>
+		</li>
+	</ul>
+</div>
+
+<script type="text/html" id="reasons_for_closing">
+	<div class="layui-form" lay-filter="reasons_for_closing">
+		<div class="layui-form-item">
+			<label class="layui-form-label">关闭原因</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-short" name="reasons_for_closing" type="text" lay-verify="required" {notempty name="$system_site_config.reasons_for_closing"}value="{$system_site_config.reasons_for_closing}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="reasons_for_closing_submit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="title">
+	<div class="layui-form" lay-filter="title_form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">网站标题</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-mid" name="title" type="text" lay-verify="required" {notempty name="$system_site_config.title"}value="{$system_site_config.title}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="title_submit">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="keywords">
+	<div class="layui-form" lay-filter="keywords_form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">网站关键词</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-mid" name="keywords" type="text"  lay-verify="required" {notempty name="$system_site_config.keywords"}value="{$system_site_config.keywords}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="keywords_submit">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="description">
+	<div class="layui-form" lay-filter="description_form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">网站描述</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-mid" name="description" type="text" lay-verify="required" {notempty name="$system_site_config.description"}value="{$system_site_config.description}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="description_submit">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="icp">
+	<div class="layui-form" lay-filter="icp_form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">备案号</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-mid" name="icp" type="text" lay-verify="required" {notempty name="$system_site_config.icp"}value="{$system_site_config.icp}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="icp_submit">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="police_icp">
+	<div class="layui-form" lay-filter="police_icp_form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">备案地</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-short" name="police_icp_location" type="text" lay-verify="required" placeholder="例如：京公网安备" {notempty name="$system_site_config.police_icp_location"}value="{$system_site_config.police_icp_location}"{/notempty}>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">备案号</label>
+			<div class="layui-input-inline">
+				<input class="layui-input nc-len-short" name="police_icp_code" type="text" lay-verify="required" placeholder="例如：11000002000001" {notempty name="$system_site_config.police_icp_code"}value="{$system_site_config.police_icp_code}"{/notempty}>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="police_icp_submit">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+{/block}
+{block name="script"}
+<script>
+	var system_site_config = JSON.parse('{$system_site_config|json_encode}');
+</script>
+<script src="ADMIN_JS/site_config.js"></script>
+{/block}

@@ -1,0 +1,77 @@
+.edit-promote-setting{display: block;position: absolute;right: 0;font-size: 12px;top: 20px;}
+
+.promote{margin: 0 20px 20px;}
+.promote .preview-wrap{width: 250px;float: left;position: relative;padding: 20px;background-color: #F9F9F9;height: 450px;margin-right: 10px;}
+
+/*海报*/
+.promote .preview-wrap .posters-style{display: block;}
+.promote .preview-wrap .posters-style .top-wrap{border-radius: 6px;background-color: rgb(255, 255, 255);padding: 0 20px;box-shadow: rgba(0, 0, 0, 0.0470588) 0 2px 4px 0, rgba(0, 0, 0, 0.0784314) 0 2px 16px 0;overflow: hidden;}
+.promote .preview-wrap .posters-style .top-wrap img{display: block;width: 220px;height: 220px;margin: 20px auto;object-fit: cover;max-width: 100%;}
+.promote .preview-wrap .posters-style .top-wrap h1{margin: 10px 0;font-size: 14px;font-weight: normal;line-height: 24px;color: #333;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;}
+.promote .preview-wrap .posters-style .top-wrap p{margin: 10px 0;font-size: 12px;line-height: 20px;color: rgb(147, 147, 147);overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;}
+.promote .preview-wrap .posters-style .bottom-wrap{position: absolute;bottom: 20px;left: 20px;right: 20px;display: flex;align-items: center;}
+.promote .preview-wrap .posters-style .bottom-wrap img:first-of-type{width: 48px; height: 48px; border-radius: 50%; object-fit: cover;}
+.promote .preview-wrap .posters-style .bottom-wrap img:last-of-type{width: 70px; height: 70px; object-fit: cover;}
+.promote .preview-wrap .posters-style .bottom-wrap .info{margin: 0 10px;flex: 1;}
+.promote .preview-wrap .posters-style .bottom-wrap .info label{display: block;}
+.promote .preview-wrap .posters-style .bottom-wrap .info span{font-size: 12px;color: rgb(153, 153, 153);margin-top: 10px;display: block;}
+
+/*微信好友*/
+.promote .preview-wrap .wechat-style{height: 490px;position: absolute;left: 0;top: 0;display: none;}
+.promote .preview-wrap .wechat-style .chat-bg{height: inherit;width: 100%;}
+.promote .preview-wrap .wechat-style .head{position: absolute;top: 20px;left: 25px;}
+.promote .preview-wrap .wechat-style .info{background: #fff;position: absolute;width: 170px;padding: 10px;top: 80px;right: 55px;}
+.promote .preview-wrap .wechat-style .info h4{margin-bottom: 5px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 15px;}
+.promote .preview-wrap .wechat-style .info p{float: left;font-size: 12px;width: 119px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 3;line-height: 16px;color: #999;min-height: 16px;}
+.promote .preview-wrap .wechat-style .info img{width: 35px;height: 35px;margin-left: 10px;object-fit: cover;}
+.promote .preview-wrap .wechat-style .user-logo{width: 35px;height: 35px;object-fit: cover;position: absolute;top: 80px;right: 10px;}
+
+/*微信小程序好友*/
+.promote .preview-wrap .wechat-applet-style{height: 490px;position: absolute;left: 0;top: 0;display: none;}
+.promote .preview-wrap .wechat-applet-style .chat-bg{height: inherit;width: 100%;}
+.promote .preview-wrap .wechat-applet-style>.head{position: absolute;top: 20px;left: 25px;}
+.promote .preview-wrap .wechat-applet-style .info{background: #fff;position: absolute;width: 170px;padding: 10px;top: 80px;right: 55px;}
+.promote .preview-wrap .wechat-applet-style .info .head{margin-bottom: 5px;font-size: 12px;}
+.promote .preview-wrap .wechat-applet-style .info .head img{width: 20px;height: 20px;object-fit: cover;}
+.promote .preview-wrap .wechat-applet-style .info h4{margin-bottom: 5px;overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;-webkit-line-clamp: 2;line-height: 15px;}
+.promote .preview-wrap .wechat-applet-style .info .footer{padding-top: 5px;border-top: 1px solid #ddd;font-size: 12px;color: #666;overflow: hidden;text-overflow: ellipsis;margin-top: 5px;display: block;}
+.promote .preview-wrap .wechat-applet-style .info>img{width: 80px;height: 80px;object-fit: cover;margin: 0 auto 6px;display: block;}
+.promote .preview-wrap .wechat-applet-style .user-logo{width: 35px;height: 35px;object-fit: cover;position: absolute;top: 80px;right: 10px;}
+
+/*微信朋友圈*/
+.promote .preview-wrap .wechat-friends-style{height: 490px;position: absolute;left: 0;top: 0;display: none;}
+.promote .preview-wrap .wechat-friends-style .friends-bg{height: inherit;width: 100%;}
+.promote .preview-wrap .wechat-friends-style .position-info{position: absolute;top: 170px;right: 10px;}
+.promote .preview-wrap .wechat-friends-style .position-info span{color: #fff;font-weight: bold;margin-right: 5px;width: 150px;display: inline-block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;text-align: right;}
+.promote .preview-wrap .wechat-friends-style .position-info img{width: 50px;height: 50px;object-fit: cover;border-radius: 5px;margin-top: 5px;}
+.promote .preview-wrap .wechat-friends-style .chat-info{position: absolute;top: 248px;left: 5px;}
+.promote .preview-wrap .wechat-friends-style .chat-info .user-logo{width: 35px;height: 35px;object-fit: cover;border-radius: 5px;margin-right: 5px;}
+.promote .preview-wrap .wechat-friends-style .chat-info .user-name{color: #576B95;font-weight: bold;width: 230px;display: inline-block;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
+.promote .preview-wrap .wechat-friends-style .chat-info .title{margin-left: 50px;}
+.promote .preview-wrap .wechat-friends-style .chat-info .title img{width: 30px;height: 30px;object-fit: cover;}
+.promote .preview-wrap .wechat-friends-style .chat-info .title span{font-size: 12px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;width: 185px;display: inline-block;vertical-align: middle;margin-left: 5px;}
+
+.promote .edit-wrap{float: left;width: 340px;height: 470px;position: relative;}
+.promote .edit-wrap .copy-tip{font-size: 12px;margin-bottom: 10px;display: block;}
+.promote .edit-wrap>.layui-form-item input[readonly]{border-color: #e5e5e5;background-color: #f8f8f8;cursor: not-allowed;color: #cacaca;font-size: 12px;height: 30px;border-right: 0;width: 290px !important;padding-right: 10px;}
+.promote .edit-wrap>.layui-form-item .layui-input-inline{margin-right: 0;}
+.promote .edit-wrap>.layui-form-item .layui-btn{height: 30px;font-size: 12px;padding: 0 10px;border-top-left-radius: 0;border-bottom-left-radius: 0;}
+.promote .edit-wrap .copy-option{font-size: 12px;}
+.promote .edit-wrap .copy-option .split{margin: 0 12px;color: #e5e5e5;}
+
+.promote .edit-wrap .layui-form{font-size: 12px;padding: 0 10px 0;display: none;}
+.promote .edit-wrap .layui-form .layui-form-label.sm{width: 70px;}
+.promote .edit-wrap .layui-form .nc-form-row{text-align: right;padding: 0;position: absolute;bottom: 0;right: 0;}
+.promote .edit-wrap .layui-form .layui-form-item .layui-input-inline.nc-len-mid{width: 230px !important;}
+.promote .edit-wrap .layui-form .layui-form-radio{padding-right: 5px;margin: 3px 5px 0 0;}
+.promote .edit-wrap .layui-form .layui-form-radio *{font-size: 12px;}
+.promote .edit-wrap .layui-form .layui-form-radio>i{font-size: 18px;margin-right: 5px;}
+.promote .edit-wrap .layui-form input,.promote .edit-wrap .layui-form textarea{font-size: 12px;}
+.promote .edit-wrap .layui-form .layui-btn{height: 30px;padding: 5px 20px;font-size: 12px;}
+
+.promote .edit-header{height: 45px;line-height: 30px;display: none;}
+.promote .edit-header span{display: inline-block;color: #999;font-size: 12px;}
+.promote .edit-header span:first-child{width: 290px;}
+
+.promote .upload-img-block{float: left;}
+.promote .upload-tip{color: #999;vertical-align: text-bottom;display: inline-block;margin-top: 55px;}

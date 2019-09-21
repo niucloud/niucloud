@@ -1,0 +1,936 @@
+@CHARSET "UTF-8";
+.layui-body {
+    background-color: #F0F4F7;
+}
+
+.layui-fluid {
+    background: none;
+    border: none
+}
+
+.layui-col-item {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.layui-col-space20 {
+    margin: -20px -10px -10px -20px;
+}
+
+.layui-col-inner {
+    width: 49.5%;
+    padding: 20px;
+    background: #fff;
+}
+
+/*店铺歇业*/
+.niu-site-close {
+    height: 44px;
+    line-height: 44px !important;
+    /*background: #fff2f2;
+    border: 1px solid #ffdcdc;
+    margin-bottom: 20px;*/
+    margin-left: 1px;
+}
+
+.niu-site-close span {
+    font-size: 12px;
+    color: #333;
+}
+
+.niu-site-close span:first-child {
+    margin-right: 10px;
+}
+
+.niu-site-close .niu-site-close-mobile {
+    margin-right: 30px;
+}
+
+.niu-site-close .niu-site-close-mobile i, .niu-site-close.nui-siteinfo span i {
+    font-style: normal;
+    color: #fd6060;
+}
+
+.niu-site-close .niu-site-close-renewal {
+    background-color: #fd6060 !important;
+}
+
+.niu-site-close .niu-site-close-help {
+    color: #fd6060;
+    border: 1px solid #fd6060;
+}
+
+.nui-siteinfo {
+    line-height: 26px;
+    padding-left: 10px;
+}
+
+.nui-site-info-name {
+
+}
+
+.niu-wechat-icon {
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    margin: 0 5px;
+    background: url('../img/sitehome/wechat-icon.png');
+    vertical-align: middle;
+}
+
+.niu-phone-icon {
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    margin: 0 5px;
+    background: url('../img/sitehome/phone-icon.png');
+    vertical-align: middle;
+}
+
+.niu-pc-icon {
+    width: 17px;
+    height: 17px;
+    display: inline-block;
+    margin: 0 5px;
+    background: url('../img/sitehome/pc-icon.png');
+    vertical-align: middle;
+}
+
+.nui-site-info h2 {
+    padding: 5px 0;
+    font-size: 20px;
+    color: #333;
+}
+
+.nui-site-info span {
+    border: 1px solid #999;
+    border-radius: 3px;
+    color: #999;
+    padding: 2px;
+    font-size: 12px;
+    margin-right: 3px;
+}
+
+.nui-site-info-name span {
+    padding: 5px 0;
+    font-size: 20px;
+    color: #333;
+    border: none;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.nui-site-info .nui-siteinfo-status {
+    background: red;
+    color: #fff;
+    border: none;
+}
+
+.nui-perfect-info {
+    background: #F8F8F8;
+    padding: 20px 0 10px 20px;
+    margin-top: 15px;
+    height: 50px;
+}
+
+.nui-perfect-info p {
+    margin-bottom: 8px;
+}
+
+.nui-perfect-info span {
+    font-size: 12px;
+    color: #999;
+}
+
+.nui-align-right {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.nui-align-right a {
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.nui-margin20 {
+    margin-top: 20px;
+}
+
+.nui-placeholder {
+    height: 20px;
+    background: #F2F2F2;
+}
+
+.nui-padding20 {
+    padding-top: 20px;
+}
+
+.nui-addon-top {
+    font-size: 16px;
+}
+
+.nui-addon-img {
+    width: 17%;
+    display: inline-block;
+    margin-right: 5px;
+    align-self: center;
+}
+
+.nui-addon-img img {
+    width: 100%;
+    vertical-align: middle;
+}
+
+.nui-application {
+    padding-bottom: 0 !important;
+}
+
+.nui-addon-info {
+    width: 70%;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.nui-addon-info span {
+    font-size: 15px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.nui-addon-info span:first-child {
+    width: 80%;
+    /*overflow: hidden;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nui-addon-info-img {
+    width: 10%;
+}
+
+.nui-addon-info p {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #999;
+}
+
+.nui-addon-info-img img {
+    margin-bottom: 10px;
+}
+
+.nui-margin-tb {
+    margin: 15px 0;
+    display: flex;
+}
+
+.nui-heat {
+    height: 14px;
+    width: 93px;
+    background-image: url('../img/heat-icon.png');
+}
+
+.nui-coupons {
+    margin-bottom: 5px;
+}
+
+/*数据统计*/
+.niu-site-module {
+    /* margin: 20px 0px; */
+}
+
+.niu-site-module label {
+    margin: 15px 0;
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    font-size: 16px;
+    padding-left: 20px;
+}
+
+.niu-site-module label.niu-site-validity-time {
+    font-size: 13px;
+    color: #999;
+    padding-left: 0;
+}
+
+.niu-site-module label span {
+    font-size: 12px;
+    color: #999;
+    margin-left: 20px;
+}
+
+.deal-data {
+    font-size: 12px;
+    color: #999;
+    float: right;
+    height: 60px;
+    line-height: 60px;
+}
+
+.niu-site-module .niu-site-module-info {
+    min-height: 100px;
+    padding: 0 20px;
+}
+
+.niu-module-left-list {
+    float: left;
+    padding: 20px 0;
+}
+
+.niu-module-left-list-img {
+    /*width: 20%;*/
+    margin-right: 10px;
+    vertical-align: middle;
+    float: left;
+    padding: 10px 0;
+}
+
+.niu-module-left-list-info {
+    /*width: 80%;*/
+    float: left;
+}
+
+.niu-module-left-list-info h2 {
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+}
+
+.niu-module-left-list-info span {
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    color: #999;
+    margin-top: 5px;
+}
+
+/*店铺及商品提示*/
+.niu-site-store-info {
+    height: 100px;
+    padding: 0 20px;
+}
+
+.niu-store-left-list {
+    /*width: 240px;*/
+    /*width: 270px;*/
+    width: 20%;
+    float: left;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.niu-store-left-list-info h2 {
+    height: 30px;
+    line-height: 30px;
+    font-size: 20px;
+    color: #0d73f9;
+}
+
+.niu-store-left-list-info span {
+    height: 30px;
+    line-height: 30px;
+    display: inline-block;
+    color: #999;
+    margin-top: 5px;
+    position: relative;
+}
+
+.niu-store-left-active {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: red;
+    top: 5px;
+    right: -10px;
+}
+
+/*交易提示*/
+.niu-left-pay {
+    /*width: 170px;*/
+    /*width: 190px;*/
+    width: 14%;
+}
+
+/*商家帮助*/
+.niu-store-help {
+    height: 100px;
+    padding-left: 20px;
+    margin-right: 20px;
+}
+
+.niu-store-help-info {
+    /*width: 215px;*/
+    width: 33%;
+    float: left;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.niu-store-help-info span {
+    margin-left: 10px;
+    width: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/*销售情况统计*/
+.niu-sales-situation {
+    height: 100px;
+    /*padding: 0px 20px;
+    padding-right: 0px;*/
+    padding-left: 0;
+    margin-left: 20px;
+    /* border: 1px solid #ededed; */
+}
+
+.niu-sales-situation-info {
+    width: 50%;
+    height: 100%;
+    float: left;
+    position: relative;
+}
+
+.niu-sales-situation-info-left {
+    background: #f8f8f8;
+    width: 30%;
+    height: 100%;
+    float: left;
+    text-align: center;
+    line-height: 100px;
+    padding: 0 10px;
+}
+
+.niu-sales-situation-info-right {
+    width: 70%;
+    float: left;
+    font-size: 12px;
+}
+
+.niu-sales-situation-info-right p {
+    height: 48px;
+    line-height: 49px;
+    padding-left: 10px;
+    border-bottom: 1px solid #f7f5f5;
+}
+
+.niu-sales-situation-info-right p:first-child {
+    border-top: 1px solid #f7f5f5;
+}
+
+/*.niu-sales-situation-info-right p:first-child:after{
+    border-bottom: 1px solid #ededed;
+    content:'';
+    display:inline-block;
+    height:1px;
+    width: 100%;
+    color: #ededed;
+}*/
+.niu-xian {
+    content: '';
+    display: inline-block;
+    height: 1px;
+    width: 77%;
+    color: #ededed;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #ededed;
+    /* text-align: right; */
+    margin-left: 76px;
+}
+
+.niu-sales-situation-info-right p i {
+    font-style: normal;
+    margin-left: 15px;
+}
+
+/*右边内容*/
+/*客服*/
+.niu-right-customer {
+    background: #fff;
+    margin-top: 15px;
+    text-align: center;
+    padding: 20px 10px;
+}
+
+.niu-right-customer.default {
+    background: #f8f8f8;
+    text-align: left;
+}
+
+.niu-right-customer:first-child {
+    margin-top: 0;
+}
+
+.niu-right-customer-service {
+    margin-bottom: 15px;
+}
+
+.niu-right-customer-service p {
+    margin-top: 10px;
+}
+
+.niu-right-version {
+    /*padding: 0px 10px;
+    text-align: left;
+    margin-bottom: 0px;
+    display: inline-block;
+    width: 87%; */
+    overflow: hidden;
+}
+
+.niu-right-version-first {
+    font-size: 14px;
+    font-weight: bold;
+    /*width: 65%;*/
+    float: left;
+    display: inline-block;
+}
+
+.niu-right-version-last {
+    font-size: 12px;
+    color: #fc504c;
+    background: #fce8ea;
+    padding: 3px;
+    border-radius: 4px;
+    /*width: 27%;*/
+    float: right;
+    display: inline-block;
+}
+
+.niu-right-version-p {
+    margin: 10px 0;
+    font-size: 12px;
+    text-align: left;
+    /* 	    padding: 0px 10px; */
+    color: #999;
+}
+
+.niu-right-version-btn {
+    margin-top: 20px;
+    /*   	padding: 0px 10px; */
+}
+
+.niu-right-version-btn a {
+    width: 100%;
+    height: 35px;
+    line-height: 35px;
+}
+
+/*公告*/
+/* .niu-announcement{
+    padding:10px;
+    margin-bottom: 20px;
+} */
+.niu-right-announcement {
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 10px;
+    /* 		padding: 0 10px; */
+}
+
+.niu-right-announcement-first {
+    font-size: 14px;
+    font-weight: bold;
+    /*width: 80%;*/
+    float: left;
+    display: inline-block;
+}
+
+.niu-right-announcement-last {
+    font-size: 12px;
+    color: #0d73f9;
+    /*width: 15%;*/
+    display: inline-block;
+    float: right;
+}
+
+.niu-right-announcement-info {
+    height: 25px;
+    line-height: 25px;
+    font-size: 12px;
+}
+
+.niu-right-announcement-info-title {
+    color: #999;
+    width: 70%;
+    text-align: left;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.niu-right-announcement-info-time {
+    width: 27%;
+    text-align: right;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+	float: right;
+}
+
+/*app*/
+/* 	.niu-right-app{
+		background:#F8F8F8;
+		padding:15px  10px; 
+		margin-bottom: 20px;
+	} */
+.niu-right-app-img {
+    width: 22%;
+    float: left;
+}
+
+.niu-right-app-img img {
+    margin-top: 5px;
+}
+
+.niu-right-app-info {
+    margin-left: 50px;
+}
+
+.niu-right-app-info span {
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.niu-right-app-info p {
+    font-size: 12px;
+    color: #999;
+}
+
+/*应用市场*/
+/* 	.niu-application{
+		padding: 10px;
+		background:#F8F8F8;
+		margin-bottom: 20px;
+	} */
+.niu-right-application-info {
+    margin: 10px 0;
+    overflow: hidden;
+}
+
+.niu-right-application-img {
+    /*width: 20%;*/
+    float: left;
+    width: 40px;
+    height: 40px;
+}
+.layui-card-header{
+    border:none;
+}
+.niu-right-application-title {
+    /*width: 64%;*/
+    display: inline-block;
+    margin-left: 20px;
+}
+
+.niu-right-application-title p {
+    font-size: 12px;
+    color: #999;
+}
+
+.niu-right-application-img img {
+    margin-top: 5px;
+    max-width: 100%;
+}
+
+.niu-right-application-info h2 {
+    font-size: 14px;
+    height: 30px;
+    line-height: 30px;
+}
+
+.niu-right-application-info i {
+    width: 97px;
+    height: 14px;
+    display: inline-block;
+    background: url('../img/heat-icon.png');
+}
+
+/*单品销售排行*/
+.sales-ranking {
+    /*height: 442px;*/
+    padding-bottom: 20px;
+}
+
+.sales-ranking table {
+    width: 100%;
+    text-align: center;
+    /*margin: 0 15px;*/
+    /*max-width: calc(100% - 30px);*/
+    border: 1px solid #F6F6F6;
+}
+
+.sales-ranking table tr:first-child {
+    background: #ededed;
+
+}
+
+.sales-ranking table tr td {
+    border-bottom: 1px solid #ededed;
+    padding: 10px;
+}
+
+.sales-ranking table tr td a {
+    color: #999;
+    font-size: 12px
+}
+
+/*订单总数统计 折线图*/
+.charts {
+    height: 264.7px;
+    margin: 15px 0;
+}
+
+#orderCharts, #focusCharts {
+    height: 210px;
+}
+
+.charts h3 span {
+    float: right;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.charts h3 span i {
+    width: 12px;
+    display: inline-block;
+    height: 12px;
+    margin-right: 5px;
+    vertical-align: middle;
+    background: #12b7f5;
+}
+
+.black {
+    color: #666 !important;
+}
+
+.charts-title {
+    font-size: 14px;
+    color: rgb(255, 152, 76);
+    margin-right: 10px;
+    font-family: Arial, "Microsoft YaHei", 黑体, 宋体, sans-serif !important;
+}
+
+/*清除浮动*/
+.clear {
+    clear: both;
+}
+
+/*默认页面*/
+/*常用功能*/
+.niu-commonly-functions-list {
+    background: #F8F8F8;
+    padding: 10px 20px;
+}
+
+.niu-commonly-function-info {
+    width: 11%;
+    float: left;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.niu-commonly-function-info p {
+    margin-top: 10px;
+}
+
+/*数据统计*/
+/*.niu-default-statistical-list{
+    background: #F8F8F8;
+    padding: 10px 20px;
+}*/
+.niu-default-statistical-info {
+    /*width: 50%;*/
+    /*float: left;*/
+}
+
+.niu-default-statistical-left {
+    /*width: 40%;*/
+    float: left;
+    text-align: center;
+    padding-left: 20px;
+}
+.niu-default-statistical-left:first-child{
+    padding-left:0;
+}
+.niu-default-statistical-right {
+    /*width: 60%;*/
+    float: left;
+}
+
+.niu-default-statistical-right span {
+    width: 90%;
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    background: #ededed;
+    padding: 0 20px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.niu-default-statistical-right:last-child span {
+    width: 92%;
+
+}
+
+.niu-default-statistical-right span:last-child {
+    margin-bottom: 0;
+}
+.niu-default-statistical-right span:first-child {
+
+}
+
+.niu-default-statistical-right span i {
+    font-style: normal;
+    margin-left: 20px;
+    color: #333;
+}
+
+.niu-default-statistical-left-img {
+    /*width: 30%;*/
+    float: left;
+    height: 190px;
+    text-align: center;
+    line-height: 190px;
+}
+
+.niu-default-statistical-left-funs {
+    /*width: 60%;*/
+    float: left;
+    height: 95px;
+    /*line-height: 45px;*/
+    text-align: left;
+    /*margin-left: 20px;*/
+}
+
+.niu-default-statistical-left-funs p:first-child{
+    margin-top:50px;
+}
+.niu-default-statistical-left-funs p:last-child{
+    /*margin-top:50px;*/
+    font-size:12px;
+    line-height:20px;
+}
+.niu-default-statistical-left-funs p {
+    height: 45px;
+    line-height: 45px;
+    color: #999;
+    text-align:center;
+}
+
+.niu-default-statistical-left-funs p:first-child {
+    font-size: 20px;
+    color: #333;
+}
+
+/*客户看板*/
+.niu-default-customer-info {
+    width: 49%;
+    float: left;
+}
+
+.niu-default-customer-info:first-child {
+    margin-right: 2%;
+}
+
+.niu-default-customer-label {
+    padding: 10px 20px;
+    background: #eee;
+    margin-bottom: 10px;
+}
+
+.niu-default-customer-data-list {
+    height: 85px;
+}
+
+.niu-default-customer-data {
+    /*width: 215px;*/
+    float: left;
+    /*margin-right: 12px;*/
+    margin-bottom: 10px;
+    padding-right: 1%;
+}
+
+.niu-default-customer-data:last-child {
+    padding-right: 0;
+}
+
+.niu-default-customer-data-left {
+    width: 47%;
+    float: left;
+    padding: 10px 0 10px 20px;
+    background: #eee;
+    margin-right: 5px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.niu-default-customer-data-left p:first-child {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.niu-default-customer-data-right {
+    width: 49%;
+    float: left;
+}
+
+.niu-default-customer-data-right span {
+    width: 100%;
+    display: inline-block;
+    padding: 5px 0 5px 5px;
+    background: #eee;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.niu-default-customer-data-right span:first-child {
+    margin-bottom: 5px;
+}
+
+.niu-default-customer-data-right span i {
+    font-style: normal;
+    margin-left: 8px;
+}
+
+/*头部*/
+.niu-default-top {
+    height: 35px;
+    line-height: 35px;
+    background: #f1f7ff;
+    border: 1px solid #cbe2ff;
+    padding-left: 10px;
+    color: #333;
+    font-size: 12px;
+}
+
+.niu-default-top-a {
+    color: #0d73f9;
+}
+
+.niu-default-top-icon {
+    background: url('../img/sitehome/top-icon.png') no-repeat center;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.operation-box .small-procedures{
+
+}

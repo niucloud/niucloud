@@ -1,0 +1,3 @@
+@CHARSET "UTF-8";
+/*辅助空白组件*/
+.draggable-element>div.auxiliary-blank .preview{padding:0;}

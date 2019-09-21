@@ -1,0 +1,206 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+.chart-main{
+
+    height:450px;
+    width:100%
+}
+.chart-item{
+
+}
+.daterange-input{
+    position:absolute;
+    top:20px;
+    left:20px;
+    width:200px;
+    z-index:10;
+}
+.chart-content{
+    position:relative;
+}
+</style>
+{/block}
+{block name="main"}
+
+<div class="layui-card">
+    <div class="layui-card-header">统计</div>
+    <div class="layui-card-body">
+        <div class="layui-tab layui-tab-brief" lay-filter="chart_tab">
+            <ul class="layui-tab-title nc-align-center">
+                <li class="chart-tab-item layui-this" data-type="ALL">全站统计</li>
+                <li class="chart-tab-item"data-type="HOME">后台统计</li>
+                <li class="chart-tab-item"data-type="APP">前台统计</li>
+            </ul>
+            <div class="layui-tab-content chart-content">
+                <div class="layui-input-inline daterange-input-wrap">
+                    <input type="text" class="layui-input daterange-input" id="daterange" placeholder=" - ">
+                </div>
+
+
+                <div class="layui-tab-item chart-item layui-show">
+                    <div id="main_ALL" class="chart-main"></div>
+                </div>
+                <div class="layui-tab-item chart-item">
+                    <div id="main_HOME" class="chart-main"></div>
+                </div>
+                <div class="layui-tab-item chart-item">
+                    <div id="main_APP" class="chart-main"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name='script'}
+<script src="__STATIC__/js/echarts.js"></script>
+<script>
+
+    var chart_ALL;
+    var chart_HOME;
+    var chart_APP;
+    var option_ALL = {};
+    var option_HOME = {};
+    var option_APP = {};
+    var daterange = '{:date("Y-m-01")} - {:date("Y-m-d")}';
+    var chart_array = ["ALL", "HOME", "APP"];
+    layui.use(['element','laydate'], function(){
+        var laydate = layui.laydate;
+        var element = layui.element
+        eachCreateChart();//初始渲染统计图
+        //监听Tab切换，以改变地址hash值
+        element.on('tab(chart_tab)', function(data){
+            renderChart($(this).data("type"));
+        });
+        //日期范围
+        laydate.render({
+            elem: '#daterange'
+            ,format: 'yyyy-MM-dd'
+            ,range: true
+            ,value:daterange //必须遵循format参数设定的格式
+            ,done: function(value, date, endDate){
+                daterange = value;
+                eachUpdateChart();
+            }
+        });
+
+    });
+
+    /**
+     * 循环创建 统计图
+     * */
+    function eachCreateChart(){
+        $.each(chart_array, function(name, value) {
+            createChart(value);
+        });
+    }
+    /**
+     * 循环更新 统计图
+     * */
+    function eachUpdateChart(){
+        $.each(chart_array, function(name, value) {
+            updateChart(value);
+        });
+    }
+
+    /**
+     * 渲染轮播图
+     **/
+    function renderChart(type){
+        var chart_name = 'chart_'+type;
+        if( window[chart_name] == undefined){
+            window[chart_name] = echarts.init(document.getElementById('main_' + type));
+        }
+        var option_name = 'option_'+type;
+
+        window[chart_name].setOption(window[option_name]);
+    }
+    /**
+     * 创建统计图
+     * @param type
+     */
+    function createChart(type){
+
+        var chart_name = 'chart_'+type;
+        var option_name = 'option_'+type;
+        //折线图
+        if($(".chart-tab-item.layui-this").data("type") == type) {
+            window[chart_name] = echarts.init(document.getElementById('main_' + type));
+        }
+        var chart_data = getChartData(type);
+    }
+    /**
+     * 创建统计图
+     * @param type
+     */
+    function updateChart(type){
+        var chart_name = 'chart_'+type;
+        var option_name = 'option_'+type;
+        var chart_data = getChartData(type);
+
+
+    }
+
+    /**
+     * 获取统计数据
+     * @param type
+     */
+    function getChartData(type){
+        var chart_name = 'chart_'+type;
+        var option_name = 'option_'+type;
+        $.ajax({
+            type : "post",
+            url : "{:addon_url('admin/system/getVisitStatisticsData')}",
+            dataType : "JSON",
+            data : {date_type : "daterange", type : type, daterange : daterange },
+            async : false,
+            success : function(res) {
+                chart_data = res.data;
+
+                window[option_name] = {
+                    legend: {
+                        data:['访问次数','访问人数'],
+                        x: 'right',
+                        right: '20',
+                    },
+                    tooltip: {
+                        trigger: 'axis'
+                    },
+                    grid: {
+                        left: '20',
+                        right: '20',
+                        bottom: '20',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: chart_data.date
+                    },
+                    yAxis: {
+                        type: 'value'
+                    },
+                    series: [
+                        {
+                            data: chart_data.data.count_data,
+                            type: 'line',
+                            smooth: true,
+                            stack: '次数',
+                            name: "访问次数"
+                        },
+                        {
+                            data: chart_data.data.ip_count_data,
+                            type: 'line',
+                            smooth: true,
+                            stack: '人数',
+                            name: "访问人数"
+                        }
+                    ]
+                };
+                if($(".chart-tab-item.layui-this").data("type") == type){
+                    window[chart_name].setOption(window[option_name]);
+                }
+            }
+        });
+    }
+</script>
+{/block}

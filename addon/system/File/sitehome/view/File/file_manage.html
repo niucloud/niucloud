@@ -1,0 +1,807 @@
+<style type="text/css">
+.album_content {
+	overflow: hidden;
+	width: 760px;
+	height: 480px;
+}
+
+.category-list {
+	float: left;
+	width: 180px;
+	background: #f2f2f2;
+	height: 400px;
+	overflow-y: auto;
+}
+
+.category-list .category-item {
+	height: 30px;
+	line-height: 30px;
+	position: relative;
+	padding: 0 5px 0 5px;
+	margin-right: 1px;
+	cursor: pointer;
+}
+
+.active {
+	background: #fff
+}
+
+.category-list .category-name {
+	width: 100px;
+	display: inline-block;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.category-list .category-num {
+	position: absolute;
+	top: 0;
+	right: 8px;
+	color: #999;
+}
+
+.attachment-container {
+	float: right;
+	width: 565px;
+}
+
+.img-item {
+	position: relative;
+	float: left;
+	width: 105px;
+	height: 105px;
+	margin-right: 10px;
+	margin-bottom: 30px;
+	cursor: pointer;
+}
+
+.image-box {
+	background: #ccc;
+	width: 105px;
+	height: 105px;
+	text-align: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: 50% 50%;
+}
+
+.image-box-active {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	border: 2px solid #009688;
+	box-sizing: border-box;
+}
+
+.image-box-active:after {
+	position: absolute;
+	display: block;
+	content: " ";
+	right: 0;
+	top: 0;
+	border: 14px solid #009688;
+	border-left-color: transparent;
+	border-bottom-color: transparent;
+	z-index: 1;
+}
+
+.image-box-active i {
+	position: absolute;
+	right: 0;
+	top: 0;
+	font-size: 12px;
+	color: #fff;
+	font-style: normal;
+	font-family: arial;
+	width: 13px;
+	text-align: center;
+	height: 15px;
+	z-index: 2;
+}
+.layui-body {
+	z-index: unset;
+}
+
+.layui-form-item {
+	clear: inherit;
+}
+
+.layui-upload-img {
+	width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.layui-col-md2 {
+	width: auto;
+}
+
+.layui-col-md2:nth-child(5n) .img-item {
+	margin-right: 0;
+}
+
+.layui-col-space1>* {
+	padding: 0;
+}
+
+.img-item .image-meta {
+	position: absolute;
+	width: 105px;
+	height: 25px;
+	font-size: 12px;
+	line-height: 25px;
+	color: #fff;
+	text-align: center;
+	background: rgba(0, 0, 0, .2);
+	bottom: 0;
+}
+
+.upload-dialog-r {
+	display: none;
+	overflow: hidden;
+	height: 600px;
+	padding: 0 20px;
+	position: relative
+}
+
+.upload-dialog-top {
+	padding: 10px 0 15px;
+}
+
+.upload-dialog-serach {
+	float: right;
+	position: relative;
+	width: 250px;
+}
+
+.upload-dialog-icon {
+	position: absolute;
+	z-index: 1;
+	top: 1px;
+	left: 2px;
+}
+
+.upload-dialog-icon .layui-btn {
+	height: 30px;
+	line-height: 30px;
+	padding: 0 10px;
+}
+
+.image-title-wrap {
+	display: flex;
+	height:30px;
+}
+
+.image-title-wrap .image-title {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: right;
+	font-size: 12px;
+	padding-bottom: 1px;
+	white-space: nowrap;
+	line-height:25px;
+}
+
+.image-title-wrap .image-title-ext {
+	font-size: 12px;
+	padding-bottom: 1px;
+	white-space: nowrap;
+	line-height:25px;
+}
+
+.layui-quote-nm {
+	border-width: 1px;
+}
+
+#pagedablum_contain {
+	float: left
+}
+
+.layui-elem-quote {
+	margin-top: 10px;
+	max-height: 300px;
+	overflow: auto;
+}
+
+.attachment-selected {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px solid #07d;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.attachment-selected i {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    color: #fff
+}
+.attachment-selected::after {
+    position: absolute;
+    display: block;
+    content: ' ';
+    right: 0;
+    bottom: 0;
+    border: 14px solid #07d;
+    border-left-color: transparent;
+    border-top-color: transparent;
+    z-index: 1;
+}
+
+.upload-image-item-box{
+	position: relative;
+    float: left;
+    margin: 0 10px 10px 0;
+    width: 80px;
+    height: 80px;
+}
+.upload-image-item{
+	width: 80px;
+    height: 80px;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+.upload-close-modal {
+    display: none;
+    position: absolute;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(0,0,0,.3);
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    line-height: 16px;
+    border-radius: 9px;
+}
+.close-box{
+	cursor: pointer
+}
+.layui-layer-move{
+	z-index:unset
+}
+
+.upload-image-item{
+	position:relative;
+}
+.upload-image-curtain{
+	position:absolute;
+	width:80px;
+	height:80px;
+	line-height:80px;
+	background-color:rgba(0,0,0,0.5);
+	text-align:center;
+	color:#FFF;
+	display:none;
+}
+</style>
+<span onclick="uploadAlbum{$name}(this)">{$title}</span>
+<div>
+	<script id="album_file{$name}" type="text/html">
+	{{#  layui.each(d.list, function(index, item){ }}
+
+ 			<div class="layui-col-md2">
+                <div class="grid-demo">
+                <div class="img-item">
+                <div class="image-box" style="background-image:url({{ nc.img(item.path) }})">
+                <input type="hidden" class="img-path" value="{{ item.path }}"/>
+                <input type="hidden" class="img-id" value="{{ item.id }}"/>
+                <input type="hidden" class="img-file-name" value="{{ item.file_name }}"/>
+                <input type="hidden" class="img-file-ext" value="{{ item.file_ext }}"/>
+                <input type="hidden" class="img-pic-spec" value="{{ item.pic_spec }}"/>
+                <input type="hidden" class="img-big-pic-path" value="{{ item.big_pic_path }}"/>
+                <input type="hidden" class="img-big-pic-spec" value="{{ item.big_pic_spec }}"/>
+                <input type="hidden" class="img-mid-pic-path" value="{{ item.mid_pic_path }}"/>
+                <input type="hidden" class="img-mid-pic-spec" value="{{ item.mid_pic_spec }}"/>
+                <input type="hidden" class="img-small-pic-path" value="{{ item.small_pic_path }}"/>
+                <input type="hidden" class="img-small-pic-spec" value="{{ item.small_pic_spec }}"/>
+                <input type="hidden" class="img-thumb-pic-path" value="{{ item.thumb_pic_path }}"/>
+                <input type="hidden" class="img-thumb-pic-spec" value="{{ item.thumb_pic_spec }}"/>
+                <input type="hidden" class="img-size" value="{{ item.size }}"/>
+                </div>
+
+                {{#  if( getActiveArrayIndex(item.id) != "-1"){ }}
+                <div class="image-box-active"><i class="active-index">{{ getActiveArrayIndex(item.id) }}</i></div>
+                {{#  } }}
+
+                <div class="image-meta">{{ item.pic_spec }}</div>
+                <div class="image-title-wrap" title="">
+                <p class="image-title">{{ item.file_name }}</p>
+                <p class="image-title-ext">{{ item.file_ext }}</p>
+                </div>
+                </div>
+                </div>
+          </div>
+
+	{{#  }); }}
+	{{#  if(d.list.length === 0){ }}
+	<br/><span style='width:10%;height:30px;display:block;margin:0 auto;'>暂无数据</span>
+	{{#  } }}
+	</script>
+	
+	<script id="category{$name}" type="text/html">
+
+	{{#  layui.each(d, function(index, item){ }}
+	    {{# if(d.category_id > 0){ }}
+			{{#  if(item['id'] == d.category_id){ }}
+				<div class="category-item active">
+			{{# } else { }}
+				<div class="category-item">
+			{{#  } }}
+		{{# } else { }}
+			{{# if(index == 0){ }}
+				<div class="category-item active">
+			{{# } else { }}
+				<div class="category-item">
+			{{#  } }}
+		{{#  } }}
+			<span class="category-name">{{ item['name'] }}</span>
+			<span class="category-num">{{ item['num'] }}</span>
+			<input type="hidden" value="{{ item['id'] }}" class="category-id" />
+		</div>
+
+	{{#  }); }}
+
+	</script>
+
+</div>
+
+<div class="upload-dialog-r" id="album{$name}">
+	<div class="upload-dialog-top">
+		<button class="layui-btn layui-btn-sm" onclick="upload{$name}()"  type="button">上传图片</button>
+
+		<div class="upload-dialog-serach">
+			<div class="upload-dialog-icon">
+				<button class="layui-btn layui-btn-primary layui-btn-sm" style="border: none">
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+			<input type="text" class="layui-input" style="padding: 0 40px;">
+		</div>
+
+	</div>
+
+	<div class="album_content">
+		<div class="category-list" id="t_category{$name}"></div>
+		<div class="attachment-container">
+			<div class="layui-row layui-col-space1" id="t_customerInfo{$name}"></div>
+			<div id="paged{$name}" class="page"></div>
+		</div>
+	</div>
+
+	<div style="text-align: center;">
+		<button type="button" class="layui-btn layui-btn-primary" onclick="ablumBtnOk()">确定</button>
+	</div>
+</div>
+
+<!-- 多图上传开始 -->
+<div class="layui-form" id="uploadImage{$name}" style="display: none; margin-top: 15px;">
+	<div class="layui-form-item">
+		<label class="layui-form-label">网络图片</label>
+		<div class="layui-input-inline">
+			<input type="text" name="fetch_image_path"  autocomplete="off" placeholder="请添加网络图片地址" class="layui-input">
+		</div>
+		<button type="button" class="layui-btn layui-btn-primary"  onclick="fetchPubImg();">提取</button>
+	</div>
+
+	<div class="layui-form-item" style="overflow: hidden; height: 465px;">
+		<label class="layui-form-label">本地图片</label>
+		<div class="layui-input-inline">
+			<button type="button" class="layui-btn layui-btn-normal" id="chooseList{$name}">选择多文件</button>
+			<blockquote class="layui-elem-quote layui-quote-nm">
+				预览图：
+				<ul class="layui-upload-list" id="previewList{$name}">
+				</ul>
+			</blockquote>
+			<p class="layui-input-block" style="margin-left:0">仅支持 gif、 jpeg、 png、 bmp 4种格式,大小不超过3.0 MB</p>
+		</div>
+	</div>
+	<div style="text-align: center;">
+		<button type="button" class="layui-btn layui-btn-disabled" id="Action{$name}"" disabled="disabled" style="background:#FBFBFB">确定</button>
+	</div>
+</div>
+<!-- 多图上传结束 -->
+
+<script>
+var upload_type = '{$type}';
+var size = '{$size}';
+var index;
+var active_array = new Array();
+var upload_index;
+var limit = 15;
+var uploadListIns;
+var default_event = '';
+layui.use([ 'form', 'laypage', 'laytpl' ], function() {
+    var laytpl = layui.laytpl;
+    var form = layui.form;
+    var laypage = layui.laypage;
+
+	//分组绑定事件
+    $('body').on("click", ".category-item", function() {
+        $(this).siblings().removeClass('active');
+        $(this).addClass('active');
+
+        getFileAlbumList(1, limit);
+        checkImages(); //选择图片
+    });
+    
+    //获取相册分组
+    function getFileCategory(){
+        $.ajax({
+            type : "post",
+            url : '{:addon_url("File://sitehome/File/getFileCategory")}',
+            data : {
+                type : "IMAGE"
+            },
+            async : false,
+            dataType : "JSON",
+            success : function(data) {
+                var category_tpl = $("#category{$name}").html();
+                if($("#t_category{$name} .active .category-id").length > 0){
+                    data.data.category_id = $(".active .category-id").val();
+				}else{
+                    data.data.category_id = 0;
+				}
+                laytpl(category_tpl).render(data.data, function(html){
+                    $("#t_category{$name}").html(html);
+                });
+            }
+        });
+    }
+
+    getFileCategory();//分组
+    getFileAlbumList(1, limit); //分组文件
+    checkImages(); //选择图片
+    
+    //获取相册数据
+    function getFileAlbumList(page, limit){
+        var category_id = $(".active .category-id").val();
+        $.ajax({
+            type : "get",
+            url : '{:addon_url("File://sitehome/File/fileManage")}',
+            data : {
+                page : page,
+                limit : limit,
+                type : 'IMAGE',
+                category_id : category_id
+            },
+            dataType : "JSON",
+            async : false,
+            success : function(data) {
+                //渲染相册
+                var album_tpl = $("#album_file{$name}").html();
+                laytpl(album_tpl).render(data.data, function(html){
+                    $("#t_customerInfo{$name}").html(html);
+                });
+                //调用分页
+                laypage.render({
+                    elem : 'paged{$name}',
+                    count : data.data.count,
+                    curr: page, //当前页
+                    layout: nc.get_page_param(),
+                    prev: '<i class="layui-icon layui-icon-left"></i>',
+                    next: '<i class="layui-icon layui-icon-right"></i>',
+                    limit : limit,
+                    hash : 'page',
+                    jump : function(obj, first) {
+                        if (!first) { //一定要加此判断，否则初始时会无限刷新
+                            getFileAlbumList(obj.curr, obj.limit);//一定要把翻页的ajax请求放到这里，不然会请求两次。
+                        }
+                        form.render('checkbox');
+                    }
+                });
+            }
+        });
+    }
+    
+    //删除选中
+    function getDelateActiveArrayIndex(id){
+    	var delete_index;
+    	$.each(active_array,function(i,item){
+    		if(item.id == id){
+    			delete_index = item.index;
+    			active_array.splice(i, 1);
+    			return false;
+    		}
+    	});
+    	return delete_index;
+    }
+    
+    //重新排序
+    function sortActiveArrayIndex(index){
+    	$.each(active_array,function(i,item){
+    		var item_index = item.index;
+    		if(item_index > index){
+				
+    			active_array[i]["index"] = item_index-1;
+    			if($("#album{$name}").find(".img-id[value = '"+ item["id"] +"']").length > 0){
+    				$("#album{$name}").find(".img-id[value = '"+ item["id"] +"']").parent().parent().find(".image-box-active i ").text(item["index"]);
+    			}
+    		}
+    	})
+    }
+    
+ 	//选择图片
+   	function checkImages(){
+   	 	 $("#album{$name}").unbind('click').on("click",".layui-col-md2",function(){
+	  		 var id = $(this).find(".img-id").val();
+	    	 var path = $(this).find(".img-path").val();
+	         var file_name = $(this).find(".img-file-name").val();
+	         var file_ext = $(this).find(".img-file-ext").val();
+	         var pic_spec = $(this).find(".img-pic-spec").val();
+	         var big_pic_path = $(this).find(".img-big-pic-path").val();
+	         var big_pic_spec = $(this).find(".img-big-pic-spec").val();
+	         var mid_pic_path = $(this).find(".img-mid-pic-path").val();
+	         var mid_pic_spec = $(this).find(".img-mid-pic-spec").val();
+	         var small_pic_path = $(this).find(".img-small-pic-path").val();
+	         var small_pic_spec = $(this).find(".img-small-pic-spec").val();
+	         var thumb_pic_path = $(this).find(".img-thumb-pic-path").val();
+	         var thumb_pic_spec = $(this).find(".img-thumb-pic-spec").val();
+	         var img_size = $(this).find(".img-size").val();
+	    	 if(upload_type == 'single'){
+	    		 $(this).find(".image-box-active").remove();
+	    		 if(parseInt(img_size) > parseInt(size)){
+	    			 layer.msg('图片不能大于'+size+'kb');
+	    			 return false;
+	    		 }
+	    		 
+		    	 if($(this).find(".attachment-selected").length > 0){
+		    		  $(this).find(".attachment-selected").remove();
+		    		  active_array[0] = '';
+		    	 }else{
+		    		 var active_html = '<div class="attachment-selected"><i class="layui-icon">&#xe605;</i></div>';
+		    		 $('.layui-col-md2').find(".img-item").find('.attachment-selected').remove();
+	    			 $(this).find(".img-item").append(active_html);
+	   				 active_array[0] = {"id":parseInt(id),"index" : active_array.length+1, "path" : path,"file_name": file_name, "file_ext": file_ext,"pic_spec": pic_spec,"big_pic_path": big_pic_path,"big_pic_spec": big_pic_spec,"mid_pic_path": mid_pic_path,"mid_pic_spec": mid_pic_spec,"small_pic_path": small_pic_path,"small_pic_spec": small_pic_spec,"thumb_pic_path": thumb_pic_path,"thumb_pic_spec": thumb_pic_spec};
+		    	 }
+	    	 }else{
+	    		 $(this).find('.attachment-selected').remove();
+		    	 if($(this).find(".image-box-active").length > 0){
+		    		 var active_index = getDelateActiveArrayIndex(id);
+		    		 sortActiveArrayIndex(active_index);
+			         $(this).find(".image-box-active").remove();
+		    	 }else{
+		    		 active_array.push({"id":parseInt(id),"index" : active_array.length+1, "path" : path,"file_name": file_name, "file_ext": file_ext,"pic_spec": pic_spec,"big_pic_path": big_pic_path,"big_pic_spec": big_pic_spec,"mid_pic_path": mid_pic_path,"mid_pic_spec": mid_pic_spec,"small_pic_path": small_pic_path,"small_pic_spec": small_pic_spec,"thumb_pic_path": thumb_pic_path,"thumb_pic_spec": thumb_pic_spec});
+		    		 var active_html = '<div class="image-box-active"><i class="active-index">'+active_array.length+'</i></div>';
+		    		 $(this).find(".img-item").append(active_html);
+		    	 }
+	    	 }
+
+	      });
+       
+   	}
+    
+    //上传方法
+   	layui.use('upload', function(){
+		var upload = layui.upload;
+   		//多图片上传
+   		var previewListView = $('#previewList{$name}');
+  		  	uploadListIns = upload.render({
+	  		    elem: '#chooseList{$name}',
+	  		    url: '{:addon_url("File://common/File/imageToAlbum")}',
+	  		    accept: 'file',
+	  		    multiple: true,
+	  		    method: 'post',
+	  		    data: {category_id:function(){return $(".active>.category-id").val();}},
+	  		    auto: false,
+	  		    bindAction: '#Action{$name}',
+	  		    choose: function(obj){
+	  		        //将每次选择的文件追加到文件队列
+	  		        var files= this.files = obj.pushFile();
+	  		    	
+					//预读本地文件示例，不支持ie8
+					obj.preview(function(index, file, result){
+						 var s = '';
+						 s += '<li class="upload-image-item-box"  index="'+ index +'">';
+						 s += '<div class="upload-image-item"  alt="'+ file.name +'" style="background-image:url('+ result +')">';
+					     s += '<div class="upload-image-curtain">50%</div>';
+						 s += '<span class="upload-close-modal" id="upload_img_'+index+'">×</span>';
+						 s += '</div>';
+						 s += '</li>';
+					     $('#previewList{$name}').append(s);
+					     
+					     //删除列表中对应的文件，一般在某个事件中使用
+					     $("#upload_img_"+index).bind('click',function(){
+                             delete files[index];
+                             $(this).parent().parent('.upload-image-item-box').remove();
+                             uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                             
+    					     //禁用按钮
+    					     if($("#previewList{$name} li").length < 1){
+    					      	$('#Action{$name}').addClass('layui-btn-disabled').removeClass('layui-btn-primary');
+    					      	$('#Action{$name}').attr("disabled","disabled");
+    					     }
+    					     
+                         });
+					     
+					    //禁用按钮
+					     if($("#previewList{$name} li").length > 0){
+					      	$('#Action{$name}').removeClass('layui-btn-disabled').addClass('layui-btn-primary');
+					      	$('#Action{$name}').removeAttr("disabled");
+					     }
+					   
+					});
+					
+	  		    },
+
+	  	        done: function(res, index, upload){
+	  	            var image_box = $(".upload-image-item-box[index='"+ index +"']").find(".upload-image-item .upload-image-curtain");
+	  	            image_box.text("50%");
+	  	            image_box.show();
+	  	            if(res.code == 0){
+	  	                setTimeout(function(){image_box.text("100%");},500);
+	  	                return delete this.files[index]; //删除文件队列已经上传成功的文件
+	  	            }else{
+	  	                setTimeout(function(){image_box.text("上传失败");},500);
+	  	            }
+	  	        },
+	  	        allDone: function(obj){ //当文件全部被提交后，才触发
+	  	            getFileCategory();//分组
+	  	            getFileAlbumList(1, 15); //分组文件
+	  	            if(obj.total == obj.successful){
+	  	                setTimeout(function(){
+	  	                    layer.close(upload_index);
+	  	                    $('#previewList{$name}').find('.upload-image-item-box').remove();
+	  	                    btnDisable();
+	  					    clear_files();
+	  					    clear_check();
+	  					},1000);
+
+	  	            }
+	  	        },
+	  		    error: function(index, upload){
+
+	  		    }
+			});
+   
+	});
+
+    //预览删除显示隐藏
+    $('body').on("mouseover", ".upload-image-item", function() {
+    	 $(this).children('.upload-close-modal').css('display','block');
+    });
+    $('body').on("mouseout", ".upload-image-item", function() {
+	  	 $(this).children('.upload-close-modal').css('display','none');
+	});
+ 
+});
+    //上传
+    function uploadAlbum{$name}(event, type=''){
+    	default_event = event;
+
+    	index = layer.open({
+			type: 1,
+			area: ['800px'], //宽高
+			title: "我的图片",
+			content:  $('#album{$name}'),
+			cancel: function(){
+				//右上角关闭回调
+				btnDisable();
+				clear_files();
+				clear_check();
+				//return false 开启该代码可禁止点击该按钮关闭
+			},
+		      success: function(layero, index){
+				  var mask = $(".layui-layer-shade");
+				     mask.appendTo(layero.parent());
+			  }
+    	});
+    }
+
+    // 保存选中的图片 回调
+    function ablumBtnOk(){
+    	try{
+    		ablumUploadSuccess(active_array, "{$name}",default_event);
+    		loadImgMagnify();
+		}catch(e){
+			console.error("缺少回调函数ablumUploadSuccess()");
+		}
+		clear_check();
+        layer.close(index);
+    }
+
+    //多图上传图片
+	function upload{$name}(){
+		upload_index = layer.open({
+			type: 1,
+			area: ['800px'], //宽高
+			title: "<span><a class='close-box'><i class='layui-icon'>&#xe603;</i>我的图片/</a>本地上传</span>",
+			content:  $('#uploadImage{$name}'),
+			cancel: function(){
+			  //右上角关闭回调
+			  btnDisable();
+			  clear_files();
+			  //return false 开启该代码可禁止点击该按钮关闭
+			},
+		      success: function(layero, index){
+				  var mask = $(".layui-layer-shade");
+				     mask.appendTo(layero.parent());
+			  }
+		});
+	
+	}
+	//获取选中
+    function getActiveArrayIndex(id){
+    	var delete_index = -1;
+    	$.each(active_array,function(i,item){
+    		if(item.id == id){
+    			delete_index = item.index;
+    			return false;
+    		}
+    	});
+    	return delete_index;
+    }
+    
+    $("body").on("click", ".close-box", function(){
+    	 btnDisable();
+   	     clear_files();
+		 layer.close(upload_index);
+	});
+	
+/**
+ * 网络图盘提取
+ */
+function  fetchPubImg(){
+    var fetch_image_path = $("input[name=fetch_image_path]").val();
+    var category_id = $(".active .category-id").val();
+    $.ajax({
+        type : "post",
+        async : false,
+        url : '{:addon_url("File://common/File/fetchPubImgToAlbum")}',
+        data : {
+            fetch_image_path : fetch_image_path,
+            category_id : category_id
+        },
+        dataType : "JSON",
+        success : function(data) {
+        	if(data['code'] != 0){
+        		layer.msg(data['message']);
+        		return false;
+        	}else{
+        		try{
+        			ablumUploadSuccess(data,"{$name}");
+					loadImgMagnify();
+        		}catch(e){
+        			console.error("缺少回调函数ablumUploadSuccess()");
+        		}
+        		layer.close(upload_index);
+        	}
+        }
+    });
+
+}
+ 
+//按钮禁用
+function btnDisable(){
+      $('#previewList{$name}').find('.upload-image-item-box').remove();
+	  $('#Action{$name}').addClass('layui-btn-disabled').removeClass('layui-btn-primary');
+      $('#Action{$name}').attr("disabled","disabled");
+}
+
+//清除files数据
+function clear_files(){
+	for(i in uploadListIns.config.files){
+		delete uploadListIns.config.files[i];
+	}
+	uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+}
+
+//清除选中
+function clear_check(){
+	$('.attachment-container .img-item').find(".image-box-active").remove();
+	$('.attachment-container .img-item').find(".attachment-selected").remove();
+	active_array = [];
+}
+</script>

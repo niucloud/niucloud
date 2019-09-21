@@ -1,0 +1,178 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_WECHAT_CSS/wx_leavemsg.css">
+<style>
+	.layui-table, .layui-table-view {margin: 0;}
+	.layui-table-body {overflow: visible;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-tab nui-tab">
+	<ul class="layui-tab-title" style="display:none">
+
+		<li {if  $is_starred_msg eq 0} class='layui-this'{/if}>
+			<a href='{:addon_url("Wechat://sitehome/leavemsg/index")}'>全部</a>
+		</li>
+		<!--<li {if  $is_starred_msg eq 1} class='layui-this' {/if}>-->
+			<!--<a href='{:addon_url("Wechat://sitehome/leavemsg/index?is_starred_msg=1")}'>已收藏的消息</a>-->
+		<!--</li>-->
+	</ul>
+    <div class="nc-function-search">
+        {if  $is_starred_msg eq 0}
+        <!-- 搜索框   -->
+        <div class='layui-form'>
+            {if  $is_starred_msg eq 0}
+            <div class="layui-input-inline" style="display:none">
+                <select name="sort">
+                    <option value="0">时间排序</option>
+                    <!--<option value="1">赞赏总额排序</option>-->
+                </select>
+            </div>
+            <div class="layui-input-inline nc-len-small">
+                <select name="date">
+                    <option value="0">全部</option>
+                    <option value="1">最近五天</option>
+                    <option value="2">今天</option>
+                    <option value="3">昨天</option>
+                    <option value="4">前天</option>
+                </select>
+            </div>
+            {/if}
+            <!--<div class="layui-input-inline">-->
+            <!--<input type="text" name="mobile" autocomplete="off" placeholder="消息内容" class="layui-input">-->
+            <!--</div>-->
+
+            <button class="layui-btn layui-btn-primary" lay-submit lay-filter='search'>搜索</button>
+        </div>
+        {/if}
+    </div>
+	
+	<div class="nc-table-box">
+        <table class="layui-table" style="margin:0">
+            <thead>
+            <tr style="display:block">
+                <th style="width:1000px">用户</th>
+                <th style="width:255px">创建时间</th>
+                <th style="width:250px">状态</th>
+                <th style="width:120px; text-align:right;">操作</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+	<table id="leavemsg_list" lay-filter="leavemsg"></table>
+</div>
+
+<script type="text/html" id="message_info">
+
+	<div class="message_list">
+		<div class = "layui-row message_box">
+			<div class = "layui-row layui-col-md7 user_info">
+				<a class = "avatar">
+					<img src = "{{ d.value.wx_headimg_url }}"/>
+				</a>
+				<div class = "message_info">
+					<div class="nick_name">{{ d.value.nick_name }}</div>
+					<div class = "message_content">{{ d.value.content }}</div>
+				</div>
+			</div>
+			<div class = "layui-col-md2 message_time">{{ nc.time_to_date(d.value.date_time) }}</div>
+			<div class = "layui-col-md2 message_status">
+				{{#  if(d.value.msg_status === 1){ }}
+				<span style="color: #e15f63;">已回复</span>
+				{{# }else{ }}
+				<span>&nbsp;<span>
+  		        {{#  } }}
+			</div>
+			<div class = "layui-col-md1 message_opr">
+				<a href="javascript:;" title="收藏消息" lay-event="star">
+					{{#  if(d.value.is_starred_msg === 0){ }}
+					<i class="layui-icon layui-icon-rate-solid" style="font-size: 18px; color: #c2c2c2;"></i>
+					{{# }else{ }}
+					<i class="layui-icon layui-icon-rate-solid" style="font-size: 18px; color: #FFB800;"></i>
+					{{#  } }}
+				</a>
+				<a href="javascript:;"  title="快捷回复" lay-event="reply">
+					<i class="layui-icon layui-icon-reply-fill" style="font-size: 18px; color: #c2c2c2;"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="reply-box" id="reply_box_{{ d.id }}">
+			<textarea id="reply_editor_{{ d.id }}"></textarea>
+			<div class = "reply-button">
+				<button class="layui-btn" lay-event="send">发送（enter）</button>
+				<button class="layui-btn layui-btn-primary" lay-event="pickup">收起</button>
+			</div>
+		</div>
+</script>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+var layedit;
+layui.use(['layedit', 'form'], function(){
+	layedit = layui.layedit, form = layui.form;
+	form.on('submit(search)', function(data){
+		var field = data.field;
+		//重载表格
+		table.reload({
+			where: field,
+			page: {
+				curr : 1
+			}
+		});
+	});
+});
+
+var table = new Table({
+	elem : '#leavemsg_list',
+	filter : "leavemsg",
+	url : "{:addon_url('Wechat://sitehome/Leavemsg/index')}",
+	cols: [
+		[ {
+			field: '',
+			toolbar : '#message_info'
+		}]
+	],
+	skin: 'nob'
+});
+
+//监听工具条
+table.tool(function(obj) {
+	var data = obj.data;
+	switch (obj.event) {
+		case "reply":
+			$(this).attr("lay-event", "reply_pickip");
+			$("#reply_box_" + data.id).show();
+			layedit.build('reply_editor_' + data.id, {
+				height: 180, //设置编辑器高度
+				tool: ['face']
+			});
+			break;
+		case "reply_pickip":
+			$(this).attr("lay-event", "reply");
+			$("#reply_box_" + data.id).hide();
+			break;
+		case "pickup":
+			$("#reply_box_" + data.id).hide();
+			break;
+		case "send":
+			sendMessage(data.id, data.to_uin);
+			break;
+	}
+});
+
+//发送回复消息
+function sendMessage(id, open_id){
+	var message = $("#reply_editor_"+id).val();
+	$.ajax({
+		type : "post",
+		url : "{:addon_url('Wechat://sitehome/Leavemsg/sendWechatCustomservicesMessage')}",
+		data : {"open_id " : open_id, "message" : message},
+		dataType : "JSON",
+		success : function(res){
+			layer.msg(res.message,{},function(){ if(res.code == 0){table.reload(); }});
+		}
+	});
+}
+</script>
+{/block}

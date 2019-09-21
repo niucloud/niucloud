@@ -1,0 +1,561 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_NS_MEMBER_CSS/member_detail.css">
+{/block}
+
+{block name="main"}
+
+<div class="details-wrap basic-info">
+	<div class="headframe">
+		{notempty name="$info['headimg']"}
+		<img src="{:img($info['headimg'])}" alt="">
+		{else/}
+		<img src="ADDON_NS_MEMBER_IMG/default_user.png" alt="会员头像">
+		{/notempty}
+	</div>
+	<ul class="customer-info">
+		<li>
+			<div>
+				<span class="customer-info-title">用户名：</span>
+				<span class="customer-info-content">{$info.username}</span>
+			</div>
+		</li>
+		<li>
+			<div>
+				<span class="customer-info-title">昵称：</span> 
+				<span class="customer-info-content">{notempty name="$info['nick_name']"}{$info.nick_name}{else/}未知{/notempty}</span>
+			</div>
+			<div>
+				<span class="customer-info-title">手机号：</span>
+				<span class="customer-info-content">{notempty name="$info['mobile']"}{$info.mobile}{else/}未知{/notempty}</span>
+			</div>
+			<div>
+				<span class="customer-info-title">邮箱：</span>
+				<span class="customer-info-content">{notempty name="$info['email']"}{$info.email}{else/}无{/notempty}</span>
+			</div>
+		</li>
+		<li>
+			<div>
+				<span class="customer-info-title">真实名称：</span>
+				<span class="customer-info-content">{notempty name="$info['real_name']"}{$info.real_name}{else/}未知{/notempty}</span>
+			</div>
+			<div>
+				<span class="customer-info-title">注册时间：</span>
+				<span class="customer-info-content">{$info.register_time|date="Y-m-d",###}</span>
+			</div>
+			<!--							<div>-->
+			<!--								<span class="customer-info-title">最近浏览：</span>-->
+			<!--								<span class="customer-info-content">未浏览</span>-->
+			<!--							</div>-->
+			<!--							<div>-->
+			<!--								<span class="customer-info-title">收货地址：</span>-->
+			<!--								<span class="customer-info-content">未知</span>-->
+			<!--							</div>-->
+		</li>
+	</ul>
+	<div class="customer-info-edit nc-text-color" onclick="editLayer('editMember', '会员编辑', '450px', 'auto')">基本资料编辑</div>
+</div>
+<div class="layui-tab nc-table-box" lay-filter="member_detail_tab">
+	<ul class="layui-tab-title">
+		<li lay-id="basic_info">基础信息</li>
+		<li lay-id="account_info" onclick="javascript: location.reload();">账户信息</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item">
+			<div class="details-wrap basic-info">
+				<ul class="customer-info menber-info">
+					<li>
+						<div>
+							<span class="customer-info-title">性别：</span>
+							<span class="customer-info-content">
+							{switch name="$info['sex']"}
+								{case value="0"}未知{/case}
+								{case value="1"}男{/case}
+								{case value="2"}女{/case}
+							{/switch}
+							</span>
+						</div>
+						<div>
+							<span class="customer-info-title">生日：</span>
+							<span class="customer-info-content">{if $info['birthdayyear'] && $info['birthdaymonth'] && $info['birthday']}{$info['birthdayyear']}-{$info['birthdaymonth']}-{$info['birthday']}{/if}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">生肖：</span>
+							<span class="customer-info-content">{notempty name="$info['zodiac']"}{$info.zodiac}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">星座：</span>
+							<span class="customer-info-content">{notempty name="$info['constellation']"}{$info.constellation}{else/}无{/notempty}</span>
+						</div>
+					</li>
+					<li>
+						<div>
+							<span class="customer-info-title">支付宝账号：</span>
+							<span class="customer-info-content">{notempty name="$info['alipay_no']"}{$info.alipay_no}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">QQ号：</span>
+							<span class="customer-info-content">{notempty name="$info['qq']"}{$info.qq}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">msn编号：</span>
+							<span class="customer-info-content">{notempty name="$info['msn_no']"}{$info.msn_no}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">淘宝账号：</span>
+							<span class="customer-info-content">{notempty name="$info['taobao_no']"}{$info.taobao_no}{else/}无{/notempty}</span>
+						</div>
+					</li>
+					<li>
+						<div>
+							<span class="customer-info-title">微信号：</span>
+							<span class="customer-info-content">{notempty name="$info['weixin_no']"}{$info.weixin_no}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">地区：</span>
+							<span class="customer-info-content">{notempty name="$info['full_address']"}{$info.full_address}{/notempty}</span>
+						</div>
+					</li>
+				</ul>
+				<div class="customer-info-edit nc-text-color" onclick="editLayer('baseInfo', '编辑会员资料', '850px', 'auto')">会员资料编辑</div>
+			</div>
+			<div class="details-wrap basic-info label-info">
+				<ul class="customer-info menber-info">
+					{notempty name="$info.member_label_list"}
+					<li class="label-list">
+						{foreach name="$info.member_label_list" item="vo"}
+						<div>
+							<button class="layui-btn layui-btn-primary">{$vo.label_name}</button>
+						</div>
+						{/foreach}
+					</li>
+					{else/}
+					<p class="label-empty">暂无标签</p>
+					{/notempty}
+				</ul>
+				<div class="customer-info-edit nc-text-color" onclick="editLayer('memberLabel', '编辑会员标签', '450px', 'auto')">会员标签编辑</div>
+			</div>
+			
+			<div class="details-wrap basic-info">
+				<ul class="customer-info menber-info">
+					<li>
+						<div>
+							<span class="customer-info-title">会员组：</span>
+							<span class="customer-info-content">{notempty name="$info.member_group_name"}{$info.member_group_name}{else/}暂无会员组{/notempty}</span>
+						</div>
+					</li>
+				</ul>
+				<div class="customer-info-edit nc-text-color" onclick="editLayer('memberGroup', '编辑会员组', '450px', 'auto')">会员组编辑</div>
+			</div>
+			<div class="details-wrap basic-info">
+				<ul class="customer-info menber-info">
+					<li>
+						<div>
+							<span class="customer-info-title">学历：</span>
+							<span class="customer-info-content">{notempty name="$info['education']"}{$info.education}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">学号：</span>
+							<span class="customer-info-content">{notempty name="$info['student_no']"}{$info.student_no}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">班级：</span>
+							<span class="customer-info-content">{notempty name="$info['grade']"}{$info.grade}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">院校：</span>
+							<span class="customer-info-content">{notempty name="$info['graduateschool']"}{$info.graduateschool}{else/}无{/notempty}</span>
+						</div>
+					</li>
+				</ul>
+				<div class="customer-info-edit nc-text-color" onclick="editLayer('educationInfo', '编辑教育状况', '450px', 'auto')">教育状况编辑</div>
+			</div>
+			<div class="details-wrap basic-info">
+				<ul class="customer-info menber-info">
+					<li>
+						<div>
+							<span class="customer-info-title">公司：</span>
+							<span class="customer-info-content">{notempty name="$info['company']"}{$info.company}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">职业：</span>
+							<span class="customer-info-content">{notempty name="$info['occupation']"}{$info.occupation}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">职位：</span>
+							<span class="customer-info-content">{notempty name="$info['position']"}{$info.position}{else/}无{/notempty}</span>
+						</div>
+						<div>
+							<span class="customer-info-title">收入：</span>
+							<span class="customer-info-content">{notempty name="$info['revenue']"}{$info.revenue}{else/}无{/notempty}</span>
+						</div>
+					</li>
+				</ul>
+				<div class="customer-info-edit nc-text-color" onclick="editLayer('workInfo', '编辑工作状况', '450px', 'auto')">工作状况编辑</div>
+			</div>
+		</div>
+		<div class="layui-tab-item">
+			
+			<div class="nc-quote-box">
+				<div class="layui-form">
+					<div class="layui-form-item">
+						<div class="layui-input-inline nc-input-span">
+							<div class="nc-input-text">
+							{foreach name="$account_config_info" item="vo"}
+							{if condition="$vo['is_use'] eq 1"}
+							<span class="member-list-content">{$vo['name']}：{$info[$vo['key']]}</span>
+							{/if}
+							{/foreach}
+							</div>
+							<button class='layui-btn' lay-submit lay-filter="setAccount">调整</button>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<label class="layui-form-label sm">类型</label>
+						<div class="layui-input-inline nc-len-tiny">
+							<select name="account_type">
+								<option value="">全部</option>
+								{foreach $account_config_info as $k => $v}
+								{if $v['is_use'] == 1}
+								<option value="{$v['key']}">{$v['name']}</option>
+								{/if}
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label sm">时间</label>
+						<div class="layui-inline">
+							<div class="layui-input-inline daterange-input-wrap">
+								<input type="text" class="layui-input daterange-input nc-len-slightly" id="daterange" placeholder=" - ">
+							</div>
+							<button class="layui-btn layui-btn-primary date-picker-btn" onclick="datePick(7, this);">近7天</button>
+							<button class="layui-btn layui-btn-primary date-picker-btn" onclick="datePick(30, this);">近30天</button>
+						</div>
+					</div>
+					<div class="nc-form-row sm">
+						<button class='layui-btn' lay-submit lay-filter="searchForm">筛选</button>
+					</div>
+				</div>
+			</div>
+			<div class="member-table-box">
+				<table id="member_account" lay-filter="member_account"></table>
+			</div>
+			<script type="text/html" id="create_time">
+				<span>{{nc.time_to_date(d.create_time)}}</span>
+			</script>
+			<script type="text/html" id="account_data">
+				{{# if(parseFloat(d.account_data)>0){ }}
+				<span style="color:#4CAF50;">+{{d.account_data}}</span>
+				{{# }else{ }}
+				<span style="color:#F44336;">{{d.account_data}}</span>
+				{{# } }}
+			</script>
+			
+			<script type="text/html" id="account_html">
+				
+				<div class="layui-form" lay-filter="form" id="account_info">
+					
+					{foreach name="$account_config_info" item="vo"}
+					{if condition="$vo['is_use'] eq 1"}
+					<div class="layui-form-wrap">
+						<blockquote class="layui-elem-quote layui-quote-nm">{$vo['name']}</blockquote>
+						<div class="layui-form-item">
+							<label class="layui-form-label sm">当前{$vo['name']}</label>
+							<div class="layui-input-inline">
+								<span class="nc-input-text">{{ d['{$vo["key"]}'] }}</span>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label sm">调整数额</label>
+							<div class="layui-input-block">
+								<input type="number" data-num="{{ d['{$vo.key}'] }}" name="account[{$vo.key}]" id="{$vo.key}" placeholder="0"  lay-verify="account_number" autocomplete="off" class="layui-input nc-len-mid" min="-10000000" max="10000000">
+							</div>
+							<div class="layui-form-mid layui-word-aux">输入负号表示减少</div>
+						</div>
+					</div>
+					{/if}
+					{/foreach}
+					
+					<div class="nc-form-row sm">
+						<input type="hidden" value="{{ d.member_id }}" name="member_id"/>
+						<button class="layui-btn" lay-submit lay-filter="formAccount" >保存</button>
+						<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+					</div>
+				
+				</div>
+			</script>
+		
+		</div>
+	</div>
+</div>
+
+<script type="text/html" id="baseInfo">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">性别</label>
+			<div class="layui-input-inline nc-len-mid">
+				<select name="sex">
+					<option value="0" {{ d.sex== 0 ? 'selected' : ''}}>未知</option>
+					<option value="1" {{ d.sex== 1 ? 'selected' : ''}}>男</option>
+					<option value="2" {{ d.sex== 2 ? 'selected' : ''}}>女</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">生日</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="birthday" class="layui-input" id="birthday">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">所在地</label>
+			<div class="layui-input-inline area">
+				<select name="province" lay-filter="province">
+					<option value="0">请选择省</option>
+				</select>
+			</div>
+			<div class="layui-input-inline area">
+				<select name="city" lay-filter="city">
+					<option value="0">请选择市</option>
+				</select>
+			</div>
+			<div class="layui-input-inline area">
+				<select name="district" lay-filter="district">
+					<option value="0">请选择区县</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">详细地址</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="address" class="layui-input" value="{{d.address}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮编</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="zipcode" class="layui-input" value="{{d.zipcode}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="weixin_no" class="layui-input" value="{{d.weixin_no}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">支付宝账号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="alipay_no" class="layui-input" value="{{d.alipay_no}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">QQ号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="qq" class="layui-input" value="{{d.qq}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">msn编号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="msn_no" class="layui-input" value="{{d.msn_no}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">淘宝账号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="taobao_no" class="layui-input" value="{{d.taobao_no}}">
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="editMemberInfoSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+
+<script type="text/html" id="memberLabel">
+	<div class="layui-form" lay-filter="memberLabel">
+		<div class="layui-form-item">
+			<label class="layui-form-label">会员标签</label>
+			<div class="layui-input-inline nc-len-mid">
+				<select name="member_label" multiple>
+					<option value=""></option>
+					{notempty name="$label_list"}
+					{foreach name="$label_list" item="vo"}
+					<option value="{$vo.label_id}" {{ $.inArray('{$vo.label_id}', d.label_id_arr) >=0 ? 'selected' : '' }}>{$vo.label_name}</option>
+					{/foreach}
+					{/notempty}
+				</select>
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="editMemberInfoSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+
+<script type="text/html" id="memberGroup">
+	<div class="layui-form" lay-filter="memberGroup">
+		<div class="layui-form-item">
+			<label class="layui-form-label">会员组</label>
+			<div class="layui-input-inline nc-len-mid">
+				<select name="member_group">
+					<option value=""></option>
+					{notempty name="$group_list"}
+					{foreach name="$group_list" item="vo"}
+					<option value="{$vo.group_id}" {{# if(d.member_group== {$vo.group_id} ){ }} selected {{# } }}>
+						{$vo.group_name}
+					</option>
+					{/foreach}
+					{/notempty}
+				</select>
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="memberGroupSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+
+<script type="text/html" id="educationInfo">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">学历</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="education" class="layui-input" value="{{d.education}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">学号</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="student_no" class="layui-input" value="{{d.student_no}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">班级</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="grade" class="layui-input" value="{{d.grade}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">院校</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="graduateschool" class="layui-input" value="{{d.graduateschool}}">
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="editMemberInfoSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+
+<script type="text/html" id="workInfo">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">公司</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="company" class="layui-input" value="{{d.company}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">职业</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="occupation" class="layui-input" value="{{d.occupation}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">职位</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="position" class="layui-input" value="{{d.position}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">收入</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="revenue" class="layui-input" value="{{d.revenue}}">
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="editMemberInfoSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+
+<script type="text/html" id="editMember">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>用户名</label>
+			<div class="layui-input-inline nc-len-mid">
+				{{# if (d.username != ''){ }}
+				<input type="text" class="layui-input" value="{{d.username}}" readonly>
+				{{# }else{ }}
+				<input type="text" name="username" class="layui-input" lay-verify="username" value="{{d.username}}">
+				{{# } }}
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">昵称</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="nick_name" class="layui-input" value="{{d.nick_name}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">真实姓名</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="real_name" class="layui-input" value="{{d.real_name}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="mobile" lay-verify="mobile" class="layui-input" value="{{d.mobile}}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱</label>
+			<div class="layui-input-inline nc-len-mid">
+				<input type="text" name="email" lay-verify="email" class="layui-input" value="{{d.email}}">
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit="" lay-filter="editMemberInfoSubmit">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+		<input type="hidden" name="member_id" value="{{d.member_id}}">
+	</div>
+</script>
+{/block}
+
+{block name="script"}
+<script>
+	var tab = "{$tab}";
+	var tpl_data = JSON.parse('{$info|json_encode}');
+	tpl_data.label_id_arr = tpl_data.member_label != '' ? tpl_data.member_label.split(',') : [];
+
+	var daterange = '{:date("Y-m-d h:m:s", strtotime("-6 days"))} - {:date("Y-m-d h:m:s")}';
+	layui.use('laydate', function(){
+		var laydate = layui.laydate;
+
+		laydate.render({
+			elem: '#daterange'
+			,format: 'yyyy-MM-dd HH:mm:ss'
+			,range: true
+			,value: daterange
+		});
+
+	});
+</script>
+<script src="ADDON_NS_MEMBER_JS/member_detail.js"></script>
+{/block}

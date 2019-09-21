@@ -1,0 +1,149 @@
+{extend name="sitehome@style/base"/}
+{block name="main"}
+<style>
+.upload_box .single-btn-upload{display: none;}
+.layui-form-select dl {max-height: 200px;}
+.image-block{width: 100px;}
+.image-block img{max-width: 100%;}
+</style>
+<div class="layui-form">
+
+	 <div class="layui-form-item">
+	    <label class="layui-form-label"><span class="required">*</span>导航名称</label>
+	    <div class="layui-input-block">
+	      <input type="text" name="title" lay-verify="required" placeholder="请输入导航名称" value="" autocomplete="off" class="layui-input">
+	    </div>
+	 </div>
+	 
+	 <div class="layui-form-item">
+	    <label class="layui-form-label">排序</label>
+	    <div class="layui-input-inline">
+	      <input type="number" name="sort" value="0" placeholder="请输入排序" autocomplete="off" class="layui-input">
+	    </div>
+	 </div>
+	 
+	 <div class="layui-form-item">
+	    <label class="layui-form-label">是否显示</label>
+	    <div class="layui-input-block">
+	    	 <input type="checkbox" name="is_show" value="1" lay-skin="primary" title="显示" checked="">
+	    </div>
+	 </div>
+	 
+	 <div class="layui-form-item">
+	    <label class="layui-form-label"><span class="required">*</span>链接地址</label>
+	    <div class="layui-input-block">
+     		 <input type="radio" checked name="nav_type" lay-filter = "nav_type" value="0" title="自定义链接" >
+	         <input type="radio"  name="nav_type" lay-filter = "nav_type" value="1" title="模块" >
+	    </div>
+	 </div>
+
+	 <div class="layui-form-item nav-type-0">
+	    <label class="layui-form-label"></label>
+	    <div class="layui-input-block">
+	      <input type="text" name="" class="url layui-input" lay-verify="" placeholder="请输入链接地址" value="" autocomplete="off">
+	    </div>
+	 </div>
+	 
+	 <div class="layui-form-item nav-type-1" style="display: none">
+	    <label class="layui-form-label"></label>
+	     <div class="layui-input-inline h5-url-select" >
+	      <select class="h5-url" lay-verify="required">
+	        {foreach $link['data'] as $k => $v}
+	        	{if $v['h5_url'] != ''}
+	        	<option value="{$v['name']}" {if $v['h5_url'] == $info['url']} selected {/if} wap-url="{$v['h5_url']}">{$v['title']}</option>
+	        	{/if}
+	        {/foreach}
+	      </select>
+	    </div>
+	 </div>
+	 
+	 <div class="layui-form-item">
+		<label class="layui-form-label img-upload-lable">图片</label>
+		<div class="layui-input-inline img-upload">
+			<input type="hidden" lay-verify="" class="layui-input"  name = "icon" id="hidden_icon" autocomplete="off"/>
+			<div class="image-block"><img class="image_url"/></div>
+			<input type="button" value="上传图片" class="layui-btn upload-btn" onclick="uploadSingleimage()" /> 
+		</div>
+	</div>
+	 
+ 	<div class="layui-form-item">
+	    <label class="layui-form-label"></label>
+	    <div class="layui-input-inline">
+	       <button class="layui-btn" lay-submit="" lay-filter="save">保存</button>
+	  		<a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+	    </div>
+	 </div>
+</div>
+<div class="upload_box">
+	{:hook("fileUpload", ['name' => 'image', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000'], '', true)}
+</div>
+{/block}
+{block name="script"}
+<script>
+var repeat_flag = false;//防重复标识
+layui.use(['form'], function() {
+	var form = layui.form;
+	
+	form.verify({
+		required: function (value, item) {
+			var msg = $(item).attr("placeholder") != undefined ? $(item).attr("placeholder") : '';
+			if (value == '') return msg;
+		},
+	});
+	
+	form.on('radio(nav_type)', function (data) {
+		if (data.value == 0) {
+			//自定义
+			$('.nav-type-0').show();
+			$('.nav-type-1').hide();
+		} else {
+			$('.nav-type-1').show();
+			$('.nav-type-0').hide();
+		}
+	});
+	
+	form.on('submit(save)', function (data) {
+		var field = data.field;
+		if (field.nav_type == 0) {
+			//自定义
+			field.url = $('.url').val();
+			var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
+			if (!reg.test(field.url) || field.url == '') {
+				$('.url').addClass('layui-form-danger').focus();
+				layer.msg('请输入正确的链接地址', {icon: 5});
+				return;
+			}
+		} else {
+			$('.url').attr('lay-verify', '');
+			field.url = $('.h5-url-select .h5-url option:selected').attr('wap-url');
+		}
+		field.is_blank = 0;
+		field.type = 2;
+		if (repeat_flag) return;
+		repeat_flag = true;
+		$.ajax({
+			type: "post",
+			url: '{:addon_url("DiyView://sitehome/Navigation/add")}',
+			data: {
+				'data': JSON.stringify(field)
+			},
+			dataType: "JSON",
+			success: function (res) {
+				layer.msg(res.message);
+				if (res.code == 0) {
+					window.location.href = '{:addon_url("DiyView://sitehome/Navigation/index")}';
+				} else {
+					repeat_flag = false;
+				}
+			}
+		});
+		return false;
+	});
+	
+});
+function singleImageUploadSuccess(res,name){
+	$('.image_url').attr('src', nc.img(res.path)).attr('layer-src', nc.img(res.path));
+	$('#hidden_icon').val(res.path);
+}
+</script>
+{/block}

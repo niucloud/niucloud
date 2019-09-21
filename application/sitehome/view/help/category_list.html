@@ -1,0 +1,290 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+
+{block name="main"}
+<script type="text/html" id="batchOperation">
+	<button class="layui-btn layui-btn-primary" lay-event="delete">删除</button>
+</script>
+<div class="nc-function-search">
+	<button class="layui-btn"  onclick="openModal()" >添加类型</button>
+</div>
+<div class="nc-table-box">
+	<table id="article_list" lay-filter="article" class="layui-table"></table>
+</div>
+<script type="text/html" id="sort_info">
+	<input type="number" value="{{d.sort}}" class="layui-input nc-len-short" onchange="sortChange({{d.class_id}}, this)"/>
+</script>
+<script type="text/html" id="icon_info">
+	{{#  if(d.icon == ''){ }}
+	<img src="" alt=""/>
+	{{#  }else{ }}
+	<img src="{{nc.img(d.icon)}}" layer-src="{{nc.img(d.icon)}}" alt="{{d.class_name}}" width="30" height="30"/>
+	{{#  } }}
+</script>
+<script type="text/html" id="operation">
+	<a class="default" class="default" lay-event="edit" >编辑</a>
+	<a class="default"  class="default" lay-event="del">删除</a>
+</script>
+{/block}
+
+{block name="script"}
+<script type="text/html" id="category_html">
+	<!-- 分类的添加修改 -->
+	<div class="layui-form category-form" lay-filter="category_add" id="category_add" >
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>分类名称</label>
+			<div class="layui-input-inline">
+				{{#  if(d.class_name == undefined || d.class_name == ""){ }}
+				<input type="text" name="class_name" value="" lay-verify="class_name" autocomplete="off" placeholder="请输入分类名称" class="layui-input nc-len-mid" >
+				{{#  }else{ }}
+				<input type="text" name="class_name" value="{{ d.class_name }}" lay-verify="class_name" autocomplete="off" placeholder="请输入分类名称" class="layui-input nc-len-mid" >
+				{{#  } }}
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label img-upload-lable">分类图标</label>
+			<div class="layui-input-inline article img-upload">
+				{{#  if(d.icon == undefined || d.icon == ""){ }}
+				<input type="hidden" class="layui-input"  name = "icon" autocomplete="off" value=""  id="icon"/>
+				{{#  }else{ }}
+				<input type="hidden" class="layui-input"  name = "icon" autocomplete="off" value="{{ d.icon }}"  id="icon"/>
+				{{#  } }}
+				<div class="upload-img-block category">
+					
+					{{#  if(d.icon == undefined || d.icon == ''){ }}
+					
+					<div class="upload-img-box" onclick="uploadSingleCategory()" >
+						<div>
+							<i class="add">+</i>
+						</div>
+					</div>
+					{{#  }else{ }}
+					<div class="upload-img-box has-choose-image">
+						<div>
+							<img src="{{ nc.img(d.icon) }}" layer-src="{{ nc.img(d.icon) }}">
+						</div>
+						<span onclick="uploadSingleCategory();">修改</span>
+					</div>
+					{{#  } }}
+				
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-inline">
+				{{#  if(d.sort == undefined || d.sort == ""){ }}
+				<input type="number" name="sort" value="0" lay-verify="sort" autocomplete="off" placeholder="请输入排序" class="layui-input nc-len-tiny">
+				{{#  }else{ }}
+				<input type="number" name="sort" value="{{ d.sort }}" lay-verify="sort" autocomplete="off" placeholder="请输入排序" class="layui-input nc-len-tiny">
+				{{#  } }}
+			</div>
+		</div>
+		{{#  if(d.icon == undefined || d.class_id == ""){ }}
+		<input type="hidden" name="class_id" value="0"/>
+		{{#  }else{ }}
+		<input type="hidden" name="class_id" value="{{ d.class_id }}"/>
+		{{#  } }}
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit lay-filter="add_save">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+{:hook("fileUpload", ["name" => "Category", "file_type" => "IMAGE", "type" => "common"], '', true)}
+<script>
+	var form;
+	var layer_index;
+	var table = new Table({
+		elem: '#article_list',
+		filter : "article",
+		url : '{:addon_url("sitehome/help/helpCategory")}',
+		cols: [
+			[
+				{
+					width: '5%',
+					type : 'checkbox'
+				},
+				{
+					field: 'class_name',
+					width: '40%',
+					title: '分类名称'
+				},
+				{
+					field: '',
+					width: '20%',
+					title: '图标',
+					templet: '#icon_info'
+				},
+				{
+					field: '',
+					width: '20%',
+					title: '排序',
+					templet: '#sort_info'
+				},
+				{
+					width: '15%',
+					title: '操作',
+					toolbar: '#operation',
+					align: 'right'
+				}
+			]
+		],
+		bottomToolbar : "#batchOperation"
+	});
+	
+	//批量操作
+	table.bottomToolbar(function(obj){
+		
+		if(obj.data.length < 1){
+			layer.msg('请选择要操作的数据');
+			return;
+		}
+		
+		switch(obj.event) {
+			case "delete":
+				var id_array = new Array();
+				for (i in obj.data) id_array.push(obj.data[i].class_id);
+				delCategory(id_array.toString());
+				break;
+		}
+		
+	});
+	
+	//监听工具条
+	table.tool(function(obj){
+		var data = obj.data;
+		var event = obj.event;
+		switch(event){
+			case 'extend':
+				getChildCategoryList(data.category_id);
+				break;
+			case "edit":
+				openModal(data);
+				break;
+			case "del":
+				delCategory(data.category_id);
+				break;
+		}
+	});
+	
+	layui.use(['form', 'laytpl' ], function(){
+		form = layui.form;
+		laytpl = layui.laytpl;
+		var repeat_flag = false;//防重复标识
+		form.on('submit(add_save)', function(data){
+			
+			if(repeat_flag) return;
+			repeat_flag = true;
+			var field = data.field;
+			if(field.class_id == 0){
+				var url = '{:addon_url("sitehome/help/helpcategoryadd")}';
+			}else{
+				var url = '{:addon_url("sitehome/help/helpcategoryedit")}';
+			}
+			$.ajax({
+				type:"post",
+				url : url,
+				data: field,
+				dataType : "JSON",
+				success:function(res){
+					if(res.code == 0) table.reload();
+					layer.close(layer_index);
+					layer.msg(res.message);
+					repeat_flag = false;
+				}
+			});
+			
+			return false;
+		});
+		
+		form.verify({
+			class_name:function(value){
+				if(value == ''){
+					return '请输入分类名称';
+				}
+			},
+		});
+		
+	});
+	
+	/**
+	 * 根据条件打开弹框
+	 */
+	function openModal(data){
+		if(data == undefined){
+			title = "添加帮助类型";
+			data = {};
+		}else{
+			title = "修改帮助类型";
+		}
+		var tpl_data = data;
+		var tpl_html = $("#category_html").html();
+		laytpl(tpl_html).render(tpl_data, function(html){
+			layer_index = layer.open({
+				title: title,
+				type: 1,
+				area: ['550px'],
+				content: html,
+			});
+		});
+		form.render();//重载form表单
+	}
+	
+	/**
+	 * 删除分类
+	 */
+	function delCategory(class_ids){
+		layer.confirm('确定删除吗?', {
+			btn: ['确定','取消']
+		}, function(){
+			$.ajax({
+				type:"post",
+				async:false,
+				url: '{:addon_url("sitehome/help/helpcategorydelete")}',
+				data: { 'class_ids' : class_ids },
+				dataType : "JSON",
+				success:function(res){
+					layer.msg(res.message);
+					if(res.code == 0){
+						table.reload();
+					}
+				}
+			});
+		}, function(){
+			layer.close();
+		});
+		
+	}
+	
+	function sortChange(class_id, event){
+		var sort = $(event).val();
+		$.ajax({
+			type:"post",
+			async:false,
+			url : '{:addon_url("sitehome/help/sorthelpArticleCategory")}',
+			data:{'class_id':class_id, 'sort': sort},
+			dataType : "JSON",
+			success: function (res) {
+				layer.msg(res.message);
+				if(res.code == 0){
+					table.reload();
+				}
+			}
+		});
+		
+	}
+	
+	/**
+	 * 单图回调事件
+	 */
+	function singleImageUploadSuccess(res,name){
+		if(name == "Category"){
+			$(".category").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSingleCategory();">修改</span></div>');
+			$("#icon").val(res.path);
+		}
+	}
+</script>
+{/block}

@@ -1,0 +1,5 @@
+@CHARSET "UTF-8";
+.member-address{padding: 10px;background: #fff;}
+.member-address a{display: block;color:#333;}
+.member-address a:after{content: '';display: inline-block;background: url("../img/arrow_right.png") no-repeat;width: 20px;height: 20px;float: right;}
+.member-address:active{background: #fdfdfd;}

@@ -1,0 +1,85 @@
+{extend name="base"/}
+
+{block name="resources"}
+<style>
+.nc-list li {display: flex;}
+.nc-list .authorization-pic{display: inline-block;width: 25px; height: 25px; text-align: center;}
+.nc-list .authorization-pic img{max-height: 100%;max-width: 100%;}
+.nc-list > ul > li{min-height: 40px;}
+.nc-list.style1 input{border: 0;}
+#auth_list{display: none;padding: 10px 20px 20px;}
+
+</style>
+{/block}
+
+{block name="main"}
+<div class="nc-list style1">
+    <div class="head">
+        <h2>授权绑定</h2>
+        <span>尊享更多权限</span>
+    </div>
+    <ul>
+        <li>
+            <div class="nc-mr20 nc-ml20">
+                <div class="authorization-pic">
+                    <img src='ADMIN_IMG/original.png'/>
+                </div>
+                获得正版使用许可
+            </div>
+            <div class="nc-mr20">
+                <div class="authorization-pic">
+                    <img src='ADMIN_IMG/security.png'/>
+                </div>
+                获得数据安全保证
+            </div>
+            <div class="nc-mr20">
+                <div class="authorization-pic">
+                    <img src='ADMIN_IMG/update.png'/>
+                </div>
+                及时获得软件的更新信息
+            </div>
+            <div class="nc-mr20">
+                <div class="authorization-pic">
+                    <img src='ADMIN_IMG/official.png'/>
+                </div>
+                获得官方技术支持
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="layui-form nc-mt20">
+    <input type="hidden" id="domain" value="{$domain}" name="domain">
+    <input type="hidden" id="name" value="{$auth_info['name']}" name="">
+    <div class="layui-form-item">
+        <label class="layui-form-label sm"><span class="required">*</span>AppID</label>
+        <div class="layui-input-inline">
+            <input type="text" name="app_key" required placeholder="请输入授权码" autocomplete="off" class="layui-input" lay-verify="app_key" value="{$auth_info['value']['app_key']}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label sm"><span class="required">*</span>Appsecret</label>
+        <div class="layui-input-inline">
+            <input type="text" name="app_secret" required placeholder="请输入秘钥" autocomplete="off" class="layui-input nc-len-mid" lay-verify="app_secret" value="{$auth_info['value']['app_secret']}">
+        </div>
+    </div>
+    <div class="nc-form-row sm">
+         {if condition="$auth_info['value'] neq ''"}
+             <button class="layui-btn layui-btn-disabled btn-already">已绑定</button>
+         {else/}
+             <button class="layui-btn" lay-submit lay-filter="*">立即绑定</button>
+         {/if}
+        <button class="layui-btn" onclick="list()">查看授权列表</button>
+        <br/>
+        <div class="layui-form-mid layui-word-aux">没有注册牛云的客户？<a href="https://www.niucloud.com" target="_blank">立即注册</a></div>
+    </div>
+</div>
+
+<div id="auth_list">
+    <table id="auth_table_list"></table>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="ADMIN_JS/auth.js"></script>
+{/block}

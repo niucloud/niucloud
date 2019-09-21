@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NiuCloud - 登录</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css" />
+<link rel="stylesheet" href="SITEHOME_CSS/common.css">
+<link rel="stylesheet" href="SITEHOME_STYLE/profession/theme.css">
+<link rel="stylesheet" href="HOME_CSS/login.css">
+<script src="__STATIC__/js/jquery-2.2.js"></script>
+<script src="__STATIC__/ext/layui/layui.js"></script>
+<script>
+	layui.use(['layer','element'], function () {
+	});
+	window.nc_url = {
+		baseUrl: "{:request()->root(true)}/",
+		route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+	};
+</script>
+<script src="__STATIC__/js/common.js"></script>
+</head>
+<body>
+<div class="login-content">
+	<div class="login-content-left">
+		<h2 class="login-left-title">牛云开源应用市场</h2>
+		<p class="login-left-desc">NiuCloud开源应用市场是一个基于ThinkPHP5的免费开源框架</p>
+		<img class="login-left-pic" src="HOME_IMG/login_content.png" alt="">
+	</div>
+	<div class="login-content-right layui-form">
+		<h3>欢迎使用</h3>
+		<input type="text" class="nui-input" name="username" placeholder="请输入账号" id="username" lay-verify="required" value="{$username}">
+		<input type="password" class="nui-input" placeholder="请输入密码" name="password" id="password" lay-verify="required" value="{$password}">
+		<div class="nui-home-username">
+			<input type="text" class="nui-input nui-input-yzm" placeholder="请输入验证码" name="captcha" lay-verify="required">
+			<div class="nui-username-bg nui-yzm"><img id="capthcha_code" src="{:url('home/login/captcha')}" onclick="this.src='{:url('home/login/captcha')}'" alt="captcha"></div>
+		</div>
+		<div class="remember">
+			<input type="checkbox" name="remember" lay-skin="primary" lay-verify="agreement" title="记住密码" >
+			<a href="{:url('home/login/register')}" class="color-blue register">立即注册？</a>
+		</div>
+		<div class="login-btn-box nc-bg-color" lay-submit lay-filter='save'>
+			<a href="javascript:;" type="button" class="login-btn ">登录</a>
+		</div>
+
+<!--		<div class="third-party-log">-->
+<!--			<hr>-->
+<!--			<span>第三方登录</span>-->
+<!--			<div class="third-party-log-imgs">-->
+<!--				<img src="HOME_IMG/login_wx.png" alt="">-->
+<!--				<img src="HOME_IMG/login_qq.png" alt="">-->
+<!--				<img src="HOME_IMG/login_wb.png" alt="">-->
+<!--			</div>-->
+<!--		</div>-->
+	</div>
+
+</div>
+<div class="login-footer">
+	<p>Copyright © 2019-2022 <a href="https://www.niucloud.com" target="_blank">https://www.niucloud.com</a>&nbsp;版权所有</p>
+	<p>
+		{notempty name="$system_site_config_info"}
+		<a href="http://beian.miit.gov.cn" target="_blank">网站备案号：{$system_site_config_info['icp']}</a>
+		{/notempty}
+		{notempty name="$system_site_config_info['police_icp_location'] && $system_site_config_info['police_icp_code']"}
+		&nbsp;&nbsp;
+		<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$system_site_config_info['police_icp_code']}" target="_blank">
+			<img src="ADMIN_IMG/police_gov.png"/>
+			<span>{$system_site_config_info['police_icp_location']}&nbsp;{$system_site_config_info['police_icp_code']}号</span>
+		</a>
+		{/notempty}
+	</p>
+</div>
+<script src="HOME_JS/login.js"></script>
+</body>
+</html>

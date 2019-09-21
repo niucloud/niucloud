@@ -1,0 +1,169 @@
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .nc-list{padding-top: 15px;}
+</style>
+{/block}
+{block name="main"}
+<div class="nc-list">
+    <div class="head">
+        <h2>账号安全</h2>
+        <span>注册时间：{$user_info['register_time'] | date="Y-m-d H:i:s",###}</span>
+    </div>
+    <ul>
+         <li>
+             <label>头像</label>
+             <span>
+                 <div class="headframe">
+                 {empty name="$user_info['headimg']"}
+                 <img src="SITEHOME_IMG/personal_4.png" layer-src="SITEHOME_IMG/personal_4.png" name="headimg" class="icon" >
+                 {else /}
+                 <img src="{:img($user_info['headimg'])}" layer-src="{:img($user_info['headimg'])}" name="headimg" class="icon">
+                 {/empty}
+                </div>
+             </span>
+             <input type="hidden" class="layui-input" name = "icon" value="{$info['icon']}" />
+             <a class="operation"  href="javascript:uploadSingleicon();">修改头像</a>
+             {:hook("fileUpload", ["name" => "icon", 'type' => 'common', 'file_type' => 'IMAGE'], '', true)} 
+         </li>
+		<li>
+             <label>用户名</label>
+             <span>{$user_info['username']}</span>
+             <!--<a href="javascript:editLayer('editusername', '修改用户名', '550px');" class="operation">修改</a>-->
+		</li>
+        <li>
+             <label>密码</label>
+             <span>*******</span>
+             <a href="javascript:editLayer('editPass', '修改密码', '550px');" class="operation">修改</a>
+         </li>
+        <li>
+            <label>手机号</label>
+            <span>
+                {$user_info['mobile']}
+                <input type="hidden" name="old_mobile" value="{$user_info['mobile']}">
+            </span>
+            {if $bind_mobile_info['is_bind_mobile']}
+                <a href="javascript:updateMobile('update')" class="operation">更换手机号</a>
+            {else/}
+                <a href="javascript:bindMobile('bind')" class="operation">绑定手机号</a>
+            {/if}
+        </li>
+    </ul>
+</div>
+
+<script type="text/html" id="editPass">
+    <div class="layui-form" lay-filter="editPass">
+        <div class="layui-form-item">
+            <label class="layui-form-label">输入原密码</label>
+            <div class="layui-input-inline nc-len-mid">
+                <input type="password" name="old_password" class="layui-input" value="" lay-verify="password">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新密码</label>
+            <div class="layui-input-inline nc-len-mid">
+                <input type="password" name="new_pass" class="layui-input" value="" lay-verify="password">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认新密码</label>
+            <div class="layui-input-inline nc-len-mid">
+                <input type="password" name="c_new_pass" class="layui-input" value="" lay-verify="cPassword">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline nc-len-mid">
+                <button class="layui-btn" lay-submit="" lay-filter="editPassSubmit">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+            </div>
+        </div>
+        <input type="hidden" name="uid" value="{$uid}">
+    </div>
+</script>
+
+<!-- 编辑用户名 -->
+<script type="text/html" id="editusername">
+    <div class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline nc-len-mid">
+                <input type="text" name="username" class="layui-input" value="{$user_info['username']}" lay-verify="required">
+            </div>
+        </div>
+       
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-inline nc-len-mid">
+                <button class="layui-btn" lay-submit="" lay-filter="editusername">保存</button>
+                <button type="reset" class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+            </div>
+        </div>
+        <input type="hidden" name="uid" value="{$uid}">
+    </div>
+</script>
+
+<!-- 修改绑定手机 -->
+<script type="text/html" id="update_mobile_html">
+    <div class="layui-form"  lay-filter="update_mobile">
+        <div class="layui-form-item">
+            <label class="layui-form-label">原始手机</label>
+            <div class="layui-input-inline">
+                <span class="nc-input-text">{:substr_replace($bind_mobile_info['mobile'], '****', 3, 4)}</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">绑定手机</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile"  lay-verify="required|phone|mobileIsExist" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="required">*</span>校验码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sms_code" lay-verify="required|checkCode" placeholder="请输入校验码" autocomplete="off" class="layui-input" maxlength="6">
+            </div>
+            <button onclick="sendOutCode(this);" class="layui-btn">获取校验码</button>
+            <button class="layui-btn layui-hide code-time">60s</button>
+        </div>
+        <div class="nc-form-row">
+            <button class="layui-btn" lay-submit lay-filter="update_bind_mobile" type="button">绑定</button>
+            <button class="layui-btn layui-btn-primary" type="reset" onclick="back()">返回</button>
+        </div>
+    </div>
+</script>
+
+<!-- 绑定手机 -->
+<script type="text/html" id="bind_mobile_html">
+<div id="bind-mobile-bind" >
+    <div class="layui-form"  lay-filter="bing_mobile">
+        <div class="layui-form-item">
+            <label class="layui-form-label">绑定手机</label>
+            <div class="layui-input-inline">
+                <input type="text" name="mobile"  lay-verify="required|phone|mobileIsExist" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="required">*</span>校验码</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sms_code" lay-verify="required|checkCode" placeholder="请输入校验码" autocomplete="off" class="layui-input" maxlength="6">
+            </div>
+            <button onclick="sendOutCode(this);" class="layui-btn">获取校验码</button>
+            <button class="layui-btn layui-hide code-time">60s</button>
+        </div>
+        <div class="nc-form-row">
+            <button class="layui-btn" lay-submit lay-filter="bind_mobile" type="button">绑定</button>
+        </div>
+    </div>
+</div>
+</script>
+{/block}
+{block name="script"}
+<script>
+	var tpl_data = JSON.parse('{$user_info|json_encode}');
+	var uid = {$uid};
+</script>
+<script src="ADMIN_JS/security.js?time={:time()}"></script>
+{/block}

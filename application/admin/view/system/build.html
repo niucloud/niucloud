@@ -1,0 +1,69 @@
+{extend name="base"/}
+{block name="main"}
+<div class="layui-form" lay-filter="build">
+<div class="layui-form layui-show">
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>插件名</label>
+		<div class="layui-input-block">
+       		<input type="text" name="name" value=""   lay-verify="required" autocomplete="off" placeholder="插件名称" class="layui-input nc-len-long">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">请填写插件名称</div>
+	</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>中文名称</label>
+		<div class="layui-input-block">
+       		<input type="text" name="title" value=""   lay-verify="required" autocomplete="off" placeholder="插件中文名称" class="layui-input nc-len-long">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">请填写插件中文名称</div>
+	</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>插件简介</label>
+		<div class="layui-input-block">
+       		<input type="text" name="description" value=""   lay-verify="required" autocomplete="off" placeholder="插件简介" class="layui-input nc-len-long">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">请填写插件简介</div>
+	</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>版本号</label>
+		<div class="layui-input-block">
+       		<input type="text" name="name" value=""   lay-verify="required" autocomplete="off" placeholder="插件名称" class="layui-input nc-len-long">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">请填写插件名称</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>插件分类</label>
+		<div class="layui-input-block nc-len-short">
+       		 <select name="notice_category_id" lay-verify="requiredselect" lay-filter="notice_category_id">
+			    <option value="">插件分类</option> 
+			     <option value="">插件分类</option>
+			      <option value="">插件分类</option>     
+		      
+			</select>
+	    </div>
+	</div>
+	
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>插件内容</label>
+		<div class="layui-input-inline">
+			<textarea id="editor"></textarea>
+		</div>
+	</div>
+		<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>支持端口</label>
+		<div class="layui-input-block nc-len-short">
+       		 <select name="notice_category_id" lay-verify="requiredselect" lay-filter="notice_category_id">
+			    <option value="">支持端口</option> 
+			     <option value="">插件分类</option>
+			      <option value="">插件分类</option>     
+		      
+			</select>
+	    </div>
+	</div>
+	<div class="nc-form-row sm">
+	    <button class="layui-btn" lay-submit lay-filter="formSave">保存</button>
+		<button onclick="window.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+	</div>
+</div>
+</div>
+{/block}

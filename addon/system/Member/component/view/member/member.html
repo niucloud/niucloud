@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="RESOURCE_PATH/component/view/member/css/member.css" />
+{php}
+$member_info = api("System.Member.memberInfo", [ 'access_token' => $access_token ]);
+{/php}
+{if condition="$member_info['code']==0"}
+<div class="member">
+	<div class="custom-level">
+		{if condition="$attr['background_image']"}
+		<img class="custom-level-img" src="{:img($attr['background_image'])}">
+		{else/}
+		<img class="custom-level-img" src="RESOURCE_PATH/component/view/member/img/default_member_bg.png">
+		{/if}
+	</div>
+	<div class="member-head {$attr.member_info_location}" style="text-align:{$attr['textAlign']}" onclick="location.href='{:addon_url("Member://wap/member/member")}'">
+		<a href="javascript:;{:addon_url("member://wap/member/info")}" class="member-head-link">
+			{if condition="$member_info['data']['headimg']"}
+			<img class="member-head-url" src="{:img($member_info['data']['headimg'])}">
+			{else/}
+			<img class="member-head-url" src="RESOURCE_PATH/component/view/member/img/default_user.png">
+			{/if}
+			<label style="color:{$attr['textColor']};">{$member_info['data']['nick_name']}</label>
+		</a>
+	</div>
+	<a href="javacript:;" class="member--head-subtitle">
+		<span>{$member_info['data']['member_group_name']}</span>
+		<span>成为会员&nbsp;></span>
+	</a>
+ </div>
+{else/}
+<script>
+	location.href = nc.url("wap/login/login");
+</script>
+{/if}

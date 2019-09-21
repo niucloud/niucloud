@@ -1,0 +1,100 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<style>
+    .addons-buy-icon {
+        width:90px;
+        height: 90px;
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 5px;
+        text-align: center;
+    }
+    .layui-btn-primary {
+        border: 1px solid #C9C9C9;
+        background-color: #fff;
+        color: #555;
+    }
+    .buy-time-select {
+        background-color: #ffffff;
+        color: #0d73f9;
+        border: 1px solid #0d73f9;
+    }
+    .total_price {
+        font-size: 22px;
+        color: #f36a5a;
+    }
+</style>
+{/block} {block name="main"}
+<div>
+    <p class="layui-elem-quote">启用</p>
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs2 addons-buy-icon">
+                <img src="https://img.yzcdn.cn/public_files/2018/03/29/5cc3216b3e86fea96a4995f84428ce06.png">
+            </div>
+            <div class="layui-col-xs10">
+                <div>
+                    <label>{$info['title']}</label>
+                    <br>
+                    <div class="layui-text">{$info['description']}</div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div>
+                    <button class="layui-btn" onclick="save(1)">立即启用</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br><br>
+    <label>应用详情</label>
+    <hr>
+    <div>
+        <pre>{$info['content']}</pre>
+    </div>
+    <input type="hidden" id="hidden_price" value="{$info['price']}">
+    <input type="hidden" id="hidden_addons_id" value="{$info['id']}">
+</div>
+<script>
+    $('.buy_time button').click(function() {
+        $('.buy_time button').removeClass('buy-time-select');
+        $(this).addClass('buy-time-select');
+        price();
+    });
+    price();
+    function price(){
+        var price = $('#hidden_price').val();
+        var num = $('.buy-time-select').attr('time');
+        var totalPrice = price * num;
+        $('.total_price').text('￥'+totalPrice);
+    }
+
+	var repeat_flag = false;//防重复标识
+   function save(type) {
+	   if (repeat_flag) return;
+	   repeat_flag = true;
+	   var addons_id = $('#hidden_addons_id').val();
+	   var num = $('.buy-time-select').attr('time');
+	   $.ajax({
+		   type: "post",
+		   url: "{:url('sitehome/addons/createOrder')}",
+		   data: {
+			   'addons_id': addons_id,
+			   'num': num,
+			   'type': type
+		   },
+		   dataType: "JSON",
+		   success: function (data) {
+			   layer.msg(data.msg);
+			   if (data.data == 0) {
+				   window.location.href = nc.url('sitehome/addons/orderInfo', {"id": data.data});
+			   } else {
+				   repeat_flag = false;
+			   }
+		   }
+	   });
+   }
+</script>
+{/block}

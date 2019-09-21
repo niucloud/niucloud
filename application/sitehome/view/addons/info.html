@@ -1,0 +1,54 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<style>
+    .layui-fluid{padding-top: 20px !important;}
+</style>
+{/block}
+{block name="main"}
+<input type="hidden" id="hidden_name" value="{$info['name']}">
+<table class="layui-table">
+    <colgroup>
+        <col width="15%">
+        <col width="85%">
+    </colgroup>
+    <thead>
+    <tr>
+        <th colspan="2">模块信息</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td class="label">应用图标</td>
+        <td>
+            <div class="addon-icon">
+                <img src="__ROOT__{$info.icon}" alt="">
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="label">应用标识</td>
+        <td>{$info.name}</td>
+    </tr>
+    <tr>
+        <td class="label">应用名称</td>
+        <td>{$info.title}</td>
+    </tr>
+    <tr>
+        <td class="label">作者</td>
+        <td>{$info.author}</td>
+    </tr>
+    <tr>
+        <td class="label">版本</td>
+        <td>{$info.version}</td>
+    </tr>
+    <tr>
+        <td class="label">应用描述</td>
+        <td>{$info.description}</td>
+    </tr>
+    <tr>
+        <td class="label">安装时间</td>
+        <td>{notempty name="$info.create_time"}{$info.create_time|date="Y-m-d H:i:s",###}{else/}--{/notempty}</td>
+    </tr>
+    </tbody>
+</table>
+{/block}

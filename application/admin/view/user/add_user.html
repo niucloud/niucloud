@@ -1,0 +1,73 @@
+{extend name="base"/}
+{block name="main"}
+<div class="layui-form" lay-filter="user">
+	<div class="nc-step">
+		<span class="layui-breadcrumb" lay-separator="|">
+			  <a class="nc-step-tab nc-step-active">1 基本信息</a>
+			  <a class="nc-step-tab">2 权限设置</a>
+		</span>
+	</div>
+	<div class="nc-step-content">
+		<div class="nc-step-item layui-show">
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>用户名</label>
+				<div class="layui-input-inline nc-len-long">
+					<input type="text" name="username" value="" lay-verify="required" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>手机号</label>
+				<div class="layui-input-inline nc-len-long">
+					<input type="text" name="mobile" value="" lay-verify="phone|required" autocomplete="off" placeholder="请输入手机号" class="layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>密码</label>
+				<div class="layui-input-block nc-len-long">
+					<input type="password" id="password" name="password" value="" lay-verify="password" autocomplete="off" placeholder="请输入密码" class="layui-input">
+				</div>
+				<div class="layui-form-mid layui-word-aux">密码最少为6个字符</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>确认密码</label>
+				<div class="layui-input-inline nc-len-long">
+					<input type="password" name="repassword" value="" lay-verify="repassword" autocomplete="off" placeholder="请输入确认密码" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>姓名</label>
+				<div class="layui-input-inline nc-len-long">
+					<input type="text" name="real_name" value="" lay-verify="required"autocomplete="off" placeholder="请输入姓名" class="layui-input">
+				</div>
+			</div>
+			<div class="nc-form-row sm">
+				<button class="layui-btn" lay-submit lay-filter="next_step">下一步</button>
+			</div>
+
+		</div>
+		<div class="nc-step-item">
+			<div class="layui-form-item">
+				<label class="layui-form-label sm"><span class="required">*</span>管理组</label>
+				<div class="layui-input-inline nc-len-short">
+					<select name="group_id" lay-verify="groupId">
+						<option value="">选择管理组</option>
+						{volist name="group_list" id="vo"}
+						{if $vo.is_system != 1}
+						<option value="{$vo.group_id}">{$vo.group_name}</option>
+						{/if}
+						{/volist}
+					</select>
+				</div>
+			</div>
+			<div class="nc-form-row sm">
+				<button class="layui-btn" lay-submit lay-filter="last_step">上一步</button>
+				<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name='script'}
+<script src="ADMIN_JS/add_user.js"></script>
+{/block}

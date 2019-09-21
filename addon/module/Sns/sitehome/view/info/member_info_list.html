@@ -1,0 +1,237 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+
+<div class="nc-function-search">
+    <div class="layui-form">
+        <div class="layui-input-inline nc-len-mid">
+            <select  name="p_category_id" lay-filter="p_category_id" lay-verify="p_category_id">
+                <option value="">请选择分类</option>
+                {foreach $category as $key=>$vo }
+                <option value="{$vo.category_id}" >{$vo.name}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="layui-input-inline nc-len-mid">
+            <select  name="category_id" lay-filter="category_id">
+                <option value="">请选择分类</option>
+            </select>
+        </div>
+        <div class="layui-input-inline nc-len-mid nc-search-btn">
+            <input type="text" id="search" name="search" placeholder="标题" autocomplete="off" class="layui-input">
+        </div>
+        
+        <button class="layui-btn-primary layui-btn" lay-filter="search" lay-submit>筛选</button>
+    </div>
+</div>
+
+<div class="nc-table-box">
+    <table id="info_list" lay-filter="article" class="layui-table"></table>
+</div>
+
+<script type="text/html" id="num_info">
+    <span>{{d.click}}&nbsp;/&nbsp;{{d.comment_count}}</span>
+</script>
+
+<script type="text/html" id="time_info">
+    <span>{{ nc.time_to_date(d.create_time) }}</span>
+</script>
+
+<!--排序-->
+<script type="text/html" id="sort">
+    <input type="text" value="{{d.sort}}"  class="layui-input" onchange="infoSort({{d.info_id}}, this)"/>
+</script>
+
+<script type="text/html" id="operation">
+    {{# if(d.state == 0){ }}
+        <a class="default" lay-event="state">审核</a>
+    {{# } }}
+    <a class="default" lay-event="del">删除</a>
+</script>
+
+{/block}
+{block name="script"}
+<script>
+    var page_index =  '{$page_index}';
+
+    //排序更新
+    function infoSort(info_id,_this){
+        var sort = $(_this).val();
+
+        $.ajax({
+            type: "post",
+            url: nc.url("sns://sitehome/info/updateInfoSort"),
+            data: {
+                'info_id':info_id,
+                'sort': sort,
+            },
+            dataType: "JSON",
+            success: function (res) {
+            }
+        });
+    }
+
+    layui.use(['form'], function () {
+        var form = layui.form;
+        //搜索submit提交
+        form.on('submit(search)', function(data){
+            table.reload({
+                page: {
+                    curr: 1
+                },
+                where: data.field
+            });
+        });
+
+        //获取二级分类
+        form.on('select(p_category_id)', function (obj) {
+
+            var p_category_id = $("select[name='p_category_id']").val();
+
+            $.ajax({
+                type: "post",
+                url: nc.url("sns://sitehome/info/getCategory"),
+                data: {
+                    'category_id': p_category_id,
+                },
+                dataType: "JSON",
+                success: function (res) {
+
+                    var arrData = JSON.parse(res);
+
+                    $("select[name=category_id] option:gt(0)").remove();
+
+                    var html = '';
+                    for(var i = 0; i < arrData.length; i++){
+                        html += '<option value="'+arrData[i]['category_id']+'" >'+arrData[i]['name']+'</option>';
+                    }
+
+                    $("select[name=category_id]").append(html);
+                    form.render();
+                }
+            });
+        });
+    });
+
+    var table = new Table({
+        elem: '#info_list',
+        filter : "article",
+        url : '{:addon_url("sns://sitehome/info/memberInfoList")}',
+        page:{
+            layout: ['count', 'limit', 'prev', 'page', 'next'],
+            limit:10,
+            curr:page_index
+        },
+        cols: [
+            [{
+                field: 'title',
+                width: '20%',
+                title: '标题',
+                unresize : 'true'
+            },{
+                field: 'category_name',
+                width: '10%',
+                title: '分类',
+                unresize : 'true'
+            },{
+                field: 'state_as',
+                width: '10%',
+                title: '状态',
+                unresize : 'true'
+            },{
+                field: 'release_name',
+                width: '15%',
+                title: '发布人',
+                unresize : 'true'
+            },{
+
+                width: '10%',
+                title: '排序',
+                toolbar: '#sort'
+            },{
+                field: 'add_time',
+                width: '15%',
+                title: '发布时间',
+                unresize : 'true'
+            },{
+                title: '操作',
+                width: '15%',
+                toolbar: '#operation',
+                align: 'right',
+                unresize : 'true'
+            }]
+        ]
+    });
+
+    //监听工具条
+    table.tool(function(obj){
+        var info_id = obj.data.info_id;
+        var page_index = $('.layui-laypage-em').next().html();
+
+        switch (obj.event) {
+            case "edit":
+                window.location.href = nc.url('sns://sitehome/info/editInfo', {"info_id": info_id,page: page_index});
+                break;
+            case "del":
+                deleteArticle(info_id);
+                break;
+            case "state":
+                stateArticle(info_id);
+                break;
+        }
+    });
+
+    function deleteArticle(info_id){
+
+        layer.confirm('确定删除吗?', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    type: "post",
+                    url: nc.url("sns://sitehome/info/deleteInfo"),
+                    data: {
+                        'info_id': info_id,
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        layer.msg(res.message);
+                        location.reload();
+                    }
+                });
+            }, function () {
+                layer.close();
+            });
+    }
+
+    //审核
+    function stateArticle(info_id){
+
+        layer.confirm('审核，通过？拒绝？', {
+            btn: ['通过', '拒绝'] //可以无限个按钮
+        }, function(index, layero){
+            stateAjax(info_id,1);
+            //按钮【通过】的回调
+        }, function(index){
+            stateAjax(info_id,2);
+            //按钮【拒绝】的回调
+        });
+    }
+    //审核
+    function  stateAjax(info_id,state) {
+        $.ajax({
+            type: "post",
+            url: nc.url("sns://sitehome/info/updateInfo"),
+            data: {
+                'info_id':info_id,
+                'state': state,
+            },
+            dataType: "JSON",
+            success: function (res) {
+                layer.msg(res.message);
+                location.reload();
+            }
+        });
+    }
+</script>
+{/block}

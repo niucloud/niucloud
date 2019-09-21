@@ -1,0 +1,97 @@
+{extend name="sitehome@style/base"/}
+{block name="main"}
+<div class="layui-form">
+	<div class="layui-form-item">
+		<label class="layui-form-label"><span class="required">*</span>公告标题</label>
+		<div class="layui-input-inline">
+       		<input type="text" name="title" {notempty name="$info"} value="{$info.title}" {else/} value="" {/notempty}  lay-verify="require" autocomplete="off" placeholder="" class="layui-input nc-len-mid" placeholder="请输入公告标题">
+	    </div>
+	</div>
+	<div class="layui-form-item">
+    	<label class="layui-form-label">公告来源</label>
+		<div class="layui-input-inline">
+       		<input type="text" name="source" {notempty name="$info"} value="{$info.source}" {else/} value="" {/notempty}  lay-verify="" autocomplete="off" placeholder="" class="layui-input nc-len-mid">
+   		</div>
+	</div>
+	<div class="layui-form-item">
+    	<label class="layui-form-label">来源链接</label>
+		<div class="layui-input-inline">
+       		<input type="text" name="source_url" {notempty name="$info"} value="{$info.source_url}" {else/} value="" {/notempty}  lay-verify="" autocomplete="off" placeholder="" class="layui-input nc-len-mid">
+    	</div>
+	</div>
+	<div class="layui-form-item">
+ 		<label class="layui-form-label">是否置顶</label>
+		<div class="layui-input-inline">
+       		<input type="checkbox" name="set_top"  lay-skin="switch" value="1" {if $info.set_top} checked {/if}>
+    	</div>
+	</div>
+	<div class="layui-form-item">
+ 		<label class="layui-form-label">排序</label>
+		<div class="layui-input-inline">
+       		<input type="number" min="0" lay-verify="number" name="sort" {notempty name="$info"} value="{$info.sort}" {else/} value="0" {/notempty} class="layui-input nc-len-tiny">
+    	</div>
+	</div>
+  	<div class="layui-form-item">
+    	<label class="layui-form-label"><span class="required">*</span>公告内容</label>
+		<div class="layui-input-inline">
+			<textarea id="editor" class="nc-len-long">{$info.content}</textarea>
+		</div>
+  	</div>
+  	{notempty name="$info"}
+  		<input type="hidden" name="id" value="{$info.id}"> 
+  	{/notempty}
+	<div class="nc-form-row">
+	    <button class="layui-btn" lay-submit lay-filter="formSave">保存</button>
+		<button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+var editor = new Editor("editor",{});
+
+if($("#editor").val()){
+	editor.setContent($("#editor").val());
+}
+
+layui.use('form', function(){
+	var form = layui.form;
+	
+	var repeat_flag = false;//防重复标识
+    form.verify({
+        title: function(value){
+            if(value.length < 1){
+                return '请输入公告标题';
+            }
+        }
+    });
+
+	form.on('submit(formSave)', function(data){
+	    var filed = data.field;
+        filed.content = editor.getContent();
+        if(filed.content == ""){
+            layer.msg('请输入公告内容', {icon : 5}); return;
+        }
+        var url = '{:addon_url("sitehome/notice/addnotice")}';
+        if(filed.id != undefined) url = '{:addon_url("sitehome/notice/editNotice")}';
+        if(repeat_flag) return;
+		repeat_flag = true;
+        $.ajax({
+			url : url,
+			data : filed,
+            type: "post",
+            async : false,
+            dataType : "JSON",
+            success: function (res) {
+                layer.msg(res.message);
+                if(res.code == 0){
+                    window.location.href='{:addon_url("sitehome/notice/index")}';
+                }else {
+					repeat_flag = false;
+                }
+            }
+        })
+    })
+})
+</script>
+{/block}

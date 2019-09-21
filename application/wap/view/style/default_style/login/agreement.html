@@ -1,0 +1,38 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+{/block}
+{block name="head"}
+<header class="hui-header">
+	<div id="hui-back"></div>
+	<h1>注册协议</h1>
+</header>
+{/block}
+{block name="main"}
+{php}
+$info = api("System.Manage.agreement",[]);
+{/php}
+<div class="hui-wrap">
+	<div class="hui-center-title" style="margin-top:15px;"><h1>{$info['data']['title']}</h1></div>
+	<div class="hui-content" style="padding:18px 8px;" id="content">
+		{$info['data']['content']}
+	</div>
+</div>
+
+<!--<header class="nc-register-header">-->
+
+	<!--<a class="logo" href="{:addon_url('ncactive://web/index')}">-->
+		<!--{notempty name="$site_info.icon"}-->
+		<!--<img src="{:IMG($site_info.icon)}" style=" width: 38%;margin: 20px;">-->
+		<!--{else /}-->
+		<!--<img src="WAP_IMG/login_img/default-logo.png" style=" width: 38%;margin: 20px;">-->
+		<!--{/notempty}-->
+	<!--</a>-->
+	<!--<div class="welcome">{$info['data']['title']}</div>-->
+<!--</header>-->
+<!--<div class="nc-main" style="min-height: 320px;padding: 0 10px;">{$info['data']['content']}</div>-->
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    hui('#content').unfold();
+</script>
+{/block}

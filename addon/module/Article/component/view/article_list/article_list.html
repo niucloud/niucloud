@@ -1,0 +1,144 @@
+{php}
+	$category_list = api("Article.Article.categoryList");
+	$category_id = input("category_id", 0);
+{/php}
+<link rel="stylesheet" href="RESOURCE_PATH/component/view/article_list/css/article_list.css"/>
+<link rel="stylesheet" href="__STATIC__/ext/mescroll/css/mescroll.css"/>
+<style>
+.mescroll{top: 80px;}
+</style>
+<div class="article-list-wrap">
+
+	<div class="article-class-wrap clear">
+		<ul>
+		    <li data-id="0" class="current">推荐</li>
+		 	{volist name="$category_list['data']" id="vo" key="k"}
+			<li data-id="{$vo.category_id}">{$vo.category_name}</li>
+			{/volist}
+		</ul>
+	</div>
+	
+	<div id="article_mescroll" class="mescroll">
+		<ul class="article-list"></ul>
+	</div>
+	
+</div>
+<script src="__STATIC__/ext/mescroll/js/mescroll.js"></script>
+<script type="text/javascript">
+$(function() {
+	//创建MeScroll对象
+	var page_size = 10;
+	var mescroll = new MeScroll("article_mescroll", {
+		down: {
+			auto: false, //是否在初始化完毕之后自动执行下拉回调callback; 默认true
+			callback: downCallback
+		},
+		up: {
+			auto: false, //是否在初始化时以上拉加载的方式自动加载第一页数据; 默认false
+			isBounce: false, //此处禁止ios回弹
+			callback: upCallback,
+			page: {
+				num: 0,
+				size: page_size
+			},
+			toTop: { //配置回到顶部按钮
+				src: "__STATIC__/ext/mescroll/img/mescroll_to_top.png",
+				offset: 500
+			}
+		}
+	});
+	
+	/*下拉刷新的回调 */
+	function downCallback() {
+		loadList(1,false);
+		console.log("下拉刷新的回调");
+	}
+	
+	/*上拉加载的回调 page = {num:1, size:10}; num:当前页 从1开始, size:每页数据条数 */
+	function upCallback(page) {
+		loadList(page.num, true);
+		console.log("上拉加载的回调");
+	}
+	
+	function loadList(page, is_append) {
+		var category_id = parseInt($('.article-list-wrap .article-class-wrap ul li.current').attr('data-id').toString());
+		var condition = {};
+		if (category_id > 0) condition.category_id = category_id;
+		else condition.commend_flag = 1;
+		condition = JSON.stringify(condition);
+		
+		nc.api("Article.Article.getArticlePageList", {
+			"page": page,
+			"page_size": page_size,
+			"condition": condition
+		}, function (res) {
+			if (res.code == 0) {
+				var h = "";
+				if (res.data.list.length > 0) {
+					for (i in res.data.list) {
+						var item = res.data.list[i];
+						h += '<li>';
+						if (item.image) {
+							h += '<div class="avatar">';
+								h += '<a href="' + nc.url('Article://wap/article/detail?article_id=' + item.article_id)  + '">';
+									h += '<img src="' + nc.img(item.image) + '">';
+								h += '</a>';
+							h += '</div>';
+						}
+						h += '<div class="item-container">';
+							h += '<a href="' + nc.url('Article://wap/article/detail?article_id=' + item.article_id)  + '">';
+								h += '<span class="article-title">' + item.title + '</span>';
+								h += '<span class="article-respondent">' + item.author + ' | ' + item.summary + '</span>';
+								h += '<span class="tag">' + item.category_name + '</span>';
+								h += '<span class="click-num">点击量' + item.click + '</span>';
+							h += '</a>';
+						h += '</div>';
+						h += '</li>';
+					}
+				} else {
+					h += '<div class="o-error">';
+					h += '<p class="txt">您还没有相关的文章</p>';
+					h += '</div>';
+				}
+				if(res.data.list.length>0){
+					if (is_append) $("#article_mescroll ul").append(h);
+					else $("#article_mescroll ul").html(h);
+				}else{
+					$("#article_mescroll ul").html(h);
+				}
+				mescroll.endByPage(res.data.list.length, res.data.page_count);
+			} else {
+				mescroll.endErr();
+			}
+		});
+	}
+	
+	var max_offset_left = $(".article-class-wrap ul li:last-child").offset().left + $(".article-class-wrap ul li:last-child").innerWidth() - $(".article-class-wrap ul").innerWidth() - 10;
+	var offset_left = 0;
+	
+	$(".article-list-wrap .article-class-wrap ul li").click(function () {
+		if (!$(this).hasClass("current")) {
+			var _index = $(this).index();
+			var _active_index = $(".article-class-wrap ul li.current").index();
+			var center_width = $(".article-class-wrap ul").innerWidth() / 2;
+			var _offset_left = $(this).offset().left;
+			var _oneself_width = $(this).innerWidth() / 2;
+			if (_index > _active_index) {
+				//向左偏移
+				offset_left += (_offset_left - center_width + _oneself_width);
+			} else {
+				//向右偏移
+				offset_left -= (center_width - _offset_left - _oneself_width);
+			}
+			offset_left = offset_left < 0 ? 0 : offset_left; // 最小偏移量
+			offset_left = offset_left > max_offset_left ? max_offset_left : offset_left; //最大偏移量
+			$(".article-class-wrap ul").animate({"scrollLeft": offset_left}, 500) //设置偏移量;
+		}
+		$(".article-class-wrap ul li").removeClass("current");
+		$(this).addClass("current");
+		loadList(1, false);
+	});
+	
+	$(".article-list-wrap .article-class-wrap ul li[data-id='{$category_id}']").click();
+});
+</script>

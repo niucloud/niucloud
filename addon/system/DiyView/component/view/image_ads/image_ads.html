@@ -1,0 +1,67 @@
+{if condition="$attr['selectedTemplate'] != 'carousel-posters'"}
+<style>
+.image-ads{background: #ffffff;font-size:0;overflow: hidden;white-space: nowrap;}
+.image-ads .image-ads-item{text-align: center;position: relative;}
+.image-ads .image-ads-item a{display: block;text-align: center;}
+.image-ads .image-ads-item div img{width: auto;height: auto;max-width: 100%;max-height: 100%;}
+.image-ads .image-ads-item span{background: rgba(0,0,0,.6);position: absolute;bottom: 0;color: #ffffff;font-size: 12px;width: 100%;left: 0;line-height: 30px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;padding: 0 5px;}
+.image-ads.horizontal-sliding {overflow-x: scroll;white-space: nowrap;}
+.image-ads.horizontal-sliding::-webkit-scrollbar{display: none;}
+.image-ads.horizontal-sliding .image-ads-item{display: inline-block;width: 100px;vertical-align: middle;}
+</style>
+<div class="image-ads {$attr['selectedTemplate']}">
+	{foreach name="$attr['list']" item="vo"}
+	<div class="image-ads-item" style="margin-bottom:{if condition="$attr['selectedTemplate'] == 'vertically'"}{$attr['imageClearance']}px;{else/}0;{/if};margin-right:{if condition="$attr['selectedTemplate'] == 'horizontal-sliding'"}{$attr['imageClearance']}px;{else/}0;{/if}">
+		{if condition="$vo.link"}
+		<a href="{:addon_url($vo['link']['h5_url'])}">
+		{else/}
+		<a href="javascript:;">
+		{/if}
+			<div>
+				{if condition="stristr($vo.imageUrl,'static') === false"}
+				<img src="{:img($vo.imageUrl)}" draggable="false"/>
+				{else/}
+				<img src="{:img(__PUBLIC__.'/'.$vo.imageUrl)}" draggable="false" />
+				{/if}
+			</div>
+			{if condition="$vo['title']"}
+			<span>{$vo['title']}</span>
+			{/if}
+		</a>
+	</div>
+	{/foreach}
+</div>
+{else/}
+<style>
+.image-ads-swipslider li a{position: relative;display: block;}
+.image-ads-swipslider li a .mui-slider-title{color: #ffffff;text-align: center;background: rgba(0,0,0,.6);opacity:1;position: absolute;font-size: 12px;bottom: 15px;width: 100%;padding: 5px 0;}
+.image-ads-swipslider li a img{width: auto;height: auto;max-width: 100%;max-height: 100%;}
+</style>
+<link rel="stylesheet" href="__STATIC__/ext/swipeslider/css/swipeslider.css"/>
+<div id="full_feature" class="image-ads-swipslider swipslider">
+	<ul class="sw-slides">
+		{foreach name="$attr['list']" item="vo" key="k"}
+		<li class="sw-slide">
+			{if condition="$vo.link"}
+			<a href="{:addon_url($vo['link']['h5_url'])}">
+			{else/}
+			<a href="javascript:;">
+			{/if}
+				{if condition="stristr($vo.imageUrl,'static') === false"}
+				<img src="{:img($vo.imageUrl)}"/>
+				{else/}
+				<img src="{:img(__PUBLIC__.'/'.$vo.imageUrl)}"/>
+				{/if}
+				{if condition="$vo['title']"}
+				<p class="mui-slider-title">{$vo['title']}</p>
+				{/if}
+			</a>
+		</li>
+		{/foreach}
+	</ul>
+</div>
+<script src="__STATIC__/ext/swipeslider/js/swipeslider.js"></script>
+<script>
+	$('#full_feature').swipeslider();
+</script>
+{/if}

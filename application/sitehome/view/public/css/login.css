@@ -1,0 +1,185 @@
+@CHARSET "UTF-8";
+body {
+    font: 14px "Microsoft YaHei", Helvetica Neue, Helvetica, PingFang SC, \5FAE\8F6F\96C5\9ED1, Tahoma, Arial, sans-serif;
+}
+
+.login-bg {
+    position: absolute;
+    width: 100%;
+    height: 448px;
+    top: 50%;
+    left: 0;
+    margin-top: -270px;
+}
+
+.nui-home-main {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: #f9f9f9;
+    /* 	background: url('../img/home_login_back.png'); */
+}
+
+.nui-home-info {
+    position: relative;
+    top: 50%;
+    width: 850px;
+    height: 370px;
+    margin: auto;
+    padding: 40px 90px;
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .1);
+    transform: translateY(-50%);
+    box-sizing: border-box;
+
+}
+
+.nui-home-info::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.nui-home-right {
+    float: right;
+    align-self: center;
+    border-radius: 3px;
+    width: 310px;
+    min-width: 310px;
+    margin: 0 auto;
+}
+
+.nui-home-right h2 {
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.nui-home-info .nui-home-logo {
+    position: relative;
+    display: inline-block;
+    top: -50%;
+    width: 300px;
+    height: 195px;
+    border-right: 1px dashed #e5e5e5;
+    line-height: 195px;
+    text-align: center;
+    transform: translateY(22%);
+}
+
+/*表单*/
+.nui-home-username {
+    padding: 7px 10px;
+    width: 80%;
+    display: inline-block;
+    /* background: #eef6ff; */
+    border-radius: 3px;
+    margin-bottom: 10px;
+    border: 1px solid #D2D2D2;
+}
+
+.nui-username-bg {
+    height: 100%;
+    width: 11%;
+    display: inline-block;
+    float: left;
+    padding-top: 4px;
+}
+
+.user-img {
+    width: 16px;
+}
+
+.pwd-img {
+    width: 15px;
+}
+
+.nui-input {
+    border: none;
+    background: #ffffff;
+    width: 81%;
+    padding: 5px;
+}
+
+.nui-home-buttom {
+    background: #0d73f9;
+    cursor: pointer;
+    border: 1px solid #0d73f9;
+    padding: 10px;
+}
+
+.nui-button {
+    border: none;
+    color: #fff;
+    background: none;
+    display: block;
+    text-align: center;
+}
+
+.nui-input-yzm {
+    border-left: none;
+    border-right: 1px solid #b4b4b4;
+    width: 50%;
+    float: left;
+}
+
+.nui-yzm {
+    width: 42%;
+}
+
+.nui-yzm img {
+    width: 100%;
+    margin-left: 7px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.nui-button:hover {
+    color: #fff;
+}
+
+/* 页面切换样式 */
+.page-type {
+    display: inline-block;
+    color: #333333;
+    line-height: 28px;
+    width: 87%;
+    margin: auto;
+    padding-bottom: 16px;
+}
+
+.page-type > div {
+    float: left;
+    text-align: center;
+    width: 100%;
+}
+
+.page-type > div.select-page a {
+    padding: 4px 10px;
+    font-size: 20px;
+    color: #333;
+    font-weight: 900;
+}
+
+.row-class {
+    overflow: hidden;
+    width: 100%;
+    display: inline-block;
+    font-size: 12px;
+}
+
+.color-blue {
+    color: #0d73f9;
+}
+
+.row-class .left {
+    float: left;
+    display: block;
+    margin-left: 21px;
+}
+
+.row-class .right {
+    float: right;
+    display: block;
+    margin-right: 21px;
+}

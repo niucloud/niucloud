@@ -1,0 +1,80 @@
+{extend name="admin@base"/}
+{block name="main"}
+<div class="layui-form">
+	<input type="hidden" id="name" value="{$wechat_info['name']}" name="">
+
+	<div class="nc-quote-box " style="padding: 0;">
+		<blockquote class="layui-elem-quote layui-quote-nm">微信配置</blockquote>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信公众号登录授权</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" value="1" lay-filter="status" name="status"lay-skin="switch" lay-text="|" {if $wechat_info['status'] eq 1}checked{/if}>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" >AppID</label>
+			<div class="layui-input-inline">
+				<input type="text" name="app_id" required placeholder="请输入AppID" autocomplete="off" class="layui-input nc-len-long" value="{$wechat_info['value']['app_id']}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">AppSecret</label>
+			<div class="layui-input-inline">
+				<input type="text" name="app_secret" required placeholder="请输入AppSecret" autocomplete="off" class="layui-input nc-len-long" value="{$wechat_info['value']['app_secret']}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">消息校验Token</label>
+			<div class="layui-input-inline">
+				<input type="text" name="token" autocomplete="off" class="layui-input nc-len-long" required placeholder="请输入Token" value="{$wechat_info['value']['token']}">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">消息加解密Key</label>
+			<div class="layui-input-inline">
+				<input type="text" name="encodingaeskey" autocomplete="off" class="layui-input nc-len-long" required placeholder="请输入Key" value="{$wechat_info['value']['encodingaeskey']}">
+			</div>
+		</div>
+	</div>
+	<div class="nc-quote-box ">
+		<blockquote class="layui-elem-quote layui-quote-nm">服务器配置</blockquote>
+		<div class="layui-form-item">
+			<label class="layui-form-label">登录授权的发起页域名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" class="layui-input config-input nc-len-long" readOnly value="{$data_url.host}" id="login_url">
+			</div>
+			<a href="javascript:copy('login_url')" class="layui-btn layui-btn-primary">复制</a>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">授权事件接收URL</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" class="layui-input config-input nc-len-long" readOnly value="{$data_url.auth_msg_url}" id="author_url">
+			</div>
+			<a href="javascript:copy('author_url')" class="layui-btn nui-copy layui-btn-primary">复制</a>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">消息与事件接收URL</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" class="layui-input config-input nc-len-long" readOnly value="{$data_url.msg_url}" id="message_url">
+			</div>
+			<a href="javascript:copy('message_url')" class="layui-btn nui-copy layui-btn-primary">复制</a>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">公众号开发域名</label>
+			<div class="layui-input-inline">
+				<input type="text" name="" class="layui-input config-input nc-len-long" readOnly value="{$data_url.open_url}" id="public_url">
+			</div>
+			<a href="javascript:copy('public_url')" class="layui-btn nui-copy layui-btn-primary">复制</a>
+		</div>
+	</div>
+	
+	<div class="nc-form-row">
+		<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+		<button onclick="windwo.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+	</div>
+</div>
+
+{/block}
+{block name="script"}
+<script src="ADDON_WECHAT_NIUCLUD_JS/wechat.js"></script>
+{/block}

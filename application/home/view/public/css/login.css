@@ -1,0 +1,135 @@
+body{
+    min-width: 1150px;
+    background-color: #EDF0F3;
+}
+.login-content{
+    display: flex;
+    margin: 150px auto;
+    justify-content: space-between;
+    width: 1100px;
+}
+
+.login-content .login-content-left .login-left-title{
+    margin-left: 58px;
+    font-size: 38px;
+    font-weight: bold;
+}
+.login-content .login-content-left .login-left-desc{
+    margin-left: 58px;
+    margin-top: 15px;
+    line-height: 1.4;
+    color: #666;
+}
+.login-content .login-content-left .login-left-pic{
+    width: 481px;
+    height: 382px;
+    margin-top: 20px;
+}
+
+.login-content .login-content-right{
+    display: table;
+    width: 500px;
+    border-radius: 5px;
+    padding: 40px 60px;
+    background-color: #fff;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.login-content .login-content-right h3{
+    font-size: 18px;
+}
+.login-content-right input{
+    margin-top: 20px;
+    padding-left: 20px;
+    width: 380px;
+    height: 42px;
+    border-radius: 3px;
+    border: 1px solid #e5e5e5;
+    box-sizing: border-box;
+}
+.login-content-right .nui-home-username{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.login-content-right .nui-home-username input{
+    margin-top: 0;
+    width: 196px;
+}
+
+.login-content-right .nui-home-username .nui-username-bg{
+    display: inline-block;
+    width: 158px;
+    height: 42px;
+    vertical-align: middle;
+}
+.login-content-right .nui-home-username .nui-username-bg img{
+    max-width: 100%;
+    max-height: 100%;
+    width: 100%;
+}
+.login-content-right .remember{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.login-content-right .login-btn-box{
+    margin-top: 20px;
+    height: 42px;
+    text-align: center;
+    line-height: 42px;
+    cursor: pointer;
+}
+
+.login-content-right .login-btn{
+    color: #fff;
+    font-size: 14px;
+}
+
+.login-content-right .third-party-log{
+    position: relative;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.login-content-right .third-party-log hr{
+    position: absolute;
+    top: 7px;
+    width: 100%;
+    background-color: #e5e5e5;
+}
+
+.login-content-right .third-party-log span{
+    position: relative;
+    z-index: 2;
+    display: inline-block;
+    width: 120px;
+    height: 30px;
+    line-height: 30px;
+    background-color: #fff;
+}
+.login-content-right .third-party-log .third-party-log-imgs{
+    margin-top: 25px;
+}
+.login-content-right .third-party-log .third-party-log-imgs img{
+    margin-right: 65px;
+}
+.login-content-right .third-party-log .third-party-log-imgs img:last-of-type{
+    margin-right: 0;
+}
+
+.login-footer{
+    overflow: hidden;
+    height: 70px;
+    font-size: 12px;
+    text-align: center;
+    color: #999;
+}
+.login-footer p:first-of-type{
+    margin-top: 13px;
+}
+.login-footer p{
+    line-height: 1.9;
+}
+.login-footer p a{color:#999;}

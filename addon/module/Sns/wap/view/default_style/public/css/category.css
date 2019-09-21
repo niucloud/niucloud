@@ -1,0 +1,39 @@
+.bar {
+    height: 40px;
+}
+
+.project {
+    padding: 0 4% 4%;
+    background-color: #fff;
+    overflow: hidden;
+}
+
+.grey-bar {
+    width: 100%;
+    height: 10px;
+    background: #eee;
+}
+
+.title {
+    width: 100%;
+    height: 50px;
+    font-weight: bold;
+    line-height: 50px;
+    font-size: 18px;
+}
+
+.items div {
+    float: left;
+    width: 29%;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    margin: 0 0 10px 6%;
+    border: 1px solid #bbb;
+    border-radius: 3px;
+    color: #777;
+}
+
+.items div:nth-child(3n+1) {
+    margin-left: 0;
+}

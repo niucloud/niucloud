@@ -1,0 +1,90 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<style type="text/css">
+body{background: #F0EFF4;}
+.body-main{background: #F0EFF4; line-height: 48px; color: #000;font-size: 14px;}
+.block-title{color: #666; padding-left: 10px;}
+
+.block-content{background: #ffffff;padding-left: 10px;}
+.block-content .row-label{border-bottom: 1px solid #eeeeee;width: 100%;overflow: hidden;}
+.row-label .label-title{float: left;}
+.row-label .label-value{float: right; padding-right: 10px;color: #666;}
+
+.block-item{height: 53px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+    line-height: 26px;
+    padding: 10px 0px;}
+.block-item>div{float: left;}
+.block-item .item-img-lf{    height: 52px;
+    width: 52px;
+    background: #eee;}
+.block-item .item-text-ct{margin-left: 10px;}
+.block-item .item-text-ct .text-describe{color: #666;}
+.block-item .item-link-rg{
+	    float: right;
+    padding-right: 10px;
+    margin-top: 12px;
+    overflow: hidden;
+}
+.block-item .item-link-rg span{	
+	height: 10px; width: 10px; 
+	display: inline-block;
+	border-bottom: 1px solid #484848;
+	border-right: 1px solid #484848;
+transform:rotate(-48deg);
+-ms-transform:rotate(-48deg); 	/* IE 9 */
+-moz-transform:rotate(-48deg); 	/* Firefox */
+-webkit-transform:rotate(-48deg); /* Safari 和 Chrome */
+-o-transform:rotate(-48deg); 	/* Opera */
+}
+</style>
+{/block}
+{block name="main"}
+<div class="body-main">
+	<p class="block-title">订单详情</p>
+	<div class="block-content">
+	
+		<div class="row-label">
+			<div class="label-title">商品名称</div>
+			<div class="label-value">{$pay_info.pay_detail}</div>
+		</div>
+		
+		<div class="row-label">
+			<div class="label-title">订单编号</div>
+			<div class="label-value">{$pay_info.out_trade_no}</div>
+		</div>
+		
+		<div class="row-label">
+			<div class="label-title">商家名称</div>
+			<div class="label-value">{$pay_info.pay_body}</div>
+		</div>
+		<div class="row-label">
+			<div class="label-title">订单价格</div>
+			<div class="label-value">{$pay_info.pay_money}元</div>
+		</div>
+		
+	</div>
+	
+	<p class="block-title">支付方式</p>
+	<div class="block-content">
+		{volist name = "pay_config" id = "vo"}
+			{if condition = "$vo.config_info neq Null && $vo.config_info.status eq 1"}
+			<a href="{:addon_url('Pay://wap/pay/payment', ['type'=> $vo.info.name,'pay_data'=> $pay_data])}&notify_url={$notify_url}&return_url={$return_url}" ><div class="block-item block-link">
+				<div class="item-img-lf"><img src="" alt="" /></div>
+				<div class="item-text-ct">
+					<p class="text-title">{$vo['info']['title']}</p>
+					<div class="text-describe">{$vo['info']['description']}</div>
+				</div>
+				<div class="item-link-rg"><span class="link-right"></span></div>
+			</div>
+			</a>
+			{/if}
+		{/volist}
+		
+		
+	</div>
+</div>
+{/block}
+{block name="script"}
+{/block}

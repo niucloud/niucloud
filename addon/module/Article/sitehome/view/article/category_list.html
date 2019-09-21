@@ -1,0 +1,306 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+
+<div class='nc-functional-block'>
+	<button class="layui-btn" id="add_btn" onclick="openModal();">添加分类</button>
+</div>
+<div class="nc-table-box">
+    <table id="category_list" lay-filter="category_list" class="layui-table"></table>
+</div>
+
+<script type="text/html" id="sort_info">
+<input type="number" value="{{d.sort}}" class="layui-input nc-len-short" onchange="sortChange({{d.category_id}}, this)"/>
+</script>
+<script type="text/html" id="operation">
+	<a class="default" class="default" lay-event="edit" >编辑</a>
+	<a class="default"  class="default" lay-event="del">删除</a>
+</script>
+{/block}
+{block name="script"}
+<script type="text/html" id="category_html">
+	<!-- 分类的添加修改 -->
+	<div class="layui-form category-form" lay-filter="category_add">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>分类名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="category_name" value="{{ d.data.category_name || '' }}" lay-verify="category_name" autocomplete="off" placeholder="请输入分类名称" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">上级分类</label>
+			<div class="layui-input-inline">
+				<select name="p_id" class="nc-len-mid" lay-filter="p_id">
+					<option value="0">顶级分类</option>
+					{{#  layui.each(d.category_data, function(index, item){ }}
+						<option value="{{ item.category_id }}" {{#  if(item.category_id == d.data.p_id ){ }} selected {{#  } }}>{{ item.category_name }}</option>
+					{{#  }); }}
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-inline">
+				<input type="number" name="sort" value="{{ d.data.sort || 0 }}" lay-verify="sort" autocomplete="off" placeholder="请输入排序" class="layui-input nc-len-tiny" >
+			</div>
+		</div>
+		<input type="hidden" name="category_id" value="{{ d.data.category_id || 0 }}"/>
+		<div class="nc-form-row">
+			<input type="button" value="保存" class="layui-btn"  lay-submit="" lay-filter="add_save"/>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+
+<script>
+var form,laytpl,layer_index;
+var table = new Table({
+	elem: '#category_list',
+	filter : "category_list",
+	url : '{:addon_url("article://sitehome/article/articlecategorylist")}',
+	where : {
+		category_id: 0
+	},
+	cols: [
+		[{
+			field: 'child',
+			width: '10%',
+			title: '',
+			templet: function(d){
+				if(d.child_num) return '<span class="extend" lay-event="extend" data-id="'+ d.category_id +'">[+]</span>';
+				else return '';
+			},
+            align: 'left',
+            unresize : 'true'
+		}, {
+			field: 'category_name',
+			width: '40%',
+			title: '分类名称',
+            unresize : 'true'
+		},  {
+			field: '',
+			width: '20%',
+			title: '排序',
+			templet: '#sort_info',
+            unresize : 'true'
+		}, {
+			title: '操作',
+			toolbar: '#operation',
+			align:'right',
+            unresize : 'true'
+		}]
+	]
+});
+
+//监听工具条
+table.tool(function(obj){
+	var data = obj.data;
+	switch (obj.event) {
+		case "extend":
+			getChildCategoryList(data.category_id);
+			break;
+		case "edit":
+			openModal(data);
+			break;
+		case "del":
+			delCategory(data.category_id);
+			break;
+	}
+});
+
+layui.use(['form', 'laytpl'], function(){
+    form = layui.form;
+	laytpl = layui.laytpl;
+	var repeat_flag = false;//防重复标识
+  	form.on('submit(add_save)', function(data){
+  		
+  		if(repeat_flag) return;
+		repeat_flag = true;
+  		
+  		var field = data.field;
+		if(field.category_id == 0){
+			var url = '{:addon_url("article://sitehome/article/categoryadd")}';
+		}else{
+			var url = '{:addon_url("article://sitehome/article/categoryedit")}';
+		}
+  		$.ajax({
+        	type:"post",
+			url : url,
+        	data: field,
+       		dataType : "JSON",
+			success:function(res){
+				layer.msg(res.message);
+				layer.close(layer_index);
+				if(res.code == 0) {
+					table.reload();
+				}
+				repeat_flag = false;
+			}
+		});
+
+  		return false;
+  	});
+  	
+  	form.verify({
+  		category_name:function(value){
+  			if(value == ''){
+  				return '请输入分类名称';
+  			}
+  		},
+	  });
+	 
+});
+
+/**
+ * 根据条件打开弹框
+ */
+function openModal(data){
+	var category_data = [];
+	if(data == undefined){
+		title = "添加文章类型";
+		data = {};
+	}else{
+		title = "修改文章类型";
+	}
+	//查询
+	$.ajax({
+            type:"post",
+			url : '{:addon_url("article://sitehome/article/articlecategorylist")}',
+            data: { 'category_id' : 0 },
+			dataType : "JSON",
+			async : false,
+			success:function(res){
+				if(res.code == 0){
+					category_data = res.data.list;
+				}
+			}
+		});
+	var tpl_data = { 
+		"data":data,
+		"category_data":category_data
+	};
+	var tpl_html = $("#category_html").html();
+	laytpl(tpl_html).render(tpl_data, function(html){
+		layer_index = layer.open({
+			title: title,
+			type: 1,
+			area: ['550px'],
+			content: html,
+		});
+	});
+	form.render();//重载form表单
+}
+
+/**
+ * 删除分类
+ */
+function delCategory(category_ids){
+	$.ajax({
+        type:"post",
+        async:false,
+        url: '{:addon_url("article://sitehome/article/categoryCount")}',
+        data: { 'category_id' : category_ids },
+        dataType : "JSON",
+		success:function(res){
+			if(res.data == 0){
+				layer.confirm('确定删除吗?', {
+			        btn: ['确定','返回']
+			    }, function(){
+			        $.ajax({
+			            type:"post",
+			            async:false,
+			            url: '{:addon_url("article://sitehome/article/categorydelete")}',
+			            data: { 'category_ids' : category_ids },
+			            dataType : "JSON",
+						success:function(res){
+							layer.msg(res.message);
+							if(res.code == 0){
+								table.reload();
+							}
+						}
+			    });
+			    }, function(){
+			        layer.close();
+			    });
+			}else{
+				layer.msg('该分类存在下级分类，不可以删除');
+			}
+		}
+	})
+	
+}
+
+/**
+ * 获取二级分类
+ */
+function getChildCategoryList(category_id){
+	var type = $("span[data-id='"+ category_id +"']").html();
+	if(type == '[+]'){
+		$.ajax({
+            type:"post",
+			url : '{:addon_url("article://sitehome/article/articlecategorylist")}',
+            data: { 'category_id' : category_id },
+            dataType : "JSON",
+			success:function(res){
+				if(res.code == 0){
+					var list = res.data.list;
+					var html = '';
+					if(list.length > 0){
+						$.each(list, function(name, value){
+							html += '<tr data-id="'+ category_id +'">';
+								html += '<td><div class="layui-table-cell"></div></td>';
+								html += '<td><div class="layui-table-cell before">'+ value.category_name +'</div></td>';
+								html += '<td><div class="layui-table-cell"><input type="number" value="'+ value.sort +'" class="layui-input nc-len-short" onchange="sortChange('+ value.category_id +', this)"/></div></td>';
+								html += '<td><div class="layui-table-cell"><a class="default" event="edit" onclick="editCategory('+ value.category_id +')">编辑</a>\n<a class="default" event="del" onclick="delCategory('+ value.category_id +')">删除</a></div></td>';
+							html += '</tr>';
+						})
+					}
+					$("span[data-id='"+ category_id +"']").html('[-]');
+					var obj = $("span[data-id='"+ category_id +"']").parentsUntil('tbody');
+					obj.eq(obj.length-1).after(html);
+				}
+			}
+		})
+	}else{
+		$("span[data-id='"+ category_id +"']").html('[+]');
+		$("tr[data-id='"+ category_id +"']").remove();
+	}
+}
+
+function sortChange(category_id, event){
+	var sort = $(event).val();
+	$.ajax({
+		type:"post",
+        async:false,
+        url : '{:addon_url("article://sitehome/article/sortArticleCategory")}',
+		data:{'category_id':category_id, 'sort': sort},
+		dataType : "JSON",
+		success: function (res) {
+			layer.msg(res.message);
+			table.reload();
+		}
+	});
+	
+}
+
+/**
+ * 编辑
+ * @param category_id
+ */
+function editCategory(category_id){
+    $.ajax({
+        type:"post",
+        url : '{:addon_url("article://sitehome/article/categoryinfo")}',
+        data: { 'category_id' : category_id },
+        dataType : "JSON",
+        success:function(res){
+            if(res.code == 0){
+                var data = res.data;
+                openModal(data);
+            }
+        }
+    })
+}
+</script>
+{/block}

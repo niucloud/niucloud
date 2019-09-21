@@ -1,0 +1,92 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<style>
+    .clearfix:after{content:'';display:block;height:0;clear:both}
+    .addons-buy-icon{width:200px;height:200px;display:inline-block;vertical-align:middle;border-radius:5px;text-align:center;line-height:200px}
+    .addons-buy-icon img{max-width:100%;max-height:100%;vertical-align:middle}
+    .layui-btn-primary{border:1px solid #C9C9C9;background-color:#fff;color:#555}
+    .buy-time-select{background-color:#fff;color:#0d73f9;border:1px solid #0d73f9}
+    .total_price{font-size:22px;color:#f36a5a}
+    .select-box{margin-top:30px;line-height:30px}
+    .select-box span{display:block;width:100px;float:left;text-align:center;cursor:pointer}
+    .detail-container{border-top:1px solid #f1eded;padding:6px 4px}
+    .item-key{display:block;width:70px;float:left;line-height:30px}
+    .item-val{display:block;margin-left:70px}
+    .item-val .layui-btn-primary{margin-left:0;margin-right:10px;margin-bottom:10px}
+</style>
+{/block} 
+{block name="main"}
+
+<div>
+    <p class="layui-elem-quote">购买</p>
+    <div style="padding: 20px; background-color: #f9f9f9;">
+        <div class="layui-row layui-col-space15">
+            <div class="layui-col-xs2 addons-buy-icon">
+                <img src="{:img($info.pic)}">
+            </div>
+            <div class="layui-col-xs6">
+                <div>
+                    <label>{$info['title']}</label>
+                    <br>
+                    <div class="layui-text">版本：{$info['version']}</div>
+                </div>
+                <br>
+                <div class="layui-text">应用价格：<span class="total_price" id="money">{$info.month}</span></div>
+                <br>
+                <div class="layui-text buy_time">
+                	<span class="item-key">购买周期</span>
+                    <span class="item-val">
+                    	<button class="layui-btn layui-btn-primary buy-time-select" type="month" money="{$info.month}" >一个月</button>
+	                    <button class="layui-btn layui-btn-primary" type="season" money="{$info.season}">一季度</button>
+	                    <button class="layui-btn layui-btn-primary" type="year" money="{$info.year}">一年</button>
+	                    <button class="layui-btn layui-btn-primary" type="price" money="{$info.price}">永久</button>
+                    </span>
+                </div>
+                <div>
+                    <button class="layui-btn " onclick="orderCreate()">立即订购</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="select-box clearfix">
+    	<span class="select">应用详情</span>
+<!--     	<span>使用教程</span> -->
+    </div>
+    <div class="detail-container">
+    	<div class="content">{$info['content']}</div>
+    	<div class="content" style="display:none;">{$info['tutorial']}</div>
+    </div>
+    <input type="hidden" id="hidden_name" value="{$info['name']}">
+</div>
+<script>
+	price();
+
+    $('.buy_time button').click(function() {
+        $('.buy_time button').removeClass('buy-time-select');
+        $(this).addClass('buy-time-select');
+        price();
+    })
+    
+    $(".select-box span").each(function(i){
+    	$(this).click(function(){
+    		$(this).addClass('select').siblings().removeClass('select');
+    		$(".detail-container div").eq(i).show().siblings().hide();
+    	})
+    })
+    
+    function price(){
+    	var obj = $('.buy-time-select');
+    	var money = obj.attr('money');
+        $('#money').text('￥'+money);
+    }
+    
+   function orderCreate(){
+    	
+       var name = $('#hidden_name').val();
+       var type = $('.buy-time-select').attr('type');
+       
+       window.location.href = nc.url('sitehome/addons/orderInfo', {"name" : name, "type" : type});
+       
+    }
+</script>
+{/block}

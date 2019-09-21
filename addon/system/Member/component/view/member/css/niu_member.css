@@ -1,0 +1,96 @@
+@CHARSET "UTF-8";
+
+.draggable-element .member .preview-draggable {
+    padding: 0;
+}
+
+.custom-level {
+    width: 100%;
+    position: relative;
+}
+
+.custom-level img {
+    max-width: 100%;
+    display: block;
+}
+
+.layui-advice {
+    width: 50%;
+    display: inline-block;
+    margin-left: 107px;
+    color: #ccc;
+    margin-top: 10px;
+}
+
+/*头像*/
+.member-head {
+    position: absolute;
+    top: 40%;
+    margin-top: -30px;
+    text-align: center;
+}
+
+.member-head img {
+    max-width: 60px;
+    max-height: 60px;
+    vertical-align: middle;
+    width: auto;
+    height: auto;
+    margin: 0 10px;
+    border-radius: 50%;
+}
+
+.member-head.center {
+    left: 50%;
+    margin-left: -40px;
+    margin-top: -45px;
+}
+
+.member-head.center img {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.member-head.right {
+    width: 100%;
+}
+
+.member-head.right img {
+    float: right;
+}
+
+.member-head.right label {
+    float: left;
+    line-height: 60px;
+    margin-left: 10px;
+}
+
+.member--head-subtitle{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 80%;
+    height: 40px;
+    background-color: #3c3731;
+    color: #FFF;
+    font-size: 12px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    transform: translateX(-50%);
+}
+
+.member--head-subtitle:hover{
+    color: #fff;
+}
+
+.member--head-subtitle span:first-of-type{
+    margin-left: 10px;
+    color: #999;
+}
+
+.member--head-subtitle span:last-of-type{
+    margin-right: 10px;
+}

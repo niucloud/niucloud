@@ -1,0 +1,178 @@
+{extend name="admin@base"/}
+{block name="main"}
+<style type="text/css">
+    .effect {
+        width: 260px;
+    }
+    .message-template-content {
+        display: inline-block;
+        position: absolute;
+        left: 18px;
+        margin-bottom: 12px;
+        padding: 8px 15px;
+        width: 206px;
+        word-break: break-all;
+        font-size: 16px;
+        line-height: 1.25;
+        color: #000;
+        background: #e5e5ea;
+        border-radius: 17px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        top: 111px;
+        max-height: 273px;
+        min-height: 30px;
+    }
+    .message-template-content:after{
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 30px;
+        width: 10px;
+        height: 20px;
+        background: #e5e5ea;
+        border-bottom-right-radius: 10px;
+        -webkit-transform: translate(-30px,-2px);
+        -moz-transform: translate(-30px,-2px);
+        -ms-transform: translate(-30px,-2px);
+        transform: translate(-30px,-2px);
+    }
+    .keywords {
+        height: 30px;
+        display: inline-block;
+        color: #000;
+        font-size: 14px;
+        line-height: 30px;cursor:pointer
+    }
+    .layui-textarea[disabled]{
+        background: #eee;
+    }
+    .layui-textarea[disabled]:hover,.layui-textarea[disabled]:focus{
+        border-color: #e6e6e6!important;
+    }
+    .hint{color: #888;}
+    .var-parse-block{font-size:12px;}
+    .layui-table td,.layui-table th,.layui-table-fixed-r,.layui-table-header,.layui-table-page,.layui-table-tips-main,.layui-table-tool,.layui-table-view,.layui-table[lay-skin=line],.layui-table[lay-skin=row]
+    {
+        border-width: 1px;
+        border-color: #EAEAEA;
+    }
+
+</style>
+<div class="layui-form">
+    <div class="layui-form-item layui-form-text layui-col-md6 ">
+        <label class="layui-form-label"><span class="required">*</span>是否启用</label>
+        <div class="layui-input-block">
+            <input type="checkbox" name="status" value="1"lay-skin="switch" {if $type_info['sms_is_open'] eq 1}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">短信模板编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="code" lay-verify="code" placeholder="请输入短信模板编号" autocomplete="off" class="layui-input nc-len-long" value="{$info['code']}" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">变量解析</label>
+        <!-- 关键字 -->
+        <div class="layui-btn-group var-parse-block nc-len-long"  >
+            {if !empty($type_info['var_json'])}
+            <table class="layui-table" lay-skin="" lay-size="sm">
+                <colgroup>
+                    <col width="150">
+                    <col width="200">
+                    <col>
+                </colgroup>
+                <thead>
+                <tr>
+                    <th>变量名</th>
+                    <th>变量</th>
+                    <th>重定义变量</th>
+                </tr>
+                </thead>
+                <tbody>
+                {foreach $type_info['var_json'] as $k => $v }
+                <tr>
+                    <td>{$v}</td>
+                    <td>{$k}</td>
+                    <td><input var-tag="{$k}"type="text" class="layui-input var-parse nc-len-short" value="{$info['var_parse'][$k]}"></td>
+                </tr>
+                {/foreach}
+                </tbody>
+            </table>
+            {/if}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">消息内容</label>
+
+        <div class="layui-input-block" style="width:508px;">
+            <textarea placeholder="请输入内容" name="content" lay-verify="content"class="layui-textarea nc-len-long" id="content">{$info['content']}</textarea>
+            <p class="hint">使用阿里云等第三方短信，可以按自己需求来创建，只需使用变量与系统提供的关键字相同即可。(<span>注:当前消息内容仅用于参考显示</span>)</p>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <img class="effect" src="ADDON_NS_SMS_ALIYUN_IMG/message-v3.png">
+            <div class="message-template-content sms_template_content">{$info['content']}</div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script>
+    layui.use('form', function() {
+        var form = layui.form;
+		var repeat_flag = false;//防重复标识
+        form.verify({
+            code : function (value) {
+                if(value.length == 0){
+                    return '请输入短信模板编号';
+                }
+            }
+
+        });
+        form.on('submit(save)', function(data){
+            var field = data.field;
+			var var_parse_array = {};
+			$(".var-parse").each(function(){
+				var tag = $(this).attr("var-tag");
+				var val = $(this).val();
+				var_parse_array[tag] = val;
+			});
+			var var_parse = JSON.stringify(var_parse_array);
+			field.keyword = "{$keyword}";//关键字
+			field.var_parse = var_parse;//变量解析
+			if(repeat_flag) return;
+			repeat_flag = true;
+            $.ajax({
+                type : "get",
+                url : '{:addon_url("SmsAliyun://admin/Index/template")}',
+                data: field,
+                dataType : "JSON",
+                success : function(res) {
+                    layer.msg(res.message);
+                    if(res.code >= 0){
+                       location.href= '{:addon_url("Sms://admin/config/template")}';
+                    }else{
+						repeat_flag = false;
+                    }
+
+                }
+            });
+        });
+    });
+    $("body").on("keyup", "#content", function(){
+        var val = $(this).val();
+        $(".sms_template_content").text(val);
+    })
+</script>
+{/block}

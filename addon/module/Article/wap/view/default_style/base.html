@@ -1,0 +1,61 @@
+{php}
+	//加载语言
+	\think\Lang::load("addon/app/Niushop/lang/zh-cn.php");
+{/php}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1"/>
+    {php}
+    	$seo = api('System.Manage.seo', ['site_id' => SITE_ID]);
+    {/php}
+    <meta name="keywords" content="{$seo['data']['keywords']}" />
+    <meta name="description" content="{$seo['data']['description']}"/>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+	<link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
+	<title>{$title ? $title.'-' : '' } {$seo['data']['title']}</title>
+	
+	<link rel="stylesheet" type="text/css" href="__STATIC__/ext/mzui/css/mzui.css" />
+	<link rel="stylesheet" href="__STATIC__/css/normalize.css">
+	<link rel="stylesheet" href="__STATIC__/ext/mescroll/css/mescroll.css"/>
+	<link rel="stylesheet" href="WAP_ADDON_CSS/base.css">
+	
+	<!--<link rel="stylesheet" href="ADDON_MODULE/DiyView/sitehome/view/public/ext/mui/css/mui.min.css" />-->
+	<!--<link rel="stylesheet" href="ADDON_MODULE/DiyView/sitehome/view/public/ext/mui/css/mui_rewrite.css" />-->
+	<!--<script src="ADDON_MODULE/DiyView/sitehome/view/public/ext/mui/js/mui.js"></script>-->
+	<!--<script src="ADDON_MODULE/DiyView/sitehome/view/public/ext/mui/js/mui.zoom.js"></script>-->
+	<!--<script src="ADDON_MODULE/DiyView/sitehome/view/public/ext/mui/js/mui.previewimage.js"></script>-->
+	<script src="__STATIC__/js/jquery-2.2.js"></script>
+	<script src="STATIC_JS/jquery.cookie.js"></script>
+	<script src="__STATIC__/ext/mzui/js/mzui.js"></script>
+	<script src="__STATIC__/ext/analytics.js"></script>
+	<script src="__STATIC__/ext/mescroll/js/mescroll.js"></script>
+	
+    <script>
+	    var APP_KEY = "{$site_info['app_key']}";
+		var API_URL = '{$API_URL}/';
+        var ACCESS_TOKEN = '{$access_token}';
+        var STATIC = "__STATIC__";
+        window.nc_url = {
+            baseUrl: "{:request()->root(true)}/",
+            route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+        };
+    </script>
+    <script src="__STATIC__/js/common.js"></script>
+    <script src="WAP_ADDON_JS/common.js"></script>
+    {block name="resources"}{/block}
+</head>
+<body>
+
+{block name="head"}
+{/block}
+{block name="main"}{/block}
+{block name="bottom"}
+<div></div>
+{/block}
+{block name="script"}{/block}
+</body>
+</html>

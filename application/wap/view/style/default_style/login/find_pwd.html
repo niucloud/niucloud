@@ -1,0 +1,62 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<link rel="stylesheet" type="text/css" href="WAP_CSS/login_css/login_find.css">
+{/block}
+{block name="main"}
+{php}
+	$type = request()->get('type', 1);
+
+{/php}
+
+<!-- 密码修改 -->
+<div class="hui-wrap">
+	<div class="hui-center-title" style="margin-top:35px;"><h1 style="border:0px;">找回密码</h1></div>
+	<div style="margin:20px 10px; margin-bottom:15px;" class="hui-form" id="form_find">
+{if condition="$type == 1"}
+		<!-- 手机 -->
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">手机号</div>
+			<input type="text" class="hui-input hui-input-clear" name="mobile" id="mobile" placeholder="输入11位手机号" />
+		</div>
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">验证码</div>
+			<input type="text" class="hui-input" id="mobile_code"  name="mobile_code"placeholder="输入手机验证码" />
+			<div style="width:160px;">
+				<button class="send-code sendcode" onclick="sendSmsCode(this)"  width="100%">获取动态码</button>
+			</div>
+		</div>
+{else/}
+		<!-- 邮箱 -->
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">邮箱号</div>
+			<input type="text" class="hui-input hui-input-clear" name="email" id="email" placeholder="输入11位手机号" />
+		</div>
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">验证码</div>
+			<input type="password" class="hui-input" id="email_code"  name="email_code"placeholder="输入手机验证码" />
+			<div style="width:160px;">
+				<button class="send-code sendcode" onclick="sendEmailCode(this)"  width="100%">获取动态码</button>
+			</div>
+		</div>
+{/if}
+
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">新密码</div>
+			<input type="password" class="hui-input hui-pwd-eye" placeholder="输入新密码"  id="pass" name="pass"onfocus="$(this).attr('type','password')" />
+		</div>
+		<div class="hui-form-items">
+			<div class="hui-form-items-title">确认密码</div>
+			<input type="password" class="hui-input hui-pwd-eye" placeholder="确认新密码"  id="new_pass" name="new_pass" onfocus="$(this).attr('type','password')" />
+		</div>
+	</div>
+
+	<div style="padding:10px; padding-top:10px;">
+		<input type="hidden" id="tesing" value="{$type}" />
+		<button type="button" class="hui-button hui-button-large hui-primary" id="submit">保存</button>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript" src="__STATIC__/ext/hui/js/hui-form.js"></script>
+<script src="WAP_JS/login_js/login_find.js"></script>
+{/block}

@@ -1,0 +1,24 @@
+<style>
+	.promote .img-wrap{text-align: center;padding: 20px;width: 200px;margin: 0 auto;}
+	.promote .img-wrap img{max-width: 100%;}
+	.promote .info-wrap h5{margin-bottom: 10px;}
+	.layui-form-item{margin-left: 64px;}
+</style>
+<div class="layui-tab layui-tab-brief promote">
+	<ul class="layui-tab-title">
+		<li>H5</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<div class="img-wrap">
+				<img src="{:img($qr_code)}"/>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-inline">
+					<input class="layui-input nc-len-mid" type="text" value="{:addon_url($info_url)}" id="promote_wap">
+				</div>
+				<input type="button" value="复制" class="layui-btn layui-btn-primary" onclick="nc.copy('promote_wap')">
+			</div>
+		</div>
+	</div>
+</div>

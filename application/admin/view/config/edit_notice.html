@@ -1,0 +1,66 @@
+{extend name="base"/}
+{block name="main"}
+<div class="layui-form" lay-filter="notice">
+<div class="layui-form layui-show">
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>公告标题</label>
+		<div class="layui-input-block">
+       		<input type="text" name="title" {notempty name="$info"} value="{$info.title}" {else/} value="" {/notempty}  lay-verify="required" autocomplete="off" placeholder="公告标题" class="layui-input nc-len-long">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">请填写公告标题</div>
+	</div>
+
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>公告分类</label>
+		<div class="layui-input-block nc-len-short">
+       		 <select name="notice_category_id" lay-verify="requiredselect" lay-filter="notice_category_id">
+			    <option value="">公告分类</option>      
+		      	{volist name="$category_list" id="vo"}
+					<option value="{$vo.notice_category_id}" {if !empty($info) && $vo.notice_category_id== $info.notice_category_id }selected{/if} >{$vo.title}</option>
+				{/volist}
+			</select>
+	    </div>
+	</div>
+	
+	<div class="layui-form-item">
+		<label class="layui-form-label sm"><span class="required">*</span>协议内容</label>
+		<div class="layui-input-inline">
+			<textarea id="editor">{notempty name="$info"}{$info.content}{/notempty}</textarea>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">阅读次数</label>
+		<div class="layui-input-block">
+       		<input type="number" min="0" lay-verify="number" name="click" {notempty name="$info"} value="{$info.click}" {else/} value="0" {/notempty}  lay-verify="require" autocomplete="off" placeholder="阅读次数" class="layui-input nc-len-tiny">
+	    </div>
+		<div class="layui-form-mid layui-word-aux">默认为0。您可以设置一个初始值,阅读次数会在该初始值上增加。</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">排序</label>
+		<div class="layui-input-inline">
+       		<input type="number" min="0" max="255" lay-verify="numberSort" name="sort" {notempty name="$info"} value="{$info.sort}" {else/} value="0" {/notempty}  lay-verify="require" autocomplete="off" placeholder="排序" class="layui-input nc-len-tiny">
+	    </div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">是否显示</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="is_display" autocomplete="off" class="layui-input" lay-skin="switch" lay-text="|" value="1" {if !empty($info) && $info.is_display} checked {/if}>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label sm">是否推荐</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="is_recommend" autocomplete="off" class="layui-input" lay-skin="switch" lay-text="|" value="1" {if !empty($info) && $info.is_recommend} checked {/if}>
+		</div>
+	</div>
+	<div class="nc-form-row sm">
+	    <button class="layui-btn" lay-submit lay-filter="formSave">保存</button>
+		<button onclick="window.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+	</div>
+	<input type="hidden" id="notice_id" {notempty name="$info"}value="{$info.notice_id}"{/notempty}>
+</div>
+</div>
+{/block}
+{block name="script"}
+<script src="ADMIN_JS/edit_notice.js"></script>
+{/block}

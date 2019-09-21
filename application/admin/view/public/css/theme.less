@@ -1,0 +1,135 @@
+@base: #12b7f5; // 主色调
+@color-black: #000;
+@color-red: red;  // 必填提醒
+
+//******************** 背景颜色 *******************
+
+.nc-bg-color {
+  background-color: @base !important;
+}
+
+.nc-bg-color-black {
+  background-color: @color-black !important;
+}
+
+.nc-bg-color-black-f7 {
+  background-color: lighten(@color-black,97%) !important;
+}
+
+.layui-nav.nc-nav .layui-this::after{
+  background-color: @base !important;
+}
+
+.layui-btn-disabled:hover{
+  background-color: @base !important;
+}
+.layui-card-header:after{
+  background-color: @base !important;
+}
+
+.create-progress-bar .layui-progress-bar,.create-site-content-btn{
+  background-color: @base !important;
+}
+
+//******************** 边框颜色 *******************
+.nc-border-color {
+  border-color: @base !important;
+}
+
+.nc-border-color-block {
+  border-color: @color-black !important;
+}
+
+//******************** 字体颜色 *******************
+a:hover{
+  color: @base;
+}
+
+.nc-text-color {
+  color: @base !important;
+}
+
+.nc-text-color-black {
+  color: @color-black !important;
+}
+
+.nc-text-color-black-99 {
+  color: lighten(@color-black,60%) !important;
+}
+
+.nc-list .head > span,.layui-text em, .layui-word-aux{
+  color: lighten(@color-black,60%) !important;
+}
+
+.nc-text-color-hover{
+  color: @base !important;
+}
+
+.niu-base .layui-nav .layui-this > a span, .niu-base .layui-nav.nc-nav  .layui-this > a, .niu-base .layui-nav  .layui-this > a{
+  color: @base !important;
+}
+
+.layui-nav.nc-nav .layui-nav-item a{
+  color: lighten(@color-black,20%) !important;
+}
+//******************** 按钮颜色 *******************
+.layui-btn{
+  background-color: @base !important;
+}
+.layui-btn.layui-btn-primary{
+  border-color: lighten(@color-black,90%) !important;
+  color: lighten(@color-black,40%) !important;
+}
+
+.layui-form-onswitch{
+  border-color: @base !important;
+  background-color: @base !important;
+}
+
+//******************** 表单必填提醒 *******************
+.required{
+  color: @color-red !important;
+}
+.layui-form-checked[lay-skin=primary] i{
+  border-color: @base !important;
+  background-color: @base !important;
+}
+.layui-form-select dl dd:hover{
+  color: @base !important;
+}
+.layui-form-select dl dd.layui-this{background: lighten(@color-black,97%) !important;color: @base !important;}
+//******************** 表格 *******************
+.layui-table tbody tr:hover, .layui-table thead tr, .layui-table-click, .layui-table-header, .layui-table-hover, .layui-table-mend, .layui-table-patch, .layui-table-tool, .layui-table[lay-even] tr:nth-child(even){
+  background-color: lighten(@color-black,97.5%) !important;
+}
+.layui-table td, .layui-table th{border-bottom-color: lighten(@color-black, 89.5%) !important;}
+
+//******************** 分页 *******************
+//.layui-table-page .layui-laypage a{
+////  border-color: @base !important;
+////}
+.layui-table-page .layui-laypage a, .layui-table-page .layui-laypage span.layui-laypage-curr{
+  border-color: lighten(@color-black,87%) !important;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em{
+  background-color: @base !important;
+}
+//******************** 列表 *******************
+.nc-list.style1 .head{
+  background-color: lighten(@color-black,97%) !important;
+}
+
+.nc-list > ul > li{
+  border-color: lighten(@color-black,90%);
+}
+
+.nc-list > ul > li > .operation{
+  color: @base !important;
+}
+//******************** 菜单 *******************
+.layui-nav .layui-nav-item a:hover, .layui-nav .layui-this a{
+  color: @base !important;
+}
+
+//******************** 面包屑 *******************
+.layui-breadcrumb a:hover{color: @base !important;}

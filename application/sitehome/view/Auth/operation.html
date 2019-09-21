@@ -1,0 +1,106 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+.search-titem{width: auto;}
+</style>
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+    <div class="layui-form" id="search_form">
+        <div class="layui-input-inline">
+            <input type="text" name="search_username" placeholder="请输入操作人名称" autocomplete="off" class="layui-input nc-len-short">
+        </div>
+        <div class="layui-input-inline">
+            <input type="text" name="search_module" placeholder="请输入模块名称" autocomplete="off" class="layui-input nc-len-short">
+        </div>
+        <div class="layui-input-inline daterange-input-wrap">
+            <input type="text" class="layui-input daterange-input nc-len-slightly" id="daterange" placeholder=" - ">
+        </div>
+        <button class='layui-btn layui-btn-primary' lay-submit lay-filter="searchForm">筛选</button>
+        <!--<div class="nc-form-row sm">-->
+        <!--<button type="reset" class='layui-btn layui-btn-primary'>重置搜索条件</button>-->
+        <!--</div>-->
+    </div>
+</div>
+<div class="nc-table-box">
+    <table id="log_list" lay-filter="log"></table>
+</div>
+
+<script id="create_time" type="text/html">
+	{{nc.time_to_date(d.create_time)}}
+</script>
+
+{/block}
+{block name="script"}
+<script>
+var layui_form, laydate;
+var table = new Table({
+	elem: '#log_list',
+	url: '{:url("sitehome/auth/operation")}', //数据接口
+	cols: [[
+		{
+			field: 'username',
+			title: '操作人',
+			width: '25%',
+            unresize : 'true'
+		}, {
+			field: 'module',
+			title: '操作模块',
+			width: '25%',
+            unresize : 'true'
+		}, {
+			field: 'create_time',
+			title: '操作时间',
+			width: '25%',
+			templet: '#create_time',
+            unresize : 'true'
+		}, {
+			field: 'title',
+			title: '操作内容',
+			align: 'right',
+            unresize : 'true'
+		}]]
+});
+
+layui.use(['form', 'laydate'], function() {
+	layui_form = layui.form;
+	laydate = layui.laydate;
+	layui_form.render();
+
+    var daterange = '{:date("Y-m-d h:m:s", strtotime("-6 days"))} - {:date("Y-m-d h:m:s")}';
+    laydate.render({
+        elem: '#daterange'
+        ,format: 'yyyy-MM-dd HH:mm:ss'
+        ,range: true
+        ,value: daterange
+    });
+	
+	layui_form.on('submit(searchForm)', function(data){
+        var strs = $("#daterange").val().split(" - ");
+        var field = data.field;
+        field.search_start_time = strs[0];
+        field.search_end_time = strs[1];
+		data.field.site_id = {$site_id};
+		table.reload({
+			where: field,
+			page: {
+				curr : 1
+			}
+		});
+		return false;
+	});
+});
+	
+function reset() {
+	layui_form.render();
+	laydate.render({
+		elem: '#start_date',
+		type: 'datetime'
+	});
+	laydate.render({
+		elem: '#end_date',
+		type: 'datetime'
+	});
+}
+</script>
+{/block}

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1"/>
+    <title>{$title} - {$system_site_config_info['title']}</title>
+    <meta name="keywords" content="{$system_site_config_info['keywords']}">
+    <meta name="description" content="{$system_site_config_info['description']}">
+    <link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
+    <link rel="shortcut icon" type="image/x-icon" href="ADMIN_IMG/admin_icon.ico" media="screen"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="ADMIN_CSS/admin.css"/>
+    <link rel="stylesheet" type="text/css" href="ADMIN_CSS/theme.css"/>
+    <link rel="stylesheet" type="text/css" href="__STATIC__/ext/font-awesome/css/font-awesome.min.css"/>
+    <script src="__STATIC__/js/jquery-2.2.js"></script>
+    <script src="__STATIC__/ext/layui/layui.js"></script>
+    <script>
+        layui.use(['layer', 'upload', 'element'], function () {
+        });
+        window.nc_url = {
+            baseUrl: "{:request()->root(true)}/",
+            route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}',
+                '{:request()->controller()}', '{:request()->action()}'
+            ],
+        };
+    </script>
+    <script src="__STATIC__/js/common.js"></script>
+    {block name="resources"}{/block}
+</head>
+
+<body>
+<div class="layui-layout layui-layout-admin niu-base">
+    <div class="layui-header">
+        <div class="nc-header-container">
+            <div class="layui-logo">
+                <a href="{:url('admin/index/index')}"><img src="ADMIN_IMG/logo.png"/></a>
+            </div>
+            <ul class="layui-nav layui-layout-left niu-site-topbar">
+                <li class="layui-nav-item niu-nav-item {if $url=='admin/index/index'}layui-this{/if}">
+                    <a href="{:url('admin/index/index')}">站点列表</a>
+                </li>
+                {notempty name="$menu[1]"}
+                {foreach name="$menu[1]" item="first_menu"}
+                <li class="layui-nav-item niu-nav-item {$first_menu['selected']}">
+                    <a href="{$first_menu['url']}">{$first_menu['title']}</a>
+                </li>
+                {/foreach}
+                {/notempty}
+            </ul>
+            <ul class="layui-layout-right">
+                <li class="layui-nav-item nui-hover">
+                    <a href="javascript:;">
+                        <div class="headframe" style="display:inline-block;vertical-align:middle;">
+                        <img src="{if empty($user_info['headimg'])}SITEHOME_IMG/personal_4.png{else/}{:img($user_info['headimg'])}{/if}" class="layui-nav-img">
+                        </div>
+                            <p class="layui-nav-name">{$user_info.username}</p>
+                    </a>
+                    <div class="head-nav-bottom">
+                        <div class="user-dropdown-meta nc-bg-color-f9">
+                            <div>{$user_info.username}</div>
+                            <div>{$user_info.mobile}</div>
+                        </div>
+                        <a href="{:url('admin/index/security')}">账户设置</a>
+                        <a href="{:url('home/login/logout')}">退出登录</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="nc-container">
+        {block name='second_menu'}
+            {if condition="count($crumbs)<3" }
+            {notempty name="$menu[2]"}
+            <ul class="layui-nav nc-nav">
+                {foreach name="$menu[2]" item="second_menu"}
+                <li class="layui-nav-item {$second_menu['selected']}">
+                    <a href="{$second_menu['url']}" {$second_menu['target']}>{$second_menu['title']}</a>
+                </li>
+                {/foreach}
+            </ul>
+            {/notempty}
+            {/if}
+        {/block}
+
+        {block name='crumbs'}
+	        {if condition="count($crumbs)>2" }
+	        <span class="layui-breadcrumb" {empty name="$crumbs[1]" }style="display:none;" {/empty}>
+	           {if $crumbs[2]['title'] }
+	              <a href="{:addon_url($crumbs[0]['url'])}">{$crumbs[0]['title']}</a>
+	              <a href="{:addon_url($crumbs[1]['url'])}">{$crumbs[1]['title']}</a>
+	              <a><cite>{$crumbs[2]['title']}</cite></a>
+	           {else/}
+	              <a href="{:addon_url($crumbs[0]['url'])}">{$crumbs[0]['title']}</a>
+	              <a><cite>{$crumbs[1]['title']}</cite></a>
+	           {/if}
+	        </span>
+	        {/if}
+        {/block}
+    	
+       
+
+        <div class="layui-fluid">
+            {if condition="count($crumbs)>=3 && $menu[3]" }
+            <div class="layui-tab nc-mb20">
+                <ul class="layui-tab-title">
+                    {foreach name="$menu[3]" item="third_menu"}
+                    <li class="{$third_menu['selected']}"><a href="{$third_menu['url']}">{$third_menu['title']}</a></li>
+                    {/foreach}
+                </ul>
+            </div>
+            {/if}
+            {block name='main'}{/block}
+        </div>
+    </div>
+    <footer class="bottom-info">
+        <a href='javascript:;' class="logo">
+            <img src="SITEHOME_IMG/logo-gray.png"/>
+        </a>
+        <p>Copyright © 2019-2029 <a href="https://www.niucloud.com" target="_blank">niucloud.com</a>&nbsp;版权所有</p>
+        <p>
+            {notempty name="$system_site_config_info"}
+            <a href="http://beian.miit.gov.cn" target="_blank">网站备案号：{$system_site_config_info['icp']}</a>
+            {/notempty}
+            {notempty name="$system_site_config_info['police_icp_location'] && $system_site_config_info['police_icp_code']"}
+            &nbsp;&nbsp;
+            <a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode={$system_site_config_info['police_icp_code']}" target="_blank">
+                <img src="ADMIN_IMG/police_gov.png"/>
+                <span>{$system_site_config_info['police_icp_location']}&nbsp;{$system_site_config_info['police_icp_code']}号</span>
+            </a>
+            {/notempty}
+        </p>
+    </footer>
+    {block name="script"}
+    {/block}
+</div>
+</body>
+
+</html>

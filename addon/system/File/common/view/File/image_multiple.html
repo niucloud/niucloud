@@ -1,0 +1,222 @@
+<style>
+	.upload-image-item{position:relative}
+	.upload-image-curtain{position:absolute;top: -8px;left: -9px;width:120px;height:120px;line-height:120px;background-color:rgba(0,0,0,0.5);text-align:center;color:#FFF;display:none}
+	.nc-upload-wrap{margin-right: 6px;margin-bottom: 6px;padding: 8px;box-sizing: border-box;}
+	.nc-upload-img{line-height: 1;font-size: 14px;}
+	.layui-upload-list{overflow-y: auto;height: 295px;}
+	.upload-image-item{height: 100%;width: 100%;}
+	.layui-upload-list::-webkit-scrollbar{
+		width: 3px;
+	}
+	.layui-upload-list::-webkit-scrollbar-track-piece{
+		background-color: #e5e5e5;
+	}
+	.layui-upload-list::-webkit-scrollbar-thumb{
+		background-color: rgba(0,0,0,.2);
+	}
+</style>
+<!-- 多图上传开始 -->
+<script type="text/html" id="multuple_html{$name}">
+	<div class="layui-form" id="upload_image" style="font-size:12px;position:relative;">
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">网络图片</label>
+			<div class="layui-input-inline">
+				<input type="text" name="fetch_image_path{$name}"  autocomplete="off" placeholder="请添加网络图片地址" class="layui-input nc-len-mid">
+			</div>
+			<button type="button"  type="button" class="layui-btn layui-btn-primary" onclick="fetchPubImg{$name}({{ d.category_id }});">提取</button>
+		</div>
+		<div class="layui-upload">
+			<label class="layui-form-label sm">本地图片</label>
+			<div class="layui-input-block">
+				<ul class="layui-upload-list" id="previewList">
+					<li class="nc-upload-img" id="chooseList" title="仅支持 gif、 jpeg、 png、 bmp 4种格式, 大小不超过3.0 MB">
+						<span class="add-img">+</span>
+						<p class="add-style">点击添加图片</p>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button type="button" class="layui-btn layui-btn-disabled" id="chooseListAction"  disabled="disabled">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+</script>
+<script>
+	var index;
+	var uploadListIns;
+	var picture_arr = [];
+	//多图
+	function upload{$name}(category_id) {
+		category_id = category_id == undefined ? 0 : category_id;
+		layui.use(['upload','laytpl'], function(){
+			var $ = layui.jquery,upload = layui.upload,laytpl = layui.laytpl;
+			var tpl_html = $("#multuple_html{$name}").html();
+			var tpl_data = {category_id : category_id};
+			laytpl(tpl_html).render(tpl_data, function(html){
+				index = layer.open({
+					type: 1,
+					area: ['550px'], //宽高
+					title: "本地上传",
+					content: html,
+					cancel: function () {
+						//右上角关闭回调
+						$('#previewList').find('.nc-upload-wrap').remove();
+						$('#chooseListAction').addClass('layui-btn-disabled').removeClass('layui-btn-primary').attr("disabled", "disabled");
+						clear_files();
+					},
+					success: function (layero, index) {
+						var mask = $(".layui-layer-shade");
+						mask.appendTo(layero.parent());
+						layui.use('upload', function(){
+							var upload = layui.upload;
+							//多图片上传
+							var data_json = {thumb_type:'{$thumb_type}'};
+							if(category_id > 0){
+								var url = '{:addon_url("File://common/File/imageToAlbum")}';
+								data_json["category_id"] = category_id;
+							}else{
+								var url = '{:addon_url("File://common/File/image")}';
+							}
+
+
+							var previewListView = $('#previewList');
+							uploadListIns = upload.render({
+								elem: '#chooseList'
+								,url: url
+								,accept: 'file'
+								,multiple: true
+								,method: 'post'
+								,data: data_json
+								,auto: false
+								,bindAction: '#chooseListAction'
+								,choose: function(obj){
+									//将每次选择的文件追加到文件队列
+									var files= this.files = obj.pushFile();
+									//预读本地文件示例，不支持ie8
+									obj.preview(function(index, file, result){
+
+										var s = '';
+										s += '<li class="nc-upload-wrap" index="'+ index +'">';
+										s += '<div class="upload-image-item image-item"  alt="'+ file.name +'" style="background:url('+ result +') no-repeat">';
+										s += '<div class="upload-image-curtain">50%</div>';
+										s += '<span class="upload-close-modal"  id="upload_img_'+index+'">×</span>';
+										s += '</div>';
+										s += '</li>';
+										$('#previewList').prepend(s);
+
+										//删除列表中对应的文件，一般在某个事件中使用
+										$("#upload_img_"+index).bind('click',function(){
+											delete files[index];
+											delete picture_arr[index];//删除所选队列
+											$(this).parent().parent('.nc-upload-wrap').remove();
+											uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+											//禁用按钮
+											if($("#previewList li").length <= 1){
+												$('#chooseListAction').addClass('layui-btn-disabled').attr("disabled","disabled");
+											}
+
+										});
+										//禁用按钮
+										if($("#previewList li").length > 0){
+											$('#chooseListAction').removeClass('layui-btn-disabled').removeAttr("disabled");
+										}
+									});
+								}
+								,done: function(res, index, upload){
+									picture_arr.push(res.data);
+									var image_box = $(".nc-upload-wrap[index='"+ index +"']").find(".upload-image-item .upload-image-curtain");
+									image_box.text("50%");
+									image_box.show();
+									if(res.code == 0){
+										setTimeout(function(){image_box.text("100%");},500);
+										return delete this.files[index]; //删除文件队列已经上传成功的文件
+									}else{
+										setTimeout(function(){image_box.text("上传失败");},500);
+										layer.msg(res.message);
+									}
+								}
+								,allDone: function(obj){
+									//当文件全部被提交后，才触发
+									//getFileCategory();//分组
+									try {
+										singleMultipleImageUploadSuccess(picture_arr,"{$name}");
+									}catch (e) {
+										console.log(e.message);
+									}
+									if(obj.total == obj.successful){
+										setTimeout(function(){
+											layer.close(index);
+											$('#previewList').find('.nc-upload-wrap').remove();
+										},1000);
+
+									}
+
+								}
+								,error: function(index, upload){
+
+								}
+							});
+
+						});
+
+
+					}
+				});
+			})
+		})
+
+
+	}
+
+	//预览删除显示隐藏
+	$('body').on("mouseover", ".upload-image-item", function() {
+		$(this).children('.upload-close-modal').css('display','block');
+	}).on("mouseout", ".upload-image-item", function() {
+		$(this).children('.upload-close-modal').css('display','none');
+	});
+
+
+
+	//清除files数据
+	function clear_files(){
+		for(i in uploadListIns.config.files){
+			delete uploadListIns.config.files[i];
+		}
+		uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+	}
+
+	/**
+	 * 网络图盘提取
+	 */
+	function  fetchPubImg{$name}(category_id){
+		var fetch_image_path = $("input[name=fetch_image_path{$name}]").val();
+
+		//多图片上传
+		var data_json = {fetch_image_path:fetch_image_path};
+		if(category_id > 0){
+			var url = '{:addon_url("File://common/File/fetchPubImgToAlbum")}';
+			data_json["category_id"] = category_id;
+		}else{
+			var url = '{:addon_url("File://common/File/fetchPubImg")}';
+		}
+		$.ajax({
+			type : "post",
+			async : false,
+			url : url,
+			data : data_json,
+			dataType : "JSON",
+			success : function(data) {
+				if(data['code'] != 0){
+					layer.msg(data['message']);
+					return false;
+				}else{
+					singleMultipleImageUploadSuccess(data.data,"{$name}");
+					// getFileAlbumList(1, limit); //分组文件
+					layer.close(index);
+				}
+			}
+		});
+
+	}
+</script>

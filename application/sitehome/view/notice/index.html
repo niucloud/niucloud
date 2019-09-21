@@ -1,0 +1,133 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-functional-block">
+    <button onclick="location.href ='{:addon_url('sitehome/notice/addnotice')}'" class="layui-btn">添加公告</button>
+</div>
+<div class="nc-table-box">
+	<table id="notice_list" lay-filter="notice" class="layui-table"></table>
+</div>	
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+var table = new Table({
+	elem: '#notice_list',
+	filter : "notice",
+	url : '{:addon_url("sitehome/notice/index")}',
+	cols: [
+		[
+			{
+				type : 'checkbox'
+			},
+			{
+				width: '35%',
+				title: '公告标题',
+	            templet: function(data){
+	                var html = data.set_top ? '<span style="color:red;">[ 置顶 ] </span>' : '';
+	                    html += data.title;
+	                return html;
+	            }
+			},
+			{
+                width: '20%',
+	            title: '创建时间',
+                templet: function(data){
+	                return nc.time_to_date(data.create_time);
+	            }
+	        },
+	        {
+                width: '10%',
+				title: '排序',
+			    templet: function(data){
+	                return '<input type="number" onchange="sortChange('+ data.id +', this)" name="sort" value="'+ data.sort +'"  class="layui-input nc-len-short">';
+	            }
+			},
+	        {
+				title: '操作',
+				templet : function(data){
+					var html = '<a class="default" lay-event="edit">编辑</a>';
+					if(!data.set_top){
+						html += '<a class="default" lay-event="setTop"> 置顶</a>';
+					}
+					html += '<a class="default" lay-event="del"> 删除</a>';
+					return html;
+				},
+                align:'right'
+			}
+		]
+	]
+});
+
+table.tool(function(obj){
+    var data = obj.data;
+    var event = obj.event;
+    if(event === 'edit'){
+        location.href = nc.url('sitehome/notice/editnotice', {"id":data.id});
+    }else if(event === 'del'){
+        deleteNotice(data.id);
+	}else if(event === 'setTop'){
+        modifySiteNoticeTop(data.id);
+	}
+});
+
+function deleteNotice(id) {
+	layer.confirm(
+		'确定删除吗?',
+		{
+			btn: ['确定', '取消']
+		},
+		function () {
+			$.ajax({
+				type: "post",
+				async: false,
+				url: '{:addon_url("sitehome/notice/deleteNotice")}',
+				data: {'id': id},
+				dataType: "JSON",
+				success: function (res) {
+					if (res.code == 0) {
+						table.reload();
+					}
+					layer.msg(res.message);
+				}
+			});
+		},
+		function () {
+			layer.close();
+		}
+	);
+}
+
+function modifySiteNoticeTop(id){
+	$.ajax({
+        type:"post",
+        async:false,
+		url : '{:addon_url("sitehome/notice/modifySiteNoticeTop")}',
+        data: { 'id' : id },
+        dataType : "JSON",
+		success:function(res){
+			if(res.code == 0){
+				table.reload();
+			}
+			layer.msg(res.message);
+		}
+    });
+}
+
+function sortChange(id, event){
+	var sort = $(event).val();
+	$.ajax({
+		type:"post",
+        async:false,
+        url : '{:addon_url("sitehome/notice/sortNotice")}',
+		data:{'id':id, 'sort': sort},
+		dataType : "JSON",
+		success: function (res) {
+			layer.msg(res.message);
+			table.reload();
+		}
+	});
+}
+</script>
+{/block}

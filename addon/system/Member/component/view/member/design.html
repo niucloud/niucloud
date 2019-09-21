@@ -1,0 +1,37 @@
+<nc-component v-bind:data="data[index]" class="member">
+
+	<template slot="preview">
+		<div class="custom-level">
+			<img v-if="nc.background_image" v-bind:src="changeImgUrl(nc.background_image)">
+			<img v-else src="RESOURCE_PATH/component/view/member/img/default_member_bg.png">
+		</div>
+
+		<div class="member-head" v-bind:class="[nc.member_info_location]">
+			<img class="member-head-url" src="RESOURCE_PATH/component/view/member/img/default_user.png">
+			<label v-bind:style="{ color : nc.textColor }">用户昵称</label>
+		</div>
+
+		<a href="javacript:;" class="member--head-subtitle">
+			<span>白银</span>
+			<span>成为会员&nbsp;></span>
+		</a>
+ 		
+	</template>
+	
+	<template slot="edit">
+
+		<template v-if="nc.lazyLoad">
+			<nc-member-img></nc-member-img>
+		</template>
+		
+		<color></color>
+
+	</template>
+	<!-- 资源 -->
+	<template slot="resource">
+	
+		<css src="RESOURCE_PATH/component/view/member/css/niu_member.css"></css>
+		<js src="RESOURCE_PATH/component/view/member/js/member.js"></js>
+		
+	</template>
+</nc-component>

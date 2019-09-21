@@ -1,0 +1,17 @@
+.pics-boxs .upload-close-modal{display: block;top: 3px;right: 0;}
+.pics-box{width: 100%;border: 1px solid #e3e3e3;margin-top: 10px;padding: 10px;white-space: nowrap;min-height: 100px;}
+.pics-boxs:after{display: block;content: '';clear: both;}
+.image-block{width: 80px;height: 83px;border: 1px solid #ddd;margin-top: 10px;line-height: 80px;text-align: center;}
+.image-block img{max-width: 100%}
+.pics-box img{width: 80px;height: 80px;margin-right: 10px;float: left;border: 1px solid #eee;}
+.upload_box > div > .layui-btn.layui-btn-sm{display: none;}
+.img-input{display: block;}
+.img-block{float: left}
+.img-info{float: left;margin-top: 10px;}
+.img_color{width: 18%;padding-right: 10px;}
+.add-on{width: 50px;padding: 5px 15px;height: 32px;line-height: 20px;border: 1px solid #e6e6e6;border-radius: 2px 0 0 2px;text-align: center;background-color: #FBFBFB;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;box-sizing: border-box;float: left;display: block;color: #666;}
+.selected-template-list ul li{float: left;width: 20%;text-align: center;border: 1px solid #e5e5e5;padding: 5px;margin: 0 10px 15px 0;cursor: pointer;background: #ffffff;}
+.selected-template-list ul:after{content: '';display: block;clear: both;}
+.selected-template-list ul li img{width: 100%;}
+.selected-template-list ul li.selected{border-color: #0d73f9;}
+.layui-form-label+.layui-input-block{margin-left: 151px;}

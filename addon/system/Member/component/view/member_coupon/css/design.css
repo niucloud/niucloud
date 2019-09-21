@@ -1,0 +1,3 @@
+@CHARSET "UTF-8";
+.member-coupon span{display: block;}
+.member-coupon span:after{content: '';display: inline-block;background: url("../img/arrow_right.png") no-repeat;width: 20px;height: 20px;float: right;}

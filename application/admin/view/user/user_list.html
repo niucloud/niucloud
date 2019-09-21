@@ -1,0 +1,66 @@
+{extend name="base"/}
+{block name="resources"}
+    <style>
+        .layui-table span{max-width: 400px;}
+    </style>
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+    <button class="layui-btn" onclick="location.href = nc.url('admin/user/addUser')">添加用户</button>
+    <div class="layui-form">
+        <div class="layui-input-inline nc-len-short">
+            <select name="is_admin" lay-filter="is_admin">
+                <option value="">用户类型</option>
+                <option value="1">系统管理员</option>
+                <option value="0">站点管理员</option>
+            </select>
+        </div>
+        <div class="layui-input-inline nc-len-short">
+            <select  name="status" lay-filter="status">
+                <option value="">用户状态</option>
+                <option value="1">正常</option>
+                <option value="0">已锁定</option>
+            </select>
+        </div>
+        <div class="layui-input-inline nc-len-mid nc-search-btn">
+            <input type="text" id="search_keys" name="search_keys" placeholder="用户名/昵称/手机号" autocomplete="off" class="layui-input">
+            <button class="layui-icon-search" lay-filter="search" lay-submit></button>
+        </div>
+    </div>
+</div>
+<table class="layui-table" id="user_list" lay-filter="user_list"></table>
+<script type="text/html" id="more_info">
+    <button class="layui-btn" lay-event="edit_user_basic_info">基础信息</button>
+    <button class="layui-btn" lay-event="edit_user_site_manage">站点管理</button>
+    <button class="layui-btn" lay-event="edit_user_group">管理组设置</button>
+</script>
+<script type="text/html" id="status">
+    {{#  if(d.uid == 1){ }}
+    <p class="layui-disabled">管理员不能锁定</p>
+    {{#  } else { }}
+    <input type="checkbox" name="status" value="{{d.uid}}" lay-skin="switch" title="锁定" lay-text=" | " lay-filter="status" {{ d.status==1 ? 'checked' : '' }}>
+    {{# } }}
+</script>
+<script type="text/html" id="username">
+    <div class="img-wrap headframe">
+        {{#  if(d.headimg == ''){ }}
+        <img src="ADMIN_IMG/user_img.png">
+        {{#  } else { }}
+        <img src="__ROOT__/attachment/{{d.headimg}}">
+        {{# } }}
+    </div>
+    <span>{{d.username}}</span>
+</script>
+
+<script type="text/html" id="operation">
+    {{#  if(d.is_admin == 1){ }}
+    <a href="javascript:;" class="primary" lay-filter="edit" lay-event="edit_user_basic_info">编辑</a>
+    {{#  }else{ }}
+    <a href="javascript:;" class="primary" lay-filter="edit" lay-event="edit_user_basic_info">编辑</a>
+    <a href="javascript:;" class="primary" lay-filter="delete" lay-event="delete">删除</a>
+    {{#  } }}
+</script>
+{/block}
+{block name="script"}
+<script src="ADMIN_JS/user_list.js"></script>
+{/block}

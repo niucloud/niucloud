@@ -1,0 +1,118 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<link rel="stylesheet" href="SITEHOME_CSS/addons_lists.css">
+{/block}
+{block name="main"}
+<div class="nc-quote-box ">
+    <blockquote class="layui-elem-quote layui-quote-nm">移动社交广告</blockquote>
+    <div class="application-social-adv ">
+        <a class="application-adv-item" href="javascript:;">
+            <h3 class="application-adv-title">牛云应用市场,总有您需要的</h3>
+            <div class="application-adv-content">
+                <i class="application-adv-icon"></i>
+                <img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+            </div>
+        </a>
+        <a class="application-adv-item" href="javascript:;">
+            <h3 class="application-adv-title">购买牛云相关授权</h3>
+            <div class="application-adv-content">
+                <i class="application-adv-icon"></i>
+                <img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+            </div>
+        </a>
+        <a class="application-adv-item" href="javascript:;">
+            <h3 class="application-adv-title">注册成为开发人员,开发销售模块</h3>
+            <div class="application-adv-content">
+                <i class="application-adv-icon"></i>
+                <img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
+            </div>
+        </a>
+    </div>
+</div>
+{foreach $category_list as $category_k => $category_v}
+{notempty name="$category_v['addon_list']"}
+<div class="nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">{$category_v.category_title}</blockquote>
+    <div class="nc-item-block-parent">
+        {volist name="$category_v['addon_list']" id="vo"}
+        <div class="nc-item-block fl size-lg drop">
+            <a class="nc-item-block-wrap" href="{notempty name="$vo['redirect_url']"}{$vo['redirect_url']}{else/}javascript:;{/notempty}">
+                <div class="nc-item-pic">
+                    {if $vo['icon'] == ''}
+                    <img src="SITEHOME_IMG/sitehome/tc1_91.png">
+                    {else /}
+                    <img src='__ROOT__{$vo['icon']}'>
+                    {/if}
+                </div>
+                <div class="nc-item-content">
+                    <div class="nc-content-title">{$vo.title}
+                        {if $vo['status_data']['status'] == 0}
+                        <span class="label"></span>
+                        {/if}
+                    </div>
+                    <p class="nc-content-desc">{$vo.description}</p>
+                    <div class="nc-icon">
+                        {foreach $vo["support_app_type"] as $k => $v}
+                        <img src="__ROOT__/{$v['logo']}" alt="">
+                        {/foreach}
+                    </div>
+                </div>
+            </a>
+            <div class="nc-item-float">
+                <div>
+                {if $is_system==1}
+                    {if $vo['status_data']['status'] == 0}
+                        <a><span class="layui-badge-dot"></span>未安装</a>
+                        <a class="nc-assist-fr" href="javascript:install('{$vo['name']}');">安装</a>
+                    {elseif $vo['status_data']['status'] == 1}
+                        <a><span class="layui-badge-dot layui-bg-blue"></span>已安装</a>
+                        <a class="nc-assist-fr" href="javascript:uninstall('{$vo['name']}');">卸载</a>
+                        <a class="nc-assist-fr" href="javascript:explain('{$vo['name']}');">说明</a>
+                    {/if}
+                {else/}
+                    <a class="nc-assist-fr" href="javascript:explain('{$vo['name']}');">说明</a>
+                {/if}
+                </div>
+            </div>
+        </div>
+        {/volist}
+    </div>
+</div>
+{/notempty}
+{/foreach}
+<script>
+function explain(module) {
+	window.open(nc.url('sitehome/addons/info', {"name": module}));
+}
+
+{if $is_system==1}
+function uninstall(module){
+	layer.confirm('该插件在卸载的同时，也会将相关的数据清除，您确定继续卸载吗？', {title:'提示'}, function(index){
+		$.ajax({
+			type: "post",
+			url: nc.url('sitehome/addons/unsetup'),
+			data: {"name" : module},
+			success: function (res) {
+				layer.msg(res.message,{ time : 1000 },function () {
+					if(res.code==0) location.reload();
+				});
+			}
+		});
+	});
+}
+
+function install(module) {
+	$.ajax({
+		type: "post",
+		url: nc.url('sitehome/addons/setup'),
+		data :{"name" : module},
+		success: function (res) {
+			layer.msg(res.message,{ time : 1000 },function () {
+				if(res.code==0) location.reload();
+			});
+		}
+	});
+}
+{/if}
+</script>
+{/block}

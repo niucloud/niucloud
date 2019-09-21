@@ -1,0 +1,693 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<style>
+    body {
+        background: #F5F5F5;
+    }
+
+    .bar {
+        height: 44px;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    /* 基本信息 */
+    .base-info {
+        width: 100%;
+        overflow: hidden;
+        background: #fff;
+        margin-bottom: 10px;
+    }
+
+    .shop-img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .shop-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .price {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+        padding: 0 4%;
+        border-bottom: 1px solid #f5f5f5;
+        justify-content: space-between;
+    }
+
+    .shop-price span,
+    .shop-title {
+        font-size: 20px;
+        font-weight: bold;
+        width: 80%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .shop-visits span,
+    .shop-like span {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .title {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        height: 60px;
+        line-height: 60px;
+        padding: 0 4%;
+        justify-content: space-between;
+    }
+
+    .shop-like img {
+        width: 16px;
+        height: 14px;
+        vertical-align: sub;
+    }
+
+    .shop-like-active,
+    .shop-like-active span {
+        color: #F4D130;
+    }
+
+    /* 详细信息 */
+    .detail-info,
+    .introduce {
+        overflow: hidden;
+        background-color: #fff;
+        padding: 16px 4% 0;
+    }
+
+    .detail-info-item {
+        width: 100%;
+        overflow: hidden;
+        margin-bottom: 14px;
+    }
+
+    .detail-info-item div {
+        float: left;
+    }
+
+    .detail-info-item-title {
+        width: 24%;
+        color: #999;
+        font-size: 16px;
+    }
+
+    .detail-info-item-content {
+        width: 76%;
+        font-size: 16px;
+    }
+
+    .center-tab {
+        font-size: 16px;
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        color: #666;
+        background: #fff;
+        margin-top: 10px;
+    }
+
+    .center-tab span {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .center-tab-item-active,
+    .center-tab-item-active span {
+        color: #3257FE !important;
+    }
+
+    /* 评论 */
+    .comments {
+        width: 100%;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .comments li {
+        overflow: hidden;
+        border-top: 1px solid #F5F5F5;
+        padding: 30px 4% 20px;
+        ;
+    }
+
+    .reviewer {
+        width: 100%;
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+    }
+
+    .reviewer-img {
+        width: 10vw;
+        height: 10vw;
+        border-radius: 50%;
+        margin-right: 2%;
+    }
+
+    .reviewer-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .reviewer-name {
+        font-weight: bold;
+        line-height: 1;
+        margin-top: 12px;
+    }
+
+    .reviewer-star {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .reviewer-star img {
+        width: 5%;
+        height: 5%;
+    }
+
+    .comment-content {
+        width: 100%;
+        padding: 16px 10px 10px 0;
+        font-size: 14px;
+    }
+
+    .comment-content,
+    .comment-info div,
+    .comment-info span {
+        color: #666;
+    }
+
+    .comment-img {
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+    }
+
+    .comment-img img {
+        width: 30vw;
+        height: 30vw;
+        margin-left: 2%;
+    }
+
+    .comment-img img:first-child {
+        margin: 0;
+    }
+
+    .comment-info {
+        width: 100%;
+        line-height: 17px;
+    }
+
+    .comment-time {
+        float: left;
+    }
+
+    .comment-nice {
+        float: right;
+        line-height: 17px;
+    }
+
+    .comment-nice img {
+        width: 12px;
+        height: 12px;
+    }
+
+    .introduce {
+        border-top: 1px solid #f5f5f5;
+    }
+
+    .introduce-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .introduce p,
+    .introduce h,
+    .introduce div {
+        color: #666;
+    }
+
+    .introduce {
+        padding-bottom: 10px;
+    }
+
+    #swipe {
+        height: 60vw;
+    }
+
+    .comment_head {
+        width: 10vw;
+        height: 10vw;
+        border-radius: 50%;
+        margin-right: 4%;
+    }
+
+    .hui-form-textarea {
+        width: 86% !important;
+        height: 156px !important;
+        background: #fff;
+        border: 1px solid #e7e7e7;
+    }
+
+    .hui-form-textarea textarea {
+        height: 100%;
+    }
+
+    .hui-form-items {
+        position: relative;
+    }
+
+    .push {
+        position: absolute;
+        bottom: 15%;
+        right: 6%;
+    }
+
+    .more {
+        color: #999;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+
+    .hui-form-items-title img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .state-bar {
+        width: 100%;
+        height: 40px;
+        background: #000;
+        color: #fff;
+        position: fixed;
+        top: 44px;
+        line-height: 40px;
+        text-align: center;
+        z-index: 2;
+    }
+
+    #share {
+        width: 21%;
+    }
+
+    #share img {
+        margin-top: 24%;
+        width: 50%;
+        height: 50%;
+    }
+
+    #shareIframe {
+        width: 100%;
+        height: 80px;
+        background: #fff;
+        position: fixed;
+        bottom: 0;
+        line-height: 84px;
+        text-align: center;
+    }
+    .hui-swipe{
+        position: relative;
+    }
+    .report{
+        position: absolute;
+        right: 17px;
+        bottom: 22px;
+        color: cadetblue;
+    }
+    .report-iframe{
+        position: fixed;
+        bottom: 0;
+    }
+</style>
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back"></div>
+    <h1>{$title}</h1>
+    <div id="share"><img src="ADDON_WAP_SNS_IMG/share.png" alt=""></div>
+</header>
+{/block}
+{block name="main"}
+
+{if condition="$info_detail['state'] eq 0"}
+<div class="state-bar">待审核</div>
+{elseif condition="$info_detail['state'] eq 2"}
+<div class="state-bar">审核未通过</div>
+{/if}
+</div>
+<div class="bar"></div>
+<div id="shareIframe" class="hide">
+    <img src="ADDON_WAP_SNS_IMG/like.png" alt="">
+</div>
+{php}
+$info_id = input("info_id");
+$is_collection = api("Sns.Category.addBrowse", ['access_token'=> $access_token,'info_id'=>$info_id]);
+{/php}
+<!-- 基本信息 -->
+<div class="base-info">
+    <div class="hui-swipe" id="swipe" style="margin-bottom: 10px;">
+        <!-- 轮播图 -->
+        <div class="hui-swipe-items">
+            {volist name="info_detail.img_arr" id="vo"}
+            <div class="hui-swipe-item"><img src="{:img($vo)}" /></div>
+            {/volist}
+        </div>
+        <div class="report">举报</div>
+    </div>
+    <div class="price">
+        <div class="shop-price">
+            {if condition="$info_detail.price eq '面议'"}
+                <span>{$info_detail.price}</span>
+            {else}
+            <span>￥</span><span class="shop-price-num">{$info_detail.price}</span>
+            {/if}
+        </div>
+        <div class="shop-visits">
+            <span>浏览:&nbsp;&nbsp;</span><span class="shop-visits-num">{$info_detail.visit}</span>
+        </div>
+    </div>
+    <div class="title">
+        <div class="shop-title">{$info_detail.title}</div>
+        <div class="shop-like" onclick="isLike()">
+            <img id="shop-like-img" src="ADDON_WAP_SNS_IMG/like_default.png" alt="">
+            <span>收藏</span>
+        </div>
+    </div>
+</div>
+<!-- 详细信息 -->
+<ul class="detail-info">
+    <li class="detail-info-item">
+        <div class="detail-info-item-title">圈子</div>
+        <div class="detail-info-item-content">{$info_detail.circle_name}</div>
+    </li>
+    <li class="detail-info-item">
+        <div class="detail-info-item-title">联系人</div>
+        <div class="detail-info-item-content">{$info_detail.linkman}</div>
+    </li>
+    <li class="detail-info-item">
+        <div class="detail-info-item-title">发布时间</div>
+        <div class="detail-info-item-content">{:time_to_date($info_detail.add_time,"Y-m-d")}</div>
+    </li>
+    {volist name="info_detail.attribute_value" id="vo"}
+    <li class="detail-info-item">
+        <div class="detail-info-item-title">{$vo.attribute_name}</div>
+        <div class="detail-info-item-content">{$vo.content}</div>
+    </li>
+    {/volist}
+</ul>
+<div class="center-tab">
+    <span class="center-tab-item center-tab-item-active introduce-tab" onclick="tabOn(this)">房屋介绍</span>
+    <span>&nbsp;|&nbsp;</span>
+    <span class="center-tab-item comments-tab" onclick="tabOn(this)">评论(<span id="commentTotal"></span>)</span>
+</div>
+<!-- 房屋介绍默认显示 -->
+<div class="introduce">
+    {$info_detail.content}
+</div>
+<!-- 评论区默认不显示 -->
+<div class="comments-itmes hide">
+    <ul class="comments"></ul>
+    <div class="hui-form-items">
+        <div class="hui-form-items-title comment_head">
+            <img src="{:img($member_headimg ?? 'ADDON_WAP_SNS_IMG/default_headimg.png')}" alt="">
+        </div>
+        <div class="hui-form-textarea" style="width: 86% !important;border-radius: 3px;">
+            <textarea id="comment" style="padding: 10px;background: #fff;color: #999;" placeholder="添加评论..."></textarea>
+            <button type="button" class="hui-button hui-button-small hui-primary hui-fl push"
+                onclick="publish()">发表</button>
+        </div>
+    </div>
+</div>
+<!-- 举报表单 -->
+<div class="hui-wrap report-iframe hide">
+    <form style="padding:28px 10px;" class="hui-form" id="reportForm">
+        <div class="hui-form-items">
+            <div class="hui-form-items-title">举报内容</div>
+            <div class="hui-form-textarea">
+                <textarea checkType="string" checkData="10,150" checkMsg="举报内容应为10-150个字符" placeholder="如：商品与描述不符合..." name="report_explain"></textarea>
+            </div>
+        </div>
+        <div class="hui-form-items">
+            <div class="hui-form-items-title">联系方式</div>
+            <input type="number" class="hui-input" checkType="phone" checkMsg="手机号码格式错误" placeholder="如：1889088..." name="contact" />
+        </div>
+        <div style="padding:15px 8px;">
+            <button type="button" class="hui-button hui-primary hui-fr" id="submitBtn">确认举报</button>
+        </div>
+    </form>
+</div>
+
+{/block}
+{block name="bottom"}
+{/block}
+{block name="script"}
+<script src="__STATIC__/ext/hui/js/hui-swipe.js"></script>
+<script src="__STATIC__/ext/hui/js/hui-form.js"></script>
+<script src="__STATIC__/ext/hui/js/hui-star.js"></script>
+<script>
+    console.log("{$access_token}" =='')
+    // 初始是否为已收藏
+    if ({$is_collection} != 0) {
+        $(".shop-like").addClass("shop-like-active");
+        $("#shop-like-img").attr("src", "ADDON_WAP_SNS_IMG/like.png");
+    };
+    commentListShow(3);
+    // 轮播图
+    var swipe = new huiSwpie('#swipe');
+    swipe.autoPlay = true;
+    swipe.run();
+    // 渲染星级方法
+    function starShow(selector, num) {
+        this.dom = hui(selector);
+        this.starNum = 5;
+        this.size = 16;
+        this.color = '#CCCCCC';
+        this.colorActive = '#F9BE66';
+        this.trueStarNum = num;
+        var _self = this;
+        if (this.dom.length < 1) {
+            return;
+        }
+        var starHtml = '';
+        for (var i = 0; i < this.starNum; i++) {
+            starHtml += '<div class="hui-fl hui-icons hui-icons-star" style="font-size:' + this.size + 'px; color:' +
+                this.color + ';" starVal="' + (i + 1) + '"></div>';
+        }
+        this.dom.html(starHtml);
+        var stars = _self.dom.find('div');
+        for (var i = 0; i < _self.trueStarNum; i++) {
+            stars.dom[i].style.color = _self.colorActive;
+        }
+
+    }
+    // 渲染评论星级
+    function allStarShow() {
+        $(".star-num").each(function () {
+            var trueStarNum = $(this).attr("data-star-num");
+            var selector = '#' + $(this).prop("id");
+            starShow(selector, trueStarNum);
+        })
+    }
+    allStarShow();
+    // 收藏功能
+    function isLike() {
+        if (!($(".shop-like").hasClass("shop-like-active"))) {
+            $(".shop-like").addClass("shop-like-active");
+            $("#shop-like-img").attr("src", "ADDON_WAP_SNS_IMG/like.png");
+            isLikePost(1);
+            hui.toast('收藏成功');
+
+        } else {
+            $(".shop-like").removeClass("shop-like-active");
+            $("#shop-like-img").attr("src", "ADDON_WAP_SNS_IMG/like_default.png");
+            isLikePost(0);
+            hui.toast('取消成功');
+        }
+    }
+    // 收藏提交
+    function isLikePost(is_collection) {
+        nc.api("Sns.Category.isCollection", {
+                "info_id": {$info_id},
+                "is_collection": is_collection,
+                'access_token': "{$access_token}"
+            },
+            function (res) {},
+            true);
+    }
+    // 发表评论
+    function publish() {
+        if("{$access_token}" ==''){
+            hui.toast('您还未登录，无法评论');
+            return false;
+        }
+        var content = $("#comment").val();
+        if (content == '' || content == ' ') {
+            return false;
+        }
+        nc.api("Sns.Member.addComment", {
+                "info_id": {$info_id},
+                "content": content,
+                "access_token": "{$access_token}"
+            },
+            function (res) {
+                hui.toast('评论成功');
+                var html = '';
+                html += '<li>'
+                html += '<div class="reviewer">'
+                html += '<div class="reviewer-img">'
+                html +=
+                    '<a href=""><img class="avatar circle" src="' + nc.img("{$member_info['headimg']}" ?
+                        "{$member_info['headimg']}" : 'ADDON_WAP_SNS_IMG/default_headimg.png') + '" alt="ssss"></a>'
+                html += '</div>'
+                html += '<div class="reviewer-info">'
+                html += '<a href=""><div class="reviewer-name">{$member_info["username"]}</div></a>'
+                html += '</div></div>'
+                html += '<div class="comment-content">'
+                html += content
+                html += '</div>'
+                html += '<div class="comment-info">'
+                html += '<div class="comment-time">刚刚</div>'
+                html += '<div class="comment-nice">'
+                html += '<img src="ADDON_WAP_SNS_IMG/nice_default.png" alt="">'
+                html += '<span class="comment-nice-num">0</span>'
+                html += '</div></div>'
+                html += '</li>'
+                if($(".comments:has(li)").length){
+                    $(".comments li").eq(0).before(html);
+                }else{
+                    $(".comments").eq(0).append(html);
+                    }
+                // commentListShow(0);
+                $("#comment").val('');
+            })
+    }
+    // 评论列表
+    function commentListShow(limit) {
+        nc.api("Sns.Category.getCommentList", {
+                "info_id": {$info_id},
+                "limit": limit
+            },
+            function (res) {
+                console.log(res);
+                var data = res.data.comment;
+                $(".comments").empty();
+                for (var i = 0; i < data.length; i++) {
+                    var html = '';
+                    html += '<li>'
+                    html += '<div class="reviewer">'
+                    html += '<div class="reviewer-img">'
+                    html +=
+                        '<a href=""><img class="avatar circle" src="' + nc.img(data[i].member_array.headimg ? data[
+                            i].member_array.headimg : 'ADDON_WAP_SNS_IMG/default_headimg.png') + '" alt="ssss"></a>'
+                    html += '</div>'
+                    html += '<div class="reviewer-info">'
+                    html += '<a href=""><div class="reviewer-name">' + data[i].member_array.username + '</div></a>'
+                    html += '</div></div>'
+                    html += '<div class="comment-content">'
+                    html += data[i].content
+                    html += '</div>'
+                    html += '<div class="comment-info">'
+                    html += '<div class="comment-time">' + nc.time_to_date(data[i].create_time, "Y-M-D ") + '</div>'
+                    html += '<div class="comment-nice" onclick="isNice(this,' + data[i].comment_id + ')">'
+                    html += '<img src="ADDON_WAP_SNS_IMG/nice_default.png" alt="">'
+                    html += '<span class="comment-nice-num">' + data[i].fabulous + '</span>'
+                    html += '</div></div>'
+                    if (i == 2 && data.length == 3 && res.data.total > 3) {
+                        html += '<div class="more" onclick="commentListShow(0)">查看全部' + res.data.total + '条评论</div>'
+                    }
+                    html += '</li>'
+                    $(".comments").append(html);
+                }
+                $("#commentTotal").text(' ' + res.data.total + ' ');
+            })
+    }
+    // 点赞
+    function isNice(obj, comment_id) {
+        var niceNum = parseInt($(obj).find(".comment-nice-num").text());
+        if (!$(obj).hasClass("shop-like-active")) {
+            $(obj).addClass("shop-like-active");
+            $(obj).find("img").attr("src", "ADDON_WAP_SNS_IMG/nice.png");
+            $(obj).find(".comment-nice-num").text(niceNum + 1);
+            isNiceApi(comment_id, 1);
+        } else {
+            $(obj).removeClass("shop-like-active");
+            $(obj).find("img").attr("src", "ADDON_WAP_SNS_IMG/nice_default.png");
+            $(obj).find(".comment-nice-num").text(niceNum - 1);
+            isNiceApi(comment_id, 0);
+        }
+    }
+    // 点赞api
+    function isNiceApi(comment_id, like) {
+        nc.api("Sns.Member.isNice", {
+                'comment_id': comment_id,
+                'like': like
+            },
+            function (res) {})
+    }
+    // tab切换
+    function tabOn(obj) {
+        $(obj).addClass("center-tab-item-active").siblings().removeClass("center-tab-item-active");
+        if ($(obj).hasClass("comments-tab")) {
+            $(".introduce").hide();
+            $(".comments-itmes").show();
+        } else {
+            $(".introduce").show();
+            $(".comments-itmes").hide();
+        }
+    }
+
+    // 分享
+    document.onclick = function(){
+        $('#shareIframe').hide();
+        $(".report-iframe").hide();
+    }
+    $("#share").click(function(event){
+        event.stopPropagation();
+        $('#shareIframe').show();
+    });
+    // 举报
+    $(".report").click(function(event){
+        event.stopPropagation();
+        $(".report-iframe").show();
+        $(".introduce").css("margin-bottom","428px")
+    })
+    $(".report-iframe").click(function(event){
+        event.stopPropagation();
+    })
+
+    hui.formInit();
+    //表单验证
+    var loves;
+    //表单元素数据收集
+    hui('#submitBtn').click(function(){
+        var res = huiFormCheck('#reportForm');
+        //提交
+        if(res){
+            var data = hui.getFormData('#reportForm');
+            data.loves = loves;
+            data.info_id = "{$info_id}"
+            data.access_token = "{$access_token}"
+            nc.api("Sns.Member.addReport", data, function (res) {
+                $(".report-iframe").hide();
+                $(".report-iframe input").val('');
+                $(".report-iframe textarea").val('');
+                if(res.code == 0){
+                    hui.toast('举报成功');
+                }
+            }, false);
+        }
+    });
+</script>
+{/block}

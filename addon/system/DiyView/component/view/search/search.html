@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="RESOURCE_PATH/component/view/search/css/search.css"/>
+<div class="top-search">
+	<div class="left-img">
+		<a href="{if condition="$attr.left_link"}{:addon_url($attr['left_link']['h5_url'])}{else/}{:addon_url("$addon_app://wap/product/category")}{/if}">
+		{if condition="$attr.left_img_url"}
+		<img src="{$attr.left_img_url}" class="self-adaption"/>
+		{else/}
+		<img src="RESOURCE_PATH/component/view/search/img/category.png" class="self-adaption"/>
+		{/if}
+		</a>
+	</div>
+	<div class="top-search-form">
+		<div class="top-search-box">
+			<span class="top-search-icon"><img src="RESOURCE_PATH/component/view/search/img/icon_search.png" class="self-adaption"/></span>
+			<input type="text" value="{$attr.title}" placeholder="搜索" readonly />
+		</div>
+	</div>
+	<div class="right-img">
+		<a href="{if condition="$attr.right_link"}{:addon_url($attr['right_link']['h5_url'])}{else/}{:url("wap/member/index")}{/if}">
+		{if condition="$attr.right_img_url"}
+		<img src="{$attr.right_img_url}" class="self-adaption"/>
+		{else/}
+		<img src="RESOURCE_PATH/component/view/search/img/user.png" class="self-adaption"/>
+		{/if}
+		</a>
+	</div>
+</div>
+<script>
+$(function(){
+   $(window).scroll(function () {
+       if($(this).scrollTop() == 0){
+           $(".top-search").css("background","transparent");
+	   }else{
+           $(".top-search").css("background","{$attr.background_color}");
+	   }
+   });
+
+   $(".top-search-form").click(function () {
+	   location.href = nc.url("{$addon_app}://wap/product/searchList");
+   });
+
+});
+</script>

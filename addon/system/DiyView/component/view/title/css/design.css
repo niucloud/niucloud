@@ -1,0 +1,8 @@
+@CHARSET "UTF-8";
+.draggable-element .top-title .preview-draggable{padding:0;}
+.top-title header{height: 40px;line-height: 40px;position: relative;background: #fff;}
+.top-title header a{color:inherit;}
+.top-title header .go-back {position: absolute;height: 40px;width: 40px;}
+.top-title header .go-back svg{width:20px;fill: currentColor;height: 40px;margin-left: 10px;}
+.top-title header h4 {text-align: center;font-weight: normal;margin: 0;line-height: inherit;font-size: 16px;}
+.top-title header .operation{position:absolute;right:10px;bottom:0;}

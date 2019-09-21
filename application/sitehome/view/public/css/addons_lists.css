@@ -1,0 +1,12 @@
+.application-social-adv{display: flex;justify-content: space-between;}
+.application-social-adv .application-adv-item{position: relative;width: 33%;height:150px;padding: 20px;vertical-align: middle;color: #fff;-webkit-border-radius: 3px;-moz-border-radius: 3px;border-radius: 3px;margin-right:10px;box-sizing: border-box;}
+.application-social-adv .application-adv-item:nth-child(1){background: url("../img/social_adv_one.png") no-repeat center/100% 100%;background-clip: padding-box;}
+.application-social-adv .application-adv-item:nth-child(2){background: url("../img/social_adv_two.png") no-repeat center/100% 100%;background-clip: padding-box;}
+.application-social-adv .application-adv-item:nth-child(3){background: url("../img/social_adv_three.png") no-repeat center/100% 100%;background-clip: padding-box;}
+.application-social-adv .application-adv-item i{display: inline-block;width: 15px;height: 6px;background-color: #fff;box-shadow: 2px 3px 2px rgba(0,0,0,.1);}
+.application-social-adv .application-adv-item .application-adv-title{font-size: 22px;font-weight: bold;line-height: 1.4;}
+.application-social-adv .application-adv-item .application-adv-content{position: absolute;bottom:20px;display: flex; justify-content: space-between;width: 85%;align-items: center;}
+.application-social-adv .application-adv-item:hover{color: #fff !important;}
+.nc-item-float > div{padding-left: 5px; padding-right: 5px; box-sizing: border-box;}
+.nc-item-float a .layui-badge-dot{margin-right: 5px;}
+.nc-item-float .nc-assist-fr:nth-last-of-type(2){margin-left: 5px;}

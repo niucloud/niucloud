@@ -1,0 +1,181 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_NS_SMS_CSS/sms_list.css">
+{/block}
+{block name="main"}
+<div class="nc-quote-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">发送统计</blockquote>
+    <div class="layui-card-body overview">
+        <ul>
+            <li>
+                <p class="title">短信总发送条数</p>
+                <em class="num">{$sms_num.total_num.data}</em>
+            </li>
+            <li>
+                <p class="title">短信成功到达量</p>
+                <em class="num">{$sms_num.send_success_num.data}</em>
+            </li>
+            <li>
+                <p class="title">短信发送失败量</p>
+                <em class="num">{$sms_num.send_fail_num.data}</em>
+            </li>
+            <li>
+                <p class="title">短信待发送数量</p>
+                <em class="num nc-text-color">{$sms_num.to_be_send_num.data}</em>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="nc-quote-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">发送记录</blockquote>
+    <div class="sms-signature">
+        {notempty name="signature"}
+            短信签名：<b>【{$signature}】</b><a href="javascript:;" onclick="editSmsSignature('{$signature}', this);" class="nc-text-color">修改</a>
+        {else/}
+            短信签名：<b>未设置签名</b><a href="javascript:;" onclick="editSmsSignature('', this);" class="nc-text-color">设置</a>
+        {/notempty}
+    </div>
+    <table id="sms_list" lay-filter="sms_list"></table>
+    <script type="text/html" id="status">
+        {{#  if(d.status == 1){ }}
+        成功
+        {{#  } else if(d.status == -1) { }}
+        失败
+        {{#  } else { }}
+        待发送
+        {{#  } }}
+    </script>
+    <script type="text/html" id="operation">
+        {{#  if(d.status != 1){ }}
+        <a class="default" lay-event="send_sms">重新发送</a>
+        {{#  } }}
+    </script>
+    <script type="text/html" id="send_account">
+            <label><span>{{d.account}}</span></label><br />
+        </script>
+    <script type="text/html" id="sms_template">
+            <div>
+                {{#  if(d.type_name != ''){ }}<label>发送类型:<span>{{ d.type_name }}</span></label><br />{{#  } }}
+                {{#  if(d.code != ''){ }}<label>短信模板:<span>{{d.code }}</span></label><br />{{#  } }}
+                {{#  if(d.sign != ''){ }}<label>短信签名:<span>{{d.sign }}</span></label>{{#  } }}
+            </div>
+        </script>
+    <script type="text/html" id="create_time">
+            <label><span>{{ nc.time_to_date(d.create_time) }} </span></label>
+        </script>
+</div>
+
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+var table = new Table({
+	elem: '#sms_list',
+    filter : "sms_list",
+	url: '{:addon_url("Sms/sitehome/Config/smsList")}',
+	cols: [
+		[
+			{
+				field: 'account',
+				title: '账号',
+				templet: "#send_account",
+                unresize : 'false'
+			},
+			{
+				width: '20%',
+				title: '配置信息',
+				templet: "#sms_template",
+                unresize : 'false'
+			},
+			{
+				field: 'result',
+				width: '25%',
+				title: '发送结果',
+                unresize : 'false'
+			},
+			{
+				field: 'status',
+				width: '10%',
+				title: '状态',
+				templet: '#status',
+                unresize : 'false'
+			},
+			{
+				field: '',
+				width: '15%',
+				title: '发送时间',
+				templet: '#create_time',
+                unresize : 'false'
+			},
+			{
+				title: '操作',
+				toolbar: '#operation',
+				align: 'right',
+                unresize : 'false'
+			}
+		]
+	]
+});
+
+//监听工具条
+table.tool(function(obj) {
+	var data = obj.data;
+	switch (obj.event) {
+		case "send_sms":
+			sendMsg(data);
+			break;
+	}
+});
+
+function sendMsg(data) {
+	layer.confirm('确定要重新发送?', {
+		btn: ['确定', '返回']
+	}, function () {
+		
+		//请求地址是错的
+		$.ajax({
+			type: "post",
+			async: false,
+			url: '{:addon_url("Sms/sitehome/Config/smsSend")}',
+			data: {'id': data.id},
+			dataType: "JSON",
+			success: function (res) {
+				layer.msg(res['message'], {}, function () {
+					if (res.code == 0) {
+						table.reload();
+					}
+				});
+			}
+		});
+	}, function () {
+		layer.close();
+	});
+}
+
+function editSmsSignature(value, event) {
+	layer.prompt({
+		title: '编辑签名',
+		formType: 3,
+		value: value
+	}, function (val, index) {
+		$.ajax({
+			type: "post",
+			async: true,
+			url: nc.url("sms://sitehome/config/editSmsSignature"),
+			data: {
+				signature: val,
+			},
+			dataType: "JSON",
+			success: function (data) {
+				var index = layer.index;
+				layer.close(index);
+				layer.msg(data.message);
+				if (data.code == 0) {
+					$(event).parents('.sms-signature').find('b').text('【' + val + '】');
+				}
+			}
+		});
+	});
+}
+</script>
+{/block}

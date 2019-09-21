@@ -1,0 +1,263 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+	.nc-form-row{padding-left: 170px;}
+</style>
+{/block}
+
+{block name="main"}
+<div class="layui-form">
+	<div class="nc-quote-box">
+		<div class="layui-quote-nm layui-elem-quote">基础信息</div>
+		<div class="layui-card-body">
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>站点名称</label>
+				<div class="layui-input-inline" >
+					<input type="text" name="site_name" value="{$site_info.site_name}" lay-verify="site_name" autocomplete="off" placeholder="请输入站点名称" class="layui-input nc-len-short">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label img-upload-lable">站点logo</label>
+				<div class="layui-input-inline img-upload">
+					<input type="hidden" class="layui-input" name = "icon" value="{$site_info['icon']}" />
+					<div class="upload-img-block site-icon">
+						{if empty($site_info['icon'])}
+						<div class="upload-img-box" onclick="uploadSinglesite_icon();">
+							<div>
+								<i class="add">+</i>
+							</div>
+						</div>
+						{else/}
+						<div class="upload-img-box has-choose-image">
+							<div>
+								<img src="{:img($site_info['icon'])}" layer-src="{:img($site_info['icon'])}">
+							</div>
+							<span onclick="uploadSinglesite_icon();">修改</span>
+						</div>
+						{/if}
+					</div>
+					{:hook("fileUpload", ["name" => "site_icon", 'type' => 'common', 'file_type' => 'IMAGE'], '', true)}
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">站点二维码</label>
+				<div class="layui-input-inline">
+					<p class="image-box qrcode_url_box" style="width:80px;height:80px;border:1px dashed #ccc;line-height:80px;text-align:center;" ><img class="qrcode_url" style="max-width:100%;max-height:100%;vertical-align:middle;" {if condition="$site_info.qrcode_url != ''"}src="{:img($site_info.qrcode_url)}" layer-src="{:img($site_info.qrcode_url)}"{/if}/></p>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">创建日期</label>
+				<div class="layui-input-inline">
+					<p class="nc-input-text">{$site_info.create_time|date='Y-m-d H:i:s',###}</p>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">站点简介</label>
+				<div class="layui-input-inline">
+					<textarea placeholder="请输入站点简介" class="layui-textarea nc-len-long" name="desc">{$site_info.desc}</textarea>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="nc-quote-box">
+		<div class="layui-quote-nm layui-elem-quote">seo设置</div>
+		<div class="layui-card-body">
+			<div class="layui-form-item">
+				<label class="layui-form-label">标题附加字</label>
+				<div class="layui-input-block">
+					<input type="text" name="title" {notempty name="$site_seo_info"} value="{$site_seo_info.title}" {else/} value="" {/notempty}  lay-verify="require" autocomplete="off" placeholder="" class="layui-input  nc-len-mid">
+					<div class="layui-form-mid layui-word-aux">页面标题添加统一后缀</div>
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">网站关键词</label>
+				<div class="layui-input-block">
+					<input type="text" name="keywords" {notempty name="$site_seo_info"} value="{$site_seo_info.keywords}" {else/} value="" {/notempty}  lay-verify="require" autocomplete="off" placeholder="" class="layui-input  nc-len-mid">
+				</div>
+				<div class="layui-form-mid layui-word-aux">keywords项出现在页面头部的标签中，用于记录本页面的关键字，多个关键字请用英文“,”分隔</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">关键词描述</label>
+				<div class="layui-input-block">
+					<input type="text" name="description" {notempty name="$site_seo_info"} value="{$site_seo_info.description}" {else/} value="" {/notempty}  lay-verify="require" autocomplete="off" placeholder="" class="layui-input  nc-len-mid">
+				</div>
+				<div class="layui-form-mid layui-word-aux">description出现在页面头部的Meta标签中，用于记录本页面的摘要与描述，建议不超过80个字</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">其他页头信息</label>
+				<div class="layui-input-block">
+					<textarea name="other" autocomplete="off" placeholder="" class="layui-textarea  nc-len-mid">{notempty name="$site_seo_info"}{$site_seo_info.other}{/notempty}</textarea>
+				</div>
+				<div class="layui-form-mid layui-word-aux">如需在中添加其他的HTML代码，可以使用本设置，否则请留空</div>
+			</div>
+			<input type="hidden" name="site_seo_id" value="{$site_seo_id}">
+			
+		</div>
+	</div>
+	
+	<div class="nc-quote-box">
+		<div class="layui-quote-nm layui-elem-quote">备案设置</div>
+		<div class="layui-card-body">
+			<div class="layui-form-item">
+				<label class="layui-form-label">网站ICP备案号</label>
+				<div class="layui-input-inline">
+					<input type="text" name="cip_code" value="{$site_record_info['cip_code']}" placeholder="请输入ICP备案号" autocomplete="off" class="layui-input nc-len-mid">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">网站公安备案</label>
+				<div class="layui-input-inline">
+					<input type="text" name="public_security" value="{$site_record_info['public_security']}" placeholder="网站公安备案" autocomplete="off" class="layui-input nc-len-mid">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公安备案链接</label>
+				<div class="layui-input-inline">
+					<input type="text" name="public_security_url" value="{$site_record_info['public_security_url']}" placeholder="网站公安备案链接" autocomplete="off" class="layui-input nc-len-mid">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">第三方统计代码</label>
+				<div class="layui-input-inline">
+					<textarea name="third_count" autocomplete="off" placeholder="" class="layui-textarea nc-len-mid">{notempty name="$site_record_info"}{$site_record_info.third_count}{/notempty}</textarea>
+				</div>
+			</div>
+			<input type="hidden" value="{$site_record_id}" name="site_record_id">
+		
+		</div>
+	</div>
+	
+	<div class="nc-quote-box">
+		<div class="layui-quote-nm layui-elem-quote">版权设置</div>
+		<div class="layui-card-body">
+			<div class="layui-form-item">
+				<label class="layui-form-label img-upload-lable">电脑端logo</label>
+				<div class="layui-input-inline img-upload">
+					<input type="hidden" class="layui-input" name = "pc_logo"  value="{$site_copyright_info['pc_logo']}" />
+					<div class="upload-img-block pc_logo">
+						{if empty($site_copyright_info['pc_logo'])}
+						<div class="upload-img-box" onclick="uploadSinglepc_logo()">
+							<div>
+								<i class="add">+</i>
+							</div>
+						</div>
+						{else/}
+						<div class="upload-img-box has-choose-image">
+							<div>
+								<img src="{:img($site_copyright_info['pc_logo'])}" layer-src="{:img($site_copyright_info['pc_logo'])}">
+							</div>
+							<span onclick="uploadSinglepc_logo();">修改</span>
+						</div>
+						{/if}
+					</div>
+					{:hook("fileUpload", ['name' => 'pc_logo', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000'], '', true)}
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label img-upload-lable">手机端logo</label>
+				<div class="layui-input-inline img-upload">
+					<input type="hidden" class="layui-input"  name = "wap_logo"  value="{$site_copyright_info['wap_logo']}"   />
+					<div class="upload-img-block wap_logo">
+						{if empty($site_copyright_info['wap_logo'])}
+						<div class="upload-img-box" onclick="uploadSinglewap_logo()" >
+							<div>
+								<i class="add">+</i>
+							</div>
+						</div>
+						{else/}
+						<div class="upload-img-box has-choose-image">
+							<div>
+								<img src="{:img($site_copyright_info['wap_logo'])}" layer-src="{:img($site_copyright_info['wap_logo'])}">
+							</div>
+							<span onclick="uploadSinglewap_logo();">修改</span>
+						</div>
+						{/if}
+					</div>
+					{:hook("fileUpload", ['name' => 'wap_logo', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000'], '', true)}
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">公司名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="company_name" value="{$site_copyright_info['company_name']}" lay-verify="" placeholder="" value="" autocomplete="off" class="layui-input nc-len-mid">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">版权链接</label>
+				<div class="layui-input-inline">
+					<input type="text" name="copyright_url" value="{$site_copyright_info['copyright_url']}" lay-verify="" placeholder="" value="" autocomplete="off" class="layui-input nc-len-mid">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">版权信息</label>
+				<div class="layui-input-inline">
+					<textarea name="copyright_desc" autocomplete="off" placeholder="" class="layui-textarea nc-len-mid">{notempty name="$site_copyright_info"}{$site_copyright_info.copyright_desc}{/notempty}</textarea>
+				</div>
+			</div>
+			<input type="hidden" value="{$site_copyright_id}" name="site_copyright_id">
+		
+		</div>
+	</div>
+
+	<div class="nc-form-row">
+		<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+		<button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+	</div>
+</div>
+
+{/block}
+{block name="script"}
+<script>
+    layui.use(['form'], function () {
+    	var form = layui.form;
+		
+        form.verify({
+        	site_name : function(value){
+        		if(value == ''){
+        			return '请输入站点名称';
+        		}
+        	}
+        });
+	
+		var repeat_flag = false;//防重复标识
+        form.on('submit(save)', function(data){
+        	if(repeat_flag) return;
+			repeat_flag = true;
+            $.ajax({
+        		url: "{:url('sitehome/manager/editSiteInfo')}",
+        		data: data.field,
+        		type: "post",
+                dataType : "JSON",
+        		success: function (res) {
+        			if(res.code == 0){
+						layer.msg(res.message,{ time : 200 },function () {
+							location.reload();
+						});
+			        }else{
+						repeat_flag = false;
+					}
+        		}
+        	})
+        });
+    });
+    
+    /**
+     * 单图回调事件
+     */
+    function singleImageUploadSuccess(res,name){
+        if(name == "site_icon"){
+        	$(".site-icon").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSinglesite_icon();">修改</span></div>');
+            $("input[name='icon']").val(res.path);
+        }else if(name == "wap_logo"){
+			$(".wap_logo").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSinglewap_logo();">修改</span></div>');
+			$("input[name='wap_logo']").val(res.path);
+		}else if(name == "pc_logo"){
+			$(".pc_logo").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSinglepc_logo();">修改</span></div>');
+			$("input[name='pc_logo']").val(res.path);
+		}
+    }
+</script>
+{/block}

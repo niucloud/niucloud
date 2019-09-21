@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>NiuCloud - 注册</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css" />
+<link rel="stylesheet" href="SITEHOME_CSS/common.css">
+<link rel="stylesheet" href="SITEHOME_STYLE/profession/theme.css">
+<link rel="stylesheet" href="HOME_CSS/register.css">
+<script src="__STATIC__/js/jquery-2.2.js"></script>
+<script src="__STATIC__/ext/layui/layui.js"></script>
+<script>
+window.nc_url = {
+	baseUrl: "{:request()->root(true)}/",
+	route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+};
+</script>
+<script src="__STATIC__/js/common.js"></script>
+</head>
+<body>
+
+<div class="user-register">
+	<div class="register-logo">
+		<div class="container"><a href=""><img src="" alt="" class="logo"/></a></div>
+	</div>
+	
+	<div class="register-content nc-quote-box">
+		<div class="layui-elem-quote layui-quote-nm">
+			<h3>账号注册</h3>
+			<div class="go">
+				已有账号，<a href="{:url('home/login/login')}" class='nc-text-color'>去登录</a>
+			</div>
+		</div>
+		
+		<div class="clearfix"></div>
+		<div class="register-form layui-form">
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>用户名</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="text" name="username" lay-verify="required" value="" placeholder="请输入用户名" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>手机号</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="text" name="mobile" lay-verify="required|phone" value="" placeholder="请输入手机号" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>密码</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="password" name="password" lay-verify="pass" value="" placeholder="请输入不少于6位的密码" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>确认密码</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="password" name="repassword" lay-verify="pass" value="" placeholder="请再次输入不少于6位的密码" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>昵称</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="text" name="nickname" lay-verify="required" value="" placeholder="请输入昵称" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">真实姓名</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="text" name="realname" value="" placeholder="请输入真实姓名" autocomplete="off" class="layui-input layui-form-danger">
+			    </div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label"><span class="required">*</span>验证码</label>
+				<div class="layui-input-inline nc-len-mid">
+			      <input type="text" name="captcha" lay-verify="required" value="" placeholder="请输入验证码" autocomplete="off" class="layui-input layui-form-danger">
+			      <div class="verification-code"><img id="capthcha_code" src="{:url('home/login/captcha')}" onclick="this.src='{:url('home/login/captcha')}'" alt="captcha"></div>
+			    </div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label"></label>
+				<div class="layui-input-inline nc-len-mid">
+			       <input type="checkbox" name="agreement" lay-skin="primary" lay-verify="agreement" title="阅读并接受协议  <a href='javascript:;' class='nc-text-color'>用户协议</a>" >
+			    </div>
+			</div>
+			
+			<div class="nc-form-row">
+			    <button class="layui-btn" lay-submit='' lay-filter='save'>保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="HOME_JS/register.js"></script>
+
+</body>
+</html>

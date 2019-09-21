@@ -1,0 +1,60 @@
+<nc-component v-bind:data="data[index]" class="component-title" v-bind:style="{ backgroundColor : nc.backgroundColor }">
+
+	<!-- 预览 -->
+	<template slot="preview">
+		
+		<h2 v-show="nc.title" v-bind:style="{ textAlign :nc.textAlign, fontSize : nc.fontSize + 'px' }">{{ nc.title }}</h2>
+		<p  v-show="nc.subTitle" v-bind:style="{ textAlign :nc.textAlign, fontSize : nc.fontSize-4 + 'px' }">{{ nc.subTitle }}</p>
+		
+	</template>
+
+	<!-- 编辑 -->
+	<template slot="edit">
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">文本名</label>
+			<div class="layui-input-block">
+				<input type="text" v-model="nc.title" v-bind:id="'title_'+index" placeholder="请输入文本" class="layui-input">
+			</div>
+		</div>
+			
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">副文本</label>
+			<div class="layui-input-block">
+				<input type="text" v-model="nc.subTitle" v-bind:id="'subTitle_'+index" placeholder="请输入副文本" class="layui-input">
+			</div>
+		</div>
+
+		<font-size v-bind:data="{ value : nc.fontSize }"></font-size>
+
+		<text-align></text-align>
+
+		<color v-bind:data="{ field : 'backgroundColor', 'label' : '背景颜色' }"></color>
+		
+		<nc-link v-bind:data="{ field : nc.link }"></nc-link>
+		
+	</template>
+	
+	<!-- 资源 -->
+	<template slot="resource">
+
+		<css src="RESOURCE_PATH/component/view/text/css/design.css"></css>
+		
+	</template>
+	
+	<!-- 验证 -->
+	<template slot="verify">
+		function verify(){
+			var res = { code : true, message : "" };
+			if(vue.data[{{index}}].title.length == 0){
+				res.code = false;
+				res.message = "文本不能为空";
+				setTimeout(function(){
+					$("#title_" + {{index}}).focus();
+				},10);
+			}
+			return res;
+		}
+	</template>
+	
+</nc-component>

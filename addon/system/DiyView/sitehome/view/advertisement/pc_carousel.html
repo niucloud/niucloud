@@ -1,0 +1,46 @@
+<link rel="stylesheet" href="STATIC_EXT/zui/css/zui.css">
+<link rel="stylesheet" href="STATIC_EXT/zui/css/zui-theme.css">
+<script src="STATIC_EXT/zui/lib/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="STATIC_EXT/zui/js/zui.js"></script>
+<style type="text/css">
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.carousel-indicators{
+	margin-bottom: 0;
+}
+.carousel-control .icon-prev, .carousel-control .icon-next, .carousel-control .icon-chevron-left, .carousel-control .icon-chevron-right{
+	transform: translateY(-50%);
+}
+</style>
+
+<div style="display: inline-block;width: {$adv_info.adv_width}px;height: {$adv_info.adv_height}px;overflow: hidden;" class="{$adv_class_name}">
+	<div id="myNiceCarousel" class="carousel slide" data-ride="carousel">
+	    <!-- 圆点指示器 -->
+	    <ol class="carousel-indicators">
+	    	{foreach name="$adv_info['adv_img_arr']" item="vo" key="k"}
+	        <li data-target="#myNiceCarousel" data-slide-to="{$k}" {if $k eq 0} class="active" {/if}></li>
+	    	{/foreach}
+	    </ol>
+
+	    <!-- 轮播项目 -->
+	    <div class="carousel-inner">
+	    	{foreach name="$adv_info['adv_img_arr']" item="vo" key="k"}
+	        <div class="item {if $k eq 0}active{/if}" style="background: {$vo.img_color}">
+	           <div> <img alt="First slide" src="{:img($vo.img_path)}"></div>
+	            <div class="carousel-caption"></div>
+	        </div>
+	        {/foreach}
+	    </div>
+
+		<!-- 项目切换按钮 -->
+	    <a class="left carousel-control" href="#myNiceCarousel" data-slide="prev">
+	        <span class="icon icon-chevron-left"></span>
+	    </a>
+	    <a class="right carousel-control" href="#myNiceCarousel" data-slide="next">
+	        <span class="icon icon-chevron-right"></span>
+	    </a>
+	</div>
+</div>

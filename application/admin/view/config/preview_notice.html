@@ -1,0 +1,18 @@
+{extend name="base"/}
+{block name='crumbs'}
+<span class="layui-breadcrumb">
+    <a href="{:url('admin/config/noticelist')}">公告列表</a>
+    <a><cite>{$info.title}</cite></a>
+</span>
+{/block}
+{block name="main"}
+<div class="nc-list">
+    <div class="head nc-content">
+        <h2>{$info.title}</h2>
+        <span>{$info.create_time | date="Y-m-d H:i:s",###}&nbsp;&nbsp;&nbsp;&nbsp;阅读：{$info.click}</span>
+    </div>
+    <div>{$info.content}</div>
+</div>
+{/block}
+{block name="script"}
+{/block}

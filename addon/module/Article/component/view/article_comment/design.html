@@ -1,0 +1,57 @@
+<nc-component v-bind:data="data[index]" class="cms-comment">
+
+	<!-- 预览 -->
+	<template slot="preview">
+	
+		<!-- 评论 -->
+		<div class="comment">
+		    <div class="comment-block">
+		        <h3 class="comment-title">评论<span class="comment-count">8</span></h3>
+		        <div class="comment-textarea">
+		            <textarea rows="5" id="comment-content"></textarea>
+		        </div>
+		        <div class="comment-button">
+		            <button>发表评论</button>
+		        </div>
+		    </div>
+		    <div class="comment-list">
+		            <ul>
+		            <li class="comment-item" comment_id = "'+item.id+'">
+                            <div class="comment-member-info">
+                            <div class="comment-head">
+                            	<img src="RESOURCE_PATH/component/view/article_detail/img/head.png"/>
+                            </div>
+                            <div class="comment-info">
+                            <div class="comment-name">
+                            <span class="comment-nickname">小明</span>：
+                            </div>
+                            <div class="comment-time">
+                            <span class="comment-time">2019-03-02 15:33:54</span>
+                            </div>
+                            </div>
+                            </div>
+                            <div class="comment-content">
+                                @<span class="comment-nickname">admin</span>：我的评论
+                            </div>
+                            <div class="comment-reply">
+                            <a class="comment-reply-button">回复</a>
+                            <div class="comment-reply-block"><input type="text" class="comment-reply-text" value=""/><button class="reply-cancel">取消</button><button class="reply-submit">回复</button></div>
+                            </div>
+                            </li>
+		            </ul>
+		            <div class="comment-list-more" ><a >加载更多</a></div>
+		    </div>
+		</div>
+	</template>
+	
+	<!-- 编辑 -->
+	<template slot="edit">
+		
+	</template>
+	
+	<!-- 资源 -->
+	<template slot="resource">
+		<css src="RESOURCE_PATH/component/view/article_comment/css/design.css"></css>
+	</template>
+	
+</nc-component>

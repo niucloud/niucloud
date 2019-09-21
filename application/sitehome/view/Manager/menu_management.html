@@ -1,0 +1,229 @@
+{extend name="style/base"/}
+
+{block name="resources"}
+<style type="text/css">
+.layui-table .lavel-1{padding-left: 40px;}
+.layui-table .lavel-2{padding-left: 80px;}
+.layui-table .lavel-3{padding-left: 120px;}
+.action-icon{width: 20px;height: 20px;text-align: center;display: inline-block;font-style: normal;cursor: pointer;}
+.action-icon.close:after{content: '【-】';}
+.action-icon.open:after{content: '【+】';}
+.edit-menu-layer .layui-layer-content{padding: 20px;}
+.layui-table tr td:last-of-type{text-align: right;}
+</style>
+{/block}
+
+{block name="main"}
+<table class="layui-table menu-list">
+    <colgroup>
+        <col width="5%">
+        <col width="50%">
+        <col width="25%">
+        <col width="20%">
+    </colgroup>
+    <thead>
+        <tr>
+            <th></th>
+            <th>菜单名称</th>
+            <th>排序</th>
+            <th style=" text-align:right;">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {foreach name="$tree_data" item="vo"}
+            <tr>
+                <td> {if $vo.child_num}<i class="action-icon open" data-name="{$vo.name}"></i>{/if}</td>
+                <td class="lavel-0">{$vo.title}</td>
+                <td><input type="number" class="layui-input nc-len-short" name="" value="{$vo.sort}"></td>
+                <td><a class="default" onclick="editMenu(this);" data-menu-id = "{$vo.menu_id}" data-name = "{$vo.name}" data-title = "{$vo.title}" data-menu-pid = "{$vo.menu_pid}" data-is-menu = "{$vo.is_menu}" data-desc = "{$vo.desc}" data-sort="{$vo.sort}">编辑</a></td>
+            </tr>
+            {if $vo.child_num}
+                {foreach name="$vo.child_list" item="fo"}
+                <tr class="{$vo.name}" style="display: none;">
+                    <td>{if $fo.child_num}<i class="action-icon close" data-name="{$fo.name}"></i>{/if}</td>
+                    <td class="lavel-1">├ {$fo.title}</td>
+                    <td><input type="number" class="layui-input nc-len-short" name="" value="{$fo.sort}"></td>
+                    <td><a class="default" onclick="editMenu(this);" data-menu-id = "{$fo.menu_id}" data-name = "{$fo.name}" data-title = "{$fo.title}" data-menu-pid = "{$fo.menu_pid}" data-is-menu = "{$fo.is_menu}" data-desc = "{$fo.desc}" data-sort="{$fo.sort}">编辑</a></td>
+                </tr>
+                {if $fo.child_num}
+                    {foreach name="$fo.child_list" item="so"}
+                    <tr class="{$vo.name} {$fo.name}" style="display: none;">
+                        <td>{if $so.child_num}<i class="action-icon close" data-name="{$so.name}"></i>{/if}</td>
+                        <td class="lavel-2">├ {$so.title}</td>
+                        <td><input type="number" class="layui-input nc-len-short" name="" value="{$so.sort}"></td>
+                        <td><a class="default" onclick="editMenu(this);" data-menu-id = "{$so.menu_id}" data-name = "{$so.name}" data-title = "{$so.title}" data-menu-pid = "{$so.menu_pid}" data-is-menu = "{$so.is_menu}" data-desc = "{$so.desc}" data-sort="{$so.sort}">编辑</a></td>
+                    </tr>
+                    {if $so.child_num}
+                        {foreach name="$so.child_list" item="to"}
+                        <tr class="{$vo.name} {$fo.name} {$so.name}" style="display: none;">
+                            <td></td>
+                            <td class="lavel-3">├ {$to.title}</td>
+                            <td><input type="number" class="layui-input nc-len-short" name="" value="{$to.sort}"></td>
+                            <td><a class="default" onclick="editMenu(this);" data-menu-id = "{$to.menu_id}" data-name = "{$to.name}" data-title = "{$to.title}" data-menu-pid = "{$to.menu_pid}" data-is-menu = "{$to.is_menu}" data-desc = "{$to.desc}" data-sort="{$to.sort}">编辑</a></td>
+                        </tr>
+                        {/foreach}
+                    {/if}
+                    {/foreach}
+                {/if}
+                {/foreach}
+            {/if}
+        {/foreach}
+    </tbody>
+</table>
+
+{/block} 
+
+{block name="script"}
+<script type="text/html" id="edit-menu-layer">
+    <div class="layui-form" lay-filter="menuEdit">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>菜单标题</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input nc-len-mid" name="title" lay-verify="menu_title" value="{{d.title}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input nc-len-short" name="sort" value="{{d.sort}}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级菜单</label>
+            <div class="layui-input-inline">
+                <select name="menuPid" class="nc-len-mid" lay-filter="parent_menu">
+                    <option value="">无</option>
+                    {foreach name="$tree_data" item="vo"}
+                        <option value="{$vo.name}" {{# if(d.menuPid == "{$vo.name}"){ }} selected {{# } }}>{$vo.title}</option>
+                        {if $vo.child_num}
+                            {foreach name="$vo.child_list" item="fo"}
+                            <option value="{$fo.name}" {{# if(d.menuPid == "{$fo.name}"){ }} selected {{# } }}>&nbsp;&nbsp;├ {$fo.title}</option>
+                            {/foreach}
+                        {/if}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"> 是否是菜单</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="isMenu" value="1" lay-skin="switch" lay-filter="is_menu" {{# if(d.isMenu){ }} checked {{# } }}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">描述</label>
+            <div class="layui-input-inline">
+                <textarea class="layui-textarea nc-len-mid" name="desc">{{d.desc}}</textarea>
+            </div>
+        </div>
+        <div class="nc-form-row">
+            <input type="button" value="保存" class="layui-btn"  lay-submit lay-filter="save"/>
+        </div>
+        <input type="hidden" name="menuId" value="{{d.menuId}}">
+    </div>
+</script>
+
+<script type="text/javascript">
+$(".action-icon").click(function(){
+    var name = $(this).attr('data-name');
+    if($(this).hasClass('close')){
+        $("."+ name).slideUp();
+        $(this).removeClass('close').addClass('open');
+    } else {
+        $("."+ name).slideDown();
+        $(this).removeClass('open').addClass('close');
+    }
+});
+
+var form,laytpl;
+layui.use(['form', 'laytpl'], function () {
+    form = layui.form;
+    laytpl = layui.laytpl;
+
+    form.render();
+    form.verify({
+        menu_title : function(value){
+            if(value == '') return '菜单标题不能为空';
+        }
+    });
+    form.on('submit(save)', function(data){
+        saveEdit(data.field);
+    })
+});
+
+var menu_data;
+function editMenu(event){
+    var data = $(event).data();
+    menu_data = data;
+    var tpl_html = $("#edit-menu-layer").html();
+    laytpl(tpl_html).render(menu_data, function(html){
+        layer.open({
+            title : '菜单编辑',
+            skin: 'edit-menu-layer',
+            area : ['550px'],
+            content : html,
+            btn: [],
+            type : 1
+        });
+        form.render();
+    })
+
+}
+
+function saveEdit(data){
+    var is_sub = false;
+    data.isMenu = data.isMenu || 0;
+    $.each(data, function(index, value){
+        if(value != menu_data[index]){
+            is_sub = true;
+            return false;
+        }
+    });
+
+    if(!is_sub){
+        layer.closeAll();
+    }else{
+        $.ajax({
+			type: 'post',
+			url: "{:url('sitehome/manager/menuManagement')}",
+			data: data,
+			async: false,
+			dataType: "JSON",
+			success: function (data) {
+				if (data.code == 0) {
+					layer.closeAll();
+					location.reload();
+				}
+				layer.msg(data.message);
+			}
+		});
+    }
+}
+
+$(".menu-list tbody .nc-len-short").change(function(){
+    var menuId = $(this).parents('tr').find('a').attr("data-menu-id"),
+        value = $(this).val();
+        if(value < 0) {
+            layer.msg('排序号不可为负数', {icon: 5}); 
+            return;  
+        }
+    $.ajax({
+        type : 'post',
+        url: "{:url('sitehome/manager/editMenuBaseInfo')}",
+        data : {
+            menu_id : menuId,
+            type : 'sort',
+            value : value
+        },
+        dataType : "JSON",
+        async : false,
+        success: function (data) {
+            if(data.code >= 0){
+                location.reload();
+            }
+            layer.msg(data.message);
+        }
+    })
+})
+</script>
+{/block}

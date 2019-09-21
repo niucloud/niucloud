@@ -1,0 +1,82 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="NIU_APPLET_CSS/app_index.css">
+{/block}
+
+{block name="main"}
+<div class="nc-quote-box graphic">
+    <blockquote class="layui-elem-quote layui-quote-nm">应用入口</blockquote>
+    {notempty name="$quick_entry"}
+    <ul class="nc-item-block-parent">
+        {foreach name="$quick_entry" item="vo"}
+        <li class="nc-item-block btn size-lg">
+            <a class="nc-item-block-wrap" href="javascript:;" target="_blank">
+                <div class="nc-item-pic">
+                    {notempty name="$vo['icon']"}
+                    <img src="__ROOT__/{$vo['icon']}">
+                    {else/}
+                    <img src="NIU_APPLET_IMG/icon.png">
+                    {/notempty}
+                </div>
+                <div class="nc-item-content">
+                    <div class="nc-content-title">{$vo['title']}</div>
+                    <div class="nc-content-desc">
+                        <span class="nc-text-color" onclick='nc.page_promote({$vo|json_encode});'>推广链接 >>></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+    {else/}
+    <p class="empty nc-text-color-gray-darken-30">暂无应用入口</p>
+    {/notempty}
+</div>
+
+{foreach name="$addon_diy_view_list" item="vo"}
+{if condition="$vo['addon_info']['name'] == $addon_name"}
+<div class="nc-quote-box graphic">
+    <blockquote class="layui-elem-quote layui-quote-nm">页面装修</blockquote>
+    {notempty name="$vo['view_list']"}
+    <ul class="nc-item-block-parent">
+        {foreach name="$vo['view_list']" item="child"}
+        <li class="nc-item-block size-lg">
+            <a class="nc-item-block-wrap" href="{:addon_url('diyView://sitehome/design/diyview',['name'=>strtolower($child['name']),'addon_name'=>$vo['addon_info']['name']])}">
+                <div class="img-wrap">
+                    {notempty name="$child['icon']"}
+                    <img class="nc-item-pic" src="__ROOT__/{$child['icon']}">
+                    {else/}
+                    <img class="nc-item-pic" src="NIU_APPLET_IMG/icon.png">
+                    {/notempty}
+                </div>
+                <div class="nc-item-content">
+                    <div class="nc-content-title">{$child['title']}</div>
+                </div>
+            </a>
+        </li>
+        {/foreach}
+    </ul>
+    {else/}
+    <p class="empty nc-text-color-gray-darken-30">暂无页面装修</p>
+    {/notempty}
+</div>
+{/if}
+{/foreach}
+
+<!--<div class="nc-quote-box notice">-->
+    <!--<blockquote class="layui-elem-quote layui-quote-nm">系统公告</blockquote>-->
+    <!--<ul>-->
+        <!--{foreach name="$notice_list['list']" item="vo"}-->
+        <!--<li>-->
+            <!--<a href="javascript:;">-->
+                <!--<label>{$vo['title']}</label>-->
+                <!--<span class="nc-text-color-gray-darken-30 system-notice-time" >{:time_to_date($vo['create_time'])}</span>-->
+            <!--</a>-->
+        <!--</li>-->
+        <!--{/foreach}-->
+    <!--</ul>-->
+<!--</div>-->
+{/block}
+
+{block name="script"}
+{/block}

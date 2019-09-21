@@ -1,0 +1,14 @@
+<view style="margin:0;padding:10px;background:#dbd8db">
+
+  <block wx:if="{{config_info.title != ''}}">
+    <view class="h4" style="font-size:{{config_info.fontSize}}px;margin:0;font-weight: normal;text-align:{{config_info.textAlign}};">
+      <view class="a" catchtap="linkJump" data-url="{{config_info.link.baiduapp_url}}">{{config_info.title}}</view>
+    </view>
+  </block>
+
+  <block wx:if="{{config_info.subTitle != ''}}">
+    <view class="p" style="margin:10px 0 0;text-align:{{config_info.textAlign}};font-size:{{config_info.fontSize - 4}}px">
+      <view class="a" catchtap="linkJump" data-url="{{config_info.link.baiduapp_url}}">{{config_info.subTitle}}</view>
+    </view>
+  </block>
+</view>

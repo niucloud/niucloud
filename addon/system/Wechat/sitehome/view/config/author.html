@@ -1,0 +1,88 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style type="text/css">
+.c-gray{color: #999 !important}
+.nui-container{
+	padding: 20px;
+	color: #333;
+	line-height: 30px;
+}
+.row-class{overflow: hidden;width: 100%;padding-left: 50px;}
+.row-class>div{
+	float: left;
+	display: inline-block;
+}
+.row-class>div.row-left{width: 114px;}
+.unbind{
+	color: #0d73f9;
+    font-size: 13px;
+}
+.right-controls{
+	width: 400px;
+    padding: 15px;
+    background: #f8f8f8;
+    border: 1px solid #E5E5E5;
+	margin: 10px 0px 15px;
+}
+</style>
+{/block}
+{block name="main"}
+<div class="nui-container">
+	<div class="row-class">
+		<div class="row-left">公众微信号：</div>
+		<div class="row-right c-gray">{if empty($auth_info)}你的公众号暂未设置微信号，可设置并重新授权 <a href="https://mp.weixin.qq.com" style="font-size: 11px;" class="unbind">去设置 &gt;&nbsp;&nbsp;&nbsp;</a> {else/}{$auth_info.user_name}{/if}</div>
+	</div>
+	<div class="row-class">
+		<div class="row-left">公众号昵称：</div>
+		<div class="row-right">{$auth_info.nick_name}</div>
+	</div>
+	<div class="row-class">
+		<div class="row-left">微信帐号类型：</div>
+		<div class="row-right">
+			<div class="control-action">未认证订阅号</div>
+		</div>
+	</div>
+	<div class="row-class">
+		<div class="row-left">授权状态：</div>
+		<div class="row-right">
+			<div class="authorized-value">已经授权
+				<button class="ui-btn btn-auth-list js-weixin-auth-list layui-btn" data-loading-text="正在保存..." type="button">查看权限</button>
+			</div>
+		</div>
+	</div>
+	<div class="row-class">
+		<div class="row-left">&nbsp;</div>
+		<div class="row-right">
+			<div class="right-controls">
+	            <p>你的店铺已获得该公众号的所有接口权限，可以正常对接微信</p>
+	            <p>如果使用中发现接口有异常，请点此
+	                <a href="javascript:unbind();" class="unbind">重新授权</a>试试
+	                <a href="https://open.weixin.qq.com/cgi-bin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1453779503&token=&lang=" class="unbind" target="_blank" style="margin-left: 8px;">查看教程</a>
+	            </p>
+	        </div>
+		</div>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+var repeat_flag = false;//防重复标识
+function unbind(){
+	layer.confirm('确定取消当前绑定信息，重新配置？', {
+	  btn: ['确定','取消']
+	}, function(){
+		if(repeat_flag) return;
+		repeat_flag = true;
+		$.ajax({
+			type : "post",
+			url : "{:addon_url('Wechat://sitehome/config/unbind')}",
+			data : {'unbind_type' : 'author'},
+			dataType : "JSON",
+			success : function(data) {
+				location.href = "{:addon_url('Wechat://sitehome/config/index')}";
+			}
+		});
+	});
+}
+</script>
+{/block}

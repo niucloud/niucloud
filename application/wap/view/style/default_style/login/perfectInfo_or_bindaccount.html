@@ -1,0 +1,185 @@
+{extend name="$wap_base"/}
+{block name="resources"}
+<link rel="stylesheet" href="WAP_CSS/login_css/perfectInfo_or_bindAccount.css"/>
+{/block}
+{block name="head"}{/block}
+{block name="main"}
+<header class="nc-login-header w1200">
+    <a class="logo" href="{:addon_url('ncactive://web/index')}">
+        {notempty name="$site_info.icon"}
+        <img src="{:IMG($site_info.icon)}">
+        {else /}
+        <img src="WEB_IMG/login_img/default-logo.png">
+        {/notempty}
+    </a>
+</header>
+
+{php}
+	$register_info = api("System.Login.registerConfig", ['site_id'=>SITE_ID]);
+{/php}
+
+<div class="w1200">
+	<div class="content-main">
+		<ul class="nav nav-tabs">
+	  		<li class="active"><a data-tab href="#perfectInfo">完善信息</a></li>
+	  		<li><a data-tab href="#bindAccount">绑定已有账号</a></li>
+		</ul>
+		<div class="tab-content">
+			<div class="content-tip">
+                <img src="{$data['head_img']}" class="headimg">
+                <p>完成绑定后可用{$data['name']}一键登录！</p>
+            </div>
+
+	  		<div class="tab-pane active" id="perfectInfo">
+	    		<div class="form-container">
+	    			<div class="form-item">
+	    				<label>用户名</label>
+	    				<input type="text" name="username" placeholder="请输入用户名">
+	    			</div>
+	    			<div class="form-item">
+	    				<label>设置密码</label>
+	    				<input type="password" name="password" placeholder="请输入密码">
+	    			</div>
+	    			<div class="form-item">
+	    				<label>确认密码</label>
+	    				<input type="password" name="repassword" placeholder="请输入确认密码">
+	    			</div>
+    			 	
+    			 	{if condition="$register_info['data']['web_code'] eq '1'"}
+	    			<div class="form-item vertify-code">
+	    				<label>验证码</label>
+	    				<input type="text" name="captcha" placeholder="请输入验证码">
+	    				<div class="vertify-code">
+	    					<img src="{:addon_url('ncactive://web/login/captcha')}" onclick="this.src='{:addon_url('ncactive://web/login/captcha')}'" alt="captcha" />
+	    				</div>
+	    			</div>
+    				{/if}
+
+	    			<div class="form-item vertify-code">
+	    				<button type="submit" class="btn-submit common-bg-color" onclick="formSubmit(this);">立即绑定</button>
+	    			</div>
+	    		</div>
+			</div>
+
+		  	<div class="tab-pane" id="bindAccount">
+		    	<div class="form-container">
+	    			<div class="form-item">
+	    				<label>已有账号</label>
+	    				<input type="text" name="username" placeholder="用户名/邮箱/手机号">
+	    			</div>
+	    			<div class="form-item">
+	    				<label>密码</label>
+	    				<input type="password" name="password" placeholder="请输入密码">
+	    			</div>
+	    			{if condition="$register_info['data']['web_code'] eq '1'"}
+	    			<div class="form-item vertify-code">
+	    				<label>验证码</label>
+	    				<input type="text" name="captcha" placeholder="请输入验证码">
+	    				<div class="vertify-code">
+	    					<img src="{:addon_url('ncactive://web/login/captcha')}" onclick="this.src='{:addon_url('ncactive://web/login/captcha')}'" alt="captcha" />
+	    				</div>
+	    			</div>
+	    			{/if}
+	    			<div class="form-item vertify-code">
+	    				<button type="submit" class="btn-submit common-bg-color" onclick="formSubmit(this);">立即绑定</button>
+	    			</div>
+	    		</div>
+		  	</div>
+
+		</div>
+	</div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+function formSubmit(event){
+	var field = {},
+		type = $(event).parents('.tab-pane').attr('id');
+
+	$(event).parents('.form-container').find('[name]').each(function(){
+		var name = $(this).attr('name'),
+			val = $(this).val();
+			field[name] = val;
+	});
+
+	if(!vertify(field, type)) return;
+
+ 	nc.api(
+ 		"System.Login." + type,
+ 		{
+ 			'username':field.username, 
+ 			'password':field.password,
+ 			'nick_name' : "{$data['nick_name']}",
+ 			'head_img' : "{$data['head_img']}",
+ 			'tag' : "{$tag}",
+ 			'openid' : "{$data['openid']}"
+ 		},
+ 		function(res){
+			if(res.code == 0){
+				nc.api("System.Login.oauthLogin",{ 'openid_tag':"{$tag}", 'openid':"{$data['openid']}" },function(data){
+                    if(data['code'] == 0){
+                        $.cookie('access_token_{$site_info['site_id']}', data.data.access_token, { expires: 1 });//expires：有效期
+                        location.href= "{:addon_url('ncactive://web/index/index')}";
+                    }
+                });
+			}else{
+				showBox(res.message);
+			}
+ 		},
+ 		false
+ 	)
+
+}	
+
+function vertify(field, type){
+	if(field.username == ""){
+		var msg = type == 'perfectInfo' ? '请输入用户名' : '请输入已有账号';
+		showBox(msg);	
+		return false;
+	} 
+	if(field.password == ""){
+		showBox('请输入密码');	
+		return false;
+	} 
+	if(type == 'perfectInfo' && field.repassword == ""){
+		showBox('请输入确认密码');	
+		return false;
+	} 
+	if(type == 'perfectInfo' && field.repassword != field.password){
+		showBox('两次输入的密码不一致');	
+		return false;
+	} 
+
+	{if condition="$register_info['data']['web_code'] eq '1'"}
+
+	if(field.captcha == ""){
+		showBox('请输入验证码');
+		return false;
+	}else{
+		var verifyResult = true;
+		checkCaptcha("{:addon_url('ncactive://web/login/checkcaptcha')}", field.captcha, function(data){
+			if(data.code == 0){
+                verifyResult = true;
+            }else{
+            	showBox(data.message);
+                verifyResult = false;
+            }
+		});
+        if(!verifyResult) return verifyResult;
+	}
+
+	{/if}
+
+	return true;
+}
+
+function showBox(message, icon){
+	var icon = icon != undefined ? icon : 'exclamation-sign';
+	new $.zui.Messager(message, {
+	    icon: icon,
+	    placement: 'center' 
+	}).show();
+}
+</script>
+{/block}

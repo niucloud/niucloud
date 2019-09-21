@@ -1,0 +1,29 @@
+{extend name="base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-function-search">
+    <button class="layui-btn" onclick="location.href = nc.url('admin/user/addGroup')">添加用户组</button>
+</div>
+<table id="group_list" lay-filter="group_list"></table>
+<script type="text/html" id="status">
+    {{#  if(d.is_system == 0){ }}
+    <input type="checkbox" name="status" value="{{d.group_id}}" lay-filter="status" lay-skin="switch" lay-text=" | " {{ d.status==1 ? 'checked' : '' }}>
+    {{#  }else{ }}
+    <span class="layui-disabled">超级管理员不能编辑</span>
+    {{#  } }}
+</script>
+<script type="text/html" id="operation">
+    {{#  if(d.is_system == 0){ }}
+    <a class="default" lay-event="edit">编辑</a>
+    <a class="default" lay-event="deleteGroup">删除</a>
+    {{#  } }}
+    {{#  if(d.is_system == 1){ }}
+    <p class="nc-bg-color-gray layui-disabled">超级管理员不能编辑或删除</p>
+    {{#  } }}
+</script>
+
+{/block}
+{block name="script"}
+<script src="ADMIN_JS/group_list.js"></script>
+{/block}

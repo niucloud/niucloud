@@ -1,0 +1,70 @@
+@CHARSET "UTF-8";
+.container::before{
+	display: table;
+    content: " ";
+}
+.user-register {
+    background-color: #fff;
+    min-height: 100vh;
+}
+
+.user-register .register-logo {
+    border-bottom: 1px solid #e8e9eb;
+	height: 50px;
+}
+
+.container {
+    width: 600px;
+    padding: 0;
+    position: relative;
+}
+
+.user-register .register-logo img {
+    margin: 10px 0;
+    max-width: 150px;
+}
+
+.user-register .register-content .container {
+    padding-top: 60px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-bottom: 30px;
+    font-size: 24px;
+    color: #4c4c4c;
+}
+.nc-quote-box .layui-elem-quote.layui-quote-nm{
+    display: flex;
+    justify-content: space-between;
+}
+.nc-quote-box .layui-elem-quote.layui-quote-nm .go{
+    font-size: 12px;
+}
+
+.user-register .register-content .container h3 {
+    font-weight: 400;
+    display: inline-block;
+    padding-left: 25px;
+    border-left: 3px solid #3296fa;
+    margin: 0;
+}
+
+.user-register .register-content .container .go {
+    font-size: 14px;
+    float: right;
+    line-height: 26px;
+}
+
+.user-register .register-content {
+    width: 520px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+.clearfix::after{
+	clear: both;
+}
+.verification-code{
+    position: absolute;
+    top: -2px;
+    right: 1px;
+}
+

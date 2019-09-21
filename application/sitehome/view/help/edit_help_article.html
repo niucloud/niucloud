@@ -1,0 +1,59 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+
+{block name="main"}
+<div class="layui-form">
+	<div class="nc-quote-box">
+        <blockquote class="layui-elem-quote">常规信息</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>帮助标题</label>
+            <div class="layui-input-inline">
+               <input type="text" name="title" value="{$help_info.title}" lay-verify="title" autocomplete="off" placeholder="请输入帮助标题" class="layui-input nc-len-mid">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>帮助类型</label>
+            <div class="layui-input-inline">
+               <select name="class_id" class="nc-len-mid"  lay-verify="class_id">
+                    <option value="0">请选择</option>
+                     {volist name="list_tree" id="vo"}
+                        <option value="{$vo.class_id}" {if condition="$vo.class_id eq $help_info.class_id"}selected{/if}>{$vo.class_name}</option>
+                     {/volist}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+             <label class="layui-form-label">排序</label>
+             <div class="layui-input-inline">
+                 <input type="number" name="sort" value="{$help_info.sort}" lay-verify="sort" autocomplete="off" placeholder="请输入排序" class="layui-input nc-len-short">
+             </div>
+        </div>
+	</div>
+
+	<div class="nc-quote-box">
+        <blockquote class="layui-elem-quote">帮助内容</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">帮助内容</label>
+            <div class="layui-input-inline">
+                <textarea id="editor" class="nc-len-long"></textarea>
+            </div>
+          </div>
+        <div class="nc-form-row">
+            <input type="hidden" name="id" value="{$help_info.id}"/>
+            <button class="layui-btn" lay-submit lay-filter="btnArticle" type="button">保存</button>
+            <button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">取消</button>
+        </div>
+	</div>
+	
+</div>
+{/block}
+{block name="script"}
+<script>
+var editor = new Editor("editor",{});
+editor.setContent('{$help_info["content"]}');
+</script>
+<script src="SITEHOME_JS/help_article.js"></script>
+{/block}

@@ -1,0 +1,62 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="STATIC_EXT/color_picker/css/colorpicker.css" />
+<link rel="stylesheet" href="SNS_CSS/bottom_nav_design.css" />
+{/block}
+{block name="main"}
+<div id="bottomNav" class="layui-form">
+	
+	<div class="preview">
+	
+		<div class="preview-head">
+			<span>底部导航</span>
+		</div>
+		
+		<div class="preview-block">
+			<ul v-show="data.list.length>0" v-bind:style="{ backgroundColor : data.backgroundColor }">
+				<li v-for="(item,index) in data.list" v-on:mouseover="mouseOver(index)" v-on:mouseout="mouseOut()">
+					<div v-show="data.type == 1 || data.type == 2">
+						<img v-bind:src="(selected == index ? (item.imgHoverUrl? changeImgUrl(item.imgHoverUrl) : 'SNS_IMG/crack_figure.png') :  (item.imgUrl? changeImgUrl(item.imgUrl) : 'SNS_IMG/crack_figure.png') )"/>
+					</div>
+					<span v-bind:style="{ fontSize : ( data.fontSize + 'px'), color : (selected == index ? data.textHoverColor :  data.textColor ) }" v-show="data.type == 1 || data.type == 3">{{ item.title }}</span>
+				</li>
+			</ul>
+		</div>
+		<div class="custom-save">
+			<button class="layui-btn save">保存</button>
+		</div>
+	</div>
+			
+	<div class="edit-attribute">
+		<bottom-menu></bottom-menu>
+	</div>
+
+</div>
+
+<!-- 相册 -->
+<div class="photo-album">
+	{:hook("fileUpload", ['type' => 'common', 'file_type' => 'IMAGE','size' => '2000' ,'name' => 'diyViewUpload'], '', true)}
+</div>
+
+{/block}
+{block name="script"}
+<script>
+var STATICIMG = 'STATIC_IMG';
+var addon_name = "{$addon_name}";
+//隐藏图片相册
+$(".photo-album>div").hide();
+
+window.onload = function(){
+	$(".photo-album").show();
+};
+{if condition="$bottom_nav_info && $bottom_nav_info.value!='' "}
+var bottomNavInfo = eval('({$bottom_nav_info.value})');
+{else/}
+var bottomNavInfo = null;
+{/if}
+</script>
+<script src="STATIC_EXT/color_picker/js/colorpicker.js"></script>
+<script src="STATIC_JS/vue.js"></script>
+<script src="DIYVIEW_JS/nc_components.js"></script>
+<script src="SNS_JS/bottom_nav.js"></script>
+{/block}

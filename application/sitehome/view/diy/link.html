@@ -1,0 +1,202 @@
+<style>
+.layui-layer-content .layui-form{padding: 20px;}
+
+.diy-link-wrap{padding: 20px;overflow: hidden;}
+.diy-link-wrap .link-list{border: 1px solid #e7e7e7;overflow: hidden;margin-bottom: 20px;}
+.diy-link-wrap .link-list>div{width: 102%;overflow-y: auto;height: 490px;}
+.diy-link-wrap .link-list>div.have-custom{height: 490px;}
+.diy-link-wrap .link-list .item{background: #EAEDF2;}
+.diy-link-wrap .link-list .item header{padding: 14px;}
+.diy-link-wrap .link-list .item header div{width: 16px;height: 16px;margin-right: 5px;display: inline-block;vertical-align: middle;margin-top: 2px;}
+.diy-link-wrap .link-list .item header div img{max-width: 100%;vertical-align: top;}
+.diy-link-wrap .link-list .item header span{vertical-align: middle;}
+.diy-link-wrap .link-list .item ul{overflow: hidden;background: #fff;padding: 20px 0 0;}
+.diy-link-wrap .link-list .item ul li{float: left;padding: 5px 10px;margin: 0 10px 20px;border: 1px solid #e7e7e7;font-size: 12px;line-height: initial;cursor: pointer;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;max-width: 156px;}
+.diy-link-wrap .link-list .item ul li.selected{color:#fff;}
+
+.diy-link-wrap .link-list .item.add-link ul{display: none;}
+.diy-link-wrap .link-list .item.add-link ul li{margin-bottom: 0;}
+.diy-link-wrap .link-list .item.add-link>div{padding: 10px;cursor: pointer;line-height: 30px;height: 30px;background: #fff;text-align: center;}
+.diy-link-wrap .link-list .item.add-link>div img{margin-right: 5px;}
+
+.diy-link-wrap .link-save{position: absolute;bottom: 0;margin-left: -39px;left: 50%;}
+</style>
+
+<article class="diy-link-wrap">
+	<aside class="link-list">
+		<div {if !empty($link) && $link['addon_name']=='CustomLink'}class="have-custom"{/if}>
+			{foreach name="$link_list" item="vo"}
+			<div class="item">
+				<header>
+					<div>
+						{notempty name="$vo['icon']"}
+						<img src="__ROOT__/{$vo['icon']}"/>
+						{else/}
+						<img src="__ROOT__/application/sitehome/view/public/img/diy_link_icon.png"/>
+						{/notempty}
+					</div>
+					<span>{$vo['addon_title']}</span>
+				</header>
+				<ul>
+					{foreach name="$vo['list']" item="child" key="ck"}
+					<li title="{$child['title']}" data-value='{$child|json_encode}' {if $child['selected']}class="selected nc-bg-color nc-border-color"  data-old-value='{$link|json_encode}'{/if}>{$child['title']}</li>
+					{/foreach}
+				</ul>
+			</div>
+			{/foreach}
+			
+			<div class="item add-link">
+				<header>
+					<div>
+						<img src="__ROOT__/application/sitehome/view/public/img/diy_link_icon.png"/>
+					</div>
+					<span>自定义链接</span>
+				</header>
+				<ul {if !empty($link) && $link['addon_name']=='CustomLink'}style="display:block;"{/if}>
+					<li {if !empty($link) && $link['addon_name']=='CustomLink'}title="{$link.title}" data-value='{$link|json_encode}' class="selected nc-bg-color nc-border-color" {/if}>{notempty name="$link"}{$link.title}{/notempty}</li>
+				</ul>
+				
+				<div>
+					<img src="__ROOT__/application/sitehome/view/public/img/diy_link_add.png">
+					<span class="nc-text-color">自定义</span>
+				</div>
+			</div>
+			
+		</div>
+		
+	</aside>
+	
+	<div class="link-save">
+		<button class="layui-btn">保存</button>
+	</div>
+	
+</article>
+<script type="text/html" id="customLink">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>链接名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="title" class="layui-input nc-len-mid" required>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">H5页面跳转路径</label>
+			<div class="layui-input-inline">
+				<input type="text" name="h5_url" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">PC端页面跳转路径</label>
+			<div class="layui-input-inline">
+				<input type="text" name="web_url" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信小程序跳转路径</label>
+			<div class="layui-input-inline">
+				<input type="text" name="weapp_url" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">支付宝小程序跳转路径</label>
+			<div class="layui-input-inline">
+				<input type="text" name="aliapp_url" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">百度小程序跳转路径</label>
+			<div class="layui-input-inline">
+				<input type="text" name="baiduapp_url" class="layui-input nc-len-mid">
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn" lay-submit="" lay-filter="saveCustomLink">保存</button>
+		</div>
+	</div>
+</script>
+<script type="text/javascript">
+$(function () {
+	
+	window.linkData = {};
+	window.linkIndex = -1;
+	var layerIndex = -1;
+	
+	$(".diy-link-wrap .link-list .item ul li").click(function () {
+		$(".diy-link-wrap .link-list .item ul li").removeClass("selected nc-bg-color nc-border-color");
+		$(this).addClass("selected nc-bg-color nc-border-color");
+	});
+	
+	$(".diy-link-wrap .link-list .item ul li.selected").click();
+	
+	//添加自定义链接
+	$(".diy-link-wrap .link-list .add-link").click(function () {
+		
+		layerIndex = layer.open({
+			type : 1,
+			title: "自定义链接",
+			content: $("#customLink").html(),
+			btn: [],
+			area: ['450px', '420px'], //宽高
+			cancel: function (index, layero) {
+				for (var k in window.linkData){
+					delete window.linkData[k];
+				}
+				$(".diy-link-wrap .link-list>div").removeClass("have-custom");
+			}
+			
+		});
+	});
+	
+	$(".link-save button").click(function () {
+		
+		var li = $(".diy-link-wrap .link-list .item ul li.selected");
+		var value = li.attr("data-value").toString();
+		var old_value = li.attr("data-old-value");
+		
+		if(old_value) value = old_value.toString();
+		
+		if(value) {
+			value = JSON.parse(value.toString());
+			window.linkData = value;
+		}
+		layer.close(window.linkIndex);
+	});
+	
+	layui.use(['form'], function () {
+		var form = layui.form;
+		form.on('submit(saveCustomLink)', function(data) {
+			var val = data.field;
+			for (var k in val) window.linkData[k] = val[k];
+			
+			window.linkData.id = -999;
+			window.linkData.addon_icon = "";
+			window.linkData.addon_name = "CustomLink";
+			window.linkData.addon_title = "自定义链接";
+			window.linkData.design_url = "";
+			window.linkData.icon = "";
+			window.linkData.name = "NC_CUSTOM_LINK";
+			window.linkData.type = 0;
+			
+			if (val.title == "") {
+				layer.msg("请输入链接名称");
+				$("input[name='title']").focus();
+				return;
+			}
+			
+			$(".diy-link-wrap .link-list .item ul li").removeClass("selected nc-bg-color nc-border-color");
+			$(".diy-link-wrap .link-list .item.add-link ul").show();
+			$(".diy-link-wrap .link-list .item.add-link ul li")
+			.attr("title",window.linkData.title)
+			.attr("data-value",JSON.stringify(window.linkData))
+			.text(window.linkData.title)
+			.addClass("selected nc-bg-color nc-border-color");
+			
+			$(".diy-link-wrap .link-list>div").addClass("have-custom");
+			
+			layer.close(layerIndex);
+		});
+		
+	});
+	
+});
+</script>

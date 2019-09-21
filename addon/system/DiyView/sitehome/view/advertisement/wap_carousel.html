@@ -1,0 +1,22 @@
+<style>
+.image-ads-swipslider li a{position: relative;display: block;}
+.image-ads-swipslider li a .mui-slider-title{color: #ffffff;text-align: center;background: rgba(0,0,0,.6);opacity:1;position: absolute;font-size: 12px;bottom: 15px;width: 100%;padding: 5px 0;}
+.image-ads-swipslider li a img{width: auto;height: auto;max-width: 100%;max-height: 100%;}
+</style>
+<link rel="stylesheet" href="__STATIC__/ext/swipeslider/css/swipeslider.css"/>
+<div id="full_feature_{$rand_str}" class="image-ads-swipslider swipslider">
+	<ul class="sw-slides">
+		{foreach name="$adv_info['adv_img_arr']" item="vo" key="k"}
+			<li class="sw-slide">
+				<a href="javascript:;">
+					<img src="{:img($vo.img_path)}"/>
+					<!-- <p class="mui-slider-title"></p> -->
+				</a>
+			</li>
+		{/foreach}
+	</ul>
+</div>
+<script src="__STATIC__/ext/swipeslider/js/swipeslider.js"></script>
+<script>
+	$('#full_feature_{$rand_str}').swipeslider();
+</script>

@@ -1,0 +1,325 @@
+{extend name="style/base"/}
+
+{block name="resources"}
+<style>
+    .map {border:1px solid #ccc;height:500px;width: 800px;}
+    .map .address-list {width:250px;height:100%;float:left;border-right:1px solid #ccc;}
+    .map .address-list .list-body {height:460px;margin-bottom:10px;}
+    .map .address-list .list-page {height:30px;background:#e5ecf9;}
+    .map .container {margin-left:251px;height:100%;}
+    .map.list-empty .address-list {width:0;border:0;}
+    .map.list-empty .container {margin-left:0;}
+    .layui-input-block{margin-left: 152px !important;}
+</style>
+{/block}
+
+{block name="main"}
+<div class="layui-form" lay-filter="update_address">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="required">*</span>联系方式</label>
+        <div class="layui-inline">
+            <div class="layui-input-inline">
+                <input type="text" name="area_code" lay-verify="area_code" placeholder="区号" autocomplete="off" class="layui-input nc-len-tiny" value="{$info.area_code}">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline">
+                <input type="text" name="phone" lay-verify="phone" placeholder="请输入电话号码（区号可为空）" autocomplete="off" class="layui-input nc-len-mid" value="{$info.phone}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="required">*</span>联系地址</label>
+        <div class="layui-input-inline">
+            <select name="province" lay-filter="province" lay-verify="province">
+                <option value="">选择省份</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="city" lay-filter="city" lay-verify="city">
+                <option value="">选择城市</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="district" lay-filter="district" lay-verify="district">
+                <option value="">选择地区</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="subdistrict" lay-filter="subdistrict" lay-verify="subdistrict">
+                <option value="">选择街道</option>
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="text" name="address" lay-verify="address" placeholder="请输入详细地址，以方便买家联系（备注：请勿重复填写省市区地址信息）" autocomplete="off" class="layui-input nc-len-long" value="{$info.address}"></div>
+        <div class="layui-input-inline" >
+            <button class="layui-btn layui-btn-primary" onclick="refreshFrom();">搜索地图</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">营业时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="business_hours" lay-verify="" placeholder="请输入营业时间（例如：周一到周五8:00-18:00）" autocomplete="off" class="layui-input nc-len-long" value="{$info.business_hours}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">地图定位</label>
+        <div class="layui-input-block">
+            <!-- 两种样式 没有没有搜索时地图全屏显示 有搜索时左边为接口返回的数据转化成的地址列表 -->
+            <div class="map list-empty">
+                <div class="address-list">
+                    <div class="list-body"></div>
+                    <div class="list-page"></div>
+                </div>
+                <div class="container" id="container"></div>
+            </div>
+            <input type="hidden" name="longitude" value="{$info.longitude}" />
+            <!-- 经度 -->
+            <input type="hidden" name="latitude" value="{$info.latitude}" />
+            <!-- 纬度 -->
+        </div>
+    </div>
+    <div class="nc-form-row">
+        <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+		<button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+    </div>
+</div>
+
+<input type="hidden" id="province_id" value="{$info.province}"/>
+<input type="hidden" id="city_id" value="{$info.city}"/>
+<input type="hidden" id="district_id" value="{$info.district}"/>
+<input type="hidden" id="subdistrict_id" value="{$info.subdistrict}"/>
+<input type="hidden" id="full_address" value="{$info.full_address}"/>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.6&amp;key=2df5711d4e2fd9ecd1622b5a53fc6b1d"></script>
+<script type="text/javascript" src="STATIC_JS/map_address.js?n=1"></script>
+<script type="text/javascript">
+var map_class;//公共地图
+var form;
+var tpl_data = new Object();//地址id数据
+
+layui.use(['form'], function () {
+	form = layui.form;
+	
+	tpl_data.province_id = $("#province_id").val();
+	tpl_data.city_id = $("#city_id").val();
+	tpl_data.district_id = $("#district_id").val();
+	tpl_data.subdistrict_id = $("#subdistrict_id").val();
+	tpl_data.full_address = $("#full_address").val();
+	
+	//监听省市县区地址的变动 
+	form.on('select(province)', function (obj) {
+		$("input[name='address']").val('');
+        getAreaList(obj.value, 2);//重新渲染地址
+        // refreshFrom();
+    });
+    form.on('select(city)', function (obj) {
+    	$("input[name='address']").val('');
+        getAreaList(obj.value, 3);//重新渲染地址
+        // refreshFrom();
+    });
+    form.on('select(district)', function (obj) {
+    	$("input[name='address']").val('');
+        getAreaList(obj.value, 4);//重新渲染地址
+        // refreshFrom();
+    });
+    form.on('select(subdistrict)', function (obj) {
+    	$("input[name='address']").val('');
+        getAreaList(obj.value, 5);//重新渲染地址
+        // refreshFrom();
+    });
+
+    map_class = new mapClass("container", {lat : "{$info.longitude}", lng : "{$info.latitude}"});
+    if(!tpl_data.province_id){
+    	getAreaList(0, 1);
+    }else{
+        map_class.map_change = true;
+   		getAreaList(0, 1, 1);
+    	getAreaList(tpl_data.province_id, 2, 1);
+    	getAreaList(tpl_data.city_id, 3, 1);
+    	getAreaList(tpl_data.district_id, 4, 1);
+    }
+	
+	var repeat_flag = false;//防重复标识
+    form.on('submit(save)', function(data){
+        var province_name = $("option[value='"+ data.field.province +"']").text();
+        var city_name = $("option[value='"+ data.field.city +"']").text();
+        var district_name = $("option[value='"+ data.field.district +"']").text();
+        var subdistrict_name = $("option[value='"+ data.field.subdistrict +"']").text();
+
+    	data.field.full_address = province_name+city_name+district_name+subdistrict_name+data.field.address;
+    	if(repeat_flag) return;
+		repeat_flag = true;
+        $.ajax({
+    		url: nc.url("sitehome/manager/contactSetting"),
+    		data: {value : JSON.stringify(data.field)},
+    		type: "post",
+            dataType : "JSON",
+    		success: function (res) {
+				repeat_flag = false;
+   				layer.msg(res.message);
+    		}
+    	})
+    	return false;
+    });
+    
+    form.verify({
+    	phone : function(value){
+    		var reg = /\d{5,11}/;
+    		if(!reg.test(value)){
+    			return '请输入正确的电话号码';
+    		}
+    	},
+    	province : function(value){
+    		if(value == ''){
+    			return '请选择省份';
+    		}
+    	},
+    	city : function(value){
+    		if(value == ''){
+    			return '请选择城市';
+    		}
+    	},
+    	district : function(value){
+    		if(value == ''){
+    			return '请选择地区';
+    		}
+    	},
+    	township : function(value){
+    		if(value == ''){
+    			return '请选择街道';
+    		}
+    	},
+    	address : function(value){
+    		if(value == ''){
+    			return '请输入详细地址';
+    		}
+    	},
+     });
+})
+
+//地图点击回调时间
+function mapChangeCallBack(){
+    $("input[name=address]").val(map_class.address.address);//详细地址
+    $("input[name=longitude]").val(map_class.address.longitude);//详细地址
+    $("input[name=latitude]").val(map_class.address.latitude);//详细地址
+    $.ajax({
+        type : "post",
+        url : nc.url("sitehome/manager/getGeographicId"),
+        async : true,
+        data : {
+            "address" : map_class.address.area
+        },
+        dataType : "JSON",
+        success : function(data) {
+            map_class.address.province = data.province_id;
+            map_class.address.city = data.city_id;
+            map_class.address.district = data.district_id;
+            map_class.address.township = data.subdistrict_id;
+			
+            tpl_data.province_id = data.province_id;
+        	tpl_data.city_id = data.city_id;
+        	tpl_data.district_id = data.district_id;
+        	tpl_data.subdistrict_id = data.subdistrict_id;
+        	
+        	getAreaList(0, 1, 1);
+        	getAreaList(tpl_data.province_id, 2, 1);
+        	getAreaList(tpl_data.city_id, 3, 1);
+        	getAreaList(tpl_data.district_id, 4, 1);
+        	
+            map_class.map_change = false;
+            refreshFrom();//重新渲染form
+            map_class.map_change = true;
+        }
+    })
+}
+
+/**
+ * 重新渲染表单
+ */
+function refreshFrom(){
+	form.render();
+    orderAddressChange();//改变地址
+    map_class.mapChange();
+}
+/** 
+ * 获取地区列表
+ * @param pid
+ * @param level
+ */
+function getAreaList(pid, level, is_first_load = 0){
+    if(level <= 5){
+        $.ajax({
+            type : "get",
+            url : nc.url("sitehome/manager/getAreaList"),
+            data : {
+                'level' : level,
+                'pid' : pid
+            },
+            dataType : "JSON",
+            //async : false,
+            success : function(res) {
+                if(res.code == 0){
+                	var obj = {1:'province', 2:'city', 3:'district', 4:'subdistrict'};
+                	if(is_first_load == 0) removeSelectedData(level);
+                	$.each(res.data, function(name, value) {
+                        $("select[name="+ obj[level] +"]").append("<option value='"+value.id+"'>"+value.name+"</option>");
+                    });
+                	if(is_first_load) $("select[name="+ obj[level] +"]").val(tpl_data[obj[level] + '_id']);
+
+                    if(is_first_load == 0){
+                    	map_class.map_change = true;
+                   		// refreshFrom();
+                    }else{	
+
+                    }
+                    form.render();
+                }else{
+                    layer.msg(res.message);
+                }
+
+            }
+        });
+    }
+}
+
+//动态改变订单地址赋值
+function orderAddressChange(is_first_load = 0){
+	map_class.address = {
+	        province : $("select[name=province]").val(),
+	        province_name : $("select[name=province] option:selected").text(),
+	        city : $("select[name=city]").val(),
+	        city_name : $("select[name=city] option:selected").text(),
+	        district : $("select[name=district]").val(),
+	        district_name : $("select[name=district] option:selected").text(),
+	        township : $("select[name=subdistrict]").val(),
+	        township_name : $("select[name=subdistrict] option:selected").text(),
+	        address : $("input[name=address]").val(),
+	    }
+}
+
+/**
+ * 地址下拉框（主要用于坐标记录）
+ */
+function selectCallBack(){
+    $("input[name=longitude]").val(map_class.address.longitude);//坐标
+    $("input[name=latitude]").val(map_class.address.latitude);//坐标
+}
+
+/**
+ * 清除之前的地区数据
+ */
+function removeSelectedData(level){
+	level = Number(level);
+	if(level <= 1) $("select[name=province] option:gt(0)").remove();
+	if(level <= 2) $("select[name=city] option:gt(0)").remove();
+	if(level <= 3) $("select[name=district] option:gt(0)").remove();
+	if(level <= 4) $("select[name=subdistrict] option:gt(0)").remove();
+}
+</script>
+{/block}

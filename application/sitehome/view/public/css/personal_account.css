@@ -1,0 +1,194 @@
+@CHARSET "UTF-8";
+
+.layui-layout-admin .layui-body{left:200px;position: inherit; background: #F0F4F7;/*margin-top: 20px*/}
+.select{ 
+    background: #fff;
+    /*padding: 5px 0px 30px 30px;*/
+    margin-left: 200px;
+	width:1000px;
+    font-size: 12px;
+    color: #666;
+	border-left: 1px solid #f2f2f2;
+	min-height: 500px;
+}
+.personal_menu{
+	width:192px
+}
+
+.nui-input{width:50%}
+.nui-form i{color:red}
+.nui-form-label{width:160px;color: #333;}
+.nui-show{position: relative;height:120px;margin-bottom:15px}
+.nui-show img{height:92px}
+.layui-form-show{position: absolute;left: 33%;bottom: 30px;}
+
+.nui-input-pass{width: 100%!important;}
+.personal_main{overflow: hidden;
+    /*width: 1150px;*/
+    margin: 25px auto;
+    position: relative;}
+
+
+.nui-input{width: 60%;}
+.layui-form-item{margin-bottom: 20px;}
+
+.file-main{    overflow: hidden;height: 109px;}
+.file-upload{position: relative; color: #fff;}
+.upload-content{
+    position: relative;
+    border: 1px dashed #ddd;
+    padding: 15px;
+    background: #F8F8F8;
+    width: 60px;
+    height: 60px;
+    top: 0;
+    text-align: center;
+    line-height: 60px;
+}
+.upload-content input[type="file"]{
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+.upload-content img{max-width: 100%;height: 100%;}
+
+.layui-content-item{min-width: 70px;line-height: 18px;padding: 21px 0;border-bottom: 1px dashed #e9e9e9;}
+.layui-icon{height:20px;margin-right:10px}
+.layui-item-name{border-right: 1px solid #e9e9e9;padding-right: 45px;}
+.layui-btn-update{float:right}
+.layui-col-item{line-height:41px}
+.layui-col-item span{color: #999}
+#form-password{display:none}
+#form-password i{color:red}
+.layui-form-item{margin-top:20px}
+.layui-btn-save{    margin-left: 450px;}
+
+/* security.html */
+.block-content{color: #333;padding: 0 20px; 	}
+.block-content h3{margin-top: 10px;font-size: 12px;}
+.block-content .item-block{
+    overflow: hidden;
+    padding: 28px 10px;
+    margin: 10px 0;
+    border-top: 1px solid #f2f2f2;
+    height: 112px;
+    box-sizing: border-box;
+}
+.border-none{border: 0 !important;}
+.item-block>div{float: left;}
+.item-block .item-l{
+	width:75px;
+}
+.item-block .item-l img{
+    margin-top: 7px;
+}
+
+.item-block .item-c{
+	width: 658px;
+    line-height: 35px;
+}
+.item-block .item-c .c-title{font-size: 16px;}
+.item-block .item-c .c-introduce{color: #999;}
+.item-block .item-r a{    display: inline-block;
+    padding: 4px 21px;
+    background: #4381E6;
+    color: #fff;
+    height: 24px;
+    line-height: 25px;
+    border-radius: 3px;
+	margin-top: 14px;
+}
+/*20180831*/
+.container {
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+.container{ margin:0 auto} 
+/* @media screen and (min-width: 1800px) { .container {width: 1700px}  
+} 设置了浏览器宽度不小于1900px时 abc 显示1700px宽度 
+
+@media screen and (max-width: 1700px) { .container {width: 1600px}  
+}  
+
+@media screen and (max-width: 1600px) { .container {width: 1500px}  
+} 
+
+@media screen and (max-width: 1500px) { .container {width: 1300px}  
+} 设置了浏览器宽度不大于1500px时 abc 显示900px宽度 */ 
+
+.layui-layout-admin .layui-logo{
+    text-align: left;
+}
+.personal_top {
+    background: #fff;
+    padding: 13px 0;
+    height: 56px;
+	display: none;
+}
+.personal_top_title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+.personal_top_info {
+    padding-right: 25px;
+    color: #999;
+}
+.personal_top_info span{
+    float: right;
+}
+.personal_top_info span:first-child{
+    float: left;
+}
+.personal_top_info span:last-child{
+    margin-right: 20px;
+}
+.personal_top_info span i{
+    font-style:normal;
+    color: #5491DF;
+}
+.personal_top_info span i:first-child{
+    margin-right: 10px;
+}
+.personal_font-weight{
+    font-weight: 600;
+}
+form.layui-form.nui-form{
+    padding: 0;
+    width: 100%;
+    display: inline-block;
+}
+.layui-btn{
+    height: 35px;
+    line-height: 35px;
+    padding: 0 25px;
+    font-size: 14px;
+}
+/*底部*/
+.footer {
+    margin: 20px 0;
+}
+.floor-3 {
+    text-align: center;
+    padding: 15px 0;
+    color: #ccc;
+    font-size: 12px;
+}
+.floor-3 .line-1 {
+    margin-bottom: 6px;
+    color: #999;
+}
+.floor-3 .line-3 {
+    margin-bottom: 4px;
+    margin-top: 30px;
+    color: #999;
+}
+.floor-3 .line-3 span, .floor-3 .line-4 span {
+    padding: 4px 6px;
+    color: #999;
+}

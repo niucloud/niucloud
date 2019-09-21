@@ -1,0 +1,224 @@
+@charset "utf-8";
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    font-size: 14px;
+    color: #666666;
+    font-family: "microsoft yahei";
+    background-color: #F8F8F8;
+    width: 100%;
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, form, p, ul, input {
+    margin: 0px;
+    padding: 0px;
+}
+
+input, textarea {
+    font-family: "microsoft yahei";
+    font-size: 14px;
+    color: #666666;
+}
+
+li {
+    padding: 0px;
+    margin: 0px;
+    line-height: 180%;
+    list-style-type: none;
+}
+
+:focus {
+    outline: 0
+}
+
+.admin-login-box {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: url("../img/admin_login.png");
+    filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";
+    -moz-background-size: 100% 100%;
+    background-size: 100% 100%;
+}
+
+.admin-login-box .login-content-area {
+    width: 540px;
+    height: 300px;
+    margin: 300px auto 0 auto;
+}
+
+/*左部logo区域*/
+.admin-login-box .login-content-area .left-logo-area {
+    width: 160px;
+    height: 300px;
+    display: inline-block;
+    float: left;
+}
+
+.admin-login-box .login-content-area .left-logo-area .logo-img {
+    width: 100%;
+    height: 300px;
+    line-height: 300px;
+    display: block;
+    text-align: center;
+}
+
+.admin-login-box .login-content-area .left-logo-area .logo-img img {
+    width: 100%;
+    margin-top: 126px;
+    border: none;
+}
+
+/*右部登录区域*/
+.admin-login-box .login-content-area .right-login-area {
+    width: 262px;
+    height: 300px;
+    margin-left: 118px;
+    display: inline-block;
+    float: left;
+}
+
+.admin-login-box .login-content-area .right-login-area .tip_info {
+    margin-bottom: 10px;
+    width: 262px;
+    height: 40px;
+}
+
+.admin-login-box .login-content-area .right-login-area .tip_info .prompt_information {
+    width: 240px;
+    height: 18px;
+    border: 1px solid #FF9E86;
+    color: #CC3300;
+    padding: 6px 10px;
+    background: #FFD8CE;
+    border-radius: 3px;
+    display: none;
+}
+
+.admin-login-box .login-content-area .right-login-area form .user-name-box,
+.admin-login-box .login-content-area .right-login-area form .password-box,
+.admin-login-box .login-content-area .right-login-area form .verification-code-box {
+    width: 260px;
+    height: 38px;
+    border: 1px solid #D9D9D8;
+    background: #fff;
+    overflow: hidden;
+    border-radius: 3px;
+    position: relative;
+}
+
+.admin-login-box .login-content-area .right-login-area form .user-name-box .username_bg,
+.admin-login-box .login-content-area .right-login-area form .password-box .password_bg {
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    float: left;
+    background: url("../img/admin_account.png") no-repeat;
+    background-position: 9px 8px;
+}
+
+.admin-login-box .login-content-area .right-login-area form .user-name-box input,
+.admin-login-box .login-content-area .right-login-area form .password-box input,
+.admin-login-box .login-content-area .right-login-area form .verification-code-box input {
+    border: none;
+    width: 212px;
+    height: 18px;
+    padding: 10px 10px 10px 0;
+}
+
+.admin-login-box .login-content-area .right-login-area form .password-box,
+.admin-login-box .login-content-area .right-login-area form .verification-code-box {
+    margin-top: 10px;
+}
+
+.admin-login-box .login-content-area .right-login-area form .password-box .password_bg {
+    background: url("../img/admin_pass.png") no-repeat;
+    background-position: 9px 8px;
+}
+
+.admin-login-box .login-content-area .right-login-area form .verification-code-box input {
+    padding: 10px 0px 10px 10px;
+    width: 160px;
+}
+
+.admin-login-box .login-content-area .right-login-area form .verification-code-box .verification-code-img {
+    width: 89px;
+    height: 38px;
+    float: right;
+    border-left: 1px solid #D9D9D8;
+    overflow: hidden;
+}
+
+.admin-login-box .login-content-area .right-login-area form .verification-code-box .verification-code-img:hover {
+    cursor: pointer;
+}
+
+.admin-login-box .login-content-area .right-login-area form .verification-code-box .verification-code-img img {
+    max-width: 100%;
+    max-height: 100%;
+    margin-top: 5px;
+    margin-left: -5px;
+
+}
+
+.admin-login-box .login-content-area .right-login-area form .sub_login {
+    width: 260px;
+    height: 38px;
+    border: 1px solid #0072D3;
+    background: #0072D3;
+    color: #fff;
+    border-radius: 3px;
+    margin-top: 20px;
+    opacity: 0.8;
+}
+
+.admin-login-box .login-content-area .right-login-area form .sub_login:hover {
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.admin-login-box .login-content-area .right-login-area .third_party_login {
+    width: 100%;
+    height: 36px;
+    margin-top: 20px;
+}
+
+.admin-login-box .login-content-area .right-login-area .third_party_login .login-btn {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+}
+
+.admin-login-box .login-content-area .right-login-area .third_party_login .login-btn:hover {
+    opacity: 0.9;
+}
+
+.admin-login-box .login-content-area .right-login-area .third_party_login .wchat {
+    background: url("../img/wx_login.png") no-repeat center;
+}
+
+.admin-login-box .login-content-area .right-login-area .third_party_login .qq {
+    background: url("../img/qq_login.png") no-repeat center;
+    margin-right: 10px;
+}
+
+.admin-login-box .txt {
+    width: 100%;
+    position: absolute;
+    bottom: 30px;
+    text-align: center;
+}
+
+.admin-login-box .txt p {
+    line-height: 180%;
+    font-size: 12px;
+}
+
+#copyright_meta a {
+    color: #666
+}

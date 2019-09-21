@@ -1,0 +1,140 @@
+{php}
+$article_id = input('article_id', 0);
+$article_detail = api("Article.Article.getArticleDetail",['article_id'=>$article_id]);
+{/php}
+{if condition="$article_detail['code'] == 0  && $article_detail['data']['comment_flag'] == 1 "}
+<link rel="stylesheet" href="RESOURCE_PATH/component/view/article_comment/css/article_comment.css?time={:time()}"/>
+<!-- 赞赏 -->
+<div class="reward">
+
+</div>
+<!-- 评论 -->
+<div class="comment">
+    <div class="comment-block">
+        <h3 class="comment-title">评论 <span class="comment-count">{$article_detail["data"]['comment_count']}</span></h3>
+        <div class="comment-textarea">
+            <textarea rows="5" id="comment-content"></textarea>
+        </div>
+        <div class="comment-button">
+            <button>发表评论</button>
+        </div>
+    </div>
+    <div class="comment-list">
+        <ul></ul>
+        <div class="comment-list-more" ><a onclick="loadList();">加载更多</a></div>
+    </div>
+</div>
+
+<script>
+    /**
+     * 评论
+     */
+    $("body").on("click", ".comment-button button", function(){
+        var content = $("#comment-content").val();
+        if(content!="") {
+			nc.api("Article.Comment.comment", {
+				'article_id': '{$article_id}',
+				'access_token': "{$access_token}",
+				"content": content
+			}, function (res) {
+				showMsg(res.message);
+				if (res.code == 0) {
+					window.location.reload();
+				} else {
+					if (res.code == 500) {
+						location.href = nc.url("wap/login/login");
+					}
+				}
+			}, false);
+		}else{
+        	showMsg("请输入评论");
+			$("#comment-content").focus();
+        }
+    })
+    /**
+     * 回复框唤醒
+     */
+    $("body").on("click", ".comment-reply-button", function(){
+        $(this).parent().find(".comment-reply-block").show();
+    })
+
+    /**
+     * 取消回复
+     */
+    $("body").on("click", ".reply-cancel", function(){
+        $(this).parent().hide();
+    })
+    /**
+     * 回复
+     */
+    $("body").on("click", ".reply-submit", function(){
+        var content = $(this).parent().find(".comment-reply-text").val();
+        var comment_id = $(this).parent().parent().parent().attr("comment_id");
+        nc.api("Article.Comment.comment",{ 'article_id' : '{$article_id}', 'access_token': "{$access_token}", "content" : content, "comment_id" : comment_id },function (res) {
+        	showMsg(res.message);
+            if(res.code == 0){
+                window.location.reload();
+            }
+        }, false);
+    })
+    var page = 1;
+    $(function(){
+        loadList();
+    })
+
+    /**
+     * 加载评论
+     */
+    function loadList() {
+            var table = $('.comment-list ul');
+            nc.api("Article.Comment.getCommentPageList",{
+                "page": page,
+                "article_id": "{$article_id}"
+            },function (res) {
+                var html = "";
+                if (res.code == 0) {
+                    if (res.data.list.length > 0) {
+                        page++;
+                        for (i in res.data.list) {
+                            var item = res.data.list[i];
+                            html += '<li class="comment-item" comment_id = "'+item.id+'">';
+                            html += '<div class="comment-member-info">';
+                            html += '<div class="comment-head">';
+                            // if(item.headimg == ""){
+                            	var headimg = "RESOURCE_PATH/component/view/article_comment/img/head.png";
+                            // }else{
+                            // 	var headimg = nc.img(item.headimg);
+                            // }
+                            html += '<img src="'+headimg+'"/>';
+                            html += '</div>';
+                            html += '<div class="comment-info">';
+                            html += '<div class="comment-name">';
+                            html += '<span class="comment-nickname">'+item.nick_name+'</span>：';
+                            html += '</div>';
+                            html += '<div class="comment-time">';
+                            html += '<span class="comment-time">'+nc.time_to_date(item.create_time)+'</span>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '<div class="comment-content">';
+                            if(item.to_comment_id > 0){
+                                html += '@<span class="comment-nickname">'+item.to_nick_name+'</span>：';
+                            }
+                            html += item.content + '</div>';
+                            html += '<div class="comment-reply">';
+                            html += '<a class="comment-reply-button">回复</a>';
+                            html +='<div class="comment-reply-block"><input type="text" class="comment-reply-text" value=""/><button class="reply-cancel">取消</button><button class="reply-submit">回复</button></div>';
+                            html += '</div>';
+                            html += '</li>';
+                        }
+                    }else{
+                        $(".comment-list-more a").remove();
+                        $(".comment-list-more").text("没有更多评论了！");
+                    }
+                }
+                table.append(html);
+            }, false);
+
+    }
+</script>
+{/if}

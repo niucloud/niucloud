@@ -1,0 +1,385 @@
+{extend name="wap@style/base" /}
+{block name="resources"}
+<style>
+    body {
+        padding-bottom: 50px;
+    }
+
+    .bar {
+        height: 84px;
+        margin-bottom: 10px;
+    }
+
+    #hui-header-sreach-icon {
+        margin-left: 6%;
+    }
+
+    .menu {
+        float: left;
+        width: 33px;
+        height: 24px;
+        margin: 10px 4% 0 3%;
+    }
+
+    .menu img {
+        width: 100%;
+        height: 100%;
+    }
+
+
+    .terms {
+        width: 100%;
+        display: -webkit-flex;
+        /* Safari */
+        display: flex;
+        border-bottom: 1px solid #f5f5f5;
+        position: fixed;
+        top: 44px;
+        background: #fff;
+        z-index: 2;
+        justify-content: space-around;
+    }
+
+    .terms img {
+        width: 69%;
+        position: absolute;
+        top: 11px;
+        left: 27px;
+
+    }
+
+    .terms div {
+        height: 100%;
+        text-align: center;
+        line-height: 40px;
+        color: #333;
+        position: relative;
+        overflow: unset;
+    }
+
+    .term-active,
+    .term-active span {
+        color: #3388FF !important;
+    }
+
+    .hui-media-content p,
+    .hui-media-content h1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* 弹出层 */
+    .iframe {
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        padding: 0 7% 18px;
+        position: fixed;
+        background: #fff;
+        top: -100%;
+        transition: top 1s;
+        box-shadow: 10px 2px 1px #F5F5FE;
+        z-index: 1;
+    }
+
+    .classify {
+        width: 38%;
+        overflow: hidden;
+        box-sizing: border-box;
+        float: left;
+        border-right: 1px solid #f5f5f5;
+    }
+
+    .classify li {
+        margin-top: 16px;
+        color: #333;
+    }
+
+    .classify-items {
+        width: 62%;
+        overflow: hidden;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    .classify-items {
+        overflow: hidden;
+    }
+
+    .classify-items li {
+        float: left;
+        margin-left: 5%;
+        line-height: 1;
+        margin-top: 16px;
+        color: #666;
+    }
+
+    .classify-items li a {
+        color: #666;
+    }
+
+    .hui-media-content {
+        width: 80%;
+    }
+
+    .hui-media-list-img {
+        width: 16vw !important;
+        height: 16vw !important;
+        border-radius: 3px;
+    }
+
+    .hui-media-list-img img {
+        width: 100%;
+        height: 100%;
+    }
+
+    .time {
+        margin-top: 2vw;
+    }
+</style>
+{/block}
+{block name="head"}{/block}
+{block name="main"}
+<header class="hui-header">
+    <div id="hui-back"></div>
+    <div id="hui-header-sreach">
+        <form style="width: 80%;">
+            <input type="search" id="searchKey" onkeydown="if(event.keyCode==13)return false;" placeholder="请输入商品关键字" />
+        </form>
+        <div id="hui-header-sreach-icon" onclick="searchNow()"></div>
+    </div>
+    <div class="menu" onclick="menuShow()">
+        <img src="ADDON_WAP_SNS_IMG/table.png" alt="">
+    </div>
+</header>
+<div class="terms order">
+    <div class="term-active" onclick="listShowByOrder(this,['sort','add_time'])"><span>综合</span>
+        <img src="ADDON_WAP_SNS_IMG/up_grey.png" alt="">
+        <img src="ADDON_WAP_SNS_IMG/down.png" alt=""></div>
+    <!-- <div onclick="orderTabOn(this)">销量
+        <img src="ADDON_WAP_SNS_IMG/order.png" alt="">
+    </div> -->
+    <div onclick="listShowByOrder(this,['visit'])"><span>点击</span>
+        <img src="ADDON_WAP_SNS_IMG/up_grey.png" alt="">
+        <img src="ADDON_WAP_SNS_IMG/down_grey.png" alt=""></div>
+</div>
+</div>
+
+<div class="bar"></div>
+<div class="iframe">
+    {php}
+    $category_list = api("Sns.Category.getCategoryList", []);
+    {/php}
+    <!-- 一级分类 -->
+    <ul class="classify">
+        <li onclick="resetList()">全部分类</li>
+        {foreach $category_list as $v}
+        <li data-for="{$v.category_id}" onclick="classifyTabOn(this)">{$v.name}</li>
+        {/foreach}
+    </ul>
+    <!-- 二级分类 -->
+    <div class="classify-items">
+        {foreach $category_list as $v}
+        <ul data-for-item="{$v.category_id}">
+            {foreach $v['child_list'] as $sv}
+            <li><a onclick="getListWithCate({$sv.category_id})">{$sv.name}</a></li>
+            {/foreach}
+        </ul>
+        {/foreach}
+    </div>
+</div>
+
+<div class="hui-wrap">
+    <div id="refreshContainer" class="hui-refresh">
+        <div class="hui-refresh-icon"></div>
+        <div class="hui-refresh-content hui-media-list">
+            <ul id="list"></ul>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="categoryId">
+<input type="hidden" id="listOrder">
+<input type="hidden" id="searchText">
+{/block}
+
+{block name="script"}
+<script src="__STATIC__/ext/hui/js/hui-refresh-load-more.js"></script>
+<script>
+    // 初始化
+    // 分类选项卡初始化
+    classifyTabOn(".classify li:eq(1)");
+    // 排序选项卡初始化
+    $("#listOrder").val("sort desc,add_time desc");
+    // 根据分类id渲染页面，默认为空，查询所有
+    $("#categoryId").val({$category_id});
+    // 上拉加载下拉刷新
+    var page = 1;
+    hui.refresh('#refreshContainer', refresh);
+    hui.loadMore(getMore);
+    // 渲染页面
+    function listShow(data) {
+        var html = '';
+        for (var i = 0; i < data.length; i++) {
+            html += '<li><a href="{:addon_url(\'Sns://wap/category/info\')}?info_id=' + data[i].info_id +
+                '">'
+            html +=
+                '<div class="hui-media-list-img"><img src="' + nc.img(data[i].img_cover) + '" /></div>'
+            html += '<div class="hui-media-content">'
+            html += '<h1>' + data[i].title + '</h1>'
+            // html += '<p class="brief">' + data[i].content + '</p>'
+            html += '<p class="time">' + data[i].add_time + '</p>'
+            html += '</div>'
+            html += '</a></li>'
+        }
+        $('#list').append(html);
+    }
+    //加载更多
+    function getMore() {
+        var category_id = $("#categoryId").val();
+        var list_order = $("#listOrder").val();
+        var page_size = 10;
+        var search_text = $("#searchText").val();
+        nc.api("Sns.Category.getInfoPageList", {
+            "page": page,
+            "category_id": category_id,
+            "order": list_order,
+            "page_size": page_size,
+            "search_text": search_text,
+        }, function (res) {
+            var data = res.data.list;
+            listShow(data);
+            //判断加载完毕
+            if (res.data.list.length < page_size) {
+                hui.endLoadMore(true, '我是有底线的 ...');
+                return false;
+            }
+            page++;
+            hui.endLoadMore();
+        }, true);
+    }
+    // 下拉刷新
+    function refresh() {
+        var category_id = $("#categoryId").val();
+        var list_order = $("#listOrder").val();
+        var page_size = 10;
+        var search_text = $("#searchText").val();
+        hui.loading('加载中...');
+        nc.api("Sns.Category.getInfoPageList", {
+            "page": 1,
+            "category_id": category_id,
+            "order": list_order,
+            "page_size": page_size,
+            "search_text": search_text,
+        }, function (res) {
+            $('#list').empty();
+            console.log(res);
+            hui.closeLoading();
+            var data = res.data.list;
+            listShow(data);
+            page = 2;
+            //结束刷新
+            hui.endRefresh();
+            //重置加载更多状态
+            hui.resetLoadMore();
+            if (res.data.list.length == 0) {
+                hui.endLoadMore(true, '暂无符合条件');
+                return false;
+            }
+            if (res.data.list.length < page_size) {
+                hui.endLoadMore(true, ' ');
+                return false;
+            }
+        }, true);
+    }
+    // 根据分类渲染
+    function getListWithCate(category_id) {
+        $("#categoryId").val(category_id);
+        $("#searchText").val("");
+        hui.refresh('#refreshContainer', refresh);
+        menuHide();
+    }
+    // 根据排列方式渲染列表
+    var order_type = " desc"
+
+    function listShowByOrder(obj, order_name) {
+        if (!($(obj).hasClass("term-active"))) {
+            order_type = " asc"
+        }
+        $(obj).addClass("term-active").siblings().removeClass("term-active");
+        $(obj).siblings().find("img").eq(0).attr("src", "ADDON_WAP_SNS_IMG/up_grey.png");
+        $(obj).siblings().find("img").eq(1).attr("src", "ADDON_WAP_SNS_IMG/down_grey.png");
+        if (order_type == " desc") {
+            order_type = " asc";
+            $(obj).find("img").eq(0).attr("src", "ADDON_WAP_SNS_IMG/up.png");
+            $(obj).find("img").eq(1).attr("src", "ADDON_WAP_SNS_IMG/down_grey.png");
+        } else {
+            order_type = " desc";
+            $(obj).find("img").eq(0).attr("src", "ADDON_WAP_SNS_IMG/up_grey.png");
+            $(obj).find("img").eq(1).attr("src", "ADDON_WAP_SNS_IMG/down.png");
+        }
+        var list_order = "";
+        for (var i = 0; i < order_name.length; i++) {
+            list_order += (order_name[i] + order_type + ',')
+        }
+        var list_order = list_order.replace(/,$/, '');
+        $("#listOrder").val(list_order);
+        hui.refresh('#refreshContainer', refresh);
+    }
+
+    // 重置分类
+    function resetList() {
+        $("#categoryId").val("");
+        $("#searchText").val("");
+        menuHide();
+        hui.refresh('#refreshContainer', refresh);
+    }
+    // 菜单弹出
+    function menuShow() {
+        if ($(".iframe").css('top') != '84px') {
+            $(".iframe").css({
+                'top': '84px'
+            });
+        } else {
+            menuHide();
+        }
+    }
+    //菜单隐藏
+    function menuHide() {
+        $(".iframe").css({
+            'top': '-100%'
+        });
+    }
+    // 选项卡
+    function classifyTabOn(obj) {
+        $(obj).addClass("term-active").siblings().removeClass("term-active");
+        $(".classify-items ul").hide();
+        $(".classify-items ul[data-for-item=" + $(obj).attr("data-for") + "]").show();
+    }
+    //监听搜索事件
+    document.getElementById('searchKey').addEventListener('keyup', function (e) {
+        if (e.keyCode == 13) {
+            searchNow();
+        }
+    });
+
+    function hotSearch(k) {
+        hui('#searchKey').val(k);
+        searchNow();
+    }
+    //核心搜索函数
+    function searchNow() {
+        document.activeElement.blur();
+        var kwd = hui('#searchKey').val();
+        kwd = kwd.trim();
+        if (kwd.length < 2) {
+            hui.toast('关键字至少2个字符');
+            hui('.hui-hot-sreach').show();
+            return;
+        }
+        $("#searchText").val(kwd);
+        $("#categoryId").val("");
+        refresh();
+    }
+</script>
+{/block}

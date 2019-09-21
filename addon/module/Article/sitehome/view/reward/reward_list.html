@@ -1,0 +1,54 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-table-box">
+    <table id="reward_list" lay-filter="reward" class="layui-table"></table>
+</div>
+
+<script type="text/html" id="pay_time">
+<span>{{ nc.time_to_date(d.pay_time) }}</span>
+</script>
+
+{/block}
+{block name="script"}
+<script>
+var table = new Table({
+	elem: '#reward_list',
+	filter : "reward",
+	url : '{:addon_url("article://sitehome/reward/rewardList")}',
+	cols: [
+		[{
+			type: 'checkbox'
+		}, {
+			field: 'out_trade_no',
+			width: '15%',
+			title: '外部交易号',
+            unresize : 'true'
+		}, {
+			field: 'nick_name',
+			width: '15%',
+			title: '赞赏用户',
+            unresize : 'true'
+		}, {
+			field: 'pay_time',
+			width: '15%',
+			title: '赞赏时间',
+			templet: '#pay_time',
+            unresize : 'true'
+		}, {
+			field: 'title',
+			width: '15%',
+			title: '所属文章',
+            unresize : 'true'
+		},{
+			field: 'money',
+			width: '35%',
+			title: '赞赏金额',
+			align: 'right',
+            unresize : 'true'
+		}]
+	]
+});
+</script>
+{/block}

@@ -1,0 +1,88 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+.tree-line{padding:10px 0;background:#ededed;margin-bottom:2px;}
+.tree-line .layui-form-checkbox{margin-top:0 !important;margin-right:10px;margin-left:10px;vertical-align:middle;}
+.tree-line label{margin-right:30px;display:inline-block;cursor:pointer;}
+.layui-form-checkbox[lay-skin=primary]{padding-left: 25px;}
+</style>
+<script type="text/javascript">
+    var tree_data = {};
+</script>
+{/block}
+{block name="main"}
+<div class="layui-form">
+	
+	<div class="layui-form-item">
+		<label class="layui-form-label">用户组名称</label>
+		<div class="layui-input-inline">
+			<input type="text" name="group_name" value="" lay-verify="title" autocomplete="off" placeholder="请输入名称" class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">权限</label>
+		<div class="layui-input-block tree-box" id="tree_box">
+			<div class="layui-tab  layui-tab-brief">
+				<ul class="layui-tab-title">
+					<li class="layui-this">系统权限</li>
+					<li>应用权限</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<div class="layui-collapse">
+							<script type="text/javascript">
+                                tree_data["system"] = JSON.parse('{$tree["system"]["tree"]}');
+							</script>
+							<div class="layui-colla-item">
+								<h2 class="layui-colla-title">{$tree["system"]["info"]["title"]}</h2>
+								<div class="layui-colla-content layui-show group-box group_box_system"></div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-tab-item">
+						<div class="layui-collapse">
+							{foreach $tree as $tree_k => $tree_v}
+								{if $tree_k != "system" }
+									<script type="text/javascript">
+										tree_data["{$tree_k}"] = JSON.parse('{$tree_v["tree"]}');
+									</script>
+									<div class="layui-colla-item">
+										<h2 class="layui-colla-title" style="position:relative;">
+											<div style="position:absolute;right:0;z-index:100;">
+												<input type="checkbox" class="addon-checkbox"  lay-skin="primary"  value="{$tree_k}"lay-filter="addon_form" title="{$tree_v["info"]["title"]}" />
+											</div>
+										</h2>
+										<div class="layui-colla-content group-box group_box_{$tree_k}">
+
+
+										</div>
+									</div>
+								{/if}
+							{/foreach}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="nc-form-row">
+		<input type="hidden" value="0" name="group_id"/>
+		<input type="button" value="保存" class="layui-btn"  lay-submit="" lay-filter="save"/>
+		<a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+	var submit_url = nc.url('sitehome/manager/addGroup');
+</script>
+
+<script>
+    //注意：选项卡 依赖 element 模块，否则无法进行功能性操作
+    layui.use('element', function(){
+        var element = layui.element;
+    });
+</script>
+<script src="SITEHOME_JS/tree.js"></script>
+<script src="SITEHOME_JS/manager_group_edit.js"></script>
+{/block}

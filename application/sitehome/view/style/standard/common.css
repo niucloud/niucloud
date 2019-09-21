@@ -1,0 +1,48 @@
+/* 一级菜单 */
+.layui-layout-admin .layui-header{height: 60px; margin-bottom: 25px;}
+.layui-layout-admin .layui-header-box{position: relative; width: 1280px; height: 60px; margin: auto;}
+.layui-layout-admin .layui-logo{width: auto;}
+.layui-layout-admin .layui-logo img{height: 36px; max-width: 248px;}
+.layui-layout-admin .layui-header .layui-nav{left: 255px;}
+.layui-nav .layui-nav-item{line-height: 60px;}
+.layui-nav-item > a > img{width: 22px; height: 22px;}
+.niu-side-nav .layui-nav-item a span{font-size: 16px; font-weight: 600; color: #fff;}
+.layui-layout-right{height: 60px; line-height: 60px;}
+.nc-user-info{width: 170px; height: 60px; line-height: 60px; word-break: break-word;}
+.nc-user-info .user-name{display: block; height: 60px; line-height: 60px; padding: 0 20px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; color: #fff;}
+.nc-user-info .user-name .user-headimg{width: 30px; height: 30px; border: none;}
+.layui-nav .layui-this::after{height: 0;}
+.nc-user-info .user-dropdown{top: 60px;}
+/* 二级菜单 */
+.layui-layout-admin .layui-children-menu{position: static; left: 0; top: 0; width: 190px; min-height: 630px; padding: 20px; background-color: #fff; box-sizing: border-box;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-itemed > .layui-nav-child, .layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item > .layui-nav-child .layui-this{background-color: #fff !important;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .nc-title a{height: auto; line-height: 45px; padding: 10px 0 5px; border-bottom: 1px dashed; text-align: center;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .nc-title a img{margin-right: 5px;}
+.layui-nav-tree .layui-nav-child a > p{font-size: 16px; font-weight: 900;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a.second-level{padding-right: 17px; padding-left: 30px;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a.second-level > div{display: inline-block; width: 22px; height: 45px; position: absolute; left: 0;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item a.second-level > div > img{max-width: 100%; max-height: 100%; width: 18px; height: 18px;}
+.niu-nav-arrow{position: absolute; display: inline-block; width: 20px; height: 20px; top: 11px; left: 128px; background: url("../../public/img/icon-down.png") no-repeat center;}
+.layui-nav-itemed .niu-nav-arrow{background: url("../../public/img/icon-up.png") no-repeat center;}
+.layui-nav-tree .layui-nav-more, .layui-nav-bar{display: none;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed > .layui-nav-child .layui-nav-itemed{line-height: 35px; height: 35px;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed > .layui-nav-child .layui-nav-itemed a{line-height: 35px; height: 35px; padding-left: 25px; font-size: 14px;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed .layui-nav-itemed a{border-left: 3px solid transparent;}
+.layui-nav-tree .layui-nav-item a:hover{background-color: transparent;}
+.seconday-selection{background-color: #f7f7fb !important; border-left: 3px solid #12b7f5;}
+.seconday-selection a{background-color: #f7f7fb !important;}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .layui-nav-item.layui-this > a{background: #f2f2f2;}
+/*.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed .layui-this a{border-left: 3px solid;}*/
+/* 主要内容 */
+.niu-box{width: 1280px; margin: 0 auto 150px; position: relative;}
+.niu-box:after{content: ""; display: block; clear: both;}
+.niu-side-right{float: right;width: 84%;}
+.niu-side-right-box{margin-bottom: 85px; background-color: #fff;}
+.niu-side-content-title-wrap{margin-bottom: 10px;height: 55px !important;}
+.niu-side-content-title{display: none; height: 55px; line-height: 65px; margin-left: 20px; margin-right: 20px; font-size: 16px;}
+.layui-fluid{min-height: 420px; padding: 0 20px 30px; background-color: #fff; box-sizing: border-box !important;}
+
+/* 面包屑 */
+.layui-fluid>.layui-breadcrumb{display: block;height: 45px;line-height: 45px;}
+.layui-breadcrumb a{color: #333 !important;}
+.layui-fluid>.layui-breadcrumb a cite{color: #999 !important;cursor: initial;}

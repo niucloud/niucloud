@@ -1,0 +1,57 @@
+﻿{extend name="base"/}
+{block name="resources"}
+{/block}
+
+{block name="main"}
+<div class="nc-function-search">
+    <div class="layui-btn" onclick="window.location.href='{:url('admin/site/addSite')}'">新建站点</div>
+    <div class="layui-form">
+        <div class="layui-input-inline nc-len-short">
+            <select name="search_type" lay-filter="search_type">
+                <option value="0">站点类型</option>
+                {volist name="addon_list" id="vo"}
+                <option value="{$vo.name}">{$vo.title}</option>
+                {/volist}
+            </select>
+        </div>
+        <div class="layui-input-inline nc-len-mid nc-search-btn">
+            <input type="text" name="search_text" placeholder="请输入站点名称" autocomplete="off" class="layui-input">
+            <button class="layui-icon-search" lay-filter="search" lay-submit ></button>
+        </div>
+    </div>
+</div>
+<table class="layui-table" id="site_list" lay-filter="site_list"></table>
+<script type="text/html" id="status">
+<input type="checkbox" name="status" value="{{d.site_id}}" lay-skin="switch" title="是" lay-text=" | " lay-filter="status" {{ d.status==1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="site_name">
+    
+    <div class="img-wrap">
+        {{#  if(d.icon == ''){ }}
+        <img src="__ROOT__{{d.app_icon}}">
+        {{#  } else { }}
+        <img src="{{nc.img(d.icon)}}">
+        {{#  } }}
+    </div>
+    <span>{{d.site_name}}</span>
+</script>
+<script type="text/html" id="site_style">
+    <span>{{d.title}}</span>
+</script>
+<script type="text/html" id="more_info">
+	<button class="layui-btn" lay-event="basic_info">站点详情</button>
+	<button class="layui-btn" lay-event="founder_info">创建人信息</button>
+    <button class="layui-btn" lay-event="module_info">模块信息</button>
+</script>
+<script type="text/html" id="operation">
+    <a href="javascript:;" class="default primary" lay-filter="basic_info" lay-event="basic_info">详情</a>
+    <a href="javascript:;" class="default primary" lay-filter="deleteSite" lay-event="deleteSite">删除</a>
+</script>
+{/block}
+
+{block name="script"}
+<script>
+	var uid = {$uid};
+</script>
+<script src="ADMIN_JS/site_list.js"></script>
+{/block}

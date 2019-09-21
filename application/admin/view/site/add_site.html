@@ -1,0 +1,96 @@
+{extend name="base"/}
+
+{block name="resources"}
+<link rel="stylesheet" href="ADMIN_CSS/add_site.css"/>
+{/block}
+{block name='crumbs'}{/block}
+{block name="main"}
+<div class="create-progress">
+	<ul class="create-progress-wrap">
+		<li class="progress-point">
+			<span>1</span>
+			<p>选择类型</p>
+		</li>
+		<li class="progress-bar"><div></div></li>
+		<li class="progress-point">
+			<span>2</span>
+			<p>创建站点</p>
+		</li>
+		<li class="progress-bar"><div></div></li>
+		<li class="progress-point">
+			<span>3</span>
+			<p>完成</p>
+		</li>
+	</ul>
+</div>
+<div class="nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">应用类型</blockquote>
+	<div class=" nc-item-block-parent">
+		{volist name="addon_list" id="vo" key="k"}
+		<div class="nc-item-block btn">
+			<a class="nc-item-block-wrap" href="javascript:;">
+				<div class="nc-item-pic">
+					<img src="__ROOT__{$vo['icon']}">
+				</div>
+				<div class="nc-item-content">
+					<div class="nc-content-title">{$vo['title']}</div>
+					<p class="nc-content-desc">{$vo['description']}</p>
+					<div class="nc-icon">
+						{notempty name="$vo['support_app_type']"}
+						{foreach $vo["support_app_type"] as $v}
+						<img src="__ROOT__/{$v['logo']}" title="支持{$v['name']}端口">
+						{/foreach}
+						{/notempty}
+					</div>
+				</div>
+				<button class="layui-btn layui-btn-primary nc-item-btn" onclick="selectSite(this)" data-addon="{$vo.name}" data-title ="{$vo.title}">立即创建</button>
+			</a>
+		</div>
+		{/volist}
+	</div>
+</div>
+
+<div class="create-site" id="show" style="display: none;">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<label class="layui-form-label">站点类型</label>
+			<p class="el-site-type layui-input-inline nc-len-mid"></p>
+		</div>
+		<div class="layui-form nui-site-block">
+			<div class="layui-form-item">
+				<label class="layui-form-label">站点名称</label>
+				<div class="layui-input-inline">
+					<input type="text" name="site_name" lay-verify="title" autocomplete="off" placeholder="请输入站点名称" class="nc-len-mid layui-input">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">站点简介</label>
+				<div class="layui-input-inline">
+					<textarea name="description" id="description" placeholder="请输入站点简介" class="nc-len-long layui-textarea"></textarea>
+				</div>
+			</div>
+			<div class="nc-form-row">
+				<input type="hidden" name="addon_app" autocomplete="off" placeholder="" class="layui-input" id="select_addon">
+				<button class="layui-btn" lay-submit="add_site" lay-filter="add_site">创建</button>
+				<button type="reset" class="layui-btn layui-btn-primary return" id="back">返回</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="create-site-end">
+	<div class="create-site-end-wrap">
+		<div class="create-site-pic">
+			<img src="__ROOT__/application/sitehome/view/public/img/progress_bar.png" class="create-site-pic-one" alt="">
+			<img src="__ROOT__/application/sitehome/view/public/img/progress_bar1.png" class="create-site-pic-two" alt="">
+		</div>
+		<div class="layui-progress layui-progress-big create-progress-bar" lay-showpercent="true" lay-filter="demo">
+			<div class="layui-progress-bar layui-bg-red" lay-percent="0%"></div>
+		</div>
+		<p class="create-site-content">正在创建站点，稍等片刻...</p>
+		<p class="create-site-content-one">已完成建站，欢迎使用</p>
+		<a href="{:url('sitehome/index/index')}" class="create-site-content-btn">确定</a>
+	</div>
+</div>
+<script type="text/javascript" src="ADMIN_JS/add_site.js"></script>
+{/block}

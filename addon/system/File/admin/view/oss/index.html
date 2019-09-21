@@ -1,0 +1,18 @@
+{extend name="admin@base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<table id="oss_type_list" lay-filter="oss_type_list" class="layui-table"></table>
+<script type="text/html" id="title">
+	<span>{{d.info.title}}</span>
+</script>
+<script type="text/html" id="status">
+	<input type="checkbox" name="status" value="{{d.config.name}}" lay-skin="switch" lay-filter="status" lay-text="" {{ d.config.status==1 ? 'checked' : '' }}>
+</script>
+<script type="text/html" id="operation">
+	<a href="{{d.info.url}}"class="default" lay-event="edit">编辑</a>
+</script>
+{/block}
+{block name="script"}
+<script src="ADDON_FILE_JS/index.js"></script>
+{/block}
