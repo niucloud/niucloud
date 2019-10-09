@@ -110,7 +110,7 @@ class Index extends Controller
 
             $admin_name = "admin";
             $admin_pwd = input('admin_pwd', "123456");
-            $admin_pwd_confirm = input('admin_pwd_confirm', "123456");
+            $admin_pwd_confirm = input('admin_pwd2', "123456");
             $site_name = input('site_name', "");
             if ($dbhost == '' || $dbuser == '') {
                 die("<script>alert('数据库链接配置信息丢失!');history.go(-1);</script>");
