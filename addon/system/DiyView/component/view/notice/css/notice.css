@@ -1,6 +1,0 @@
-@CHARSET "UTF-8";
-.notice-view{height:50px;padding: 10px;}
-.notice-view .img-wrap{width:50px;margin-right: 10px;overflow: initial;text-align: center;line-height: 50px;}
-.notice-view .img-wrap img{max-width: 80%;max-height:80%;vertical-align: middle;}
-.notice-view .hui-scroll-news{height: 50px;margin: 0;width: 80%;}
-.notice-view .hui-scroll-news .hui-scroll-news-items{height: 25px;line-height: 25px;}

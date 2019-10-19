@@ -1,9 +1,0 @@
-@CHARSET "UTF-8";
-/*文本导航组件*/
-.text-navigation .horizontal{height: 20px;}
-.text-navigation .horizontal .item{width:100%;text-align:center;line-height: 20px;height:20px;font-size: 14px;}
-.text-navigation .horizontal .item a{display: block;}
-
-.text-navigation .text-navigation-block>ul>li{position:relative;border:1px dashed #e5e5e5;padding:10px 10px 10px 0;margin-top:10px;}
-.text-navigation .text-navigation-block>ul>li div:nth-child(2){margin-bottom:0;}
-.text-navigation .text-navigation-block>ul>li:hover .del{display:block;}

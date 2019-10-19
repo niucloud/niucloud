@@ -1,8 +1,0 @@
-@CHARSET "UTF-8";
-.member-account-wrap{overflow: hidden;background-color: #efeff3 !important;}
-.member-account{padding: 10px;margin: 8px 8px;background: #ffffff;border-radius: 4px;overflow: hidden;}
-.member-account ul{display: flex;}
-.member-account li{text-align: center;flex: 1;}
-.member-account li .title{}
-.member-account li .value{display: block;}
-.member-account a{color: #333;}

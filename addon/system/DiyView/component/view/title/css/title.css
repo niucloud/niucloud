@@ -1,7 +1,0 @@
-@CHARSET "UTF-8";
-.top-title{height: 40px;line-height: 40px;position: fixed;background: #fff;border-bottom: 1px solid #e7e7e7;width: 100%;z-index: 999;}
-.top-title a{color:inherit;}
-.top-title .go-back {position: absolute;height: 40px;width: 40px;}
-.top-title .go-back svg{width:20px;fill: currentColor;height: 40px;margin-left: 10px;}
-.top-title h4 {text-align: center;font-weight: normal;margin: 0;line-height: inherit;font-size: 16px;}
-.top-title .operation{position:absolute;right:10px;bottom:0;font-size: 14px;}
