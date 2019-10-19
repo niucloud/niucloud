@@ -34,7 +34,7 @@ class ArticleAddon extends BaseAddon
 		'content' => '',
 		//预置插件，多个用英文逗号分开
 		'preset_addon' => '',
-		'support_addon' => 'Applet',
+		'support_addon' => 'Applet2',
 		'support_app_type' => 'wap,weapp'
 	);
 	public $config = [];
