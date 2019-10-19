@@ -405,7 +405,39 @@ nc.page_promote = function (data) {
 		});
 	}
 };
+//存储单元单位转换
+nc.sizeformat =  function(limit){
+    if(limit ==null || limit == ""){
+        return "0KB"
+    }
+    var index=0;
+    var limit=limit.toUpperCase();//转换为小写
+    if(limit.indexOf('B')==-1){ //如果无单位,加单位递归转换
+        limit=limit+"B";
+        //unitConver(limit);
+    }
+    var reCat=/[0-9]*[A-Z]B/;
+    if(!reCat.test(limit)&&limit.indexOf('B')!=-1){ //如果单位是b,转换为kb加单位递归
+        limit=limit.substring(0,limit.indexOf('B')); //去除单位,转换为数字格式
+        limit=(limit/1024)+'KB'; //换算舍入加单位
+        //unitConver(limit);
+    }
+    var array=new Array('KB','MB','GB','TB','PT');
+    for(var i=0;i<array.length;i++){ //记录所在的位置
+        if(limit.indexOf(array[i])!=-1){
+            index=i;
+            break;
+        }
+    }
+    var limit=parseFloat(limit.substring(0,(limit.length-2))); //得到纯数字
 
+    while(limit>=1024){//数字部分1到1024之间
+        limit /= 1024;
+        index += 1;
+    }
+    limit=limit.toFixed(2)+array[index]
+    return limit;
+}
 /**
  * 数据表格
  * layui官方文档：https://www.layui.com/doc/modules/table.html

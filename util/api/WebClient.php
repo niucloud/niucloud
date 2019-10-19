@@ -21,7 +21,7 @@ class WebClient
 		
 		$this->app_key = $app_key;
 		$this->app_secret = $app_secret;
-		$this->request_url = API_URL . '/?s=/api/';
+		$this->request_url = 'http://localhost/ncweb/auth.php';
 	}
 	
 	public function get($method, $params = array(), $api_version = '1.0')
@@ -42,8 +42,7 @@ class WebClient
 	
 	public function url($method, $api_version = '1.0')
 	{
-		$method = 'index/index/method/NcWeb.' . $method . '/version/' . $api_version;
-		$url = $this->request_url . $method;
+		$url = $this->request_url;
 		return $url;
 	}
 	
@@ -70,23 +69,14 @@ class WebClient
 	private function parse_response($response_data)
 	{
 		$data = json_decode($response_data, true);
-		if (null === $data) throw new \Exception('response invalid, data: ' . $response_data);
 		return $data;
 	}
 	
 	private function build_request_params($method, $api_params)
 	{
 		if (!is_array($api_params)) $api_params = array();
-		if ($this->app_key) {
-		
-		}
 		$pairs = $this->get_common_params($method);
-		Log::write("build_request_params");
-		Log::write($pairs);
-		Log::write($api_params);
 		foreach ($api_params as $k => $v) {
-			Log::write("isset:" . isset($pairs[ $k ]));
-			Log::write($pairs[ $k ]);
 			if (isset($pairs[ $k ])) throw new \Exception('参数名冲突');
 			$pairs[ $k ] = $v;
 		}
@@ -98,7 +88,7 @@ class WebClient
 	{
 		$params = array();
 		$params[ ApiProtocol::APP_ID_KEY ] = $this->app_key;
-		$params[ ApiProtocol::METHOD_KEY ] = 'NcWeb.' . $method;
+		$params[ ApiProtocol::METHOD_KEY ] = $method;
 		$params[ ApiProtocol::TIMESTAMP_KEY ] = date('Y-m-d H:i:s');
 		$params[ ApiProtocol::FORMAT_KEY ] = $this->format;
 		$params[ ApiProtocol::SIGN_METHOD_KEY ] = $this->sign_method;

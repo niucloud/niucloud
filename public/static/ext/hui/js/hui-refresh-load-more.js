@@ -57,7 +57,8 @@ hui.loadMore = function(func, title, loading){
 		dom = document.createElement('div');
 		dom.setAttribute('id', 'hui-load-more');
 		dom.innerHTML = title;
-		document.body.appendChild(dom);
+		// document.body.appendChild(dom);
+		$('.hui-refresh-content').append(dom);
 		dom = hui('#hui-load-more');
 	}
 	var loadMoreTimer = null;

@@ -567,7 +567,7 @@ class Weixin
 	
 	/**
 	 * 群发消息
-	 * @param unknown $json_data
+	 * @param string $json_data
 	 * @return mixed
 	 */
 	public function messageGroupSend($json_data)

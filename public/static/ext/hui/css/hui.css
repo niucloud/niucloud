@@ -52,6 +52,7 @@ textarea{resize:none; background:inherit;}
 #hui-back:before{content:"\e6a5"; font-size:18px; color:#FFFFFF;}
 #hui-header-menu{width:44px; height:44px; line-height:44px; font-family:"hui-font"; flex-shrink:0;}
 #hui-header-menu:before{content:"\e60e"; font-size:25px; color:#FFFFFF;}
+
 /* 列表 */
 .hui-list{padding:0px; border:1px solid #E4E3E6; border-left:0; border-right:0; background:#FFFFFF;}
 .hui-list li{position:relative; display:flex; width:100%; overflow:hidden; height:50px;}
