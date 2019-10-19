@@ -1,0 +1,64 @@
+{extend name="sitehome@style/base"/}
+{block name="main"}
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="required">*</span>APP_KEY：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="app_key" lay-verify='app_key' autocomplete="off" placeholder="请输入app_key" {notempty name="$config_info"}value="{$config_info.app_key}"{/notempty} class="layui-input nc-len-long">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="required">*</span>APP_SECRET：</label>
+        <div class="layui-input-inline">
+            <input type="text" name="app_secret" lay-verify="app_secret" autocomplete="off" placeholder="请输入app_secret" class="layui-input nc-len-long" {notempty name="$config_info"}value="{$config_info.app_secret}"{/notempty}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div class="layui-input-inline">
+            <input type="checkbox" name="status" value="1" lay-skin="switch" lay-filter="switchTest" {if condition='$status' eq 1}checked{/if}>
+        </div>
+    </div>
+    <div class="nc-form-row">
+        <button class="layui-btn" lay-submit="" lay-filter="saveConfig">保存</button>
+        <a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+layui.use('form', function(){
+    var form = layui.form;
+    form.verify({
+        app_key: function(value){
+            if(value.length == 0){
+                return '请输入app_key';
+            }
+        },
+        app_secret: function(value){
+            if(value.length == 0){
+                return '请输入app_secret';
+            }
+        }
+    });
+	
+	var repeat_flag = false;//防重复标识
+    form.on('submit(saveConfig)', function(data){
+		if(repeat_flag) return;
+		repeat_flag = true;
+        var field = data.field;
+		$.ajax({
+			type : "post",
+			url : "{:addon_url('OAuthLoginWechat://sitehome/Index/config')}",
+			data : field,
+			dataType : "JSON",
+			success : function(data) {
+				repeat_flag = false;
+				layer.msg(data.message);
+			}
+		});
+    });
+});
+</script>
+{/block}

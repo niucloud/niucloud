@@ -1,0 +1,123 @@
+{extend name='admin@base' /}
+{block name="main"}
+<style>
+.layui-form-label{
+  width:200px;
+}
+.layui-nav-item font{
+  color:#f2f2f2;
+}
+.font_span{
+  color : #FF5722;
+  margin-right:3px;
+}
+</style>
+
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>应用APPID</label>
+        <div class="layui-input-block">
+            <input type="text" name="APPID" required lay-verify="required" placeholder="请输入APPID" value="{$info['value']['app_id']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>应用密钥AppSecrect</label>
+        <div class="layui-input-block">
+            <input type="text" name="APPSecrect" required lay-verify="required" placeholder="请输入AppSecrect" value="{$info['value']['app_secrect']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>支付专用签名串API密钥</label>
+        <div class="layui-input-block">
+            <input type="text" name="APPpaySignKey" required lay-verify="required" placeholder="请输入paySignKey" value="{$info['value']['app_paysignkey']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>微信支付商户号</label>
+        <div class="layui-input-block">
+            <input type="text" name="num" required lay-verify="required" placeholder="请输入商户号MCHID" value="{$info['value']['num']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>apiclient_cert</label>
+        <div class="layui-input-block">
+            <input type="text" name="apiclient_cert" required lay-verify="required" placeholder="请输入绝对路径" value="{$info['value']['apiclient_cert']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="font_span">*</span>apiclient_key.pem</label>
+        <div class="layui-input-block">
+            <input type="text" name="apiclient_key" required lay-verify="required" placeholder="请输入绝对路径" value="{$info['value']['apiclient_key']}" autocomplete="off" class="layui-input" style="width:50%">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:200px">是否启用支付</label>
+        <div class="layui-input-block">
+            <input type="checkbox" required name="apiclient_status" value="1" lay-skin="switch" lay-filter="switchTest" {if condition='$info.status' eq 1}checked{/if}></div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:200px">是否启用退款</label>
+        <div class="layui-input-block">
+            <input type="checkbox" required name="refund_is_use" value="1" lay-skin="switch" lay-filter="switchTest" {if condition='$info.value.refund_is_use' eq 1}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:200px">是否启用转账</label>
+        <div class="layui-input-block">
+            <input type="checkbox" required name="transfer_is_use" value="1" lay-skin="switch" lay-filter="switchTest" {if condition='$info.value.transfer_is_use' eq 1}checked{/if}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="savePay">保存</button>
+            <a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+        </div>
+    </div>
+</div>
+<script>
+layui.use('form', function() {
+    var form = layui.form;
+	var repeat_flag = false;//防重复标识
+    form.on('submit(savePay)', function(data) {
+		var value = {};
+		value.app_id = data.field.APPID;
+		value.app_secrect = data.field.APPSecrect;
+		value.app_paysignkey = data.field.APPpaySignKey;
+		value.num = data.field.num;
+		value.apiclient_cert = data.field.apiclient_cert;
+		value.apiclient_key = data.field.apiclient_key;
+		value.refund_is_use = data.field.refund_is_use || 0;
+		value.transfer_is_use = data.field.transfer_is_use || 0;
+		var apiclient_status = data.field.apiclient_status || 0;
+		if (repeat_flag) return;
+		repeat_flag = true;
+		$.ajax({
+			type: "post",
+			url: '{:addon_url("PayWechat://admin/payconfig/index")}',
+			data: {
+				name: '{$name}',
+				value: JSON.stringify(value),
+				status: apiclient_status
+			},
+			dataType: "JSON",
+			success: function (res) {
+				repeat_flag = false;
+				layer.msg(res.message);
+			}
+		});
+	});
+});
+
+$("#resets").click(function() {
+    $(":input[type='text']").attr('value', '');
+    $(":input[type='checkbox']").prop('checked', false).removeAttr('checked');
+});
+</script>
+{/block}

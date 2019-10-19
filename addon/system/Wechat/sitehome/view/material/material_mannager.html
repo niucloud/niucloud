@@ -1,0 +1,150 @@
+<link rel="stylesheet" href="ADDON_WECHAT_MANAGER_CSS/wx_material.css">
+<!-- 图文消息 -->
+<div class="layui-tab layui-tab-brief" id="marterial_graphic_message" style="display:none;">
+	<ul class="layui-tab-title">
+		<li class="layui-this">图文消息</li>
+		<!-- <li>高级图文</li> -->
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<table id="marterial_graphic_message_list" lay-filter="marterial_graphic_message"></table>
+			<!-- 标题 -->
+			<script type="text/html" id="graphic_message_title">
+				<div class="layui-row grid-demo">
+				{{# for (var index in d.value) { }}
+     			 	<div class="layui-col-md12 layui-clear">
+						<div class="layui-col-md3 article-img" style="float:left;">
+							<span class="nc-bg-color">图文</span>
+						</div>
+						<div class="layui-col-md3 title" style="float:left;">
+							<a href="javascript:void(0);" onclick="preview({{d.id}}, {{index}})">{{d.value[index].title}}</a>
+						</div>
+					</div>
+				{{# } }}
+				{{# if (d.value.length == 1) { }}
+					<div class='layui-col-md12 read-all layui-clear' onclick="preview({{d.id}})">
+						<div class='layui-col-md4' style="float:left;">阅读全文</div>
+						<div class='layui-col-md4 layui-col-md-offset4'> > </div>
+					</div>
+				{{# } }}
+				</div>
+			</script>
+			<!-- 创建时间 -->
+			<script type="text/html" id="create_time">
+				<div>{{ nc.time_to_date(d.create_time) }}</div>
+			</script>
+			<!-- 修改时间 -->
+			<script type="text/html" id="update_time">
+				<div>{{ nc.time_to_date(d.update_time) }}</div>
+			</script>
+			<!-- 列表操作 -->
+			<script type="text/html" id="operation">
+				<a class="default layui-btn-sm" lay-event="choose">选取</a>
+			</script>
+		</div>
+		<!-- <div class="layui-tab-item"></div> -->
+	</div>
+</div>
+
+<!-- 文本消息 -->
+<div class="layui-tab layui-tab-brief" id="material_text" style="display:none;">
+	<ul class="layui-tab-title">
+		<li class="layui-this">文本消息</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<table id="material_text_list" lay-filter="material_text"></table>
+			<!-- 内容 -->
+			<script type="text/html" id="text_content">
+				<div class="layui-row grid-demo">
+					<div class="layui-col-md12 layui-clear">
+						<div class="layui-col-md3 article-img" style="float:left;">
+							<span>文本</span>
+						</div>
+						<div class="layui-col-md3 title" style="float:left;">
+							<a href="javascript:void(0);" onclick="previewText('{{d.value.content}}')">{{d.value.content}}</a>
+						</div>
+					</div>
+				</div>
+			</script>
+			<!-- 创建时间 -->
+			<script type="text/html" id="create_time">
+				<div>{{ nc.time_to_date(d.create_time) }}</div>
+			</script>
+			<!-- 修改时间 -->
+			<script type="text/html" id="update_time">
+				<div>{{ nc.time_to_date(d.update_time) }}</div>
+			</script>
+			<!-- 列表操作 -->
+			<script type="text/html" id="operation">
+				<a class="default layui-btn-sm" lay-event="choose">选取</a>
+			</script>
+		</div>
+		<!-- <div class="layui-tab-item"></div> -->
+	</div>
+</div>
+
+<!-- 添加文本消息 -->
+<div class="layui-tab layui-tab-brief" id="add_material_text" style="display:none;">
+	<ul class="layui-tab-title">
+		<li class="layui-this">添加文本消息</li>
+	</ul>
+	<div class="layui-form" >
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">内容</label>
+			<div class="layui-input-block">
+				<textarea name="content" placeholder="请输入内容" id="material_text_content" class="layui-textarea" maxlength="300" lay-verify='material_text_content'></textarea>
+				<span class='input-text-hint'>剩余300</span>
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<button class="layui-btn" lay-submit lay-filter="addText">保存</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</div>
+</div>
+
+<!-- 图片素材 -->
+<div class='layui-tab layui-tab-brief' id='material_image' style="display:none;">
+	<ul class="layui-tab-title">
+		<li class="layui-this">图片素材</li>
+	</ul>
+	<div class="layui-tab-content">
+		<div class="layui-tab-item layui-show">
+			<button class='layui-btn' onclick="uploadAlbumablum_contain()">上传素材</button>
+			<div class='img-list'></div>
+			<!-- 图片列表 -->
+			<script id="image_list" type="text/html">
+				{{#  layui.each(d.list, function(index, item){ }}
+				<div class="layui-col-md2">
+					<div class="img-check-mask" data-show="false">
+						<i class="layui-icon layui-icon-ok"></i>
+					</div>
+					<i class="img" style="background: url(attachment/{{item.value.file_path}});"
+				      data-path="attachment/{{item.value.file_path}}"
+				      data-url="{{item.value.url}}"
+				      data-media-id="{{item.media_id}}"
+					  data-id="{{item.id}}"></i>
+					<p class="layui-elip">{{item.value.name}}</p>
+				</div>
+				{{#  }); }}
+				{{#  if(d.list.length === 0){ }}
+			    	暂无数据
+		  		{{#  } }}
+			</script>
+			<div id="paged" class="page"></div>
+		</div>
+	</div>
+	<input type="hidden" id="material_picture_path" value=""/>
+	<input type="hidden" id="material_picture_media_id" value=""/>
+	<input type="hidden" id="material_picture_url" value=""/>
+	<input type="hidden" id="material_picture_id" value=""/>
+	<div class='buttom-button'>
+		<button class='layui-btn' id="material_submit">确定</button>
+		<button class='layui-btn layui-btn-primary' id="material_back">返回</button>
+	</div>
+</div>
+<div class='display: none;'>
+{:hook("fileManage", ["name" => "ablum_contain", 'type' => 'common',"file_type" => "IMAGE", "title" => "添加图片",'size' => '2000'], '', true)}
+</div>
+<script type="text/javascript" src="ADDON_WECHAT_MANAGER_JS/wx_material_mannager.js"></script>

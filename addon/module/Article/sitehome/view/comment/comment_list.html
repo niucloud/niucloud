@@ -1,0 +1,92 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="nc-table-box">
+    <table id="comment_list" lay-filter="comment_list" class="layui-table"></table>
+</div>
+
+<script type="text/html" id="comment_time">
+<span>{{ nc.time_to_date(d.create_time) }}</span>
+</script>
+
+<script type="text/html" id="operation">
+	<a class="default" lay-event="del">删除</a>
+</script>
+
+{/block}
+{block name="script"}
+<script>
+var table = new Table({
+	elem: '#comment_list',
+	filter : "comment_list",
+	url : '{:addon_url("Article://sitehome/comment/commentList")}',
+	cols: [
+		[{
+			type: 'checkbox',
+            unresize : 'true'
+		}, {
+			field: 'nick_name',
+			width: '15%',
+			title: '用户昵称',
+            unresize : 'true'
+		},  {
+			field: 'create_time',
+			width: '15%',
+			title: '评论时间',
+			templet: '#comment_time',
+            unresize : 'true'
+		}, {
+			field: 'title',
+			width: '15%',
+			title: '所属文章',
+            unresize : 'true'
+		},{
+			field: 'content',
+			width: '30%',
+			title: '评论内容',
+            unresize : 'true'
+		},{
+			title: '操作',
+			width: '10%',
+			toolbar: '#operation',
+			align: 'right',
+            unresize : 'true'
+		}]
+	]
+});
+
+//监听工具条
+table.tool(function(obj){
+	var data = obj.data;
+	switch (obj.event) {
+		case "del":
+			deleteComment(data.id);
+			break;
+	}
+});
+
+//删除
+function deleteComment(comment_id) {
+	layer.confirm('确定删除吗?', {
+		btn: ['确定', '取消']
+	}, function () {
+		$.ajax({
+			type: "post",
+			async: false,
+			url: '{:addon_url("Article://sitehome/comment/deleteComment")}',
+			data: {'comment_id': comment_id},
+			dataType: "JSON",
+			success: function (res) {
+				layer.msg(res.message);
+				if (res.code == 0) {
+					table.reload();
+				}
+			}
+		});
+	}, function () {
+		layer.close();
+	});
+}
+</script>
+{/block}

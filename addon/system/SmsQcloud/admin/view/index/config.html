@@ -1,0 +1,50 @@
+{extend name="admin@base"/}
+{block name="resources"}{/block}
+{block name='crumbs'}
+<span class="layui-breadcrumb" {empty name="$crumbs[1]" }style="display:none;" {/empty}>
+  {if $crumbs[2]['title'] }
+  <a href="{:addon_url($crumbs[0]['url'])}">{$crumbs[0]['title']}</a>
+  <a href="{:addon_url($crumbs[1]['url'])}">{$crumbs[1]['title']}</a>
+  <a href="{:addon_url($crumbs[1]['url'])}">{$crumbs[2]['title']}</a>
+  <a><cite>{$crumbs[3]['title']}</cite></a>
+  {else/}
+  <a href="{:addon_url($crumbs[0]['url'])}">{$crumbs[0]['title']}</a>
+  <a><cite>{$crumbs[1]['title']}</cite></a>
+  {/if}
+</span>
+{/block}
+{block name="main"}
+<div class="layui-form">
+  <div class="layui-form-item">
+    <label class="layui-form-label">APP_KEY</label>
+    <div class="layui-input-inline">
+      <input type="text" name="app_key" lay-verify="app_key" placeholder="APP_KEY"  value="{$list['app_key']}" autocomplete="off" class="layui-input nc-len-mid">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">SECRET_KEY</label>
+    <div class="layui-input-inline">
+      <input type="text" name="secret_key" lay-verify="secret_key" placeholder="SECRET_KEY"  value="{$list['secret_key']}" autocomplete="off" class="layui-input nc-len-mid">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">短信内容签名</label>
+    <div class="layui-input-inline">
+      <input type="text" name="signature" lay-verify="signature" placeholder="内容签名"  value="{$list['signature']}" autocomplete="off" class="layui-input nc-len-mid">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">启用</label>
+    <div class="layui-input-block">
+    	<input type="checkbox" name="status" value="1" lay-skin="switch" lay-filter="switchTest"  {if condition="$status  eq '1'"}checked{/if}>
+    </div>
+  </div>
+  <div class="nc-form-row">
+      <button class="layui-btn" lay-submit lay-filter="saveSms">保存</button>
+      <button onclick="window.history.back(-1)" class="layui-btn layui-btn-primary">返回</button>
+  </div>
+</div>
+{/block}
+{block name="script"}
+<script src="ADDON_NS_SMS_QCLOUD_JS/config.js"></script>
+{/block}

@@ -24,6 +24,8 @@ use think\console\Output;
 use app\common\model\Visit;
 use app\common\model\Upgrade;
 use app\common\model\Addon;
+use util\database\DbCompare;
+use think\Db;
 
 /**
  * 系统  控制器
@@ -65,6 +67,7 @@ class System extends BaseAdmin
 		$request = Request::instance();
 		$domain = $request->domain();
 		$this->assign('domain', $domain);
+		$this->assign('sys_version_no', SYS_VERSION_NO);
 		return $this->fetch();
 	}
 	/**
@@ -89,46 +92,148 @@ class System extends BaseAdmin
 	        'sys_release' => SYS_RELEASE
 	    ];
 	    $info = $http->post('Upgrade.getUpgradeInfo', $data);
-	    var_dump(json_decode($info, true));
+	    $info = json_decode($info, true);
+	    //文件重置
+	    foreach ($info['data']['files'] as $k => $v)
+	    {
+	        if(file_exists('data/upgrade/'.$info['data']['sys_version'].'/'.$info['data']['sys_release'].'/release/'.$v))
+	        {
+	            unset($info['data']['files'][$k]);
+	        }
+	    }
+	    if(!empty($info['data']['files']))
+	    {
+	        sort($info['data']['files']);
+	    }
+	    if(file_exists('data/upgrade/'.$info['data']['sys_version'].'/'.$info['data']['sys_release'].'/database.sql'))
+	    {
+	        unlink('data/upgrade/'.$info['data']['sys_version'].'/'.$info['data']['sys_release'].'/database.sql');
+	    }
+	    //生成升级sql文件
+	    $dir_make = dir_mkdir('data/upgrade/'.$info['data']['sys_version'].'/'.$info['data']['sys_release']);
+	    if($dir_make)
+	    {
+	            $res = file_put_contents('data/upgrade/'.$info['data']['sys_version'].'/'.$info['data']['sys_release'].'/db_upgrade.sql', $info['data']['sqls']);
+
+	    }else{
+	        $this->error("文件读写权限不足");
+	    }
+	    Session::set("version_update", $info['data']);
+		$session = Session::get("version_update");
+	    if(!empty($session))
+	    {
+	        
+            $session['script_count'] = count($session['scripts']);
+            $session['file_count'] = count($session['files']);
+	        $this->assign('version', $session);
+	        return $this->fetch("system/upgrade");
+	    }else{
+	        $this->error("云服务器检测失败");
+	    }
 	}
 	
 	/**
-	 * 下载
+	 * 下载系统文件
 	 */
 	public function download(){
 	    
-	    $config_model = new Config();
-	    $auth_info = $config_model->getConfigInfo([ 'name' => 'SYSTEM_AUTH_CONFIG' ]);
-	    $app_config = json_decode($auth_info['data']['value'], true);
-	    $this->app_key = $app_config['app_key'];
-	    $this->app_secret = $app_config['app_secret'];
-	    $this->domain = $app_config['domain'];
-	    $token = 'MDAwMDAwMDAwMMvff8qaeXOWxpa6Z67Q1ZqSeKTQydN_15ZlfpysoqyfyZmh3I9ke5zHq7qayJi7moeafd-yqX6agXebqrGzdq2zqnrLg3R7qsq8spjJ07yqm2Og3MfOgpt9oYmcr3x_Zse9Zs6Am6Cos7i9ZrKqzauFdYWYsaiD3o2KZZ6so6Sfx71_1JiJi2DG0Z2ayM-wag';
-	    $file = 'application/wap/view/public/img/login_img/captcha_code.png';
-	    $file_path = dirname($file);
-	    $data = [
-	        'token' => $token,
-	        'file'  => $file
-	    ];
-	    $http = new WebClient($this->app_key, $this->app_secret);
-	    $info = $http->post('Upgrade.download', $data);
-	    $info = json_decode($info, true);
-	    $info = base64_decode($info['data']);
-	    $dir_make = dir_mkdir('data/upgrade/'.$file_path);
-	    if($dir_make)
+	    $index = input("index", 0);
+	    $session = Session::get("version_update");
+	    if(!empty($session))
 	    {
-	        $res = file_put_contents('data/upgrade/'.$file_path.'/captcha_code.png', $info);
-	        var_dump($res);
+	        $config_model = new Config();
+	        $auth_info = $config_model->getConfigInfo([ 'name' => 'SYSTEM_AUTH_CONFIG' ]);
+	        $app_config = json_decode($auth_info['data']['value'], true);
+	        $this->app_key = $app_config['app_key'];
+	        $this->app_secret = $app_config['app_secret'];
+	        $this->domain = $app_config['domain'];
+	        $file = isset($session['files'][$index]) ? $session['files'][$index] : '';
+	        if(empty($file))
+	        {
+	            return error("升级文件不存在");
+	        }
+	        $data = [
+	            'token' => $session['token'],
+	            'file'  => $file
+	        ];
+	        $file_path = dirname($file);
+	        $http = new WebClient($this->app_key, $this->app_secret);
+	        $info = $http->post('Upgrade.download', $data);  
+	        $info = json_decode($info, true);
+	        $info = base64_decode($info['data']);
+	        $dir_make = dir_mkdir('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/release/'.$file_path);
+	        if($dir_make)
+	        {
+	            if(!empty($info))
+	            {
+	                $res = file_put_contents('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/release/'.$file, $info);
+	                if($res)
+	                {
+	                    return success($file);
+	                }else{
+	                    return error($file);
+	                }
+	            }else{
+	                return error("升级文件不存在");
+	            }
+	           
+	        }else{
+	            return error("文件读写权限不足");
+	        }
+
 	    }else{
-	        die("文件读写权限不足");
+	        return error("升级权限不足");
 	    }
-	  
 	}
 	
-	public function dbUpgrade(){
-	    $upgrade = new Upgrade();
-	    $res = $upgrade->getTableSchema('nc_addon');
-	    var_dump($res);
+	/**
+	 * 文件下载完毕，执行升级过程
+	 */
+	public function execute(){
+	    $session = Session::get("version_update");
+	    if(!empty($session))
+	    {
+	        //检测文件完整性
+	        foreach ($session['files'] as $k => $v)
+	        {
+	            if(!file_exists('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/release/'.$v))
+	            {
+	                $this->error("检测文件不完整");
+	            }
+	        }
+	        dir_mkdir('data/backup/'.$session['sys_version'].'/'.$session['sys_release'].'/release');
+	        //文件备份
+	        dir_copy('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/release', 'data/backup/'.$session['sys_version'].'/'.$session['sys_release'].'/release');
+	        //数据库备份
+	        $config = array(
+	            'path' => 'data/backup/'.$session['sys_version'].'/'.$session['sys_release'].'/',
+	            'part' => 20971520,
+	            'compress' => 0,
+	            'level' => 9
+	        );
+	        $file = array(
+	            'name' => 'backup',
+	            'part' => 1
+	        );
+	        $database = new Database($file, $config);
+	        $tables = $database->getTableList();
+	        foreach ($tables['data']['list'] as $k => $v)
+	        {
+	            $database->backup($v['Name'], 0);
+	        }
+	        //文件替换
+	        dir_copy('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/release', './');
+	        //执行数据库
+	        $sql = file_get_contents('data/upgrade/'.$session['sys_version'].'/'.$session['sys_release'].'/db_upgrade.sql');
+	        $sql_arr = parseSql($sql);
+	        foreach($sql_arr as $k => $v){
+	            if(!empty($v))
+	                Db::execute($v);
+	        }
+	        
+	        exit();
+	        
+	    }
 	}
 	/**
 	 * 获取授权列表

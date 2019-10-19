@@ -1,0 +1,150 @@
+@charset "utf-8";
+
+.clear:before,.clear:after{
+	content: '';
+	clear: both;
+	display: block;
+}
+
+.nc-pay{
+	background: #ffffff;
+    width: 990px;
+    margin: 0 auto;
+}
+
+.nc-pay .pay-info{
+	position: relative;
+	overflow: hidden;
+}
+
+.nc-pay .pay-info .p-left{
+	float: left;
+	width: 640px;
+	padding-top: 32px;
+	padding-bottom: 32px;
+	padding-left: 0
+}
+
+.nc-pay .pay-info .p-right{
+	float: right;
+	width: 190px;
+	padding-top: 32px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+	overflow: hidden
+}
+
+.nc-pay .pay-info .p-title {
+	line-height: 26px;
+	height: 26px;
+	overflow: hidden;
+	font-size: 14px;	
+ 	font-weight: bold; 
+}
+
+.nc-pay .pay-info .p-tips {
+	line-height: 20px;
+	height: 20px
+}
+
+.nc-pay .pay-info .p-price {
+	text-align: right;
+	line-height: 26px
+}
+
+.nc-pay .pay-info .p-price em {
+	vertical-align: bottom;
+	font-style: normal;
+}
+
+.nc-pay .pay-info .p-price strong {
+	font-size: 18px;
+	vertical-align: bottom;
+	color: #ff5d5b;
+	margin: 0 3px
+}
+
+.nc-pay .payment-qrcode {
+	background-color: #fff;
+	padding: 12px 30px 0;
+	-moz-box-shadow: 0 0 20px rgba(0, 0, 0, .12);
+	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .12);
+	box-shadow: 0 0 20px rgba(0, 0, 0, .12);
+	-moz-transition: all .2s ease-in-out;
+	-o-transition: all .2s ease-in-out;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+    overflow: hidden;
+}
+
+.nc-pay .payment-qrcode:hover {
+	-moz-box-shadow: 0 0 20px rgba(0, 0, 0, .24);
+	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, .24);
+	box-shadow: 0 0 20px rgba(0, 0, 0, .24)
+}
+
+.nc-pay .payment-qrcode .p-w-hd {
+	margin-bottom: 20px;
+	font-size: 18px;
+	font-family: "Microsoft Yahei";
+	position: relative;
+}
+
+.nc-pay .payment-qrcode .p-w-hd .js-weixinInfo{
+    position: absolute;
+    top: 6px;
+    left: 130px;
+    font-size: 12px;
+}
+
+.nc-pay .payment-qrcode .p-w-hd .js-weixinInfo .font-red{
+	color: #ff5d5b;
+	font-weight: 600;
+	margin: 0 2px;
+}
+
+.nc-pay .payment-qrcode .p-w-bd {
+	padding-left: 130px;
+	margin-bottom: 30px
+}
+
+.nc-pay .payment-qrcode .p-w-bd .p-w-box {
+	float: left;
+	width: 300px
+}
+
+.nc-pay .payment-qrcode .p-w-bd .p-w-sidebar {
+	float: left;
+	width: 379px;
+	height: 421px;
+	padding-left: 50px;
+	margin-top: -20px;
+	background: url(../img/phone-bg.png) 50px 0 no-repeat
+}
+
+.nc-pay .payment-qrcode .p-w-bd .pw-box-hd {
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	width: 298px;
+	height: 298px;
+}
+
+.nc-pay .payment-qrcode .p-w-bd .pw-box-hd img {
+	width: 298px;
+	height: 298px;
+	background: url(ui-modal-loading.gif) center center no-repeat
+}
+
+.nc-pay .payment-qrcode .p-w-bd .pw-box-ft {
+	height: 44px;
+	padding: 8px 0 8px 125px;
+	background: url(../img/icon-red.png) 50px 8px no-repeat #ff7674
+}
+
+.nc-pay .payment-qrcode .p-w-bd .pw-box-ft p {
+	margin: 0;
+	font-size: 14px;
+	line-height: 22px;
+	color: #fff;
+	font-weight: 700
+}

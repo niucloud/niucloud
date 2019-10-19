@@ -1,0 +1,112 @@
+{extend name="sitehome@style/base" /}
+{block name="main"}
+<style>
+:-webkit-autofill {
+	transition: background-color 5000s ease-in-out 0s;
+}
+input:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px white inset !important;
+}
+
+</style>
+
+<div class="layui-form nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">您正在编辑【<a href="javascript:;">{$message_type_info['title']}</a>】消息模板</blockquote>
+	<div class="layui-form-item">
+		<label class="layui-form-label">是否开启</label>
+		<div class="layui-input-block">
+			<input type="checkbox" name="status" value="1" lay-skin="switch" lay-filter="status" {if $message_type_info['wechat_is_open'] == 1}checked="checked"{/if}>
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">模板编号</label>
+		<div class="layui-input-block">
+			<input type="text" value="{$message_type_info['wechat_json']['template_no']}" readonly class="layui-input nc-len-mid" >
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">模板消息ID</label>
+		<div class="layui-input-block">
+            <div class="layui-input-inline">
+                <input type="text"  class="layui-input nc-len-long" readonly value="{$site_wechat_message_info['template_id']}">
+            </div>
+            <button class="layui-btn" lay-util="get_template">重置</button>
+			<div class="layui-form-mid layui-word-aux">注:与项目所绑定的微信公众号的模板库必须是主营行业:消费品/消费品、副营行业:其他/其他,重置后会删除当前项目绑定微信公众号中已绑定所有模板,并重新根据现有的微信模板消息重新绑定</div>
+		</div>
+
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">标题</label>
+		<div class="layui-input-inline nc-len-mid">
+			<input type="text"  value="{$message_type_info['wechat_json']['title']}" readonly class="layui-input">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">头部文字</label>
+		<div class="layui-input-inline nc-len-mid">
+			<input type="text" name="headtext" class="layui-input" value="{$site_wechat_message_info['headtext']}">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">底部文字</label>
+		<div class="layui-input-inline nc-len-mid">
+			<input type="text" name="bottomtext" class="layui-input" value="{$site_wechat_message_info['bottomtext']}">
+		</div>
+	</div>
+	<div class="layui-form-item">
+		<label class="layui-form-label">模板信息</label>
+		<div class="layui-input-block" style="white-space: pre-line;">
+			{$message_type_info['wechat_json']['remark']}
+		</div>
+	</div>
+
+	<div class="nc-form-row sm">
+		<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+		<a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+	</div>
+	<input type="hidden" name="keyword" value="{$keyword}">
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+layui.use(['form', 'util'], function(){
+	var form = layui.form;
+    var util = layui.util;
+	var repeat_flag = false;//防重复标识
+	form.on('submit(save)', function(data){
+		if(repeat_flag) return;
+		repeat_flag = true;
+		var field = data.field;
+	    $.ajax({
+	        type : "post",
+	        url : '{:addon_url("Wechat://sitehome/message/edit")}',
+	        data : field,
+	        dataType : "JSON",
+	        success : function(res) {
+	            layer.msg(res.message);
+	            location.href= '{:addon_url("Message://sitehome/Index/index")}';
+	        }
+	    });
+	});
+	//按钮事件绑定
+    util.event('lay-util', {
+        get_template: function () {
+            $.ajax({
+                type : "post",
+                url : '{:addon_url("Wechat://sitehome/message/getMessageTemolateId")}',
+                dataType : "JSON",
+                data : {keyword : $("input[name='keyword']").val()},
+				async : false,
+                success : function(res) {
+                    layer.msg(res.message);
+                    if(res.code == 0){
+                        location.reload();
+					}
+
+                }
+            });
+        }
+    })
+});
+</script>
+{/block}

@@ -28,14 +28,15 @@
 	<div class=" nc-item-block-parent">
 		{volist name="addon_list" id="vo" key="k"}
 		<div class="nc-item-block btn">
-			<a class="nc-item-block-wrap" href="javascript:;">
-				<div class="nc-item-pic">
-					<img src="__ROOT__{$vo['icon']}">
-				</div>
-				<div class="nc-item-content">
-					<div class="nc-content-title">{$vo['title']}</div>
-					<p class="nc-content-desc">{$vo['description']}</p>
-					<div class="nc-icon">
+			<div class="nc-item-pic">
+				<img src="__ROOT__{$vo['icon']}">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">
+					<div class="nc-item-tow-title">
+						{$vo['title']}
+					</div>
+					<div class="nc-item-tow-icon">
 						{notempty name="$vo['support_app_type']"}
 						{foreach $vo["support_app_type"] as $v}
 						<img src="__ROOT__/{$v['logo']}" title="支持{$v['name']}端口">
@@ -43,8 +44,9 @@
 						{/notempty}
 					</div>
 				</div>
-				<button class="layui-btn layui-btn-primary nc-item-btn" onclick="selectSite(this)" data-addon="{$vo.name}" data-title ="{$vo.title}">立即创建</button>
-			</a>
+				<p class="nc-item-content-desc">{$vo['description']}</p>
+			</div>
+			<button class="layui-btn layui-btn-primary nc-item-btn" onclick="selectSite(this)" data-addon="{$vo.name}" data-title ="{$vo.title}">立即创建</button>
 		</div>
 		{/volist}
 	</div>

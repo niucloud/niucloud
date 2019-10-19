@@ -7,6 +7,7 @@
 	.layui-input-block{margin-left: 150px; }
     .next-step{margin-top:100px;}
     .layui-form-item .layui-form-checkbox[lay-skin=primary]{margin-top: 0;}
+    .layui-colla-content{padding-right: 0;}
 </style>
 <script src="SITEHOME_JS/tree.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
@@ -25,15 +26,15 @@
             <div class="layui-tab-item layui-show">
                 <div class="layui-form-item">
                     <label class="layui-form-label sm">管理组</label>
-                    <div class="layui-input-inline nc-len-long">
+                    <div class="layui-input-block nc-len-short">
                         <select name="group_id"id="group_id" lay-verify="group_id"lay-filter="group_id">
                             <option data-group_array = ""value="0">选择管理组</option>
                             {volist name="group_list" id="vo"}
                                 <option group_array = "{$vo.array}" addon_array = "{$vo.addon_array}" value="{$vo.group_id}" {if $vo.is_system == 1}disabled{/if}>{$vo.group_name}</option>
                             {/volist}
                         </select>
-                        <div class="layui-form-mid layui-word-aux hint">分配用户所属用户权限组后，该用户会自动拥有此用户权限组内的模块操作权限</div>
                     </div>
+                    <div class="layui-form-mid layui-word-aux hint">分配用户所属用户权限组后，该用户会自动拥有此用户权限组内的模块操作权限</div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label sm">权限</label>
@@ -46,7 +47,7 @@
 
                             <div class="layui-colla-item">
                                 <h2 class="layui-colla-title"style="position:relative;">
-                                    <div style="position:absolute;right:0;z-index:100;">
+                                    <div style="position:absolute;left:35px;z-index:100;">
                                         <input type="checkbox" class="addon-checkbox"  lay-filter="addon_form" lay-skin="primary"  value="{$tree_k}" title="{$tree_v["info"]["title"]}" />
                                     </div>
 
@@ -67,7 +68,7 @@
             <div class="layui-tab-item">
                 <div class="layui-form-item">
                     <label class="layui-form-label sm">用户组名称</label>
-                    <div class="layui-input-inline nc-len-long">
+                    <div class="layui-input-inline nc-len-mid">
                         <input type="text" name="group_name" value="" lay-verify="group_name" autocomplete="off" placeholder="请输入用用户组名称" class="layui-input">
                     </div>
                 </div>
@@ -81,7 +82,7 @@
                             </script>
                                 <div class="layui-colla-item">
                                     <h2 class="layui-colla-title"style="position:relative;">
-                                        <div style="position:absolute;right:0;z-index:100;">
+                                        <div style="position:absolute;left: 35px;z-index:100;">
                                             <input type="checkbox" class="addon-checkbox"  lay-filter="addon_form" lay-skin="primary"  value="{$tree_k}" title="{$tree_v["info"]["title"]}" />
                                         </div>
 

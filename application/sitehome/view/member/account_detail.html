@@ -1,0 +1,135 @@
+{extend name="style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="SITEHOME_CSS/member.css">
+<style>
+	.nc-quote-box-body span:first-of-type{margin-left: 50px;}
+    .layui-form-item .layui-inline{margin-bottom: 0;}
+</style>
+{/block}
+{block name="main"}
+<input type="hidden" id="member_id" value="{$member_info['member_id']}">
+
+<div class="nc-quote-box">
+    <blockquote class="layui-elem-quote layui-quote-nm">会员账户信息</blockquote>
+    <div class="layui-form " id="search_form" >
+        <div class="layui-form-item">
+            <label class="layui-form-label sm"></label>
+            <div class="layui-input-inline">
+                {foreach name="$account_config_info['data']['value']" item="vo"}
+                {if condition="$vo['is_use'] eq 1"}
+                <span class="member-list-content">{$vo['name']}：{$member_info[$vo['key']]}</span>
+                {/if}
+                {/foreach}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label sm">类型</label>
+            <div class="layui-input-inline">
+                <select name="search_level" class="nc-len-mid">
+                    <option value="">全部</option>
+                    {foreach $account_config_info['data']['value'] as $k => $v}
+                    {if $v['is_use'] == 1}
+                    <option value="{$v['key']}">{$v['name']}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label sm">时间</label>
+            <div class="layui-inline">
+                <div class="layui-input-inline daterange-input-wrap">
+                    <input type="text" class="layui-input daterange-input nc-len-slightly" id="daterange" placeholder=" - ">
+                </div>
+                <button class="layui-btn layui-btn-primary date-picker-btn" onclick="datePick(7, this);">近7天</button>
+                <button class="layui-btn layui-btn-primary date-picker-btn" onclick="datePick(30, this);">近30天</button>
+            </div>
+        </div>
+        <div class="nc-form-row sm">
+            <button class='layui-btn' lay-submit lay-filter="searchForm">筛选</button>
+        </div>
+    </div>
+</div>
+
+<table id="label_list" lay-filter="member_label"></table>
+
+<script type="text/html" id="create_time">
+	<span>{{nc.time_to_date(d.create_time)}}</span>
+</script>
+{/block}
+{block name="script"}
+<script>
+var table;
+$(function () {
+	var member_id = $('#member_id').val();
+	table = new Table({
+		elem : '#label_list',
+		url : '{:addon_url("sitehome/member/accountDetail")}',
+		where : {member_id},
+		cols : [[
+			{field : 'nick_name', width : '20%', title : '会员昵称', align: 'left',unresize : 'true'},
+			{field : 'account_name', width : '20%', title : '账户类型',unresize : 'true'},
+			{field : 'remark', width : '40%', title : '产生方式',unresize : 'true'},
+			{field : 'create_time', title : '产生时间', templet: '#create_time', align: 'right',unresize : 'true'}
+		]]
+	});
+});
+
+layui.use(['form', 'laydate'], function(){
+	var layui_form = layui.form;
+    var laydate = layui.laydate;
+	//渲染时间
+
+    var daterange = '{:date("Y-m-d h:m:s", strtotime("-6 days"))} 至 {:date("Y-m-d h:m:s")}';
+    laydate.render({
+        elem: '#daterange'
+        ,format: 'yyyy-MM-dd HH:mm:ss'
+        ,range: '至'
+        ,value: daterange
+    });
+
+	layui_form.render();
+	layui_form.on('submit(searchForm)', function(data){
+        var strs = $("#daterange").val().split(" - ");
+        var field = data.field;
+        field.start_time = strs[0];
+        field.end_time = strs[1];
+		table.reload({
+			where: field,
+			page: {
+				curr : 1
+			}
+		});
+		return false;
+	});
+	
+});
+
+function datePick(date_num,event_obj){
+    $(".date-picker-btn").removeClass("selected");
+	$(event_obj).addClass('selected');
+    Date.prototype.Format = function (fmt,date_num) { //author: meizz
+        this.setDate(this.getDate()-date_num);
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "H+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+    var now_time =  new Date().Format("yyyy-MM-dd 23:59:59",0);//当前日期
+    var before_time =  new Date().Format("yyyy-MM-dd 00:00:00",date_num-1);//前几天日期
+    var daterange=before_time+" - "+now_time;
+    $("#daterange").val(daterange);
+
+}
+</script>
+{/block}

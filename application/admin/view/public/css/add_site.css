@@ -19,3 +19,4 @@
 .create-progress .progress-point{position: relative;z-index: 3;text-align: center;}
 .el-site-type{height: 36px; line-height: 36px;}
 .nc-item-block .nc-content-title .nc-content-desc{max-width: 200px;}
+.layui-btn.layui-btn-primary.nc-item-btn{padding: 0 7px;}

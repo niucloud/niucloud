@@ -1,0 +1,28 @@
+{php}
+	$member_account_info = api("System.Member.getMemberAccountInfo",['access_token'=>$access_token]);
+{/php}
+{if condition="$member_account_info['code']==0"}
+<link rel="stylesheet" href="RESOURCE_PATH/component/view/member_account/css/member_account.css"/>
+<div class="member-account-wrap">
+	<div class="member-account">
+		<ul>
+			{foreach name="$member_account_info['data']" item="vo"}
+			<li>
+				<a href="
+				{if condition='$vo.key eq "credit1"'}
+					{:addon_url('wap/account/integral')}
+				{elseif  condition='$vo.key eq "credit2"'/}
+					{:addon_url('wap/account/balance')}
+				{else/}
+				javascript:;
+				{/if}
+				">
+					<span class="title">{$vo.name}</span>
+					<span class="value">{$vo.num}</span>
+				</a>
+			</li>
+			{/foreach}
+		</ul>
+	</div>
+</div>
+{/if}

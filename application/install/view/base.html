@@ -20,19 +20,24 @@
 <div class="head-block">
 	<div class="top">
 		<div class="top-logo"></div>
-		<div class="top-link">
-			<ul>
-				<li><a href="https://www.niucloud.com" target="_blank">官方网站</a></li>
-				<li><a href="https://bbs.niucloud.com" target="_blank">技术论坛</a></li>
-			</ul>
-		</div>
-		<div class="top-version">
-			<!-- 版本信息 -->
-			<h2>NIUCLOUD</h2>
-		</div>
+		<ul class="top-link">
+			<li><a href="https://www.niucloud.com" target="_blank">官方网站</a></li>
+			<li><a href="https://bbs.niucloud.com" target="_blank">技术论坛</a></li>
+		</ul>
 	</div>
 </div>
-{block name='main'}{/block}
+<div class="install-content">
+	<div class="install-content-procedure">
+		<ul class="content-procedure-list">
+			<li class="content-procedure-item">1、许可协议</li>
+			<li class="content-procedure-item">2、环境检测</li>
+			<li class="content-procedure-item">3、参数配置</li>
+			<li class="content-procedure-item">4、安装完成</li>
+		</ul>
+	</div>
+	{block name='main'}
+	{/block}
+</div>
 {block name="script"}{/block}
 </body>
 </html>

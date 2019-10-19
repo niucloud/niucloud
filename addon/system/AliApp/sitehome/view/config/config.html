@@ -1,0 +1,93 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+    .nc-form-row{padding-left: 175px;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-form config-form">
+    <div class="nc-quote-box ">
+    	<blockquote class="layui-elem-quote layui-quote-nm">小程序开发者设置</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">小程序名称</label>
+            <div class="layui-input-inline medium">
+                <input type="text" name="aliapp_name" autocomplete="off" placeholder="公众号名称" class="layui-input" {notempty name="$config_info"}value="{$config_info.aliapp_name}"{/notempty}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label img-upload-lable">小程序二维码</label>
+            <div class="layui-inline img-upload">
+                <input type="hidden" class="layui-input" name = "aliapp_code" {notempty name="$config_info"}value="{$config_info.aliapp_code}"{/notempty} />
+                <div class="upload-img-block aliapp-code">
+                    {if empty($config_info.aliapp_code)}
+                    <div class="upload-img-box" onclick="uploadSinglealiapp_code()" >
+                        <div>
+                            <i class="add">+</i>
+                        </div>
+                    </div>
+                    {else/}
+                    <div class="upload-img-box has-choose-image">
+                        <div>
+                            <img src="{:img($config_info.aliapp_code)}" layer-src="{:img($config_info.aliapp_code)}">
+                        </div>
+                        <span onclick="uploadSinglealiapp_code();">修改</span>
+                    </div>
+                    {/if}
+                </div>
+                {:hook("fileUpload", ['name' => 'aliapp_code', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000'], '', true)}
+            </div>
+        </div>
+    </div>
+    <div class="nc-quote-box">
+        <blockquote class="layui-elem-quote layui-quote-nm">开发者ID设置</blockquote>
+        <div class="layui-card-body">
+            <div class="layui-form-item">
+            <label class="layui-form-label">APPID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="appid" autocomplete="off" placeholder="AppID" class="layui-input nc-len-long" {notempty name="$config_info"}value="{$config_info.appid}"{/notempty}>
+                </div>
+                <div class="layui-form-mid layui-word-aux">AppID来自于您申请的小程序账号，通过小程序首页，点击“登录管理中心”，进入小程序管理中心，在页面上点击“创建小程序”，在小程序详情页查看APPID</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="nc-form-row">
+        <button class="layui-btn" lay-submit lay-filter="formSave">保存</button>
+        <button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+layui.use(['form'], function() {
+	var form = layui.form;
+	var repeat_flag = false;//防重复标识
+	form.on('submit(formSave)', function (data) {
+		if (repeat_flag) return;
+		repeat_flag = true;
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('AliApp://sitehome/config/config')}",
+			dataType: "JSON",
+			data: data.field,
+			success: function (data) {
+				repeat_flag = false;
+				layer.msg(data.message);
+			}
+		});
+	});
+	
+});
+
+/**
+ * 单图回调事件
+ */
+function singleImageUploadSuccess(res,name){
+    if(name == "aliapp_code"){
+        $(".aliapp-code").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSinglealiapp_code();">修改</span></div>');
+        $("input[name='aliapp_code']").val(res.path);
+    }
+}
+</script>
+{/block}

@@ -1,0 +1,302 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style>
+	.niu-side-right .layui-fluid{padding-top: 0 !important;}
+	.nc-tab-title{padding: 0 !important;}
+	.appliction-title{display: flex;justify-content: space-between;padding: 0 20px;height: 56px;font-size: 18px;font-weight: bold;background-color: #FAFBFC;line-height: 56px;}
+	.appliction-title .management{font-weight: normal;font-size: 14px;color: #999;cursor: pointer;}
+	.nc-item-block-parent{padding: 0;}
+	.nc-item-block{padding: 20px;}
+	.nc-item-block-parent{padding: 20px 20px 0;}
+	.nc-item-block .nc-item-content-title{margin-bottom: 5px;margin-top: 6px;font-size: 16px; font-weight: bold;color: #333;}
+	.nc-item-block .nc-item-content-desc{overflow: hidden;font-size: 14px;color: #666;white-space: nowrap;text-overflow: ellipsis;}
+	.nc-item-block .nc-item-pic{overflow: hidden;width: 50px;height: 50px;line-height: 50px;border-radius: 50%;}
+	.nc-item-block:hover{border-color: transparent;box-shadow: 0 0 10px rgba(20,20,20,.15);}
+	.nc-item-block .nc-item-content{width:72%;}
+	.nc-item-block.more{display: flex; justify-content: center;}
+	.nc-item-block.more .nc-item-content-title{font-weight: normal;}
+	.appliction-colse{
+		display: none;
+		position: absolute;
+		top: -13px;
+		right: -13px;
+	}
+	.appliction-colse i{
+		position: relative;
+		width: 26px;
+		height: 26px;
+		font-size: 12px;
+		display: inline-block;
+		vertical-align: top;
+		background-position: -152px -32px;
+		cursor: pointer;
+	}
+	.appliction-colse i:hover{
+		/*opacity: .7;*/
+		background-position: -183px -32px;
+	}
+	.install-appliction-body{
+		display: flex;
+		padding: 20px;
+		background-color: #f5f5f5;
+	}
+	.install-appliction-body .appliction-item{
+		position: relative;
+		margin-right: 15px;
+		margin-bottom: 15px;
+		padding: 10px;
+		width: 200px;
+		background-color: #fff;
+		border-radius: 3px;
+	}
+	.install-appliction-body .appliction-item:last-of-type{
+		margin-right: 0;
+	}
+	.install-appliction-body .body-pic{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: 10px;
+		height: 95px;
+		/*background: url("NIU_APPLET_IMG/install_appliction_bj.png") no-repeat center / cover;*/
+	}
+	.install-appliction-body .body-pic img{
+		max-width: 100%;
+		max-height: 100%;
+	}
+
+	.install-appliction-body  .body-content{
+		display: flex;
+		justify-content: space-between;
+		font-size: 14px;
+		color: #333;
+	}
+
+	.install-appliction-body  .body-content span:last-of-type{
+		font-size: 12px;
+		color: #999;
+	}
+	.install-appliction-body .hidden{
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(0,0,0,.3);
+	}
+	.install-appliction-body .hidden button{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border-radius: 3px;
+		color: #fff;
+	}
+	.install-appliction-body .appliction-item:hover .hidden{
+		display: block;
+	}
+
+	.install-appliction-empty{
+		margin: 100px auto;
+		width: 80px;
+	}
+	.layui-layer-content{
+		background-color: #f5f5f5;}
+</style>
+{/block}
+{block name='title'}{/block}
+{block name="main"}
+<h2 class="appliction-title">
+	<span>应用列表</span>
+	{if condition="$is_system == 1"}
+	<span class="management" onclick="management()">管理</span>
+	{/if}
+</h2>
+
+<div class="nc-item-block-parent">
+	{notempty name="$installed_addon_list"}
+	{foreach name="$installed_addon_list" item="vo"}
+	<a class="nc-item-block size-lg" href="{if $vo.status==1}{:addon_url('applet2://sitehome/app/index', [ 'addon_name' => $vo['name'] ])}{else/}javascript:;{/if}">
+		<div class="nc-item-pic">
+			{if $vo['icon'] == ''}
+			<img  src="SITEHOME_IMG/sitehome/tc1_91.png">
+			{else /}
+			<img src='__ROOT__{$vo.icon}'>
+			{/if}
+		</div>
+
+		<div class="nc-item-content">
+			<div class="nc-item-content-title">{$vo.title}</div>
+			<p class="nc-item-content-desc">{$vo.description}</p>
+		</div>
+		<div class="appliction-colse" onclick="uninstall('{$vo.name}')">
+			<i class="layui-layer-ico layui-layer-close"></i>
+		</div>
+	</a>
+	{/foreach}
+	{/notempty}
+	{if condition="$is_system == 1"}
+	<a href="javascript:addAddon()" class="nc-item-block size-lg more">
+		<div class="nc-item-pic">
+			<img src="NIU_APPLET_IMG/more.png" alt="">
+		</div>
+		<span class="nc-item-content-title">新增应用</span>
+	</a>
+	{/if}
+
+</div>
+
+{/block}
+
+{block name="script"}
+{if condition="$is_system == 1"}
+<script id="install-appliction" type="text/html">
+	<div class="install-appliction-body">
+		{notempty name="$uninstalled_addon_list"}
+			{foreach name="$uninstalled_addon_list" item="vo"}
+			<div class="appliction-item">
+				<div class="body-pic">
+					{if $vo['icon'] == ''}
+					<img  src="SITEHOME_IMG/sitehome/tc1_91.png">
+					{else /}
+					<img src='__ROOT__{$vo.icon}'>
+					{/if}
+				</div>
+				<div class="body-content">
+					<span>{$vo['title']}</span>
+					<span>未安装</span>
+				</div>
+				<div class="hidden">
+					<button class="layui-btn" onclick="install('{$vo.name}')">安装</button>
+				</div>
+			</div>
+			{/foreach}
+		{else/}
+			<p class="install-appliction-empty nc-text-color-999">暂无数据</p>
+		{/notempty}
+	</div>
+</script>
+<script>
+	function addAddon(){
+		var html =" ";
+		layui.use('laytpl', function() {
+			var laytpl = layui.laytpl;
+			var getTpl = $("#install-appliction").html();
+			laytpl(getTpl).render({}, function (res) {
+				html = res;
+				layer.open({
+					type: 1,
+					title: '安装应用',
+					area: ['1000px','650px'],
+					content: html
+				});
+			});
+		});
+	}
+	function management() {
+		if($('.appliction-colse').is(":hidden")){
+			$('.appliction-colse').show();
+			$(".appliction-title .management").text("取消");
+		}else{
+			$('.appliction-colse').hide();
+			$(".appliction-title .management").text("管理");
+		}
+		
+	}
+	
+	//添加应用菜单
+	function addAppMenu(addon_name,is_reload) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('applet2://sitehome/app/addAppMenu')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				if(is_reload == undefined) {
+					layer.msg(res.message);
+					location.reload();
+					layer.closeAll();
+				}
+			}
+		});
+	}
+	
+	//置顶应用
+	function stickApp(addon_name){
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('applet2://sitehome/app/stickApp')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				layer.msg(res.message);
+				location.reload();
+				layer.closeAll();
+			}
+		});
+	}
+	
+	//移除应用菜单
+	function deleteAppMenu(addon_name,is_reload) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: "{:addon_url('applet2://sitehome/app/deleteAppMenu')}",
+			data: {addon_name: addon_name},
+			success: function (res) {
+				if(is_reload == undefined) {
+					layer.msg(res.message);
+					location.reload();
+					layer.closeAll();
+				}
+			}
+		});
+	}
+	
+	function uninstall(module){
+		event.preventDefault();
+		event.stopPropagation();
+		layer.confirm('该插件在卸载的同时，也会将相关的数据清除，您确定继续卸载吗？', {title:'提示'}, function(index){
+			layer.closeAll();
+			$.ajax({
+				type: "post",
+				url: nc.url('sitehome/addons/unsetup'),
+				data: {"name" : module},
+				beforeSend : function(){
+					var index = layer.load(2);
+				},
+				success: function (res) {
+					if(res.code==0) {
+						//移除该插件的快捷入口
+						deleteAppMenu(module,true);
+					}
+					layer.msg(res.message,{ time : 500 },function () {
+						if(res.code==0) location.reload();
+						layer.closeAll();
+					});
+				}
+			});
+		});
+	}
+	
+	function install(module) {
+		var index = layer.load(2);
+		$.ajax({
+			type: "post",
+			url: nc.url('sitehome/addons/setup'),
+			data :{"name" : module},
+			success: function (res) {
+				if(res.code==0){
+					addAppMenu(module,true);
+				}
+				layer.msg(res.message,{ time : 500 },function () {
+					if(res.code==0) location.reload();
+					layer.closeAll();
+				});
+			}
+		});
+	}
+</script>
+{/if}
+{/block}

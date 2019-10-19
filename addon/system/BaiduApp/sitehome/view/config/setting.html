@@ -1,0 +1,57 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+{/block}
+{block name="main"}
+<style>.nc-progress-point{flex-grow: initial; width: 20%;}</style>
+<div class="create-progress nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">百度小程序使用流程</blockquote>
+	<ul class="nc-progress-wrap">
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="NC_BAIDU_IMG/register.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">下载百度开发者工具</p>
+			<img class="nc-progress-point-arrow" src="NC_BAIDU_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="NC_BAIDU_IMG/config_info.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">下载小程序代码包</p>
+			<img class="nc-progress-point-arrow" src="NC_BAIDU_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="NC_BAIDU_IMG/public_number.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">打开小程序</p>
+		</li>
+		
+	</ul>
+</div>
+<div class="function-setting nc-quote-box">
+	<blockquote class="layui-elem-quote layui-quote-nm">百度小程序入口</blockquote>
+	<ul class="layui-card-body-box  nc-item-block-parent">
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'baiduapp://sitehome/config/config\')}'">
+			<div class="nc-item-pic">
+				<img src="NC_BAIDU_IMG/administration.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">小程序管理</div>
+				<p class="nc-item-content-desc">小程序管理</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'baiduapp://sitehome/menu/version\')}'">
+			<div class="nc-item-pic">
+				<img src="NC_BAIDU_IMG/edition.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">版本管理</div>
+				<p class="nc-item-content-desc">版本管理</p>
+			</div>
+		</li>
+	</ul>
+</div>
+{/block}
+{block name="script"}
+{/block}

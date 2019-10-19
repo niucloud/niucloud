@@ -1,0 +1,114 @@
+<!-- 视频上传开始 -->
+<script type="text/html" id="video_html">
+	<div class="layui-form" id="media_model{$id}" style="margin-top: 15px!important;font-size:12px;">
+        <div class="layui-form-item" style="height:130px">
+            <label class="layui-form-label sm">本地视频</label>
+            <div class="layui-input-block">
+                <div class="layui-upload-list media-list"></div>
+                <div class="nc-upload-img" id="media_item" title="仅支持 gif、 jpeg、 png、 bmp 4种格式, 大小不超过3.0 MB">
+                    <span class="add-img">+</span>
+                    <p class="add-style">点击添加视频</p>
+                </div>
+            </div>
+        </div>
+		<div class="nc-form-row">
+			<button type="button" class="layui-btn" id="btnVideo{$id}">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+	</div>
+
+</script>
+
+<!-- 视频上传结束 -->
+<script>
+var entity = {};// 传输数据的实体变量
+//弹出视频上传组件
+function video{$name}(category_id){
+    category_id = category_id == undefined ? 0 : category_id;
+	layui.use(['upload','laytpl'], function(){
+		var upload = layui.upload,laytpl = layui.laytpl;
+		var tpl_html = $("#video_html{$name}").html();
+		laytpl(tpl_html).render([], function(html){
+			//单图上传框
+			 var video_index{$name} = layer.open({
+				type: 1,
+				title: "本地上传",
+				area: ['850px','450px'], //宽高
+				content:  html,
+				cancel: function(){
+					//右上角关闭回调
+					//return false 开启该代码可禁止点击该按钮关闭
+				},
+				success: function(layero, index){
+                    //视频上传组件
+                    upload.render({
+                        elem: '#media_item{$id}'
+                        , url: '{:addon_url("File://common/File/video")}'
+                        , accept: 'video' //视频
+                        , acceptMime: 'video/*' //视频
+                        , data: {
+                            category_id: category_id
+                        }
+                        , auto: false
+                        , multiple: false
+                        , bindAction: '#btnVideo{$id}'
+                        , choose: function (obj) {
+                            //预读本地文件示例，不支持ie8
+                            obj.preview(function(index, file, result){
+                                console.log(file);
+                                    var video_html = '<div class="nc-upload-wrap" style="position:relative;background-color:#FFF;">';
+                                    video_html += '<img class="layui-upload-img" style="max-width: 100%;max-height: 100%;" src="__STATIC__/img/play.png"/>';
+                                    video_html += '<div class="black-bg" style="display:none;position:absolute;opacity: 0.7;background-color: #000;transition: all 0.3s ease;top:0;bottom:0;right:0;left:0;">';
+                                    video_html += '<span style="color:#FFF;">预览</span>';
+                                    video_html += '</div>';
+                                    video_html += '</div>';
+                                $('#media_model .media-list').html(video_html);
+
+                                $('#media_model .media-list .nc-upload-wrap').hover(function () {
+                                    $(this).find(".black-bg").show();
+                                },function () {
+                                    $(this).find(".black-bg").hide();
+                                })
+                                $('#media_model .media-list .nc-upload-wrap').click(function(){
+                                    //页面层-媒体播放
+                                    layer.open({
+                                        type: 1,
+                                        title: "媒体播放",
+                                        closeBtn: 1,
+                                        area: '516px',
+                                        skin: 'layui-layer-nobg', //没有背景色
+                                        shadeClose: true,
+                                        content: '<video style="width:100%;"src="'+result+'" controls="controls">' +'您的浏览器不支持 video 标签。' +'</video>'
+                                    });
+
+                                })
+                            });
+                            $(".nc-upload-img .add-style").text("点击重新编辑");
+
+                        }
+                        , done: function (res, index_1) {
+
+                            if(res.code ==  0){
+                                $('#media_model{$id}').empty();
+                                try{
+                                    singleVideoUploadSuccess(res.data,"{$name}");
+                                }catch(e){
+                                    console.error("缺少回调函数singleVideoUploadSuccess()",e.message);
+                                }
+                                layer.close(video_index{$name});
+                            }
+                        }
+
+                    });
+				}
+			});
+		});
+	});
+
+}
+
+
+	
+
+
+</script>

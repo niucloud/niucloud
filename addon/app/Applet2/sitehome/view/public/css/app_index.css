@@ -1,0 +1,17 @@
+.layui-card.notice .layui-card-body>ul{}
+.layui-card.notice .layui-card-body>ul li{padding: 5px 0;}
+.layui-card.notice .layui-card-body>ul li a{display: block;}
+.layui-card.notice .layui-card-body>ul li a span{float: right;}
+.layui-card.graphic ul{overflow: hidden;}
+.layui-card.graphic ul li{overflow: hidden;position: relative;width: 24.2%;padding: 10px;box-sizing:border-box;float: left;margin-bottom: 20px;margin-right: 1%;}
+.layui-card.graphic ul li a{display: block;}
+.layui-card.graphic ul li:nth-child(4n+4){margin-right: 0;}
+.layui-card.graphic ul li .img-wrap{float: left;}
+.layui-card.graphic ul li .img-wrap a img{width: 50px;height: 50px;}
+.layui-card.graphic ul li .info-wrap{margin-left: 60px;line-height: 25px;}
+.layui-card.graphic ul li .info-wrap span:first-child{font-weight: bold;font-size: 14px;display: block;}
+.layui-card.graphic ul li .info-wrap span:last-child{font-size: 12px;}
+.layui-card .empty{text-align: center;}
+.system-notice-time{float: right;}
+.nc-item-block .nc-item-content{align-self: center;}
+.nc-item-block .nc-content-title{font-size: 16px;}

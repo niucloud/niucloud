@@ -1,34 +1,58 @@
 {extend name="base"/}
+{block name="resources"}
+<style>
+	.install-content-procedure .content-procedure-item:first-of-type{
+		background: url("INSTALL_IMG/complete_two.png") no-repeat center / contain;
+		color: #fff;
+	}
+	.install-content-procedure .content-procedure-item:nth-child(2), .install-content-procedure .content-procedure-item:nth-child(3){
+		background: url("INSTALL_IMG/complete_four.png") no-repeat center / contain;
+		color: #fff;
+	}
+	.install-content-procedure .content-procedure-item:nth-child(4){
+		background: url("INSTALL_IMG/complete_three.png") no-repeat center / contain;
+		color: #fff;
+	}
+	.install-content-procedure{border: none;}
+</style>
+{/block}
 {block name="main"}
-<div class="main">
-	<div class="pleft">
-		<dl class="setpbox t1">
-			<dt>安装步骤</dt>
-			<dd>
-				<ul>
-					<li class="succeed">许可协议</li>
-					<li class="succeed">环境检测</li>
-					<li class="succeed">参数配置</li>
-					<li class="succeed">正在安装</li>
-					<li class="now">安装完成</li>
-				</ul>
-			</dd>
-		</dl>
-	</div>
-	<div class="pright">
-		<div class="pr-title"><h3>安装完成</h3></div>
-		<div class="install-msg">恭喜您!已成功安装牛云系统.(建议删除安装目录install)您现在可以:</div>
-		<div class="over-link fs-14">
-			<!--<a href="{$root_url}/index.php" target="_blank">访问网站首页</a>-->
-			<a href="{$root_url}/index.php/admin" target="_blank">登录网站后台</a>
-		</div>
-		<div class="install-msg">或者访问牛云网站:</div>
-		<div class="over-link">
-			<a href="https://www.niucloud.com" target="_blank">牛云官方网站</a>
-			<a href="https://bbs.niucloud.com" target="_blank">牛云论坛</a>
+<div class="install-success">
+	<div class="install-success-box">
+		<img class="install-success-pic" src="INSTALL_IMG/install_complete.png" alt="">
+		<div class="install-success-text">
+			<p class="install-success-title">恭喜您！已成功安装牛云系统。</p>
+			<p class="install-success-desc">建议删除安装目录install后使用</p>
 		</div>
 	</div>
 </div>
-
-<div class="foot"></div>
+<div class="other-links">
+	<p class="other-links-title">您现在可以访问：</p>
+	<ul class="other-links-list">
+		<li class="other-links-item">
+			<div  class="other-links-pic">
+				<img src="INSTALL_IMG/site_index.png" alt="">
+			</div>
+			<a href="{$root_url}/index.php" class="other-links-text" target="_blank">网站首页</a>
+		</li>
+		<li class="other-links-item">
+			<div  class="other-links-pic">
+				<img src="INSTALL_IMG/site_backstage.png" alt="">
+			</div>
+			<a href="{$root_url}/index.php/admin" class="other-links-text" target="_blank">网站后台</a>
+		</li>
+		<li class="other-links-item">
+			<div  class="other-links-pic">
+				<img src="INSTALL_IMG/official_website.png" alt="">
+			</div>
+			<a href="https://www.niucloud.com" class="other-links-text" target="_blank">牛云官方网站</a>
+		</li>
+		<li class="other-links-item">
+			<div  class="other-links-pic">
+				<img src="INSTALL_IMG/forum.png" alt="">
+			</div>
+			<a href="https://bbs.niucloud.com" class="other-links-text" target="_blank">牛云论坛</a>
+		</li>
+	</ul>
+</div>
 {/block}

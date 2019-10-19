@@ -160,6 +160,7 @@ class Site extends BaseAdmin
 			unset($v);
 		}
 		
+		$this->assign("title", "新建站点");
 		$this->assign('addon_list', $list_new['data']);
 		return $this->fetch('site/add_site');
 	}

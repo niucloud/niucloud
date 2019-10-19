@@ -1,0 +1,12 @@
+
+.img-list{zoom: 1;margin: 0 0 0 -20px;}
+.img-item{float: left;width: 135px;margin: 0 0 20px 20px;}
+.img-box{width: 135px;height: 135px;background: #ddd;background-repeat: no-repeat;background-size: contain;background-position: 50% 50%;cursor:pointer}
+.img-name{    padding: 8px 0 6px;}
+.img-tool{}
+.img-tool-item{display:inline-block;}
+.img-tool-vertical{    padding: 0 1px;color: #a9a9a9;}
+.img-item .layui-form-checkbox{    position:relative; display: inline-block;text-overflow: ellipsis;line-height: 14px;overflow: hidden;white-space: nowrap; cursor: pointer;  width: 135px;margin-right:0;display: -webkit-box;-webkit-line-clamp: 1; /* 限制在一个块元素显示的文本的行数 */-webkit-box-orient: vertical; /* 垂直排列 */word-break: break-all;  /* 内容自动换行 */}
+.img-item .layui-form-checkbox[lay-skin=primary] i{height:12px;width:12px;line-height:12px;}
+.img-item .layui-form-checkbox[lay-skin=primary] span{  width:100%;  margin-left: 5px;margin-right: 5px;vertical-align: middle;height:14px;line-height: 14px;color:#000;font-size:12px;white-space: nowrap;text-overflow: ellipsis;}
+.img-empty-data{text-align: center;padding: 30px 10px;font-size: 12px;}

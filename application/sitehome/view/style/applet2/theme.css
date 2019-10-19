@@ -1,0 +1,190 @@
+body {
+  color: #333;
+}
+a:hover {
+  color: #12b7f5 !important;
+}
+.nc-bg-color {
+  background-color: #12b7f5 !important;
+}
+.nc-bg-color-black {
+  background-color: #333 !important;
+}
+.nc-bg-color-f9 {
+  background-color: #f9f9f9 !important;
+}
+.nc-bg-color-e5 {
+  background-color: #e5e5e5 !important;
+}
+.nc-bg-color-999 {
+  background-color: #999999 !important;
+}
+.nc-text-color {
+  color: #12b7f5 !important;
+}
+.nc-border-color-selected:hover,
+.nc-border-color-selected.selected {
+  border-color: #12b7f5 !important;
+}
+.nc-text-color-black {
+  color: #333 !important;
+}
+.nc-text-color-f9 {
+  color: #e5e5e5 !important;
+}
+.nc-text-color-e5 {
+  color: #e5e5e5 !important;
+}
+.nc-text-color-999 {
+  color: #999999 !important;
+}
+.nc-text-color-gray {
+  color: #cccccc !important;
+}
+.nc-text-color-gray-darken-30 {
+  color: #999999 !important;
+}
+.layui-nav-itemed > a,
+.layui-nav-tree .layui-nav-title a,
+.layui-nav-tree .layui-nav-title a:hover {
+  color: #737373 !important;
+}
+.nc-border-color {
+  border-color: #12b7f5 !important;
+}
+.nc-border-color-e5 {
+  border-color: #e5e5e5 !important;
+}
+.nc-border-color-gray {
+  border-color: #e5e5e5 !important;
+}
+.layui-nav .layui-this,
+.niu-side-nav .layui-nav-item.layui-this a span,
+.layui-nav .layui-nav-item a:hover {
+  color: #12b7f5 !important;
+}
+.layui-nav .layui-nav-item.layui-this a::after {
+  background-color: #12b7f5 !important;
+}
+.layui-nav .layui-nav-item a {
+  color: #333 !important;
+}
+.layui-tab-brief > .layui-tab-title .layui-this {
+  color: #12b7f5 !important;
+}
+.layui-tab-brief > .layui-tab-more li.layui-this:after,
+.layui-tab-brief > .layui-tab-title .layui-this:after {
+  border-color: #12b7f5 !important;
+}
+.layui-tab-brief > .layui-tab-more li.layui-this:after {
+  color: #12b7f5 !important;
+}
+.layui-nav-tree .layui-this > a,
+.layui-nav-tree .layui-this {
+  color: #12b7f5 !important;
+  background-color: #e5e5e5 !important;
+}
+.layui-layout-admin .layui-nav-tree.layui-children-menu .niu-nav-itemed.layui-this > a:hover {
+  color: #12b7f5 !important;
+}
+.niu-box .layui-nav-tree .layui-nav-item:after {
+  border-top-color: #333 !important;
+  border-right-color: #333 !important;
+}
+.layui-btn {
+  background-color: #12b7f5 !important;
+}
+.layui-btn.layui-btn-primary {
+  border-color: #e5e5e5 !important;
+  color: #333 !important;
+}
+.layui-form-onswitch {
+  background-color: #12b7f5 !important;
+}
+.layui-laypage button,
+.layui-laypage input {
+  background-color: #fff !important;
+}
+.layui-form-select dl dd.layui-this {
+  background-color: #12b7f5 !important;
+}
+.layui-form-radio > i:hover,
+.layui-form-radioed > i {
+  color: #12b7f5 !important;
+}
+.required {
+  color: red;
+}
+.upload-img-box {
+  color: #12b7f5 !important;
+}
+.layui-table tbody tr:hover,
+.layui-table thead tr,
+.layui-table-click,
+.layui-table-header,
+.layui-table-hover,
+.layui-table-mend,
+.layui-table-patch,
+.layui-table-tool,
+.layui-table-total,
+.layui-table-total tr,
+.layui-table[lay-even] tr:nth-child(even) {
+  background-color: #fafafa !important;
+}
+.layui-table td,
+.layui-table th {
+  border-bottom-color: #e5e5e5 !important;
+}
+.layui-form-checked[lay-skin=primary] i {
+  background-color: #12b7f5 !important;
+  border-color: #12b7f5 !important;
+}
+.layui-table-box .operation {
+  background-color: red;
+}
+.layui-laypage .layui-laypage-curr .layui-laypage-em {
+  background-color: #12b7f5 !important;
+}
+.layui-laypage input:focus,
+.layui-laypage select:focus {
+  border-color: #12b7f5 !important;
+}
+.layui-elem-quote {
+  border-color: #12b7f5 !important;
+}
+.nc-user-info .user-dropdown-select a:hover {
+  background-color: #12b7f5 !important;
+}
+.layui-nav .layui-nav-mored,
+.layui-nav-itemed > a .layui-nav-more {
+  border-color: transparent transparent #737373;
+}
+.layui-nav .layui-nav-more {
+  border-color: #737373 transparent transparent;
+}
+.layui-nav-itemed > .layui-nav-child {
+  background-color: initial !important;
+}
+a:hover {
+  color: #12b7f5 !important;
+}
+.image-box-active {
+  border-color: #12b7f5 !important;
+}
+.image-box-active:after {
+  border-top-color: #12b7f5 !important;
+  border-right-color: #12b7f5 !important;
+}
+.close-box {
+  color: #12b7f5 !important;
+}
+.wx-menu-item.active,
+.wx-sub-menu-item.active {
+  border-color: #12b7f5 !important;
+  color: #12b7f5;
+}
+.badge-success,
+.label-success {
+  background-color: #12b7f5 !important;
+}
+/*# sourceMappingURL=theme.css.map */

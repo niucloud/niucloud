@@ -1,0 +1,18 @@
+<script type="text/javascript">
+//弹出媒体库
+function media(type, name, count){
+    //媒体库
+    layui.use(['upload','laytpl'], function() {
+        var upload = layui.upload, laytpl = layui.laytpl;
+        layer.open({
+            type: 2,
+            title: "媒体库",
+            area: ['890px', '650px'],
+            fixed: false, //不固定
+            maxmin: false,
+            content: nc.url("file://sitehome/file/media", {type:type,name:name,count:count})
+        });
+    })
+
+}
+</script>

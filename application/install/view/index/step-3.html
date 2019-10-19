@@ -1,102 +1,104 @@
-{extend name="base"/} 
+{extend name="base"/}
+{block name="resources"}
+<style>
+    .install-content-procedure .content-procedure-item:first-of-type{
+        background: url("INSTALL_IMG/complete_two.png") no-repeat center / contain;
+        color: #fff;
+    }
+    .install-content-procedure .content-procedure-item:nth-child(2){
+        background: url("INSTALL_IMG/complete_four.png") no-repeat center / contain;
+        color: #fff;
+    }
+    .install-content-procedure .content-procedure-item:nth-child(3){
+        background: url("INSTALL_IMG/conduct.png") no-repeat center / contain;
+        color: #fff;
+    }
+</style>
+{/block}
+
 {block name="main"}
 <div id='postloader' class='waitpage'></div>
 <form action="{$root_url}/install.php/index/index?step=4" method="post" name="form_install">
-<div class="main">
-    <div class="pleft">
-        <dl class="setpbox t1">
-            <dt>安装步骤</dt>
-            <dd>
-                <ul>
-                    <li class="succeed">许可协议</li>
-                    <li class="succeed">环境检测</li>
-                    <li class="now">参数配置</li>
-                    <li>正在安装</li>
-                    <li>安装完成</li>
-                </ul>
-            </dd>
-        </dl>
-    </div>
-    <div class="pright">
-        <div class="pr-title"><h3>数据库设定</h3></div>
-        <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
-            <tr>
-                <td class="onetd"><strong>数据库主机：</strong></td>
-                <td>
-                    <input name="dbhost" id="dbhost" type="text" value="localhost" class="input-txt" onChange="TestDb()" />
-                    <small>一般为localhost</small>
-                </td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>Mysql端口：</strong></td>
-                <td>
-                    <input name="dbport" id="dbport" type="text" value="3306" class="input-txt"/>
-                    <small>一般为3306</small>
-                </td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>数据库用户：</strong></td>
-                <td>
-                    <input name="dbuser" id="dbuser" type="text" value="root" class="input-txt" onChange="TestDb()"/>
-                    <small>默认root</small>
-                </td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>数据库密码：</strong></td>
-                <td>
-                  <div style='float:left;margin-right:3px;'>
-                      <input name="dbpwd" id="dbpwd" type="text" class="input-txt" onChange="TestDb()" />
-                  </div>
-                  <div style='float:left' id='dbpwdsta'></div>
-                </td>
-            </tr>
-			<tr>
-                <td class="onetd"><strong>数据库名称：</strong></td>
-                <td>
-                    <div style='float:left;margin-right:3px;'><input name="dbname" id="dbname" type="text" value="" class="input-txt" onChange="HaveDB()" /></div>
-					<div style='float:left' id='havedbsta'></div>
-                </td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>数据库编码：</strong></td>
-                <td>
+    <div class="testing parameter">
+        <div class="testing-item">
+            <h3>数据库设定</h3>
+            <table border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
+                <tr>
+                    <td class="onetd">数据库主机：</td>
+                    <td>
+                        <input name="dbhost" id="dbhost" type="text" value="localhost" class="input-txt" onChange="TestDb()" />
+                        <small>一般为localhost</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="onetd">Mysql端口：</td>
+                    <td>
+                        <input name="dbport" id="dbport" type="text" value="3306" class="input-txt"/>
+                        <small>一般为3306</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="onetd">数据库用户：</td>
+                    <td>
+                        <input name="dbuser" id="dbuser" type="text" value="root" class="input-txt" onChange="TestDb()"/>
+                        <small>默认root</small>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="onetd">数据库密码：</td>
+                    <td>
+                        <div style='float:left;margin-right:3px;'>
+                            <input name="dbpwd" id="dbpwd" type="text" class="input-txt" onChange="TestDb()" />
+                        </div>
+                        <div style='float:left' id='dbpwdsta'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="onetd">数据库名称：</td>
+                    <td>
+                        <div style='float:left;margin-right:3px;'><input name="dbname" id="dbname" type="text" value="" class="input-txt" onChange="HaveDB()" /></div>
+                        <div style='float:left' id='havedbsta'></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="onetd">数据库编码：</td>
+                    <td>
                         <label class="install-code">UTF8</label>
 
-                </td>
-            </tr>
-        </table>
-        <div class="pr-title"><h3>管理员设定</h3></div>
-        <table width="726" border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
-            <tr>
-                <td class="onetd"><strong>站点名称：</strong></td>
-                <td><input name="site_name" id="site_name" type="text" value="" class="input-txt"/>
-                    <small id="mess_site_name">必填</small></td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>管理员用户名：</strong></td>
-                <td><input name="admin_name" id="admin_name" type="text" value="admin" class="input-txt" disabled="disabled"/>
-                <small id="mess_admin_name">默认admin,不可修改</small></td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>密码：</strong></td>
-                <td><input name="admin_pwd" id="admin_pwd" type="password" value="" class="input-txt"/>
-                <small id="mess_admin_pwd">必填</small></td>
-            </tr>
-            <tr>
-                <td class="onetd"><strong>确认密码：</strong></td>
-                <td><input name="admin_pwd2" id="admin_pwd2" type="password" value="" class="input-txt"/>
-                <small id="mess_admin_pwd2">必填</small></td>
-            </tr>
-        </table>
-
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="testing-item">
+            <h3>管理员设定</h3>
+            <table border="0" align="center" cellpadding="0" cellspacing="0" class="twbox">
+                <tr>
+                    <td class="onetd"><strong>站点名称：</strong></td>
+                    <td><input name="site_name" id="site_name" type="text" value="" class="input-txt"/>
+                        <small id="mess_site_name">必填</small></td>
+                </tr>
+                <tr>
+                    <td class="onetd"><strong>管理员用户名：</strong></td>
+                    <td><input name="admin_name" id="admin_name" type="text" value="admin" class="input-txt" disabled="disabled"/>
+                        <small id="mess_admin_name">默认admin,不可修改</small></td>
+                </tr>
+                <tr>
+                    <td class="onetd"><strong>密码：</strong></td>
+                    <td><input name="admin_pwd" id="admin_pwd" type="password" value="" class="input-txt"/>
+                        <small id="mess_admin_pwd">必填</small></td>
+                </tr>
+                <tr>
+                    <td class="onetd"><strong>确认密码：</strong></td>
+                    <td><input name="admin_pwd2" id="admin_pwd2" type="password" value="" class="input-txt"/>
+                        <small id="mess_admin_pwd2">必填</small></td>
+                </tr>
+            </table>
+        </div>
         <div class="btn-box">
             <input type="button" class="btn-back" value="后退" onclick="window.location.href='{$root_url}/install.php/index/index?step=2'" />
             <input type="button" class="btn-next" value="开始安装" onclick="doInstall();" id="form_submit" />
       </div>
     </div>
-</div>
-<div class="foot">
-</div>
 </form>
 
 {/block}

@@ -1,0 +1,28 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_NC_WAP_ARTICLE_CSS/category.css"/>
+{/block}
+{block name="head"}
+<header class="hui-header">
+	<div id="hui-back" onclick="window.history.back();"></div>
+	<h1>全部分类</h1>
+</header>
+{/block}
+{block name="main"}
+{php}
+$category_list = api("Article.Article.getArticleCategoryList",[]);
+{/php}
+<div class="category-block">
+	<span class="control-title">点击以下分类进入</span>
+	<ul class="control-list">
+		<li class="control-item">
+			<a href="{:addon_url('article://wap/article/index?category_id=0')}">推荐</a>
+		</li>
+		{foreach $category_list["data"] as $k => $v}
+			<li class="control-item">
+				<a href="{:addon_url('article://wap/article/index?category_id='.$v['category_id'])}">{$v.category_name}</a>
+			</li>
+		{/foreach}
+	</ul>
+</div>
+{/block}

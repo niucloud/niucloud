@@ -1,0 +1,42 @@
+.help-box {
+
+}
+.help-menu {
+    width: 210px;
+    float: left;
+}
+.help-content {
+	width: 990px;
+    float: left;
+}
+.crumbs-nav-item {
+    float: left;
+    margin-right: 8px;
+    line-height: 22px;
+}
+.crumbs-nav-main {
+    padding: 20px 0;
+}
+#tree_menu ul .active a:focus {
+    color: #fff !important;
+}
+#tree_menu ul .active a:hover {
+    color: #fff !important;
+}
+.empty {
+    text-align: center;
+    margin-top: 30px;
+}
+.article > header h1{
+  	text-align: center;
+    font-size: 18px;
+    /* line-height: 150%; */
+    font-weight: normal;
+    color: #666;
+    border-bottom: 1px dashed #ddd;
+    margin-top: 0px;
+    padding-bottom: 10px;
+}
+.help-menu .list-toggle.icon {
+	z-index: 0;
+}

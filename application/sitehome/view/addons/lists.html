@@ -3,24 +3,24 @@
 <link rel="stylesheet" href="SITEHOME_CSS/addons_lists.css">
 {/block}
 {block name="main"}
-<div class="nc-quote-box ">
+<div class="nc-quote-box">
     <blockquote class="layui-elem-quote layui-quote-nm">移动社交广告</blockquote>
     <div class="application-social-adv ">
-        <a class="application-adv-item" href="javascript:;">
+        <a class="application-adv-item" href="https://www.niucloud.com/cases/index.html" target="_blank">
             <h3 class="application-adv-title">牛云应用市场,总有您需要的</h3>
             <div class="application-adv-content">
                 <i class="application-adv-icon"></i>
                 <img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
             </div>
         </a>
-        <a class="application-adv-item" href="javascript:;">
+        <a class="application-adv-item" href="https://www.niucloud.com/authorization.html#Tab1" target="_blank">
             <h3 class="application-adv-title">购买牛云相关授权</h3>
             <div class="application-adv-content">
                 <i class="application-adv-icon"></i>
                 <img src="SITEHOME_IMG/social_adv_arrow.png" alt="">
             </div>
         </a>
-        <a class="application-adv-item" href="javascript:;">
+        <a class="application-adv-item"  href="https://www.niucloud.com" target="_blank">
             <h3 class="application-adv-title">注册成为开发人员,开发销售模块</h3>
             <div class="application-adv-content">
                 <i class="application-adv-icon"></i>
@@ -35,8 +35,8 @@
 	<blockquote class="layui-elem-quote layui-quote-nm">{$category_v.category_title}</blockquote>
     <div class="nc-item-block-parent">
         {volist name="$category_v['addon_list']" id="vo"}
-        <div class="nc-item-block fl size-lg drop">
-            <a class="nc-item-block-wrap" href="{notempty name="$vo['redirect_url']"}{$vo['redirect_url']}{else/}javascript:;{/notempty}">
+        <a class="nc-item-block fl size-lg drop" href="{notempty name="$vo['redirect_url']"}{$vo['redirect_url']}{else/}javascript:;{/notempty}">
+            <div class="nc-item-block-wrap">
                 <div class="nc-item-pic">
                     {if $vo['icon'] == ''}
                     <img src="SITEHOME_IMG/sitehome/tc1_91.png">
@@ -45,42 +45,46 @@
                     {/if}
                 </div>
                 <div class="nc-item-content">
-                    <div class="nc-content-title">{$vo.title}
-                        {if $vo['status_data']['status'] == 0}
-                        <span class="label"></span>
-                        {/if}
+                    <div class="nc-item-content-title">
+                        <div class="nc-item-tow-title">{$vo.title}</div>
+                        <div class="nc-item-tow-icon">
+                            {foreach $vo["support_app_type"] as $k => $v}
+                            <img src="__ROOT__/{$v['logo']}" alt="">
+                            {/foreach}
+                        </div>
                     </div>
-                    <p class="nc-content-desc">{$vo.description}</p>
-                    <div class="nc-icon">
-                        {foreach $vo["support_app_type"] as $k => $v}
-                        <img src="__ROOT__/{$v['logo']}" alt="">
-                        {/foreach}
-                    </div>
-                </div>
-            </a>
-            <div class="nc-item-float">
-                <div>
-                {if $is_system==1}
-                    {if $vo['status_data']['status'] == 0}
-                        <a><span class="layui-badge-dot"></span>未安装</a>
-                        <a class="nc-assist-fr" href="javascript:install('{$vo['name']}');">安装</a>
-                    {elseif $vo['status_data']['status'] == 1}
-                        <a><span class="layui-badge-dot layui-bg-blue"></span>已安装</a>
-                        <a class="nc-assist-fr" href="javascript:uninstall('{$vo['name']}');">卸载</a>
-                        <a class="nc-assist-fr" href="javascript:explain('{$vo['name']}');">说明</a>
-                    {/if}
-                {else/}
-                    <a class="nc-assist-fr" href="javascript:explain('{$vo['name']}');">说明</a>
-                {/if}
+                    <p class="nc-item-content-desc">{$vo.description}</p>
                 </div>
             </div>
-        </div>
+            <div class="nc-item-float-wrap">
+                <div class="nc-item-float" onclick="fn()">
+                    {if $is_system==1}
+                    {if $vo['status_data']['status'] == 0}
+                    <div><span class="layui-badge-dot"></span>未安装</div>
+                    <div class="nc-assist-fr" onclick="install('{$vo['name']}')">安装</div>
+                    {elseif $vo['status_data']['status'] == 1}
+                    <div><span class="layui-badge-dot layui-bg-blue"></span>已安装</div>
+                    <div>
+                        <span class="nc-assist-fr" onclick="uninstall('{$vo['name']}')">卸载</span>
+                        <span class="nc-assist-fr" onclick="explain('{$vo['name']}')">说明</span>
+                    </div>
+                    {/if}
+                    {else/}
+                    <div class="nc-assist-fr" onclick="explain('{$vo['name']}')">说明</div>
+                    {/if}
+                </div>
+            </div>
+        </a>
         {/volist}
     </div>
 </div>
 {/notempty}
 {/foreach}
 <script>
+function fn(){
+    event.preventDefault();
+    event.stopPropagation();
+}
 function explain(module) {
 	window.open(nc.url('sitehome/addons/info', {"name": module}));
 }
@@ -116,3 +120,5 @@ function install(module) {
 {/if}
 </script>
 {/block}
+
+yin

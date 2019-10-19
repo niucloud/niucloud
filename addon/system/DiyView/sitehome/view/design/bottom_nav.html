@@ -1,0 +1,36 @@
+<div style="height: 44px;"></div>
+<div id="hui-footer" style="background-color:{$bottom_nav_info.backgroundColor};">
+
+	{volist name="$bottom_nav_info.list" id="item"}
+	<a href="{:addon_url($item.link.h5_url)}" id="nav-home" data-hover-img="{:img($item.imgHoverUrl)}" data-hover-color="{$bottom_nav_info.textHoverColor}">
+
+		{if condition="($bottom_nav_info.type == 1 || $bottom_nav_info.type == 2) && $item.imgUrl"}
+		<div class="hui-footer-icons">
+				{if (strpos($item.link.h5_url, $method) !== false) }
+				{if condition="stristr($item.imgHoverUrl,'static') === false"}
+				<img src="{:img($item.imgHoverUrl)}"/>
+				{else/}
+				<img src="{:img(__PUBLIC__.'/'.$item.imgHoverUrl)}"/>
+				{/if}
+				{else/}
+				{if condition="stristr($item.imgUrl,'static') === false"}
+				<img src="{:img($item.imgUrl)}"/>
+				{else/}
+				<img src="{:img(__PUBLIC__.'/'.$item.imgUrl)}"/>
+				{/if}
+				{/if}
+		</div>
+		{/if}
+
+		{if condition="$bottom_nav_info.type == 1 || $bottom_nav_info.type == 3"}
+		<div class="hui-footer-text" style="font-size:{$bottom_nav_info.fontSize}px;{if (strpos($item.link.h5_url, $method) !== false) }color:{$bottom_nav_info.textHoverColor};{else/}color:{$bottom_nav_info.textColor};{/if}">{$item.title}</div>
+		{/if}
+
+	</a>
+	{/volist}
+
+</div>
+
+<script>
+var method = "{$method}";
+</script>

@@ -1,0 +1,121 @@
+@charset "utf-8";
+.comment{
+    padding:20px 16px 12px;
+    margin-bottom:30px;
+}
+.comment-title{
+    padding:10px 0;
+}
+.comment-count{
+	display:inline-block;
+	height:19px;
+	line-height:19px;
+	width:19px;
+	border-radius:50px;
+	text-align: center;
+	color:#FFF;
+    background-color: #2780E3;
+	font-size:13px;
+}
+.comment-block textarea{
+	display:block;
+    width:100%;
+    line-height: 1.42857143;
+	border-radius:4px;
+	
+    color: #333333;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+.comment-button{
+    text-align:right;
+    padding:5px 0;
+}
+
+.comment-button button{
+    padding:5px 10px;
+    color: #fff;
+    background-color: #2780E3;
+	border:1px solid #2780E3;
+	border-radius:5px;
+}
+.comment-item{
+    padding:10px 0;
+}
+.comment-item:not(:last-child){
+    border-bottom:1px solid #bbb;
+}
+
+.comment-member-info{
+    overflow:hidden;
+    font-size:12px;
+}
+.comment-head{
+    float:left;
+    width:45px;
+    height:45px;
+    line-height:45px;
+    margin-right:15px;
+}
+.comment-head img{
+    display:inline-block;
+    max-height:100%;
+    max-width:100%;
+    width:auto;
+    height:auto;
+}
+.comment-nickname{
+    color:#2780E3;
+}
+.comment-info{
+    float:left;
+    height:45px;
+}
+.comment-info .comment-name{
+    height:25px;
+    line-height:25px;
+}
+.comment-info .comment-time{
+    height:20px;
+    line-height:20px;
+    color:#999;
+}
+.comment-content{
+    padding:10px 0;
+    font-size:12px;
+}
+.comment-reply{
+    text-align:right;
+    padding-right:10px;
+    color:#2780E3;
+    font-size:12px;
+}
+.comment .comment-list-more{
+    text-align:center;
+    color:#2780E3;
+}
+.comment-reply-block{
+    display:none;
+}
+.comment-reply-block button{
+    margin-left:15px;
+    padding:2px 7px;
+    color:#FFF;
+    font-size:12px;
+}
+.comment-reply-block .reply-cancel{
+    background-color:#ff5722;
+    border:none;
+}
+.comment-reply-block .reply-submit{
+    background-color:#4caf50;
+    border:none;
+}
+.comment-reply-text{
+	display:block;
+	width:100%;
+	border-radius:5px;
+	padding:3px 4px;
+	border:1px solid #9999994d;
+	margin:6px 0;
+}

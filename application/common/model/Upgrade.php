@@ -270,7 +270,7 @@ class Upgrade
                     }
                     $primary = array();
                     $isincrement = array();
-                    if (strexists($sql, 'AUTO_INCREMENT')) {
+                    if (strstr($sql, 'AUTO_INCREMENT')) {
                         $isincrement = $field;
                         $sql =  str_replace('AUTO_INCREMENT', '', $sql);
                         foreach ($schema1['fields'] as $field) {

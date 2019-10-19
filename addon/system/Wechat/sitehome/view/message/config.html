@@ -1,0 +1,45 @@
+{extend name="sitehome@style/base" /}
+{block name="resources"}
+<style>
+	.layui-elem-quote{color: #999;}
+</style>
+{/block}
+{block name="main"}
+<blockquote class="layui-elem-quote">
+	<p><i class="layui-icon layui-icon-tips"></i>  注意：请将公众平台模板消息所在行业选择为：消费品/消费品，其他/其他，所选行业不一致将会导致模板消息不可用。</p>
+	<p><i class="layui-icon layui-icon-tips"></i>  公众平台模板消息所在行业选择一个月只能修改一次,请谨慎选择。</p>
+</blockquote>
+<div class="layui-form">
+
+  	<div class="layui-form-item">
+    	<label class="layui-form-label sm">是否开启</label>
+	    <div class="layui-input-inline">
+			<input type="checkbox" name="wechat_is_open" lay-skin="switch" value="1" lay-filter="wechat_is_open" {if $config['status'] == 1}checked{/if}>
+	    </div>
+  	</div>
+	<input type="hidden" name="keyword" value="{$keyword}">
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+layui.use('form', function(){
+	var form = layui.form;
+	var repeat_flag = false;//防重复标识
+    form.on('switch(wechat_is_open)', function(data){
+		var status = data.elem.checked ? 1 : 0;
+        $.ajax({
+            type : "post",
+            url : '{:addon_url("Wechat://sitehome/message/config")}',
+            data : {
+                "status":status
+            },
+            dataType : "JSON",
+            success : function(res) {
+				repeat_flag = false;
+                layer.msg(res.message);
+            }
+        });
+    });
+});
+</script>
+{/block}

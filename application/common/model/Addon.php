@@ -364,7 +364,7 @@ class Addon
 			return "'" . $var . "'";
 		}, $site_module), ',');
 		
-		$sql = "SELECT * FROM nc_addon na WHERE ((FIND_IN_SET('" . $site_info['addon_app'] . "', na.support_addon) AND na.type='ADDON_MODULE') OR na.type='ADDON_SYSTEM' OR na.name in ($site_module_str)) and visble = 1;";
+		$sql = "SELECT * FROM nc_addon na WHERE ((FIND_IN_SET('" . $site_info['addon_app'] . "', na.support_addon) AND na.type='ADDON_MODULE')  OR na.name in ($site_module_str)) and visble = 1;";
 		$addons_list = model('nc_addon')->query($sql);
 		foreach ($addons_list as $k => $v) {
 			
@@ -408,7 +408,7 @@ class Addon
 			return "'" . $var . "'";
 		}, $site_module), ',');
 		
-		$sql = "SELECT name,icon,title,description,status FROM nc_addon na WHERE (na.type='ADDON_MODULE' and na.name in ($site_module_str) and visble = 1) or na.support_addon like '%" . $site_info['addon_app'] . "%';";
+		$sql = "SELECT name,icon,title,description,status,support_app_type FROM nc_addon na WHERE (na.type='ADDON_MODULE' and na.name in ($site_module_str) and visble = 1) or na.support_addon like '%" . $site_info['addon_app'] . "%';";
 		$addons_list = model('nc_addon')->query($sql);
 		
 		if (empty($addons_list)) {
@@ -1166,7 +1166,7 @@ class Addon
 		if (!empty($pre_addon)) {
 			return error('', '[' . $pre_addon[0]['title'] . ']插件属于预装载插件，请卸载对应插件后再卸载当前插件!');
 		}
-
+		
 		//检测站点中是否存在该插件的应用
 		$count = model("nc_site")->getCount([ 'addon_app' => $addon_name ]);
 		$class_name = get_addon_class($addon_name);
@@ -1686,74 +1686,74 @@ class Addon
 	}
 	
 	/***************************************************************************部署  安装插件*************************************************************************************/
-    /**
-     * 选择
-     * @return array
-     */
-    public function installAllAddon()
-    {
-        try {
-            // 初始化菜单的时候 应该是还原成最开始的
-            $addon_list = $this->getAdminUninstallList();//获取所有插件
-            $addon_data = $this->screenModule($addon_list);//筛选出应用
-            $module_list = $addon_data["module_list"];//应用
-            //递归由上而下安装插件
-            $addon_list = $this->recursiveAddon(array_column($addon_list,null, "name"),array_column($addon_list,'name', "name"));//阶梯化插件数据
-
-            return success($module_list);
-        } catch (\Exception $e) {
-
-            return error('', $e->getMessage());
-        }
-    }
-
-    /**
-     * 筛选应用
-     * @param $addon_list
-     * @return array
-     */
-    public function screenModule($addon_list)
-    {
-        $module_list = [];
-        foreach ($addon_list as $k => $v) {
-            //筛选应用
-            if ($v["type"] == "ADDON_APP") {
-                $module_list[] = [ "name" => $v["name"] ];
-                unset($addon_list[ $k ]);
-            }
-        }
-        $data = array(
-            "addon_list" => $addon_list,
-            "module_list" => $module_list
-        );
-        return $data;
-    }
-
-    /**
-     * 插件递归整合阶层位置
-     * @param $addon_list
-     */
-    public function recursiveAddon($addon_list = [], $addon_column_array = [])
-    {
-        $is_install = false;
-        foreach ($addon_list as $list_k => $list_v) {
-            $temp_addon = empty($list_v["preset_addon"]) ? [] : explode(",", $list_v["preset_addon"]);
-            $intersect = array_intersect($temp_addon, $addon_column_array);
-            if(empty($intersect)){
-                $is_install = true;
-                unset($addon_list[ $list_k ]);
-                unset($addon_column_array[ $list_k ]);
-                $res = $this->install($list_v["name"]);//安装插件
-            }
-        }
-        if($is_install){
-            $this->recursiveAddon($addon_list, $addon_column_array);
-        }
-
-        return success();
-    }
-
-    /**
+	/**
+	 * 选择
+	 * @return array
+	 */
+	public function installAllAddon()
+	{
+		try {
+			// 初始化菜单的时候 应该是还原成最开始的
+			$addon_list = $this->getAdminUninstallList();//获取所有插件
+			$addon_data = $this->screenModule($addon_list);//筛选出应用
+			$module_list = $addon_data["module_list"];//应用
+			//递归由上而下安装插件
+			$addon_list = $this->recursiveAddon(array_column($addon_list, null, "name"), array_column($addon_list, 'name', "name"));//阶梯化插件数据
+			
+			return success($module_list);
+		} catch (\Exception $e) {
+			
+			return error('', $e->getMessage());
+		}
+	}
+	
+	/**
+	 * 筛选应用
+	 * @param $addon_list
+	 * @return array
+	 */
+	public function screenModule($addon_list)
+	{
+		$module_list = [];
+		foreach ($addon_list as $k => $v) {
+			//筛选应用
+			if ($v["type"] == "ADDON_APP") {
+				$module_list[] = [ "name" => $v["name"] ];
+				unset($addon_list[ $k ]);
+			}
+		}
+		$data = array(
+			"addon_list" => $addon_list,
+			"module_list" => $module_list
+		);
+		return $data;
+	}
+	
+	/**
+	 * 插件递归整合阶层位置
+	 * @param $addon_list
+	 */
+	public function recursiveAddon($addon_list = [], $addon_column_array = [])
+	{
+		$is_install = false;
+		foreach ($addon_list as $list_k => $list_v) {
+			$temp_addon = empty($list_v["preset_addon"]) ? [] : explode(",", $list_v["preset_addon"]);
+			$intersect = array_intersect($temp_addon, $addon_column_array);
+			if (empty($intersect)) {
+				$is_install = true;
+				unset($addon_list[ $list_k ]);
+				unset($addon_column_array[ $list_k ]);
+				$res = $this->install($list_v["name"]);//安装插件
+			}
+		}
+		if ($is_install) {
+			$this->recursiveAddon($addon_list, $addon_column_array);
+		}
+		
+		return success();
+	}
+	
+	/**
 	 * 初始化
 	 */
 	public function getAddonCategory($const)
@@ -1877,7 +1877,7 @@ class Addon
 			$preset_addon = explode(",", $addon_info["preset_addon"]);
 			$addon_modules = explode(",", $site_info["addon_modules"]);
 			$system_addon = array_intersect($preset_addon, $addon_modules);
-            $system_addon[] = $site_info["addon_app"];
+			$system_addon[] = $site_info["addon_app"];
 			$module_addon = array_diff($addon_modules, $system_addon);
 			return success(array( "system" => $system_addon, "mobule" => $module_addon ));
 			

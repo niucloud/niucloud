@@ -63,13 +63,19 @@
             <input type="text" name="app_secret" required placeholder="请输入秘钥" autocomplete="off" class="layui-input nc-len-mid" lay-verify="app_secret" value="{$auth_info['value']['app_secret']}">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label sm"></span>当前版本</label>
+        <div class="layui-input-inline">
+        <span>{$sys_version_no}</span>
+        </div>
+    </div>
     <div class="nc-form-row sm">
          {if condition="$auth_info['value'] neq ''"}
              <button class="layui-btn layui-btn-disabled btn-already">已绑定</button>
          {else/}
              <button class="layui-btn" lay-submit lay-filter="*">立即绑定</button>
          {/if}
-        <button class="layui-btn" onclick="list()">查看授权列表</button>
+        <a class="layui-btn" href="{:addon_url('admin/system/upgrade')}">检测升级</button>
         <br/>
         <div class="layui-form-mid layui-word-aux">没有注册牛云的客户？<a href="https://www.niucloud.com" target="_blank">立即注册</a></div>
     </div>

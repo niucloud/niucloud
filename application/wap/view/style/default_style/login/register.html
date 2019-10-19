@@ -2,8 +2,8 @@
 {block name="resources"}
 <link rel="stylesheet" href="WAP_CSS/login_css/register.css">
 {/block}
+{block name="head"}{/block}
 {block name="main"}
-
 <div class="hui-wrap">
 	<div class="hui-center-title" style="margin-top:35px;"><h1 style="border:0px;">注册成为新用户</h1></div>
 	<div style="margin:20px 10px; margin-bottom:15px;" class="hui-form" id="form_register">
@@ -68,15 +68,19 @@
 		{php}
 		$info = api("System.Manage.agreement",[]);
 		{/php}
-		<span ><input type="checkbox" name="agreement" value="0"></span>
-		<span>我已阅读并同意</span>
-		{if !empty($info['data'])}
-		<a  style="color:#3280fc;" href="{:url("wap/login/agreement")}">《注册协议》</a>
-		{else /}
-		<a  style="color:#3280fc;" href="javascript:void(0)">《注册协议》</a>
-		{/if}
+		
+		<div class="hui-form-radios">
+			<input type="checkbox" name="agreement" value="1" id="agreement">
+			<label for="agreement">我已阅读并同意</label>
+			{if !empty($info['data'])}
+			<a  style="color:#3280fc;" href="{:url("wap/login/agreement")}">《注册协议》</a>
+			{else /}
+			<a  style="color:#3280fc;" href="javascript:void(0)">《注册协议》</a>
+			{/if}
+		</div>
+		
 	</div>
-	<div style="padding:10px; padding-top:10px;">
+	<div style="padding:10px;">
 		<button type="button" class="hui-button hui-button-large hui-primary" id="submit">立即注册</button>
 	</div>
 </div>
@@ -87,10 +91,10 @@
 <input type="hidden" id="hidden_pwd_length" value="{$register_config['pwd_length']}">
 {/notempty}
 {/block}
+{block name="bottom"}{/block}
 {block name="script"}
 <script type="text/javascript" src="__STATIC__/ext/hui/js/hui-form.js"></script>
 <script>
-var cookie_name = "access_token_{$site_info['site_id']}";
 var tag = "{$tag}";
 {notempty name="$data"}
 var data = {$data};

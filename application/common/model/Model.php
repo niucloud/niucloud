@@ -352,4 +352,15 @@ class Model
     {
         return Db::name($this->table)->where($where)->setDec($field, $num);
     }
+
+    /**
+     * 获取最大值
+     * @param array $where
+     * @param $field
+     * @return mixed
+     */
+    final public function getMax($where = [], $field){
+
+        return Db::name($this->table)->where($where)->max($field);
+    }
 }

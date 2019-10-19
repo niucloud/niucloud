@@ -13,7 +13,6 @@ namespace app\common\controller;
 
 use app\common\model\Site;
 use util\api\SignClient;
-use think\Cookie;
 
 /**
  * 站点基类
@@ -74,6 +73,8 @@ class BaseSite extends BaseController
 			//网站标题
 			$this->assign("title", "");
 			
+			$this->assign('site_id', $this->siteId);
+			
 			$this->assign('web_style', $this->web_style);
 			
 			$this->assign('wap_style', "wap@style/$this->wap_style/base");
@@ -89,7 +90,7 @@ class BaseSite extends BaseController
 			$this->assign('web_member_base', "addon/app/" . $this->site_info['addon_app'] . "/web/view/" . $this->web_style . "/member/member_base.html");
 			//手机端主页风格加载
 			$this->assign('wap_base', "addon/app/" . $this->site_info['addon_app'] . "/wap/view/" . $this->wap_style . "/base.html");
-
+			
 			//手机端会员风格加载
 			$this->assign('wap_member_base', "addon/app/" . $this->site_info['addon_app'] . "/wap/view/" . $this->wap_style . "/member/member_base.html");
 			
@@ -101,20 +102,14 @@ class BaseSite extends BaseController
 	 */
 	protected function initMember()
 	{
-		$this->access_token = Cookie::get("access_token_" . request()->siteid());
-		$this->assign("access_token", $this->access_token);
-		if (!empty($this->access_token)) {
-			$member_info = cache("member_info_" . SITE_ID . $this->access_token);
-			if (empty($member_info)) {
-				$member_info = api("System.Member.memberInfo", [ 'access_token' => $this->access_token ]);
-				
-				if ($member_info['code'] == 0) {
-					cache("member_info_" . SITE_ID . $this->access_token, $member_info);
-				}
-			}
-			$this->member_info = $member_info['data'];
-			$this->assign("member_info", $member_info);
+		$check = check_auth();
+		if ($check['code'] == 0) {
+			$check = $check['data'];
+			$this->access_token = $check['access_token'];
+			$this->assign("access_token", $this->access_token);
 			
+			$this->member_info = $check;
+			$this->assign("member_info", $this->member_info);
 		}
 	}
 	

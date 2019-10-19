@@ -43,6 +43,7 @@ class Index extends BaseSiteHome
 		
 		$addon["support_app_type"] = getSupportPort($addon["support_app_type"]);
 		$this->assign("addon_info", $addon);
+		$this->assign("title", "概况");
 		$res = hook('appHomeIndex', [ 'addon_app' => $app ]);
 		if (empty($res)) {
 			$this->loadEmptyPage();

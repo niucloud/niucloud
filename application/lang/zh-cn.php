@@ -17,7 +17,7 @@ return [
 	
 	'ADDON_NOT_EXIST' => '插件不存在',
 	'ADDON_IS_EXIST' => '插件已经存在',
-    'ADDON_ADD_CATEGORY_FAIL' => '插件分类安装失败',
+	'ADDON_ADD_CATEGORY_FAIL' => '插件分类安装失败',
 	'ADDON_NAME_NOT_EXIST' => '插件标识已经存在，请重新输入',
 	'ADDON_MISSIMG_ADDON_NAME' => '缺少插件标识',
 	'ADDON_INFO_ERROR' => '插件信息有误，请检查信息缺失或插件标识重复',
@@ -57,6 +57,7 @@ return [
 	'NS_LEVEL_NAME_EXISTED' => '该会员等级已存在',
 	'NS_LABEL_NAME_EXISTED' => '该会员标签已存在',
 	'RESULT_ERROR' => '添加失败',
+	'GROUP_EXIST_ERROR' => '当前成长值的会员组已存在',
 	
 	'DELIVERY_O2O_OPEN_ADDRESS_FAIL' => '站点地址配置完毕后才能开启本地配送',
 	

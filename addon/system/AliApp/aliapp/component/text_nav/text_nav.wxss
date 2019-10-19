@@ -1,0 +1,12 @@
+.text-navigation-h5 .ul {
+  overflow-y: auto;
+  white-space: nowrap;
+  margin: 0;
+  padding: 0;
+}
+
+.text-navigation-h5 .ul .li {
+  display: inline-block;
+  min-width: 25%;
+  text-overflow: ellipsis;
+}

@@ -39,12 +39,22 @@
 				</a>
 			</div>
 			<ul class="layui-nav layui-layout-left niu-side-nav">
-				{if condition="$site_info['addon_app']=='NcApplet'"}
-				<li class="layui-nav-item {if condition="strpos($current_url,'sitehome/index/index') !== false"}layui-this{/if}">
-				<a href="{:addon_url('ncapplet://sitehome/index/index')}">
-					<!--<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>-->
-					<span>首页</span>
-				</a>
+				{if condition="$site_info['addon_app']=='Applet'"}
+				<!--<li class="layui-nav-item {if condition="strpos($current_url,'sitehome/index/index') !== false"}layui-this{/if}">-->
+					<!--<a href="{:addon_url('applet://sitehome/index/index')}">-->
+						<!--&lt;!&ndash;<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>&ndash;&gt;-->
+						<!--<span>首页</span>-->
+					<!--</a>-->
+				<!--</li>-->
+				<li class="layui-nav-item {if condition="strpos($current_url,'/sitehome/app/moreapp') !== false || strpos($current_url,'sitehome/index/index') !== false"}layui-this{/if}">
+					<a href="{:addon_url('applet://sitehome/app/moreapp')}">
+						<span>应用</span>
+					</a>
+				</li>
+				<li class="layui-nav-item {if condition="strpos($current_url,'sitehome/member/memberlist') !== false"}layui-this{/if}">
+					<a href="{:addon_url('sitehome/member/memberlist')}">
+						<span>管理</span>
+					</a>
 				</li>
 				{/if}
 			</ul>
@@ -82,7 +92,7 @@
 			
 			<li class="nc-site-info">
 				<div class="site-img">
-					<a href="{:addon_url('ncapplet://sitehome/index/index')}">
+					<a href="{:addon_url('applet://sitehome/index/index')}">
 						{notempty name="$app_addon_info"}
 						<img src="{:img($app_addon_info.icon)}" class="layui-logo-icon"/>
 						{else/}
@@ -103,10 +113,10 @@
 					{/foreach}
 				</div>
 				<div class="operation nc-border-color-e5">
-					{if condition="$site_info['addon_app']=='NcApplet'"}
-					<a href="{:addon_url('ncapplet://sitehome/index/index')}" class="nc-text-color-999">返回平台</a>
+					{if condition="$site_info['addon_app']=='Applet'"}
+					<a href="{:addon_url('applet://sitehome/index/index')}" class="nc-text-color-999">返回平台</a>
 					<span class="nc-text-color-999">|</span>
-					<a href="{:addon_url('ncapplet://sitehome/app/moreapp')}" class="nc-text-color-999">切换应用</a>
+					<a href="{:addon_url('applet://sitehome/app/moreapp')}" class="nc-text-color-999">切换应用</a>
 					{/if}
 				</div>
 				{else/}

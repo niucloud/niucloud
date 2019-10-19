@@ -1,0 +1,156 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="DIYVIEW_CSS/adv.css">
+{/block}
+{block name="main"}
+<div class="layui-form">
+	
+	<div class="product-basics">
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>广告名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="adv_title" lay-verify="required" placeholder="请输入广告名称" value="{$info.adv_title}" autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label"><span class="required">*</span>关键词</label>
+			<div class="layui-input-inline">
+				{if $info}
+				<input type="text" name="keywords" lay-verify="required" placeholder="请输入广告关键词" value="{$info.keywords}" autocomplete="off" class="layui-input" onkeyup="value=value.replace(/[^a-zA-Z]/g,'')" disabled>
+				{else/}
+				<input type="text" name="keywords" lay-verify="required" placeholder="请输入广告关键字" value="" autocomplete="off" class="layui-input" onkeyup="value=value.replace(/[^A-Z_]/g,'')">
+				{/if}
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-inline">
+				<input type="number" name="sort" value="{$info.sort}" placeholder="请输入排序"  autocomplete="off" class="layui-input">
+			</div>
+		</div>
+
+		{if $info}
+			{if condition="$info.is_system == 1"}
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否显示</label>
+				<div class="layui-input-block">
+					<input type="checkbox" name="is_show" value="1" lay-skin="primary" title="显示" checked disabled>
+				</div>
+			</div>
+			{else/}
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否显示</label>
+				<div class="layui-input-block">
+					<input type="checkbox" name="is_show" value="1" lay-skin="primary" title="显示" {if condition="$info.is_show == 1"} checked=""{/if}>
+				</div>
+			</div>
+	        {/if}
+		{else/}
+			<div class="layui-form-item">
+				<label class="layui-form-label">是否显示</label>
+				<div class="layui-input-inline">
+					<input type="checkbox" name="is_show" value="1" lay-skin="primary" title="显示" checked="">
+				</div>
+			</div>
+		{/if}
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">显示方式</label>
+			<div class="layui-input-inline">
+				{if $info}
+				<input type="radio" name="adv_display" lay-filter = "display" value="1" title="图片" {if condition="$info.adv_display == 1"} checked=""{/if}>
+				<input type="radio" name="adv_display" lay-filter = "display" value="2" title="轮播" {if condition="$info.adv_display == 2"} checked=""{/if}>
+				{else/}
+				<input type="radio" checked name="adv_display" lay-filter="display" value="1" title="图片">
+				<input type="radio" name="adv_display" lay-filter="display" value="2" title="轮播">
+				{/if}
+			</div>
+		</div>
+
+		<div class="layui-form-item display1" {notempty name="$info"}style="display: none;"{/notempty}>
+			<label class="layui-form-label">广告布局</label>
+			<div class="layui-input-block selected-template-list">
+				<ul>
+					<li {if condition="$info.adv_layout == 0"} class="selected" {/if} id="layout0" value="0" data-num="1" title="1行1个">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_of1.png">
+						<div>1行1个</div>
+					</li>
+					<li {if condition="$info.adv_layout == 1"} class="selected" {/if}  id="layout1" value="1" data-num="2" title="1行2个">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_of2.png">
+						<div>1行2个</div>
+					</li>
+					<li {if condition="$info.adv_layout == 2"} class="selected" {/if}  id="layout2" value="2" data-num="3" title="1行3个">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_of3.png">
+						<div>1行3个</div>
+					</li>
+					<li {if condition="$info.adv_layout == 3"} class="selected" {/if}  id="layout3" value="3" data-num="4" title="1行4个">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_of4.png">
+						<div>1行4个</div>
+					</li>
+					<li {if condition="$info.adv_layout == 4"} class="selected" {/if}  id="layout4" value="4" data-num="4" title="2左2右">
+						<img src="DIYVIEW_IMG/rubik_cube_row2_lt_of2_rt.png">
+						<div>2左2右</div>
+					</li>
+					<li {if condition="$info.adv_layout == 5"} class="selected" {/if}  id="layout5" value="5" data-num="3" title="1左2右">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_lt_of2_rt.png">
+						<div>1左2右</div>
+					</li>
+					<li {if condition="$info.adv_layout == 6"} class="selected" {/if}  id="layout6" value="6" data-num="3" title="1上2下">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_tp_of2_bm.png">
+						<div>1上2下</div>
+					</li>
+					<li {if condition="$info.adv_layout == 7"} class="selected" {/if}  id="layout7" value="7" data-num="4" title="1左3右">
+						<img src="DIYVIEW_IMG/rubik_cube_row1_lt_of1_tp_of2_bm.png">
+						<div>1左3右</div>
+					</li>
+				</ul>
+				<div class="layui-form-mid layui-word-aux" style="float: none;">图片优先级：上>下>左>右</div>
+			</div>
+		</div>
+
+		<div id="map_box"></div>
+		<div id="pics_box"></div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label"></label>
+			<div class="layui-input-inline">
+				<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+				<a href="javascript:history.back(-1);" class="layui-btn layui-btn-primary">返回</a>
+			</div>
+		</div>
+	</div>
+	
+	<input type="hidden" id="adv_id" value="{$adv_id}">
+</div>
+
+<div class="upload_box">
+	{:hook("fileUpload", ['name' => 'map0', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map1', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map2', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map3', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map4', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map5', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map6', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileUpload", ['name' => 'map7', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '3000'], '', true)}
+	{:hook("fileManage", ["name" => "pics", 'type' => 'multiple', 'file_type' => 'IMAGE','size' => '2000', 'title'=> ''], '', true)}
+</div>
+{/block}
+{block name="script"}
+{notempty name="$info"}
+<script>
+var init_data = {};
+init_data.adv_type=parseInt( "{$info.adv_type}");
+init_data.adv_display=parseInt( "{$info.adv_display}");
+init_data.adv_layout=parseInt( "{$info.adv_layout}");
+init_data.keywords = "{$info.keywords}";
+try{
+    init_data.adv_json= {$info.adv_json};
+}catch (e){
+    console.log(e);
+}
+</script>
+{/notempty}
+<script src="DIYVIEW_JS/adv.js"></script>
+{/block}

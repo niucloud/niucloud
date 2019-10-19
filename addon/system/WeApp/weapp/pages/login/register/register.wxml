@@ -1,0 +1,41 @@
+<view class="register">
+
+  <view class="logo">
+    <image class="logo-img" src="{{config_info.logo == '' ? '/images/component/logo.png' : config_info.logo}}" />
+  </view>
+
+  <view class="item-input">
+    <input type="text" class="mui-input" placeholder="账号" bindinput="inputValue" data-type="username" value="{{username}}" />
+    <block wx:if="{{username != ''}}">
+      <image class="span clear" src="/images/component/input_clear.png" catchtap="clear" data-type="username" />
+    </block>
+  </view>
+
+  <view class="item-input">
+    <input type="password" class="mui-input" placeholder="密码" bindinput="inputValue" data-type="password" value="{{password}}" />
+    <block wx:if="{{password != ''}}">
+      <image class="span clear" src="/images/component/input_clear.png" catchtap="clear" data-type="password" />
+    </block>
+  </view>
+
+  <view class="item-input">
+    <input type="password" class="mui-input" placeholder="确认密码" bindinput="inputValue" data-type="cfpassword" value="{{cfpassword}}" />
+    <block wx:if="{{cfpassword != ''}}">
+      <image class="span clear" src="/images/component/input_clear.png" catchtap="clear" data-type="cfpassword" />
+    </block>
+  </view>
+
+  <view class="regsiter-agreement">
+    <view class="span agreement-checkbox">
+      <checkbox class="checkbox" color="#ff5000" checked="{{agree_protocol}}" catchtap="agreeProtocol"></checkbox>
+    </view>
+    <view class="span">我已阅读并同意</view>
+    <view class="a">《用户注册协议》</view>
+  </view>
+
+  <view class="item-btn">
+    <button type="button" class="btn-register" catchtap="register">注册</button>
+  </view>
+
+  <navigator class="a" class="go-login item" url="/pages/login/login/login">已有账号？ 去登陆</navigator>
+</view>

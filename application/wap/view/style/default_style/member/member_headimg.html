@@ -1,0 +1,99 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back" onclick="window.history.back();"></div>
+    <h1>{$title}</h1>
+</header>
+{/block}
+{block name="main"}
+<div class="hui-wrap">
+    <div id="hui-img-cuter-select">
+        <div id="hui-img-cuter-t1">+</div>
+        <div id="hui-img-cuter-t2">请选择图片</div>
+    </div>
+</div>
+
+<!--<div style="margin-top:28px;">-->
+    <!--<button type="button" class="hui-button hui-button-large" id="select" style="background:#FFFFFF; " >-->
+        <!--重新选择-->
+    <!--</button>-->
+<!--</div>-->
+<!--<div style="margin-top:28px;">-->
+    <!--<button type="button" class="hui-button hui-button-large" id="submit" style="background:#FFFFFF; " >-->
+        <!--保存-->
+    <!--</button>-->
+<!--</div>-->
+
+<div id="hui-footer">
+    <button type="button" class="hui-button hui-fl" style="margin:2px 0px 0px 8px;" id="selectImgBtn">重新选择</button>
+    <button type="button" class="hui-button hui-primary hui-fr" style="margin:2px 8px 0px 0px;" id="uploadBtn">保存</button>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript" src="__STATIC__/ext/hui/js/hui-image-cuter.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    /*
+    huiImgCuter 参数
+    1. 宽度和高度的比例 高度 / 宽度 默认 1
+    2. 最终保存图片的宽度 默认 200px 高度根据宽高比自动调整
+    */
+    var cuter = new huiImgCuter();
+    //绑定底部的选择按钮
+    cuter.bindSelect("#selectImgBtn");
+    //保存照片
+    hui('#uploadBtn').click(function(){
+        //获取图片数据
+        var imgData = cuter.getImgData();
+        if(!imgData){hui.toast('请选择图片'); return;}
+        hui.loading('上传图片...');
+        var img_data = {img : imgData};
+        imgupload("File.File.cropper", img_data, function (img_res) {
+            hui.iconToast(img_res.message);
+            var data = {headimg : img_res.data, access_token : ACCESS_TOKEN};
+            if(img_res.code == 0){
+                nc.api("System.Member.modifyFace", data, function (res) {
+                    hui.iconToast(res.message);
+                    setTimeout(function(){hui.toast(res.message); hui.closeLoading();}, 2000);
+                    if(res.code == 0){
+                        window.history.go(-1);
+                    }
+                }, false);
+            }
+        }, false);
+
+        /*
+        //上传到服务端演示代码
+        hui.post(
+            'http://192.168.31.188/uper.php',
+            {img:imgData},
+            function(data){
+                hui.closeLoading();
+                hui.toast('上传成功!');
+            }
+        );
+        */
+        // setTimeout(function(){hui.toast('上传成功，演示的！'); hui.closeLoading();}, 2000);
+    });
+
+    function imgupload(method, param, callback, async){
+        // async true为异步请求 false为同步请求
+        var async = async != undefined ? async : true;
+        param.app_key = APP_KEY;
+        $.ajax({
+            type: 'post',
+            url: API_URL + '?s=/api/index/get/method/' + method + '/version/1.0',
+            dataType: "JSON",
+            async: async,
+            data: {'param': JSON.stringify(param), method: method},
+            success: function (res) {
+                if (callback) callback(eval("(" + res + ")"));
+            }
+        });
+    }
+</script>
+
+{/block}

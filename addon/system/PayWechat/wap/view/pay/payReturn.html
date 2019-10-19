@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>{:lang('pay')}</title>
+<script src="__TEMP__/{$style}/public/js/jquery.js"></script>
+<style>
+body{padding:0;margin:0;}
+article{
+	text-align: center;
+	margin:20px auto;
+}
+article h3{
+	font-weight: normal;
+	color:#373737;
+	font-family: "{:lang('microsoft_yahei')}", "Helvetica Neue", Helvetica, Arial,sans-serif;
+}
+article p{
+	color:#00C12C;
+	font-family: "{:lang('microsoft_yahei')}", "Helvetica Neue", Helvetica, Arial,sans-serif;
+}
+article a{
+	border:0;
+	background: #01C12D;
+	color:#ffffff;
+	border-radius: 3px;
+	padding:10px;
+	width:90%;
+	font-size:16px;
+	outline: none;
+	font-family: "{:lang('microsoft_yahei')}", "Helvetica Neue", Helvetica, Arial,sans-serif;
+	margin:15px 0;
+}
+.other-view{max-width: 90%;width:90%;margin-top:30px;}
+</style>
+</head>
+<body>
+{if condition="$status==-1"}
+<div style="position: absolute;width: 100%;height: 100%;background: rgba(0,0,0,0.8);text-align: center;">
+<img src="__TEMP__/{$style}/public/css/pay/other_view.png" class="other-view "/>
+</div>
+{else/}
+<article>
+	{if condition="$status==1"}
+		<div class="pay-block">
+			<img src="__TEMP__/{$style}/public/css/pay/pay_success.png"/>
+		</div>
+		<h3>支付成功!</h3>
+	
+		<p>交易流水号：{$out_trade_no}</p>
+
+	{else/}
+		<div class="pay-block">
+			<img src="__TEMP__/{$style}/public/css/pay/pay_error.png"/>
+		</div>
+		<h3>支付失败！</h3>
+		<p style="color:#FF3C3C;">交易流水号：{$out_trade_no}</p>
+	{/if}
+	<a href = '{$pay_info.return_url}&out_trade_no={$out_trade_no}&status={$status}'>查看订单</a>
+{/if}
+</article>
+</body>
+</html>

@@ -1,0 +1,137 @@
+{extend name="style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="layui-form">
+    <div class="register-basics">
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否允许注册会员</label>
+            <div class="layui-input-block">
+                <input type="checkbox" value="1" name="is_allow_register" lay-skin="switch" {if condition="!empty($info) && $info['is_allow_register'] eq '1'" }checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">设置为不允许则游客无法注册成为站点会员</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注册字段</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="register_type_common" value="1" lay-skin="primary" title="账号" {if condition="!empty($info) && $info['register_type_common'] eq '1'" }checked{/if}>
+                <input type="checkbox" name="register_type_mobile" value="1" lay-skin="primary" title="手机号" {if condition="!empty($info) && $info['register_type_mobile'] eq '1'" }checked{/if}>
+                <input type="checkbox" name="register_type_email" value="1" lay-skin="primary" title="邮箱" {if condition="!empty($info) && $info['register_type_email'] eq '1'" }checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">至少选择一个字段或多个字段组合</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">前台验证码是否开启</label>
+            <div class="layui-input-block">
+                <input type="checkbox" value="1" name="web_code" lay-skin="switch" {if condition="!empty($info) && $info['web_code'] eq '1'" }checked{/if}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机短信验证</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="mobile_code" value="1" lay-skin="switch" {if condition="!empty($info) && $info['mobile_code'] eq '1'" }checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">注册字段必须选择手机才能使用此功能</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱验证</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="email_code" value="1" lay-skin="switch" {if condition="!empty($info) && $info['email_code'] eq '1'" }checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">注册字段必须选择邮箱才能使用此功能</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">随机用户名前缀</label>
+            <div class="layui-input-block">
+                <input type="text" name="random_name_prefix" class="layui-input nc-len-mid" {notempty name="$info" }value="{$info['random_name_prefix']}"{/notempty}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">当注册字段没有选择“账号”时，系统会随机注册一个账号名称，格式为：前缀+用户ID</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名保留关键字</label>
+            <div class="layui-input-block">
+                <textarea name="name_keyword" placeholder="" autocomplete="off" class="layui-textarea  nc-len-mid w300">{notempty name="$info" }{$info['name_keyword']}{/notempty}</textarea>
+            </div>
+            <div class="layui-form-mid layui-word-aux">用户在注册用户名不可使用这些关键字。多个关键字之间以英文“,”分隔开，如“admin,username”</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码最小长度</label>
+            <div class="layui-input-block">
+                <input type="number" min="0" name="pwd_length" class="layui-input nc-len-tiny" {notempty name="$info" }value="{$info['pwd_length']}"{/notempty}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">新用户注册时密码最小长度，0或不填为不限制</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">强制密码复杂度</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="pwd_complexity_number" value="1" lay-skin="primary" title="数字" {if condition="!empty($info) && $info['pwd_complexity_number'] eq '1'" }checked{/if}>
+                <input type="checkbox" name="pwd_complexity_lowercase" value="1" lay-skin="primary" title="小写字母" {if condition="!empty($info) && $info['pwd_complexity_lowercase'] eq '1'" }checked{/if}>
+                <input type="checkbox" name="pwd_complexity_uppercase" value="1" lay-skin="primary" title="大写字母" {if condition="!empty($info) && $info['pwd_complexity_uppercase'] eq '1'" }checked{/if}>
+                <input type="checkbox" name="pwd_complexity_symbol" value="1" lay-skin="primary" title="符号" {if condition="!empty($info) && $info['pwd_complexity_symbol'] eq '1'" }checked{/if}>
+            </div>
+            <div class="layui-form-mid layui-word-aux">新用户注册时密码中必须存在所选字符类型，不选择为无限制</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">第三方平台注册方式</label>
+            <div class="layui-input-block">
+                <input type="radio" name="is_automatic" value="1" title="非自动" {if condition="!empty($info) && $info['is_automatic'] eq '1'" }checked{/if}/>
+            </div>
+            <div class="layui-form-mid layui-word-aux">用户首次使用第三方平台账号进行登录时，会要求绑定已有账号或新注册账号。</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"></label>
+            <div class="layui-input-block">
+                <input type="radio" name="is_automatic" value="0" title="自动" {if condition="!empty($info) && $info['is_automatic'] eq '0'" }checked{/if}/>
+            </div>
+            <div class="layui-form-mid layui-word-aux">用户首次使用第三方平台账号进行登录时，会自动注册为站点会员。缺点是无法与之前的账号进行合并。</div>
+        </div>
+        <div class="nc-form-row">
+            <button class="layui-btn" lay-submit lay-filter="save">保存</button>
+            <button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+layui.use(['form'], function() {
+	var form = layui.form;
+	var repeat_flag = false;//防重复标识
+	
+	form.on('submit(save)', function (data) {
+		var field = data.field;
+		if(field.mobile_code == "1" && field.register_type_mobile == undefined){
+			layer.msg("请勾选“手机号”注册字段");
+			return;
+		}
+		if(field.email_code == "1" && field.register_type_email == undefined){
+			layer.msg("请勾选“邮箱”注册字段");
+			return;
+		}
+		if(field.register_type_common == undefined && field.random_name_prefix == ""){
+			layer.msg("请设置随机用户名前缀");
+			return;
+		}
+		if (repeat_flag) return;
+		repeat_flag = true;
+		$.ajax({
+			type: "post",
+			url: '{:addon_url("sitehome/member/registerAndVisit")}',
+			data: {
+				'data': JSON.stringify(field)
+			},
+			dataType: "JSON",
+			success: function (res) {
+				layer.msg(res.message);
+				if (res.code == 0) {
+					location.reload();
+				}else{
+					repeat_flag = false;
+				}
+			}
+		});
+	});
+});
+</script>
+{/block}

@@ -109,7 +109,7 @@ class User extends BaseAdmin
 			if (!empty($username)) $data['username'] = $username;
 			if (!empty($mobile)) $data['mobile'] = $mobile;
 			
-			$res = $user_model->editUser($data, [ 'uid' => $uid, 'site_id' => 0 ], $group_id);
+			$res = $user_model->editUser($data, [ 'uid' => $uid ], $group_id);
 			return $res;
 		}
 		

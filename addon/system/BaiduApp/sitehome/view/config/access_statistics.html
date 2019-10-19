@@ -1,0 +1,199 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="NC_BAIDU_CSS/wx_access_statistics.css">
+{/block}
+{block name="main"}
+<blockquote class="layui-elem-quote">基础面包演示</blockquote>
+<div class="access-statistics">
+    <div class="nc-quote-box">
+        <blockquote class="layui-quote-nm layui-elem-quote">昨日分析</blockquote>
+        <ul class="access-api-list ">
+            <li class="access-api-item">
+                <div class="access-api-item-title ">
+                    <h3 class="nc-text-color-black-999">打开次数</h3>
+                </div>
+                <p class="access-api-itme-content" id="session_cnt">0</p>
+            </li>
+            <li class="access-api-item">
+                <div class="access-api-item-title">
+                    <h3 class="nc-text-color-black-999">访问次数/人数</h3>
+                </div>
+                <p class="access-api-itme-content" id="visit_pv_visit_uv">0</p>
+            </li>
+            <li class="access-api-item">
+                <div class="access-api-item-title">
+                    <h3 class="nc-text-color-black-999">新访问用户数</h3>
+                </div>
+                <p class="access-api-itme-content" id="visit_uv_new">0</p>
+            </li>
+            <li class="access-api-item">
+                <div class="access-api-item-title">
+                    <h3 class="nc-text-color-black-999">人均/次均停留时长(秒)</h3>
+                </div>
+                <p class="access-api-itme-content" id="stay_time_uv_stay_time_session">0</p>
+            </li>
+        </ul>
+    </div>
+    <div class="nc-quote-box">
+        <blockquote class="layui-quote-nm layui-elem-quote">概况</blockquote>
+        <ul class="access-api-list">
+            <li class="access-api-item">
+                <div class="access-api-item-title ">
+                    <h3 class="nc-text-color-black-999">应用总访问数</h3>
+                </div>
+                <p class="access-api-itme-content">0<span class="nc-text-color-black-999 access-api-vice-content"> / 0</span></p>
+            </li>
+            <li class="access-api-item">
+                <div class="access-api-item-title">
+                    <h3 class="nc-text-color-black-999">应用平均访问数</h3>
+                </div>
+                <p class="access-api-itme-content">0<span class="nc-text-color-black-999 access-api-vice-content"> / 0</span></p>
+            </li>
+            <li class="access-api-item">
+                <div class="access-api-item-title">
+                    <h3 class="nc-text-color-black-999">应用最高访问数</h3>
+                </div>
+                <p class="access-api-itme-content">0<span class="nc-text-color-black-999 access-api-vice-content"> / 0</span></p>
+            </li>
+        </ul>
+    </div>
+    <div class="nc-quote-box">
+        <blockquote class="layui-quote-nm layui-elem-quote">公众号API访问统计</blockquote>
+        <div class="layui-tab ">
+            <ul class="layui-tab-title">
+                <li>关键指标详情</li>
+                <li class="layui-this">公众号总访问数</li>
+                <li>公众号平均访问数</li>
+                <li>公众号最高访问数</li>
+            </ul>
+            <div class="layui-tab-content nc-border-color-gray">
+                <div class="layui-tab-item">内容1</div>
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-tab-content-time">
+                        <span>时间</span>
+                        <input type="text" class="layui-input" id="test1">
+                    </div>
+                    <div id="main" style="width: 100%;height:400px;"></div>
+                </div>
+                <div class="layui-tab-item">内容3</div>
+                <div class="layui-tab-item">内容4</div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script src="__STATIC__/js/echarts.js"></script>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#test1' //指定元素
+        });
+        getVisitData();
+    });
+
+    //折线图
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var base = +new Date(1968, 9, 3);
+    var oneDay = 24 * 3600 * 1000;
+    var date = [];
+
+    var data = [Math.random() * 300];
+
+    for (var i = 1; i < 20000; i++) {
+        var now = new Date(base += oneDay);
+        date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+        data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+    }
+
+    option = {
+        tooltip: {
+            trigger: 'axis',
+            position: function (pt) {
+                return [pt[0], '10%'];
+            }
+        },
+        title: {
+            left: 'center',
+            text: '大数据量面积图',
+        },
+        toolbox: {
+            feature: {
+                dataZoom: {
+                    yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: date
+        },
+        yAxis: {
+            type: 'value',
+            boundaryGap: [0, '100%']
+        },
+        dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 10
+        }, {
+            start: 0,
+            end: 10,
+            handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+            handleSize: '80%',
+            handleStyle: {
+                color: '#fff',
+                shadowBlur: 3,
+                shadowColor: 'rgba(0, 0, 0, 0.6)',
+                shadowOffsetX: 2,
+                shadowOffsetY: 2
+            }
+        }],
+        series: [
+            {
+                name:'模拟数据',
+                type:'line',
+                smooth:true,
+                symbol: 'none',
+                sampling: 'average',
+                itemStyle: {
+                    color: 'rgb(255, 70, 131)'
+                },
+                areaStyle: {
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                        offset: 0,
+                        color: 'rgb(255, 158, 68)'
+                    }, {
+                        offset: 1,
+                        color: 'rgb(255, 70, 131)'
+                    }])
+                },
+                data: data
+            }
+        ]
+    };
+    myChart.setOption(option);
+    
+    /**
+     *统计数据
+     */
+    function getVisitData(){
+        $.ajax({
+            type: "post",
+            url: "{:addon_url('WeApp://sitehome/Statistics/getYesterdayVisitData')}",
+            dataType: "JSON",
+            data: data.field,
+            success: function (data) {
+                console.log(data);
+            }
+        });
+    }
+</script>
+{/block}

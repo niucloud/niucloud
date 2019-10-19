@@ -1,0 +1,103 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="NIU_APPLET_CSS/index.css">
+<link rel="stylesheet" href="SITEHOME_CSS/index.css">
+<style>
+	.nc-len-mid{width: 220px !important;}
+</style>
+{/block}
+{block name='title'}{/block}
+{block name="main"}
+
+<div class="layui-card statistical">
+	<div class="layui-card-header">流量总览</div>
+	<div class="layui-card-body">
+		<ul>
+			<li>
+				<label class="nc-text-color-gray-darken-30">访问量/访客数(今日)</label>
+				<div>
+					<span class="curr" id="today_count">0</span>
+					<span class="nc-text-color-gray">/</span>
+					<span class="nc-text-color-gray" id="today_ip_count">0</span>
+				</div>
+			</li>
+			<li>
+				<label class="nc-text-color-gray-darken-30">访问量/访客数(昨日)</label>
+				<div>
+					<span class="curr" id="yesterday_count">0</span>
+					<span class="nc-text-color-gray">/</span>
+					<span class="nc-text-color-gray" id="yesterday_ip_count">0</span>
+				</div>
+			</li>
+			<li>
+				<label class="nc-text-color-gray-darken-30">访问量/访客数(最近七日)</label>
+				<div>
+					<span class="curr" id="week_count">0</span>
+					<span class="nc-text-color-gray">/</span>
+					<span class="nc-text-color-gray" id="week_ip_count">0</span>
+				</div>
+			</li>
+			<li>
+				<label class="nc-text-color-gray-darken-30">访问量/访客数(最近30日)</label>
+				<div>
+					<span class="curr" id="month_count">0</span>
+					<span class="nc-text-color-gray">/</span>
+					<span class="nc-text-color-gray" id="month_ip_count">0</span>
+				</div>
+			</li>
+		</ul>
+		
+	</div>
+</div>
+<div class="layui-card">
+	<div class="layui-card-header">流量趋势</div>
+	<div class="layui-card-body">
+		<div class="layui-tab layui-tab-brief" lay-filter="chart_tab">
+			<ul class="layui-tab-title nc-align-center">
+				<li class="chart-tab-item layui-this" data-type="ALL">全站统计</li>
+				<li class="chart-tab-item"data-type="HOME">后台统计</li>
+				<li class="chart-tab-item"data-type="APP">前台统计</li>
+			</ul>
+			<div class="layui-tab-content chart-content">
+
+				<div class="daterange-input-wrap layui-input-inline nc-len-mid">
+					<input type="text" class="layui-input daterange-input nc-len-mid" id="daterange" placeholder=" - ">
+				</div>
+
+				<div class="layui-tab-item chart-item layui-show">
+					<div id="main_ALL" class="chart-main"></div>
+				</div>
+				<div class="layui-tab-item chart-item">
+					<div id="main_HOME" class="chart-main"></div>
+				</div>
+				<div class="layui-tab-item chart-item">
+					<div id="main_APP" class="chart-main"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="layui-card notice">
+    <h2 class="layui-card-header">系统公告<a href="{:url('admin/config/noticelist')}" target="_blank" class="layui-card-vice-header nc-text-color" style=" float:right;">更多&nbsp;></a></h2>
+	<div class="layui-card-body">
+		<ul>
+		    {volist name="$notice_list" id="vo" offset="0" length='3'}  
+		     <li>
+				<a href="{:url('admin/config/previewnotice?notice_id='.$vo.notice_id)}" target="_blank">
+					<label>{$vo['title']}</label>
+					<span class="nc-text-color-gray-darken-30">{:time_to_date($vo['create_time'])}</span>
+				</a>
+			</li>
+            {/volist}
+		</ul>
+	</div>
+</div>
+{/block}
+{block name="script"}
+<script src="__STATIC__/js/echarts.js"></script>
+<!--<script src="NIU_APPLET_JS/index.js"></script>-->
+<script>
+    var daterange = '{:date("Y-m-d", strtotime("-6 days"))} 至 {:date("Y-m-d")}';
+</script>
+<script src="NIU_APPLET_JS/visit_statistics.js"></script>
+{/block}

@@ -1,0 +1,84 @@
+<script type="text/javascript">
+var index{$name};
+//文件上传
+function uploadEnclosure{$name}(event){
+	
+	layui.use(['upload','laytpl'], function(){
+		var upload = layui.upload,laytpl = layui.laytpl;
+		var tpl_html = $("#attachment_html{$name}").html();
+		laytpl(tpl_html).render([], function(html){
+			index{$name}=layer.open({
+		  		  type: 1,
+		  		  title: "附件上传",
+		  		  area: ['765px'], //宽高
+		  		  content:  html,
+		  		  cancel: function(){ 
+		  		    //右上角关闭回调
+		  		    //return false 开启该代码可禁止点击该按钮关闭
+		  		  },
+			      success: function(layero, index){
+					  var mask = $(".layui-layer-shade");
+					     mask.appendTo(layero.parent());
+		 			 //普通图片上传
+					 upload.render({
+					    elem: '#enclosure{$name}'
+					    ,url: '{:addon_url("File://common/File/enclosure")}'
+					    ,auto: false
+					    ,data: {}
+					    ,multiple: false
+					    ,accept : 'file'
+					    ,exts: 'zip'
+						,bindAction: '#btnSure{$name}'
+					    ,choose: function(obj){
+							  //预读本地文件示例，不支持ie8
+							  obj.preview(function(index, file, result){
+					                $('#uploadEnclosure{$name}  #input-enclosure{$name}').val(file.name);
+							  });
+					    }
+					    ,done: function(res, index, upload){
+				    		if(res.code ==  0){
+								try{
+									uploadAttachmentSuccess(res,"{$name}");
+								}catch(e){
+									console.error("缺少回调函数uploadAttachmentSuccess()");
+								}
+								layer.close(index{$name});
+				    	    }
+					    }
+					    //如果上传失败
+					    ,error: function(index, upload){
+
+					    }
+				  	});
+				  }
+			});
+		})
+	})
+	
+}
+</script>
+<script type="text/html" id="attachment_html{$name}">
+<div class="layui-form" id="uploadEnclosure{$name}" style="margin-top: 15px!important;font-size:12px;">
+
+   <div class="layui-form-item">
+	    <label class="layui-form-label">本地附件</label>
+	    <div class="layui-input-inline">
+	       <input type="text" name="" placeholder=""  id="input-enclosure{$name}" class="layui-input nc-len-long">
+	    </div>
+  </div>
+  <div class="layui-form-item" style="height:270px">
+	    <label class="layui-form-label"></label>
+	    <div class="layui-input-block" style="width:497px">
+			  <button type="button" class="layui-btn  layui-btn-sm" id="enclosure{$name}">上传附件</button>
+			  <div class="layui-upload-list"></div>
+		</div>
+	    <label class="layui-form-label"></label>
+		<div class="layui-input-block">上传附件类型必须是zip格式</div>
+  </div>
+	
+  <div style="text-align: center;">
+	   <button type="button" class="layui-btn layui-btn-primary" id="btnSure{$name}">确定</button>
+  </div>      
+</div>
+<!-- 附件上传结束 -->
+</script>

@@ -22,8 +22,8 @@ class Index extends BaseSite
 	//主页
 	public function index()
 	{
-	    hook("index");
-		return $this->getDiyView([ "name" => "DIYVIEW_SITE" ]);
+		hook("index");
+		return $this->getDiyView([ "name" => "DIYVIEW_SITE", 'addon_name' => $this->site_info['addon_app'] ]);
 	}
 	
 }

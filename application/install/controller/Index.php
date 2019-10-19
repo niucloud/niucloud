@@ -110,7 +110,7 @@ class Index extends Controller
 
             $admin_name = "admin";
             $admin_pwd = input('admin_pwd', "123456");
-            $admin_pwd_confirm = input('admin_pwd2', "123456");
+            $admin_pwd_confirm = input('admin_pwd_confirm', "123456");
             $site_name = input('site_name', "");
             if ($dbhost == '' || $dbuser == '') {
                 die("<script>alert('数据库链接配置信息丢失!');history.go(-1);</script>");
@@ -200,7 +200,8 @@ class Index extends Controller
                 "site_id" => 0,
                 "group_name" => "超级管理员",
                 "is_system" => 1,
-                "status" => 1
+                "status" => 1,
+                "array" => ''
             );
             $auth_result = $auth_model->addGroup($group_data);
             if ($auth_result["code"] != 0)

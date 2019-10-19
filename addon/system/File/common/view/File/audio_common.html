@@ -1,0 +1,95 @@
+<!-- 音频上传开始 -->
+<script type="text/html" id="audio_html">
+	<div class="layui-form" id="audio_model{$name}" style="margin-top: 15px!important;font-size:12px;">
+		<div class="layui-input-block">
+			<div class="layui-upload-list media-list"></div>
+			<div class="nc-upload-img" id="audio_item" title="仅支持 amr、 mp3、 mpeg 3种格式">
+				<span class="add-img">+</span>
+				<p class="add-style">点击添加音频</p>
+			</div>
+		</div>
+		<div class="nc-form-row">
+			<button type="button" class="layui-btn" id="btnAudio{$name}">保存</button>
+		</div>
+	</div>
+</script>
+
+<!-- 音频上传结束 -->
+<script>
+//音频
+function audio{$name}(category_id){
+    category_id = category_id == undefined ? 0 : category_id;
+    layui.use(['upload','laytpl'], function() {
+        var upload = layui.upload, laytpl = layui.laytpl;
+        var tpl_html = $("#audio_html{$name}").html();
+        laytpl(tpl_html).render([], function (html) {
+           var audio_index = layer.open({
+                type: 1,
+			   title: "音频",
+                area: ['850px'], //宽高
+                content: html,
+                cancel: function () {
+                    //右上角关闭回调
+                    $("#uploadAudio{$name}").hide();
+                    //return false 开启该代码可禁止点击该按钮关闭
+                },
+				success: function(layero, index){
+                    upload.render({
+                        elem: '#audio_item{$name}'
+                        ,url: '{:addon_url("File://common/File/audio")}'
+                        ,accept: 'audio' //音频
+                        ,data: {category_id: category_id}
+                        ,auto: false
+                        ,bindAction: '#btnAudio{$name}'
+                        ,choose: function(obj){
+                            //预读本地文件示例，不支持ie8
+                            obj.preview(function(index, file, result){
+                                var audio_html = '<div class="nc-upload-wrap" style="position:relative;background-color:#FFF;">';
+                                audio_html += '<img class="layui-upload-img" style="max-width: 100%;max-height: 100%;" src="__STATIC__/img/play.png"/>';
+                                audio_html += '<div class="black-bg" style="display:none;position:absolute;opacity: 0.7;background-color: #000;transition: all 0.3s ease;top:0;bottom:0;right:0;left:0;">';
+                                audio_html += '<span style="color:#FFF;">预览</span>';
+                                audio_html += '</div>';
+                                audio_html += '</div>';
+                                $('#audio_model .media-list').html(audio_html);
+
+                                $('#audio_model .media-list .nc-upload-wrap').hover(function () {
+                                    $(this).find(".black-bg").show();
+                                },function () {
+                                    $(this).find(".black-bg").hide();
+                                })
+                                $('#audio_model .media-list .nc-upload-wrap').click(function(){
+                                    //页面层-媒体播放
+                                    layer.open({
+                                        type: 1,
+                                        title: "媒体播放",
+                                        closeBtn: 1,
+                                        area: '516px',
+                                        skin: 'layui-layer-nobg', //没有背景色
+                                        shadeClose: true,
+                                        content: '<h5 style="background-color:#FFF;padding:8px;">'+file.name+'</h5><audio style="width:100%;"src="'+result+'" controls="controls">' +'您的浏览器不支持 video 标签。' +'</audio>'
+                                    });
+
+                                })
+
+                            });
+
+                        }
+                        ,done: function(res){
+                            if(res.code ==  0){
+                                $('#audio_model{$name}').empty();
+                                try{
+                                    singleAudioUploadSuccess(res.data,"{$name}");
+                                }catch(e){
+                                    console.error("缺少回调函数singleAudioUploadSuccess()",e.message);
+                                }
+                                layer.close(audio_index{$name});
+                            }
+                        }
+                    });
+				}
+            });
+        })
+    })
+}
+
+</script>

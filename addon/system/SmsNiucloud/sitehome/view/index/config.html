@@ -1,0 +1,154 @@
+{extend name="sitehome@public/base" /}
+{block name="resources"}
+<style type="text/css">
+    td{
+        height:auto;
+    }
+    .layui-table-cell{
+        height: auto;
+    }
+    [class^="layui-table-cell laytable-cell-"][class$="-1"] {
+        display: flex;
+    }
+    .layui-col-space12{
+        background: #f9f9f9;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    .layui-col-space12 .layui-col-md4{
+        height: 90px;
+        padding: 20px 0;
+    }
+    .layui-col-space12 .layui-col-md4>span{
+        font-size: 22px;
+        font-weight: 400;
+        line-height: 0;
+    }
+    .top_message{
+        padding-left: 8px;
+        margin-left: 8px;
+        border-left: 1px solid #cdcdcd;
+        color:#0d73f9;
+    }
+</style>
+{/block}
+{block name="main"}
+<div class="layui-row layui-col-space12">
+	<div class="layui-col-md3">
+        <p><span>剩余短信</span><a href="{:addon_url('SmsNiucloud://sitehome/index/buysitesms')}" class="top_message">短信充值</a></p><br/><span>{$statistics_arr['error_count']}</span>
+    </div>
+    <div class="layui-col-md3">
+        <p>发送总条数</p><br/><span>{$statistics_arr['send_count']}</span>
+    </div>
+    <div class="layui-col-md3">
+        <p>成功发送</p><br/><span>{$statistics_arr['success_count']}</span>
+    </div>
+    <div class="layui-col-md3">
+        <p>发送失败</p><br/><span>{$statistics_arr['error_count']}</span>
+    </div>
+</div>
+
+<table id="sms_list" lay-filter="sms_list"></table>
+<script type="text/html" id="status">
+    {{ d.status==1 ? '成功' : '失败' }}
+</script>
+
+<script type="text/html" id="operation">
+    {{ d.status==1 ? '' : '<a class="default" lay-event="send_sms">重新发送</a>' }}
+
+</script>
+
+<script type="text/html" id="send_account">
+    <label><span>{{d.send_account}}</span></label><br />
+</script>
+<script type="text/html" id="sms_template">
+    <div>
+        <label>发送类型:<span>{{ d.sms_type=="aliyun" ? '阿里云' : '百度云' }}</span></label><br />
+        <label>短信模板:<span>{{d.template_code}}</span></label><br />
+        <label>短信签名:<span>{{d.signature}}</span></label>
+    </div>
+</script>
+
+<script type="text/html" id="notice_context">
+    <label ><span>{{d.notice_context}}</span></label>
+</script>
+
+<script type="text/html" id="create_time">
+    <label><span>{{ nc.time_to_date(d.create_time) }} </span></label>
+</script>
+
+{/block}
+{block name="script"}
+<script type="text/javascript">
+var table = new Table({
+	elem: '#sms_list',
+	filter: "sms_list",
+	url: '{:addon_url("Sms://sitehome/Config/smsList")}',
+	cols: [[{
+		field: '',
+		width: '10%',
+		title: '账号',
+		templet: "#send_account"
+	}, {
+		field: '',
+		width: '15%',
+		title: '配置信息',
+		templet: '#sms_template'
+	}, {
+		field: '',
+		width: '40%',
+		title: '发送值',
+		templet: '#notice_context'
+	}, {
+		field: 'status',
+		width: '5%',
+		title: '状态',
+		templet: '#status'
+	}, {
+		field: '',
+		width: '12%',
+		title: '发送时间',
+		templet: '#create_time'
+	}, {
+		title: '操作',
+		width: '12%',
+		toolbar: '#operation'
+	}]]
+});
+
+//监听工具条
+table.tool( function(obj) {
+	var data = obj.data;
+	switch (obj.event) {
+		case "send_sms":
+			sendMsg(data);
+			break;
+	}
+});
+
+function sendMsg(data) {
+	layer.confirm('确定要重新发送?', {
+		btn: ['确定', '取消']
+	}, function () {
+		$.ajax({
+			type: "post",
+			async: false,
+			url: '{:addon_url("Sms://sitehome/Config/smsSend")}',
+			data: {'data_param': data},
+			dataType: "JSON",
+			success: function (res) {
+				console.log(res[0].code);
+				layer.msg(res[0]['message'], {}, function () {
+					if (res[0].code == 0) {
+						table.reload();
+					}
+				});
+			}
+		});
+	}, function () {
+		layer.close();
+	});
+}
+</script>
+{/block}

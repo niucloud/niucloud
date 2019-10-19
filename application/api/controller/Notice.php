@@ -24,7 +24,7 @@ class Notice extends BaseApi
 	 * 公告管理
 	 * @return \think\mixed
 	 */
-	public function noticeList($params)
+	public function getNoticePageList($params)
 	{
 		
 		$condition['site_id'] = $params['site_id'];
@@ -43,17 +43,4 @@ class Notice extends BaseApi
 		return $info;
 	}
 	
-	/**
-	 * 公告管理
-	 * @return \think\mixed
-	 */
-	public function getNoticeList($params)
-	{
-		
-		$condition['site_id'] = $params['site_id'];
-		$order = isset($params['order']) ? $params['order'] : 'create_time desc';
-		
-		$list = $this->notice_model->getSiteNoticePageList($condition, 1, 0, $order);
-		return $list;
-	}
 }

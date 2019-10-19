@@ -21,6 +21,10 @@
     .nc-item-block.fl .nc-item-block-wrap{cursor: pointer;}
     .nc-quote-box:last-of-type{padding-bottom: 20px;}
     .nc-item-block .nc-content-title .nc-content-desc{max-width: 200px;}
+
+
+    .nc-item-block{margin-bottom: 25px;}
+    .layui-elem-quote.layui-quote-nm{padding-top: 0;}
 </style>
 {/block}
 {block name="main"}
@@ -65,23 +69,29 @@
     {{# if(item.list.length>0){  }}
     <div class="nc-quote-box ">
 		<blockquote class="layui-elem-quote layui-quote-nm">{{item.type_name}}</blockquote>
-            <ul class="nc-item-block-parent">
+            <div class="nc-item-block-parent">
                 {{# layui.each(item.list, function(index, item){ }}
-                <li class="nc-item-block fl size-lg drop">
-                    <div class="nc-item-block-wrap" onclick="location.href=nc.url('admin/addon/addonDetail?name={{item.name}}')">
-                        {{# if(item.icon == null || item.icon == "" || item.icon == undefined){ }}
-                        <img src="SITEHOME_IMG/plug-in-unit.png" class="nc-item-pic">
-                        {{# }else{ }}
-                        <img src="__ROOT__{{ item.icon }}" class="nc-item-pic">
-                        {{# } }}
+                <a class="nc-item-block fl size-lg drop" href="{:addon_url('admin/addon/addonDetail?name=')}{{item.name}}">
+                    <div class="nc-item-block-wrap">
+                        <div class="nc-item-pic" >
+                            {{# if(item.icon == null || item.icon == "" || item.icon == undefined){ }}
+                            <img src="SITEHOME_IMG/plug-in-unit.png">
+                            {{# }else{ }}
+                            <img src="__ROOT__{{ item.icon }}">
+                            {{# } }}
+                        </div>
                         <div class="nc-item-content">
-                            <div class="nc-content-title">{{ item.title }}</div>
-                            <p class="nc-content-desc">{{ item.description }}</p>
-                            <div class="nc-icon">
-                            {{# layui.each(item.support_app_type, function(key, port_item){ }}
-                                <img src="__ROOT__/{{port_item.logo}}" title="支持{{port_item.name}}端口">
-                            {{# }); }}
+                            <div class="nc-item-content-title">
+                                <div class="nc-item-tow-title">
+                                    {{ item.title }}
+                                </div>
+                                <div class="nc-item-tow-icon">
+                                    {{# layui.each(item.support_app_type, function(key, port_item){ }}
+                                    <img src="__ROOT__/{{port_item.logo}}" title="支持{{port_item.name}}端口">
+                                    {{# }); }}
+                                </div>
                             </div>
+                            <p class="nc-item-content-desc">{{ item.description }}</p>
                         </div>
                         {{# if(item.status <= 0){ }}
                         <div class="nc-item-poa-pic">
@@ -90,23 +100,26 @@
                         {{# } }}
                     </div>
 
-                    <div class="nc-item-float">
-                        <div>
+                    <div class="nc-item-float-wrap">
+                        <div class="nc-item-float" onclick="fn()">
                             {{# if(item.status <=0){ }}
                             <span class="nc-ml10"><i class="nc-mr10 not-installed"></i>未安装</span>
-                            <a class=" nc-assist-fr nc-mr10" lay-event="install" title="安装插件" href="javascript:install('{{ item.name }}','{{ item.is_buy }}','{{ item.version }}');">立即安装</a>
+                            <div class=" nc-assist-fr nc-mr10" lay-event="install" title="安装插件" onclick="install('{{ item.name }}','{{ item.is_buy }}','{{ item.version }}')">立即安装</div>
                             {{# }else{ }}
                             <span class="nc-ml10"><i class="nc-mr10 has-been-installed"></i>已安装</span>
-                            <a class="nc-assist-fr nc-mr10" href="javascript:uninstall('{{ item.name }}');" title="卸载插件">卸载</a>
-                            <a class="nc-assist-fr nc-mr10" lay-event="init_menu" href="javascript:initMenu('{{item.name}}');" title="刷新">刷新</a>
+                            <div class="">
+                                <span class="nc-assist-fr nc-mr10" onclick="uninstall('{{ item.name }}')" title="卸载插件">卸载</span>
+                                <span class="nc-assist-fr nc-mr10" lay-event="init_menu" onclick="initMenu('{{item.name}}')" title="刷新">刷新</span>
+                            </div>
                             {{# } }}
                         </div>
                     </div>
 
-                </li>
+                </a>
                 {{# }); }}
-            </ul>
-        </div>
+            </div>
+    </div>
+
     {{#  } }}
     {{#  }); }}
 
@@ -114,6 +127,10 @@
 {/block}
 {block name="script"}
 <script>
+function fn(){
+    event.preventDefault();
+    event.stopPropagation();
+}
 var type = "{$type}";
 </script>
 <script src="ADMIN_JS/addon_list.js"></script>

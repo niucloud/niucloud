@@ -1,0 +1,330 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<style type="text/css">
+	.album_content{}
+	.category-list{float:left;width:180px;background:#f2f2f2;height:480px;overflow-y:auto;    border: 1px solid #f2f2f2}
+	.category-list .category-item{height:30px;line-height:30px;position:relative;padding:0 5px 0 5px;margin-right:1px;cursor:pointer}
+	.active{background:#fff}
+	.category-list .category-name{width:100px;display:inline-block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+	.category-list .category-num{position:absolute;top:0;right:8px;color:#999}
+	.attachment-container{float:right;width:650px}
+	.image-box-active{position:absolute;top:0;left:0;width:100%;height:100%;border:2px solid #009688;box-sizing:border-box}
+	.image-box-active:after{position:absolute;display:block;content:" ";right:0;top:0;border:14px solid #009688;border-left-color:transparent;border-bottom-color:transparent;z-index:1}
+	.image-box-active i{position:absolute;right:0;top:0;font-size:12px;color:#fff;font-style:normal;font-family:arial;width:13px;text-align:center;height:15px;z-index:2}
+	.layui-body{z-index:unset}
+	.layui-col-space1>*{padding:0}
+	.upload-dialog-top{padding:10px 0 15px}
+	.upload-dialog-serach{float:right;position:relative;width:250px}
+	.upload-dialog-icon{position:absolute;z-index:1;top:1px;left:2px}
+	.upload-dialog-icon .layui-btn{height:30px;line-height:30px;padding:0 10px}
+	.image-title-wrap{display:flex;height:30px}
+	.image-title-wrap .image-title{text-overflow:ellipsis;overflow:hidden;text-align:right;font-size:12px;padding-bottom:1px;white-space:nowrap;line-height:25px}
+	.image-title-wrap .image-title-ext{font-size:12px;padding-bottom:1px;white-space:nowrap;line-height:25px}
+	.layui-quote-nm{border-width:1px}
+	.layui-elem-quote{margin-top:10px;max-height:300px;overflow:auto}
+	.album-content{overflow:hidden;height:480px;overflow:hidden;height:600px;padding:0 20px;position:relative;font-size:12px;}
+	.empty-data{text-align: center;padding: 30px 10px;font-size: 12px;}
+	.list-view{height:443px;}
+	.dialog-search-button{float:right;}
+	.callback-btn-line .btn-disabled{background-color: #e5e5e5 !important;color: #FFF !important;}
+	.audio-item{position:relative;}
+</style>
+<link rel="stylesheet" href="ADDON_NC_FILE_CSS/audio.css">
+{/block}
+{block name='body'}
+{:hook("fileUpload", ['type' => 'common', 'file_type' => 'AUDIO' ], '', true)}
+<div class="album-content" id="album">
+	<div class="upload-dialog-top">
+		<button class="layui-btn layui-btn-sm" onclick="audio($('.category-item.active .category-id').val())"  type="button">点击上传</button>
+
+		<button class="layui-btn dialog-search-button" lay-submit lay-filter="search">搜索</button>
+		<div class="upload-dialog-serach">
+			<div class="upload-dialog-icon">
+				<button class="layui-btn layui-btn-primary layui-btn-sm" style="border: none">
+					<i class="layui-icon">&#xe615;</i>
+				</button>
+			</div>
+			<input type="text" name="search" class="layui-input" style="padding: 0 40px;">
+		</div>
+	</div>
+	<div class="album_content">
+		<div class="category-list" id="t_category"></div>
+		<div class="attachment-container">
+			<div class="layui-row layui-col-space1 list-view" id="list_view"></div>
+			<div class="layui-clear"></div>
+			<div id="paged" class="page"></div>
+		</div>
+	</div>
+	<div class="callback-btn-line"style="position:absolute;bottom:10px;left:50%;right:50%;text-align: center;">
+		<button type="button" id="callback_btn" class="layui-btn layui-btn-primary" onclick="ablumBtnOk()">确定</button>
+	</div>
+</div>
+
+
+<!-- 相册数据类表构建 -->
+<script id="list" type="text/html">
+	{{# layui.each(d.list, function(index, item){ }}
+	<div class="media-list-item" data-json_data='{{ JSON.stringify(item) }}' data-id = '{{ item.id }}'>
+		<div class="audio-item img-item">
+			<div class="audio-box">
+				<div class="audio-img">
+				</div>
+				<div class="audio-title">
+					{{ item.file_name }}
+				</div>
+				<div class="audio-time">
+					{{ nc.time_to_date(item.create_time) }}
+				</div>
+				<div class="audio-size">
+					{{ nc.sizeformat(item.size) }}
+				</div>
+				{{#  if( getActiveArrayIndex(item.id) != "-1"){ }}
+				<div class="image-box-active"><i class="active-index">{{ getActiveArrayIndex(item.id) }}</i></div>
+				{{#  } }}
+			</div>
+
+		</div>
+	</div>
+	{{#  }); }}
+	{{#  if(d.list.length === 0){ }}
+	<div class="empty-data">暂无数据</div>
+	{{#  } }}
+</script>
+
+<!-- 侧边相册分组列 -->
+<script id="category" type="text/html">
+	{{#  layui.each(d, function(index, item){ }}
+	{{# if(d.category_id > 0){ }}
+	{{#  if(item['id'] == d.category_id){ }}
+	<div class="category-item active">
+		{{# } else { }}
+		<div class="category-item">
+			{{#  } }}
+			{{# } else { }}
+			{{# if(index == 0){ }}
+			<div class="category-item active">
+				{{# } else { }}
+				<div class="category-item">
+					{{#  } }}
+					{{#  } }}
+					<span class="category-name">{{ item['name'] }}</span>
+					<span class="category-num">{{ item['num'] }}</span>
+					<input type="hidden" value="{{ item['id'] }}" class="category-id" />
+				</div>
+				{{#  }); }}
+</script>
+
+
+
+
+
+
+{/block}
+{block name="script"}
+<script>
+    var active_array = new Array();
+    var tag = "{$name}";//唯一标识
+    var limit = 15;
+    var laytpl;
+    var form;
+    var laypage;
+    var count = "{$count}";
+
+
+
+
+    //获取选中
+    function getActiveArrayIndex(id){
+        var delete_index = -1;
+        $.each(active_array,function(i,item){
+            if(item.id == id){
+                delete_index = item.index;
+                return false;
+            }
+        });
+        return delete_index;
+    }
+
+
+    layui.use([ 'form', 'laypage', 'laytpl' ], function() {
+        laytpl = layui.laytpl;
+        form = layui.form;
+        laypage = layui.laypage;
+
+        //分组绑定事件
+        $('body').on("click", ".category-item", function() {
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+            getFileAlbumList(1, limit);
+            checkItem(); //选择图片
+        });
+
+        //预览删除显示隐藏
+        $('body').on("mouseover", ".upload-image-item", function() {
+            $(this).children('.upload-close-modal').css('display','block');
+        });
+        $('body').on("mouseout", ".upload-image-item", function() {
+            $(this).children('.upload-close-modal').css('display','none');
+        });
+        //监听筛选事件
+        form.on('submit(search)', function (data) {
+            getFileAlbumList(1, limit); //分组文件
+        });
+        //数据初始化
+        getFileCategory();//分组
+        getFileAlbumList(1, limit); //分组文件
+        checkItem(); //选择图片
+    })
+
+
+
+    //获取相册分组
+    function getFileCategory() {
+        $.ajax({
+            type: "post",
+            url: '{:addon_url("File://sitehome/File/getFileCategory")}',
+            data: {
+                type: "AUDIO"
+            },
+            async: false,
+            dataType: "JSON",
+            success: function (data) {
+                var category_tpl = $("#category").html();
+                if ($("#t_category .active .category-id").length > 0) {
+                    data.data.category_id = $(".active .category-id").val();
+                } else {
+                    data.data.category_id = 0;
+                }
+                laytpl(category_tpl).render(data.data, function (html) {
+                    $("#t_category").html(html);
+                });
+            }
+        });
+    }
+
+    //获取相册数据
+    function getFileAlbumList(page, limit) {
+        var category_id = $(".active .category-id").val();
+        $.ajax({
+            type: "get",
+            url: '{:addon_url("File://sitehome/File/fileManage")}',
+            data: {
+                page: page,
+                limit: limit,
+                type: 'AUDIO',
+                category_id: category_id,
+                file_name: $("input[name='search']").val()
+            },
+            dataType: "JSON",
+            async: false,
+            success: function (data) {
+                //渲染相册
+                var album_tpl = $("#list").html();
+                laytpl(album_tpl).render(data.data, function (html) {
+                    $("#list_view").html(html);
+                });
+                //调用分页
+				$("#paged").html();
+                if(data.data.count > 0) {
+                    laypage.render({
+                        elem: 'paged',
+                        count: data.data.count,
+                        curr: page, //当前页
+                        // layout: nc.get_page_param(),
+                        prev: '<i class="layui-icon layui-icon-left"></i>',
+                        next: '<i class="layui-icon layui-icon-right"></i>',
+                        limit: limit,
+                        hash: 'page',
+                        jump: function (obj, first) {
+                            if (!first) { //一定要加此判断，否则初始时会无限刷新
+                                getFileAlbumList(obj.curr, obj.limit);//一定要把翻页的ajax请求放到这里，不然会请求两次。
+                            }
+                            form.render('checkbox');
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    //选择个体
+    function checkItem() {
+        $("#album").unbind('click').on("click", ".media-list-item", function () {
+            var json_data = $(this).data("json_data");
+            json_data.id = parseInt(json_data.id);
+
+            if ($(this).find(".image-box-active").length > 0) {
+                var active_index = getDelateActiveArrayIndex(json_data.id);
+                sortActiveArrayIndex(active_index);
+                $(this).find(".image-box-active").remove();
+            } else {
+                json_data.index = active_array.length + 1;
+                active_array.push(json_data);
+                var active_html = '<div class="image-box-active"><i class="active-index">' + active_array.length + '</i></div>';
+                $(this).find(".img-item").append(active_html);
+            }
+            if(active_array.length > count && count > 0){
+                $('#callback_btn').addClass('btn-disabled').addClass('layui-btn-disabled');
+                $('#callback_btn').attr("disabled","disabled");
+            }else{
+                $('#callback_btn').removeClass('btn-disabled').removeClass('layui-btn-disabled');
+                $('#callback_btn').removeAttr("disabled");
+            }
+        });
+    }
+
+    //删除选中
+    function getDelateActiveArrayIndex(id){
+        var delete_index;
+        $.each(active_array,function(i,item){
+            if(item.id == id){
+                delete_index = item.index;
+                active_array.splice(i, 1);
+                return false;
+            }
+        });
+        return delete_index;
+    }
+
+    //重新排序
+    function sortActiveArrayIndex(index){
+        $.each(active_array,function(i,item){
+            var item_index = item.index;
+            if(item_index > index){
+                active_array[i]["index"] = item_index-1;
+                if($("#album").find(".media-list-item[data-id = '"+ item["id"] +"']").length > 0){
+                    $("#album").find(".media-list-item[data-id = '"+ item["id"] +"']").find(".image-box-active i ").text(item["index"]);
+                }
+            }
+        })
+    }
+    /**
+     * 媒体库初始化
+     */
+    function init(){
+        getFileCategory();//分组
+        getFileAlbumList(1, limit); //分组文件
+        checkItem(); //选择图片
+    }
+    //多图片上传回调
+    function singleAudioUploadSuccess(data, name){
+        var json_data = data;
+        json_data.index = active_array.length + 1;
+        active_array.push(json_data);
+        init();
+    }
+    // 保存选中的图片 回调
+    function ablumBtnOk(){
+        console.log(active_array);
+        try{
+            parent.ablumUploadSuccess(active_array, tag);
+            parent.loadImgMagnify();
+        }catch(e){
+            console.error("缺少回调函数ablumUploadSuccess()");
+        }
+        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
+        parent.layer.close(index);
+    }
+
+</script>
+{/block}

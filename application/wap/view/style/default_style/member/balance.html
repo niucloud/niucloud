@@ -1,0 +1,95 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="WAP_CSS/member_account.css"/>
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back" onclick="window.history.back();"></div>
+    <h1>{$title}</h1>
+</header>
+{/block}
+{block name="main"}
+
+{php}
+$member_account_result = api("System.Member.getMemberAccountInfo",["access_token" => $access_token]);
+$member_account = $member_account_result["data"];
+$account_info = $member_account["credit2"];
+
+$temp_arr = explode(".", (string)$account_info["num"]);
+$int_num = !empty($temp_arr[0]) ? $temp_arr[0] : 0;
+$decimal_num = !empty($temp_arr[1]) ? $temp_arr[1] : 00;
+{/php}
+<div style="overflow:hidden;"></div>
+<div class="account-head">
+    <div class="account-block">
+        <span class="account-sm">¥</span>
+        <span class="account-big">{$int_num}</span>
+        <span>.</span>
+        <span class="account-sm">{$decimal_num}</span>
+    </div>
+</div>
+
+<div class="account-nav">
+    <div class="account-nav-block">余额明细</div>
+</div>
+
+<div class="account-list">
+
+</div>
+<div class="account-list-more" ><a onclick="loadList();">加载更多</a></div>
+
+<script>
+    var page = 1;
+    $(function(){
+        loadList();
+    });
+    /**
+     * 加载账户列表
+     */
+    function loadList() {
+        var table = $('.comment-ul');
+        nc.api("System.Member.getMemberAccountList", {
+            "page": page,
+            "access_token": '{$access_token}',
+            "type" : 'credit2'
+        }, function (res) {
+            if (res.code == 0) {
+                if (res.data.list.length > 0) {
+                    page++;
+                    $.each(res.data.list, function(key, val){
+                        dataFiex(val);
+                    });
+                } else {
+                    $(".account-list-more a").remove();
+                    $(".account-list-more").text("没有更多了！");
+                }
+            }
+        }, false);
+
+    }
+
+    function dataFiex(data){
+        var datetime = new Date(data.create_time * 1000);
+        var year = datetime.getFullYear();
+        var month = datetime.getMonth() + 1;
+        var date_str = year + "-" + month;
+        var date_obj = $("div[date='"+date_str+"']");
+        if(date_obj.length <= 0){
+            var date_html = '<div class="date-account-item" date = "'+date_str+'">';
+            date_html += '<div class="date-month">'+year+'年'+month+'月</div>';
+            date_html += '</div>';
+            $(".account-list").append(date_html);
+            var date_obj = $("div[date='"+date_str+"']");
+        }
+
+        var html = '<div class="account-item">';
+        html += '<div class="account-item-content pull-left">';
+        html += '<div class="account-item-title">'+ data.remark +'</div>';
+        html += '<div class="account-item-time">'+ nc.time_to_date(data.create_time) +'</div>';
+        html += '</div>';
+        html += '<div class="account-item-num pull-right">'+ data.account_data +'</div>';
+        html += '</div>';
+        date_obj.append(html);
+    }
+</script>
+{/block}

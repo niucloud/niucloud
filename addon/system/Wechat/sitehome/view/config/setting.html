@@ -1,0 +1,114 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="create-progress nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">微信公众号使用流程</blockquote>
+	<ul class="nc-progress-wrap">
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="ADDON_WECHAT_IMG/register.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">注册微信公众号</p>
+			<img class="nc-progress-point-arrow" src="ADDON_WECHAT_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="ADDON_WECHAT_IMG/config_info.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">填写配置信息</p>
+			<img class="nc-progress-point-arrow" src="ADDON_WECHAT_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="ADDON_WECHAT_IMG/public_number.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">上传版本</p>
+			<img class="nc-progress-point-arrow" src="ADDON_WECHAT_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="ADDON_WECHAT_IMG/edition.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">微信公众号设置</p>
+			<img class="nc-progress-point-arrow" src="ADDON_WECHAT_IMG/arrow.png" alt="">
+		</li>
+		<li class="nc-progress-point">
+			<div class="nc-progress-point-pic nc-border-color-gray">
+				<img src="ADDON_WECHAT_IMG/complete.png" alt="">
+			</div>
+			<p class="nc-progress-point-text">到微信公众号提交审核</p>
+		</li>
+	</ul>
+</div>
+<div class="function-setting nc-quote-box ">
+	<blockquote class="layui-elem-quote layui-quote-nm">微信公众号入口</blockquote>
+	<ul class="layui-card-body-box nc-item-block-parent">
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/config/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_wechat_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">公众号管理</div>
+				<p class="nc-item-content-desc">公众号管理</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/material/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_material_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">消息素材</div>
+				<p class="nc-item-content-desc">消息素材</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/menu/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_menu_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">菜单管理</div>
+				<p class="nc-item-content-desc">菜单管理</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/replay/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_replay_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">回复设置</div>
+				<p class="nc-item-content-desc">回复设置</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/fans/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_fans_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">粉丝管理</div>
+				<p class="nc-item-content-desc">粉丝管理</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/leavemsg/index\')}'">
+			<div class="nc-item-pic">
+				<img src="ADDON_WECHAT_IMG/config_leavemsg_icon.png">
+			</div>
+			<div class="nc-item-content">
+				<div class="nc-item-content-title">留言管理</div>
+				<p class="nc-item-content-desc">留言管理</p>
+			</div>
+		</li>
+		<li class="nc-item-block" onclick="location.href='{:addon_url(\'Wechat://sitehome/leavemsg/index\')}'">
+				<div class="nc-item-pic">
+					<img src="ADDON_WECHAT_IMG/config_message_icon.png">
+				</div>
+				<div class="nc-item-content">
+					<div class="nc-item-content-title">模板消息</div>
+					<p class="nc-item-content-desc">模板消息</p>
+				</div>
+		</li>
+	</ul>
+</div>
+{/block}
+{block name="script"}
+{/block}

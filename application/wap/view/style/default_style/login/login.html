@@ -2,6 +2,7 @@
 {block name="resources"}
 <link rel="stylesheet" href="WAP_CSS/login_css/login.css" />
 {/block}
+{block name="head"}{/block}
 {block name="main"}
 {php}
 $oauth_login_config = api("System.Login.getOAuthLoginType");
@@ -39,23 +40,6 @@ $register_config = api("System.Login.registerConfig", ['site_id'=>SITE_ID]);
 		<div class="clear"></div>
 	</div>
 </div>
-{if !empty($oauth_login_config['data'])}
-<div class="hui-common-title" style="margin-top:15px;">
-	<div class="hui-common-title-line"></div>
-	<div class="hui-common-title-txt">社交账号登录</div>
-	<div class="hui-common-title-line"></div>
-</div>
-<div class="hui-flex" style="width:200px;margin:0 auto;">
-	{volist name="$oauth_login_config['data']" id="vo"}
-	<div class="oauth-item">
-		<a href="{:addon_url('OAuthLogin://common/login/login', ['addon_name' => $vo['name']])}">
-			<img src="{$vo.icon}">
-		</a>
-	</div>
-	{/volist}
-</div>
-
-{/if}
 <div id="hui-black-mask" style="display:none;">
 	<!-- 演示消息内容 -->
 	<div id="hui-black-mask-content">
@@ -72,10 +56,8 @@ $register_config = api("System.Login.registerConfig", ['site_id'=>SITE_ID]);
 </div>
 
 {/block}
+{block name="bottom"}{/block}
 {block name="script"}
 <script type="text/javascript" src="__STATIC__/ext/hui/js/hui-form.js"></script>
-<script>
-	var cookie_name = "access_token_{$site_info['site_id']}";
-</script>
 <script src="WAP_JS/login_js/login.js"></script>
 {/block}

@@ -1,0 +1,9 @@
+.media-left{background-color:#f9f9f9}
+.media-right{border-left:1px solid #f9f9f9;float:right;font-size:12px;padding:15px}
+.media-big{position:relative;display:table-cell;width:480px;height:480px;text-align:center;vertical-align:middle;overflow:hidden}
+.media-detail-name{margin:60px 0;font-size:14px;font-weight:700;padding-right:10px;overflow:hidden;word-break:break-all;text-overflow:ellipsis;white-space:nowrap}
+.media-detail-title{font-weight:700;font-size:13px;line-height:1.5;color:#333}
+.media-detail-param{padding-bottom:15px}
+.media-detail-param li{padding-top:5px}
+.media-detail-param label{position:relative;font-size:12px}
+.media-detail-href{margin-top:5px;color:#5491de;background:0 0;text-decoration:none;outline:0;cursor:pointer;transition:color .3s ease}

@@ -1,0 +1,4 @@
+@CHARSET "UTF-8";
+.pop-window-box{position:fixed;left:50%;top:50%;transform:translateX(-50%) translateY(-50%);z-index:999;}
+.pop-window-box .pop-window-image{display:block;max-width:90vw;margin:0 auto;}
+.pop-window-box .pop-window-close{display:block;width:40px;margin:20px auto 0;}

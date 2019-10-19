@@ -96,9 +96,8 @@ class Manager extends BaseSiteHome
 			$group_id = input('group_id', '');
 			$nick_name = input('edit_nick_name', '');
 			$mobile = input('edit_mobile', '');
-			$siteId = $this->siteId;
 			$user_model = new User();
-			$res = $user_model->editSiteUser([ 'group_id' => $group_id ], [ 'uid' => $uid, 'site_id' => $siteId ], [ 'nick_name' => $nick_name, 'mobile' => $mobile ]);
+			$res = $user_model->editSiteUser([ 'group_id' => $group_id ], [ 'uid' => $uid ], [ 'nick_name' => $nick_name, 'mobile' => $mobile ]);
 			return $res;
 		}
 	}
@@ -171,7 +170,7 @@ class Manager extends BaseSiteHome
 			$addon_array = input('addon_array', '');
 			$diyview_page_array = input('diyview_page_array', '');
 			$auth_page_array = input('auth_page_array', '');
-
+			
 			$data = array(
 				'site_id' => $this->siteId,
 				'group_name' => $group_name,
@@ -631,7 +630,7 @@ class Manager extends BaseSiteHome
 		$select_arr = [];
 		$diyview_arr = [];
 		$auth_arr = [];
-
+		
 		if (!empty($group_info)) {
 			$select_arr = explode(',', $group_info["array"]);//当前选中
 			$diyview_arr = explode(',', $group_info["diyview_page_array"]);//当前选中
@@ -933,7 +932,7 @@ class Manager extends BaseSiteHome
 					$temp_auth_page_array[] = $auth_page_array;
 				}
 				$auth_page_str = implode(",", $temp_auth_page_array);
-
+				
 				$group_data = array(
 					'site_id' => $site_id,
 					'array' => $group_string,
@@ -960,6 +959,9 @@ class Manager extends BaseSiteHome
 			}
 			return $res;
 		} else {
+			
+			$this->assign("title", "权限设置");
+			
 			//权限组
 			$tree_condition = [];
 			if (!empty($addon_name)) {

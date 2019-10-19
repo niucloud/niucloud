@@ -1,0 +1,211 @@
+<link rel="stylesheet" href="__STATIC__/ext/hui/css/hui.css">
+<link rel="stylesheet" href="DIYVIEW_CSS/nc_diyview.css" />
+<link rel="stylesheet" href="STATIC_EXT/color_picker/css/colorpicker.css" />
+
+<div id="diyView" class='layui-form' v-bind:style="{ backgroundColor : global.bgColor,backgroundImage : 'url('+changeImgUrl(global.bgUrl)+')' }">
+
+	<div class="preview-head" v-on:click="changeCurrentIndex(-99)">
+		<span>{{global.title}}</span>
+		<div v-bind:class="{selected : currentIndex==-99}" v-bind:data-sort="-99" style="display:none;" v-show="data.length==0 || currentIndex==-99">
+			
+			<div class="edit-attribute">
+				<div class="layui-form-item">
+					<label class="layui-form-label sm">模板名称</label>
+					<div class="layui-input-block">
+						<input type="text" v-model="global.title" placeholder="请输入模板名称" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label sm">底部导航</label>
+					<div class="layui-input-block">
+						<div class="layui-unselect layui-form-switch" v-on:click="global.openBottomNav=!global.openBottomNav" v-bind:class="{ 'layui-form-onswitch' : global.openBottomNav }" lay-skin="_switch">
+							<em v-if="global.openBottomNav"></em>
+							<em v-else></em>
+							<i></i>
+						</div>
+					</div>
+				</div>
+				
+				<color v-bind:data="{ field : 'bgColor', label : '背景颜色', value : '#ffffff' }"></color>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label sm">背景图片</label>
+					<div class="layui-input-block">
+						<img-upload v-bind:data="{ data : global, field : 'bgUrl' }"></img-upload>
+					</div>
+				</div>
+				
+				<!--<div class="layui-form-item">-->
+					<!--<label class="layui-form-label sm"></label>-->
+					<!--<div class="layui-input-block">-->
+						<!--<button type="button" class="layui-btn" v-on:click="test">业务</button>-->
+					<!--</div>-->
+				<!--</div>-->
+				
+				{notempty name="$head_edit"}{$head_edit}{/notempty}
+				
+			</div>
+			
+		</div>
+		
+	</div>
+
+    <div class="preview-block">
+
+        <template v-for="(nc,index) in data" v-bind:k="index">
+
+            <div v-bind:data-index="index" v-on:click="changeCurrentIndex(nc.index)" v-bind:class="{ 'draggable-element nc-border-color-selected' : true,selected : currentIndex == nc.index }" v-bind:data-sort="index">
+            {foreach name="$diy_view_utils" item="vo"}
+                {foreach name="$vo.list" item="li"}
+                    <template v-if="nc.type == '{$li.name}'">
+                        {:hook('diyUtils', ['addon_name' =>  $li['addon_name'], 'controller' => $li['controller'] ], [], true)}
+                    </template>
+                {/foreach}
+            {/foreach}
+            </div>
+
+        </template>
+
+	</div>
+
+	<!-- 组件列表 -->
+	<nav class="component-list">
+		{foreach name="$diy_view_utils" item="vo" key="k"}
+		<h3>{$vo.type_name}</h3>
+		<ul>
+			{foreach name="$vo.list" item="li" key="li_k"}
+			<li title="{$li.title}"
+				{if condition="$li.value"}v-on:click='addComponent({$li.value},{ name : "{$li.name}", title : "{$li.title}", max_count : {$li.max_count}, addon_name : "{$li.addon_name}", controller : "{$li.controller}" })'
+				v-bind:class="{ 'disabled' : !checkComponentIsAdd('{$li.name}',{$li.max_count}) }"
+				{if condition="$li.support_diy_view"}
+				 class="hot"
+				{/if}
+				{else/}class="disabled"{/if}
+			>{$li.title}</li>
+			{/foreach}
+		</ul>
+		{/foreach}
+	</nav>
+
+	<div class="custom-save">
+        <button class="layui-btn save" lay-submit="" lay-filter="save">保存</button>
+    </div>
+
+</div>
+
+<input type="hidden" id="show_type" value="{$diy_view_info.show_type}" name="展示方式" class="layui-input">
+{if condition="!empty($diy_view_info) && !empty($diy_view_info.name)"}
+	<input type="hidden" id="name" value="{$diy_view_info.name}" />
+{elseif condition="!empty($name)"}
+	<input type="hidden" id="name" value="{$name}" />
+{else/}
+	<input type="hidden" id="name" value="DIY_VIEW_{$time}" />
+{/if}
+
+<!-- 相册 -->
+<div class="photo-album">
+{:hook("fileUpload", ['type' => 'common', 'file_type' => 'IMAGE','size' => '2000' ,'name' => 'diyViewUpload'], '', true)}
+</div>
+<script src="__STATIC__/ext/hui/js/hui.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="__STATIC__/ext/hui/js/hui-accordion.js"></script>
+<!--<script type="text/javascript" charset="utf-8" src="STATIC_EXT/ueditor/ueditor.config.js"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="STATIC_EXT/ueditor/ueditor.all.js"> </script>-->
+<!--<script type="text/javascript" charset="utf-8" src="STATIC_EXT/ueditor/lang/zh-cn/zh-cn.js"></script>-->
+<script src="STATIC_JS/vue.js"></script>
+<script src="DIYVIEW_JS/async_load_css.js"></script>
+<script src="STATIC_EXT/color_picker/js/colorpicker.js"></script>
+<script src="DIYVIEW_JS/ddsort.js"></script>
+<script src="DIYVIEW_JS/nc_components.js"></script>
+<script src="DIYVIEW_JS/nc_custom_template.js"></script>
+
+<script>
+var STATICIMG = 'STATIC_IMG';
+
+{if condition="!empty($diy_view_info) && (!empty($diy_view_info.value) || !empty($diy_view_info.id) )"}
+var id = "{$diy_view_info.id}";
+var info = eval('({$diy_view_info.value})');
+
+if(!$.isEmptyObject(info) && info.value){
+	for(var i=0;i<info.value.length;i++) vue.addComponent(info.value[i]);
+	vue.setGlobal(info.global);
+}else{
+	vue.setGlobal({ title : "{$diy_view_info.title}" });
+}
+vue.title = "{$diy_view_info.title}";
+{else/}
+var id = 0;
+{/if}
+
+window.onload = function(){
+	$(".photo-album").show();
+};
+
+//隐藏图片相册
+$(".photo-album>div").hide();
+
+var repeat_flag = false;//防重复标识
+$("button.save").click(function(){
+
+	if(verifyData()){
+		
+		//全局属性
+		var global = JSON.stringify(vue.global);
+		global = eval("("+global+")");
+		
+		//组件属性
+		var value = JSON.stringify(vue.data);
+		value = eval(value);
+		
+		//重新排序
+		value.sort(function(a,b){
+			return a.sort-b.sort;
+		});
+		
+		for(item in value){
+			delete value[item].verify;
+			delete value[item].lazyLoad;
+			delete value[item].lazyLoadCss;
+			delete value[item].index;
+			delete value[item].sort;
+			delete value[item].outerCountJs;
+		}
+		
+		if(repeat_flag) return;
+		repeat_flag = true;
+		
+		// console.log(JSON.stringify(value));
+		// console.log(JSON.stringify(global));
+		var v = {
+			global : global,
+			value : value
+		};
+		// console.log(v);
+		// console.log(JSON.stringify(v));
+		// return;
+	
+		$.ajax({
+			type : "post",
+			url : "{:addon_url('DiyView://sitehome/Index/editDiyView')}",
+			data : { id : id, name : $("#name").val(), title : vue.global.title, show_type : $("#show_type").val(), value : JSON.stringify(v), addon_name : "{$addon_name}" },
+			dataType : "JSON",
+			success : function(res){
+				layer.msg(res.message);
+				if(res.code == 0){
+				
+					if(id>0 || $("#name").val()!=""){
+						location.reload();
+					}else{
+						location.href = nc.url("diyView://sitehome/design/feature");
+					}
+				
+				}else{
+					repeat_flag = false;
+				}
+				// console.log(JSON.stringify(vue.data));
+				// console.log(res);
+			}
+		});
+	}
+});
+</script>

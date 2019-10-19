@@ -1,0 +1,177 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{/block}
+{block name="main"}
+<div class="layui-form config-form">
+    <div class="nc-quote-box">
+       	<blockquote class="layui-elem-quote layui-quote-nm">微信公众号设置</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">公众号名称</label>
+            <div class="layui-input-inline medium">
+                <input type="text" name="wechat_name" autocomplete="off" placeholder="公众号名称" class="layui-input nc-len-mid" {notempty name="$wechat_info"}value="{$wechat_info.wechat_name}"{/notempty}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">账户</label>
+            <div class="layui-input-inline medium">
+                <input type="text" name="wechat_account" autocomplete="off" placeholder="账户" class="layui-input nc-len-mid" {notempty name="$wechat_info"}value="{$wechat_info.wechat_account}"{/notempty}>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label img-upload-lable">二维码</label>
+            <div class="layui-inline img-upload">
+
+                <input type="hidden" class="layui-input"  name = "wechat_code" {notempty name="$wechat_info"}value="{$wechat_info.wechat_code}"{/notempty} />
+                <div class="upload-img-block wechat_code">
+                    {if empty($wechat_info.wechat_code)}
+                    <div class="upload-img-box" onclick="uploadSinglewechat_code()" >
+                        <div>
+                            <i class="add">+</i>
+                        </div>
+                    </div>
+                    {else/}
+                    <div class="upload-img-box has-choose-image">
+                        <div>
+                            <img src="{:img($wechat_info.wechat_code)}" layer-src="{:img($wechat_info.wechat_code)}">
+                        </div>
+                        <span onclick="uploadSinglewechat_code();">修改</span>
+                    </div>
+                    {/if}
+                </div>
+                {:hook("fileUpload", ['name' => 'wechat_code', 'type' => 'common', 'file_type' => 'IMAGE', 'size' => '2000'], '', true)}
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-inline medium nc-len-mid">
+                <select name="wechat_type">
+                    <option value="1" {if !empty($wechat_info) && $wechat_info.wechat_type == 1}selected="selected"{/if}>普通订阅号</option>
+                    <option value="2" {if !empty($wechat_info) && $wechat_info.wechat_type == 2}selected="selected"{/if}>普通服务号</option>
+                    <option value="3" {if !empty($wechat_info) && $wechat_info.wechat_type == 3}selected="selected"{/if}>认证订阅号</option>
+                    <option value="4" {if !empty($wechat_info) && $wechat_info.wechat_type == 4}selected="selected"{/if}>认证服务号/认证媒体/政府订阅号</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">原始ID</label>
+            <div class="layui-input-inline medium">
+                <input type="text" name="wechat_original" autocomplete="off" placeholder="原始ID" class="layui-input nc-len-mid" {notempty name="$wechat_info"}value="{$wechat_info.wechat_original}"{/notempty}>
+            </div>
+        </div>
+    </div>
+    <div class="nc-quote-box">
+       	<blockquote class="layui-elem-quote layui-quote-nm">开发者ID设置</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">APPID</label>
+            <div class="layui-input-inline medium">
+                <input type="text" name="appid" autocomplete="off" placeholder="AppID" class="layui-input nc-len-mid" value="{$config_info.appid}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">APP密钥</label>
+            <div class="layui-input-block medium">
+                <input type="text" name="appsecret" autocomplete="off" placeholder="Appsecret" class="layui-input nc-len-mid" value="{$config_info.appsecret}">
+            </div>
+            <div class="layui-form-mid layui-word-aux">AppID和Appsecret来自于您申请开发接口时提供的账号和密码，且公众号为已认证服务号</div>
+        </div>
+    </div>
+    <div class="nc-quote-box">
+       	<blockquote class="layui-elem-quote layui-quote-nm">公众平台通信</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">URL</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input type="text" name="url" autocomplete="off" placeholder="" class="layui-input nc-len-long" readonly="readonly" id="empowerUrl" value="{$call_back_url}">
+                </div>
+            </div>
+            <span class="layui-btn layui-btn-primary" onclick="nc.copy('empowerUrl')">复制</span>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Token</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input type="text" name="token"  autocomplete="off" placeholder="" class="layui-input nc-len-mid" id="empowerToken" maxlength="32" onkeyup="value=value.replace(/[^\w\.\/]/ig,'')" onpaste="return false" value="{if !empty($config_info)}{$config_info.token}{else/}TOKEN{/if}">
+                </div>
+                <button class="layui-btn layui-btn-primary" onclick="nc.copy('empowerToken')">复制</button>
+            </div>
+            <div class="layui-form-mid layui-word-aux">Token必须为英文或数字，长度为3-32字符。如不填写则默认为“TOKEN”。</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">EncodingAESKey(消息加解密密钥)</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline nc-len-long">
+                    <input  class="layui-input"type="text" name="encodingaeskey" id="encodingaeskey" autocomplete="off" placeholder="请填写微信公众号消息加解密密钥" {notempty name="$config_info"}value="{$config_info.encodingaeskey}"{/notempty}>
+                </div>
+                <button class="layui-btn layui-btn-primary" onclick="nc.copy('encodingaeskey')">复制</button>
+            </div>
+            <div class="layui-form-mid layui-word-aux">消息加密密钥由43位字符组成，字符范围为A-Z,a-z,0-9</div>
+        </div>
+    </div>
+    <div class="nc-quote-box">
+    	<blockquote class="layui-elem-quote layui-quote-nm">配置说明</blockquote>
+        <div class="layui-form-item">
+            <label class="layui-form-label">业务域名</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input type="text" name=""  autocomplete="off" placeholder="业务域名" id="public_url" readonly class="layui-input nc-len-long" o value="{$url}">
+                </div>
+                <button class="layui-btn layui-btn-primary" onclick="nc.copy('public_url')">复制</button>
+            </div>
+            <div class="layui-form-mid layui-word-aux">设置业务域名（设置业务域名，用户在相应域名上进行输入时不再出现防欺诈盗号等安全提示）<br/>
+                <a href="https://mp.weixin.qq.com/" target="_blank">登录微信公众平台</a>点击公众号设置&gt;功能设置&gt;业务域名设置，一次填写：<br/>
+                域名：{$url}<br/>
+                <a href="https://mp.weixin.qq.com/" target="_blank">登录微信公众平台</a>点击公众号设置&gt;开发者中心&gt;网页授权获取用户基本信息&gt;修改
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">授权域名</label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <input type="text" name="" autocomplete="off" placeholder="授权域名" id="auth_url" readonly class="layui-input nc-len-long" value="{$url}">
+                </div>
+                <span class="layui-btn layui-btn-primary" onclick="nc.copy('auth_url')">复制</span>
+            </div>
+            <div class="layui-form-mid layui-word-aux">填写授权回调页面域名业务域名设置完毕！</div>
+        </div>
+        <div class="nc-form-row">
+            <button class="layui-btn" lay-submit lay-filter="formSave">保存</button>
+            <button class="layui-btn layui-btn-primary" onclick="javascript:history.go(-1);">返回</button>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+var repeat_flag = false;//防重复标识
+layui.use(['form'], function(){
+	var form = layui.form;
+	  form.on('submit(formSave)', function(data){
+			if(repeat_flag) return;
+		  repeat_flag = true;
+			$.ajax({
+				type : "post",
+				url : "{:addon_url('Wechat://sitehome/config/config')}",
+				dataType : "JSON",
+				data : data.field,
+				success : function(data) {
+					repeat_flag = false;
+					layer.msg(data.message);
+				}
+			});
+	  });
+
+});
+
+/**
+ * 单图回调事件
+ */
+function singleImageUploadSuccess(res,name){
+    if(name == "wechat_code"){
+        $(".wechat_code").html('<div class="upload-img-box has-choose-image"><div><img src="'+nc.img(res.path)+'" layer-src="'+nc.img(res.path)+'"></div><span onclick="uploadSinglewechat_code();">修改</span></div>');
+        $("input[name='wechat_code']").val(res.path);
+    }
+}
+</script>
+{/block}

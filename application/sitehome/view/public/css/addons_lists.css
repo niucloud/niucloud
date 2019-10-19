@@ -10,3 +10,4 @@
 .nc-item-float > div{padding-left: 5px; padding-right: 5px; box-sizing: border-box;}
 .nc-item-float a .layui-badge-dot{margin-right: 5px;}
 .nc-item-float .nc-assist-fr:nth-last-of-type(2){margin-left: 5px;}
+.layui-badge-dot{margin-right: 5px;}

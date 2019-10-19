@@ -1,0 +1,224 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="ADDON_NC_FILE_CSS/file.css">
+<link rel="stylesheet" href="ADDON_NC_FILE_CSS/media_detail.css">
+<link rel="stylesheet" href="ADDON_NC_FILE_CSS/audio.css">
+{/block}
+{block name="main"}
+<div class="search-wrap layui-form nc-function-search">
+	<div class="upload-wrap">
+		<div>
+			<button class="layui-btn layui-btn-sm"  onclick="audio($('.active .category-id').val())">上传音频</button>
+		</div>
+		{:hook("fileUpload", ["name" => "", 'type' => 'common', 'file_type' => 'AUDIO' ], '', true)}
+	</div>
+	<div class="layui-form-item file-name-wrap">
+		<div class="layui-input-inline">
+			<input type="text" name="search_file_name" required="" lay-verify="file_name" placeholder="请输入资源名称" autocomplete="off" class="layui-input">
+		</div>
+		<button class="layui-btn" lay-submit lay-filter="search">搜索</button>
+	</div>
+	<div class="layui-form-item file-order">
+		<label class="layui-form-label">排序</label>
+		<div class="layui-input-inline nc-len-short">
+			<select id="img_order">
+				<option value="create_time desc">创建时间↑</option>
+				<option value="create_time asc">创建时间↓</option>
+				<option value="file_name desc">名称↑</option>
+				<option value="file_name asc">名称↓</option>
+				<option value="size desc">大小↑</option>
+				<option value="size asc">大小↓</option>
+			</select>
+		</div>
+	</div>
+</div>
+<div class="category-list">
+	<div id="t_category">
+		{foreach name="$category_list" item="vo" key="k"}
+		<div class="category-item {if $k==0}active{/if}">
+			<span class="category-name">{$vo.name}</span>
+			<span class="category-num">{$vo.num}</span>
+			<input type="hidden" value="{$vo.id}" class="category-id">
+			<input type="hidden" value="{$vo.is_default}" name="is_default">
+		</div>
+		{/foreach}
+	</div>
+	<div class="category-menu">
+		<button class="layui-btn layui-btn-sm add-group">添加分组</button>
+	</div>
+</div>
+
+<script id="category" type="text/html">
+	{{#  layui.each(d, function(index, item){ }}
+	{{# if(d.category_id > 0){ }}
+	{{#  if(item['id'] == d.category_id){ }}
+	<div class="category-item active">
+		{{# } else { }}
+		<div class="category-item">
+			{{#  } }}
+			{{# } else { }}
+			{{# if(index == 0){ }}
+			<div class="category-item active">
+				{{# } else { }}
+				<div class="category-item">
+					{{#  } }}
+					{{#  } }}
+					<span class="category-name">{{ item['name'] }}</span>
+					<span class="category-num">{{ item['num'] }}</span>
+					<input type="hidden" value="{{ item['id'] }}" class="category-id" />
+					<input type="hidden" value="{{ item['is_default'] }}" name="is_default">
+				</div>
+				{{#  }); }}
+</script>
+
+<div class="attachment-container">
+	<div class="layui-form">
+		<div class="layui-form-item">
+			<span class="group_name"></span>
+			<span class="operation">
+				<span class="rename nc-text-color">重命名 </span>
+				<span class="delete_packet nc-text-color">删除分组</span>
+			</span>
+		</div>
+	</div>
+
+	<div class="layui-form action-bar">
+		<div class="layui-form-item  attachment-checkbox">
+			<input type="checkbox" lay-skin="primary" title="全选" lay-filter="allChoose">
+		</div>
+	</div>
+
+	<div>
+		<div class="layui-row" id="media-view-list"></div>
+
+		<div style="display:none" class="image-data">
+			<button class="layui-btn layui-btn-primary layui-btn-sm grouping-all">修改分组</button>
+			<button class="layui-btn layui-btn-primary layui-btn-sm delete-all">删除</button>
+			<div id="paged" class="page" style="float: right"></div>
+		</div>
+	</div>
+
+</div>
+
+<!-- 复制 -->
+<script type="text/html" id="copy_path_html">
+	<div class="layui-form">
+		<div class="layui-form-item" id="copy_path">
+			<div class="layui-inline" style="padding:20px 10px;">
+				<div class="layui-input-inline">
+					<input class="layui-input " type="text" id="path_file"value="{{ d.path }}" readonly>
+				</div>
+				<button class="layui-btn layui-btn-primary" onclick="JScopy()">复制</button>
+				<input type="text" id="hidden_image_path" value="" style="top: -1000px; position: absolute;">
+			</div>
+		</div>
+	</div>
+
+</script>
+
+<!-- 修改分组 -->
+<script type="text/html" id="group_html">
+	<div id="modify_group" class="group-portal">
+		<div class="layui-form">
+			<div class="layui-form-item">
+				<p>选择分组</p>
+				{volist name="category_list" id="vo"}
+				<div class="layui-input-inline">
+					<input type="radio" name="group_id" value="{$vo.id}" title="{$vo.name}" lay-filter="example" {{#  if(d.category_id == {$vo.id} ){ }} checked {{#  } }}>
+				</div>
+				{/volist}
+			</div>
+		</div>
+	</div>
+</script>
+<!-- 相册 -->
+<script type="text/html" id="list_html" >
+	<div class="audio-list">
+	{{#  layui.each(d.list, function(index, item){ }}
+	<div class="audio-item">
+		<div class="audio-box"  onclick="mediaDetail('{{ item.path }}', '{{ item.file_name }}', '{{ item.size }}', '{{ item.create_time }}')">
+			<div class="audio-img">
+			</div>
+			<div class="audio-title">
+				{{ item.file_name }}
+			</div>
+			<div class="audio-time">
+				{{ nc.time_to_date(item.create_time) }}
+			</div>
+			<div class="audio-size">
+				{{ nc.sizeformat(item.size) }}
+			</div>
+		</div>
+		<div class="audio-tool">
+			<div class="layui-form" >
+				<span class="layui-form-item">
+					<input type="checkbox" name="check[]" lay-skin="primary" title="" value="{{ item.id }}" lay-filter="oneChoose">
+				</span>
+			</div>
+			<div class="audio-tool-item">
+				<a href="javascript:;" class="nc-text-color delfile" data-id="{{ item.id }}">删除</a>
+			</div>
+			<span class="audio-tool-vertical">|</span>
+			<div class="audio-tool-item">
+				<a href="javascript:;" class="nc-text-color grouping" data-id="{{ item.id }}">分组</a>
+			</div>
+			<span class="audio-tool-vertical">|</span>
+			<div class="audio-tool-item">
+				<a href="javascript:;" class="nc-text-color pathlink" data-path="{{ nc.img(item.path)  }}">链接</a>
+			</div>
+			<span class="audio-tool-vertical">|</span>
+			<div class="audio-tool-item">
+				<a href="javascript:;" class="nc-text-color file-rename" data-id="{{ item.id }}" data-file_name="{{ item.file_name }}">改名</a>
+			</div>
+		</div>
+	</div>
+	{{#  }); }}
+	{{#  if(d.list.length === 0){ }}
+		<div class="audio-empty-data">
+			暂无数据
+		</div>
+
+	{{#  } }}
+	</div>
+</script>
+
+<script type="text/html" id="media_detail_html">
+
+	<div class="layui-row">
+		<div class="layui-col-md8 media-left">
+			<div class="media-big">
+				<audio src="{{ nc.img(d.path) }}" controls="controls" style="max-width: 100%; width:100%;max-height: 480px;display:inline-block;"></audio>
+			</div>
+		</div>
+		<div class="layui-col-md4 media-right">
+			<h5 class="media-detail-name">{{ d.file_name }}</h5>
+			<div>
+				<h3 class="media-detail-title">媒体属性</h3>
+				<ul class="media-detail-param">
+					<li>
+						<label>音频大小：</label>
+						<span>{{ nc.sizeformat(d.size) }}</span>
+					</li>
+					<li>
+						<label>上传时间：</label>
+						<span>{{ nc.time_to_date(d.create_time) }}</span>
+					</li>
+				</ul>
+			</div>
+			<a  class="media-detail-href" href="{{ nc.img(d.path) }}" target="_blank">查看源文件</a>
+		</div>
+	</div>
+
+</script>
+{/block}
+{block name="script"}
+<script src="ADDON_NC_FILE_JS/media.js"></script>
+<script src="ADDON_NC_FILE_JS/media_detail.js"></script>
+<script>
+    var MEDIA_TYPE = "AUDIO";
+    var url = "File://sitehome/File/audio";
+    function singleAudioUploadSuccess(data, name){
+        getFileAlbumList(1, limit); //重新分组
+    }
+</script>
+{/block}

@@ -1,0 +1,38 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+{notempty name="$addon_name"}
+<style>
+.layui-fluid>.layui-breadcrumb{padding: 0 20px 0;}
+</style>
+{/notempty}
+{/block}
+{block name="main"}
+{if condition="$diy_view_list || $addon_name"}
+<div class="layui-tab layui-tab-brief">
+	<ul class="layui-tab-title">
+		{notempty name="$addon_name"}
+			{foreach name="$addon_diy_view_list" item="diy_view"}
+				{if $diy_view['addon_info']['name'] == $addon_name}
+					{notempty name="$diy_view['view_list']"}
+						{foreach name="$diy_view['view_list']" item="child"}
+							<li {if $child['name']==$name}class="layui-this"{/if}><a href="{:addon_url('diyView://sitehome/design/diyview',['name'=>strtolower($child['name']),'addon_name'=>$diy_view['addon_info']['name']])}">{$child['title']}</a></li>
+						{/foreach}
+					{/notempty}
+				{/if}
+			{/foreach}
+		{else/}
+			{foreach name="$diy_view_list" item="vo" key="k"}
+				{if $vo['name'] != 'DIYVIEW_SITE' && $vo['name'] != 'DIYVIEW_MEMBER'}
+					<li {if $vo['name']==$name}class="layui-this"{/if}><a href="{:addon_url('diyView://sitehome/design/diyview',['name'=>strtolower($vo['name'])])}">{$vo.title}</a></li>
+				{/if}
+			{/foreach}
+		{/notempty}
+	</ul>
+	<div class="layui-tab-content">
+		{:hook("diy", ['name' => $name,'addon_name'=>$addon_name],[],true)}
+	</div>
+</div>
+{else/}
+<div style="padding: 20px;">当前站点未配置固定页面，您可以跳转至<a href="{:addon_url('diyView://sitehome/design/feature')}" class="nc-text-color">微页面</a>进行自定义页面装修</div>
+{/if}
+{/block}

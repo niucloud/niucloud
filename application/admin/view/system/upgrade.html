@@ -1,0 +1,66 @@
+{extend name="base"/}
+{block name="main"}
+<div class="nc-list style1">
+	<div class="head">
+		<h2>检测升级</h2>
+	</div>
+	<ul class="layui-form">
+		<li>
+			<label>最新版本号</label>
+			<span>{$version.sys_version_no}</span>
+		</li>
+		<li>
+			<label>最新更新包</label>
+			<span>{$version.sys_release}</span>
+		</li>
+		<li>
+			<label>更新版本数</label>
+			<span>{$version.script_count}</span>
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('scripts', '更新版本数', '450px')">点击查看</a>
+		</li>
+		<li>
+			<label>更新文件数</label>
+			<span>{$version.file_count}</span>
+			<a href="javascript:;" class="operation nc-text-color" onclick="editLayer('files', '更新文件数', '450px')">点击查看</a>
+		</li>
+	</ul>
+</div>
+<a href="javascript:;" class="operation nc-text-color" onclick="upgrade({$version.file_count})">点击升级</a>
+<div class="layui-progress layui-progress-big" lay-showpercent="true">
+  <div class="layui-progress-bar" lay-percent="3%"></div>
+</div>
+<script type="text/html" id="scripts">
+	<div class="layui-form" lay-filter="scripts">
+		<div class="layui-form-item">
+		{volist name="$version['scripts']" id="script"}
+         <li>
+            <label>版本</label>
+            <span>{$script}</span>
+        </li>
+		{/volist}
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn layui-btn-primary" onclick="back()">关闭</button>
+		</div>
+	</div>
+</script>
+
+<script type="text/html" id="files">
+	<div class="layui-form" lay-filter="files">
+		<div class="layui-form-item">
+		{volist name="$version['files']" id="file"}
+         <li>
+            <label>文件</label>
+            <span>{$file}</span>
+        </li>
+		{/volist}
+		</div>
+		<div class="nc-form-row">
+			<button class="layui-btn layui-btn-primary" onclick="back()">关闭</button>
+		</div>
+	</div>
+</script>
+{/block}
+{block name="script"}
+<script src="ADMIN_JS/upgrade.js"></script>
+{/block}

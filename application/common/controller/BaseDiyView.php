@@ -69,11 +69,19 @@ class BaseDiyView extends BaseSite
 	final public function fetchHtml($param = [])
 	{
 		$diy_view = new DiyView();
-		if ($param['site_id'] > 0 && !empty($param['name'])) {
-			$diy_view_info = $diy_view->getSiteDiyViewDetail([
-				'nsdv.site_id' => $param['site_id'],
-				'nsdv.name' => $param['name'],
-			]);
+		if ($param['site_id'] > 0) {
+			if (!empty($param['addon_name']) && !empty($param['name'])) {
+				$diy_view_info = $diy_view->getSiteDiyViewDetail([
+					'nsdv.site_id' => $param['site_id'],
+					'nsdv.name' => $param['name'],
+					'nsdv.addon_name' => $param['addon_name'],
+				]);
+			} elseif (!empty($param['name'])) {
+				$diy_view_info = $diy_view->getSiteDiyViewDetail([
+					'nsdv.site_id' => $param['site_id'],
+					'nsdv.name' => $param['name'],
+				]);
+			}
 		}
 		
 		$body = "";
@@ -146,12 +154,18 @@ class BaseDiyView extends BaseSite
 	private function getComponentClass($addon_name, $controller)
 	{
 		$instance = null;
-		$path = '\\addon\\system\\' . $addon_name . "\\component\\controller\\" . $controller;
-		if (!class_exists($path)) {
-			$path = '\\addon\\module\\' . $addon_name . "\\component\\controller\\" . $controller;
+		$port = [ 'system', 'module', 'app' ];
+		$is_exist = false;
+		$path = '';
+		foreach ($port as $k => $v) {
+			$path = '\\addon\\' . $v . '\\' . $addon_name . "\\component\\controller\\" . $controller;
+			if (class_exists($path)) {
+				$is_exist = true;
+				break;
+			}
 		}
 		
-		if (class_exists($path)) {
+		if ($is_exist) {
 			$class = new \ReflectionClass($path);
 			$instance = $class->newInstanceArgs();
 			return $instance;

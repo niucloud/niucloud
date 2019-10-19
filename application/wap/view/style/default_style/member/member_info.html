@@ -1,0 +1,84 @@
+{extend name="wap@style/base"/}
+{block name="resources"}
+<style>
+    .face-img{
+        max-height:100%;
+        max-width:100%;
+        display:inline-block;
+        width:auto;
+        height:auto;
+    }
+</style>
+{/block}
+{block name="head"}
+<header class="hui-header">
+    <div id="hui-back" onclick="window.history.back();"></div>
+    <h1>{$title}</h1>
+</header>
+{/block}
+{block name="main"}
+
+{php}
+//$member_info_result = api("System.Member.memberInfo",["access_token" => $access_token]);
+//$member_info = $member_info_result["data"];
+$member_info = $member_info["data"];
+{/php}
+<div style="margin-top:40px;"></div>
+<div class="hui-list" style="background:#FFFFFF;">
+    <ul>
+        <li>
+            <a href="javascript:hui.open('{:addon_url("wap/member/headimg")}');">
+                <div class="hui-list-text">
+                    我的头像
+                    <div class="hui-list-info">
+                        <div style="display:inline-block;border:1px solid rgba(0,0,0,.1);height:30px;width:30px;height:30px;border-radius:50%;overflow:hidden;position:relative;vertical-align:middle;">
+                            <img class="face-img"src="{if !empty($member_info.headimg)}{:img($member_info.headimg)}{else/}{/if}" alt="">
+                        </div>
+                        <span class="hui-icons hui-icons-right"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+
+        <li>
+            <a href="javascript:hui.open('{:addon_url("wap/member/nickname")}');">
+                <div class="hui-list-text">
+                    我的昵称
+                    <div class="hui-list-info">
+                        {$member_info.nick_name}&nbsp;
+                        <span class="hui-icons hui-icons-right"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:hui.open('{:addon_url("wap/member/mobile")}');">
+                <div class="hui-list-text">
+                    手机号
+                    <div class="hui-list-info">
+                        {if !empty($member_info.mobile)}{$member_info.mobile}{else/}请填写手机号{/if}
+                        <span class="hui-icons hui-icons-right"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:hui.open('{:addon_url("wap/member/realname")}');">
+                <div class="hui-list-text">
+                    真实姓名
+                    <div class="hui-list-info">
+                        {if !empty($member_info.real_name)}{$member_info.real_name}{else/}请填写真实姓名{/if}
+                        <span class="hui-icons hui-icons-right"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<div style="margin-top:28px;">
+    <button type="button" class="hui-button hui-button-large" style="background:#FFFFFF; " onclick="location.href='{:addon_url("wap/member/loginout")}'">
+        <span class="hui-icons hui-icons-logoff"></span>退出登录
+    </button>
+</div>
+{/block}

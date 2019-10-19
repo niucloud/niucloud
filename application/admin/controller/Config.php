@@ -384,7 +384,45 @@ class Config extends BaseAdmin
 		}
 	}
 	
-
+	/**
+	 * 微信开放平台配置
+	 */
+	public function wechat()
+	{
+		$config_model = new ConfigModel();
+		if (IS_AJAX) {
+			$name = input('name', '');
+			$data = [
+				'value' => input('val'),
+				'name' => "WECHAT_PLATFORM_CONFIG",
+				'type' => 0,
+				'title' => "微信开放平台",
+				'remark' => "微信开放平台配置",
+				'status' => 1,
+			];
+			if ($name) {
+				$data['update_time'] = time();
+				$res = $config_model->editConfig($data, [ 'name' => $name ]);
+			} else {
+				$data['create_time'] = time();
+				$res = $config_model->addConfig($data);
+			}
+			return $res;
+		}
+		$wechat_info = $config_model->getConfigInfo([ 'name' => 'WECHAT_PLATFORM_CONFIG' ]);
+		$wechat_info['data']['value'] = json_decode($wechat_info['data']['value'], true);
+		$this->assign('wechat_info', $wechat_info['data']);
+		$host = request()->host();
+		$root = request()->root();
+		$data_url = array(
+			'host' => $host,
+			'auth_msg_url' => $host . '/wechat/wap/config/index',
+			'msg_url' => $host . '/wechat/wap/config/getPlatformMessage/$APPID$/',
+			'open_url' => $host
+		);
+		$this->assign("data_url", $data_url);
+		return $this->fetch('config/wechat');
+	}
 	
 	public function version()
 	{

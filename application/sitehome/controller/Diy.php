@@ -34,7 +34,9 @@ class Diy extends BaseSiteHome
 	{
 		$name = input("name", "DIYVIEW_SITE");
 		$name = strtoupper($name);
+		$addon_name = input("addon_name", $this->siteInfo['addon_app']);
 		$this->assign('name', $name);
+		$this->assign('addon_name', $addon_name);
 		return $this->fetch('diy/index');
 	}
 	
@@ -46,7 +48,9 @@ class Diy extends BaseSiteHome
 	{
 		$name = input("name", "DIYVIEW_MEMBER");
 		$name = strtoupper($name);
+		$addon_name = input("addon_name", $this->siteInfo['addon_app']);
 		$this->assign('name', $name);
+		$this->assign('addon_name', $addon_name);
 		return $this->fetch('diy/member_index');
 	}
 	

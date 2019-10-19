@@ -1,0 +1,26 @@
+<view class="notice-view" style="background-color:{{config_info.backgroundColor}};">
+
+  <view class="left-image">
+    <image class="img" src="{{config_info.image_url == '' ? '/images/component/notice.png' : config_info.image_url}}" mode="widthFix" />
+  </view>
+
+  <view class="right-list">
+    <swiper class="ul" autoplay="{{true}}" interval="2000" circular="{{true}}" vertical="{{true}}" display-multiple-items="2">
+
+      <block wx:for="{{config_info.list}}" wx:key="">
+        <swiper-item class="li">
+          <view class="a" catchtap="linkJump" data-url="{{config_info.link.weapp_url}}" style="color:{{config_info.textColor}}; font-size:{{config_info.fontSize}}px;">{{item.title}}</view>
+        </swiper-item>
+      </block>
+
+      <block wx:if="{{config_info.list.length > 0 && config_info.list.length <= 2}}">
+        <block wx:for="{{config_info.list}}" wx:key="">
+          <swiper-item class="li">
+            <view class="a" catchtap="linkJump" data-url="{{config_info.link.weapp_url}}" style="color:{{config_info.textColor}}; font-size:{{config_info.fontSize}}px;">{{item.title}}</view>
+          </swiper-item>
+        </block>
+      </block>
+
+    </swiper>
+  </view>
+</view>

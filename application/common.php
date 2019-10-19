@@ -18,6 +18,9 @@ use app\common\model\Config;
 use util\api\SignClient;
 use app\common\model\Site;
 use app\common\model\Addon;
+use think\Cookie;
+use think\Session;
+use think\Cache;
 
 /*****************************************************基础函数*********************************************************/
 /**
@@ -1373,23 +1376,121 @@ function arrDelArr($arr, $del_arr)
  */
 function testWrite($file)
 {
-    if (is_dir($file)) {
-        $dir = $file;
-        if ($fp = @fopen("$dir/test.txt", 'w')) {
-            @fclose($fp);
-            @unlink("$dir/test.txt");
-            $writeable = true;
-        } else {
-            $writeable = false;
-        }
-    } else {
-        if ($fp = @fopen($file, 'a+')) {
-            @fclose($fp);
-            $writeable = true;
-        } else {
-            $writeable = false;
-        }
-    }
+	if (is_dir($file)) {
+		$dir = $file;
+		if ($fp = @fopen("$dir/test.txt", 'w')) {
+			@fclose($fp);
+			@unlink("$dir/test.txt");
+			$writeable = true;
+		} else {
+			$writeable = false;
+		}
+	} else {
+		if ($fp = @fopen($file, 'a+')) {
+			@fclose($fp);
+			$writeable = true;
+		} else {
+			$writeable = false;
+		}
+	}
+	
+	return $writeable;
+}
 
-    return $writeable;
+/**
+ * 检测登录(应用于h5网页检测登录)
+ * @param unknown $url
+ */
+function check_auth($url = '')
+{
+	$access_token = Session::get("access_token_" . request()->siteid());
+	if (empty($access_token)) {
+		if (!empty($url)) {
+			Session::set("redirect_login_url", $url);
+		}
+		//尚未登录(直接跳转)
+		return error(url('wap/login/login'));
+	}
+	$member_info = cache("member_info_" . request()->siteid() . $access_token);
+	if (empty($member_info)) {
+		$member_info = api("System.Member.memberInfo", [ 'access_token' => $access_token ]);
+		if ($member_info['code'] == 0) {
+			$member_info = $member_info['data'];
+			cache("member_info_" . request()->siteid() . $access_token, $member_info);
+		}
+	}
+	$member_info['access_token'] = $access_token;
+	return success($member_info);
+}
+
+/**
+ * 分割sql语句
+ * @param  string $content sql内容
+ * @param  bool $string 如果为真，则只返回一条sql语句，默认以数组形式返回
+ * @param  array $replace 替换前缀，如：['my_' => 'me_']，表示将表前缀my_替换成me_
+ * @return array|string 除去注释之后的sql语句数组或一条语句
+ */
+function parseSql($content = '', $string = false, $replace = [])
+{
+    // 纯sql内容
+    $pure_sql = [];
+    // 被替换的前缀
+    $from = '';
+    // 要替换的前缀
+    $to = '';
+    // 替换表前缀
+    if (!empty($replace)) {
+        $to   = current($replace);
+        $from = current(array_flip($replace));
+    }
+    if ($content != '') {
+        // 多行注释标记
+        $comment = false;
+        // 按行分割，兼容多个平台
+        $content = str_replace(["\r\n", "\r"], "\n", $content);
+        $content = explode("\n", trim($content));
+        // 循环处理每一行
+        foreach ($content as $key => $line) {
+            // 跳过空行
+            if ($line == '') {
+                continue;
+            }
+            // 跳过以#或者--开头的单行注释
+            if (preg_match("/^(#|--)/", $line)) {
+                continue;
+            }
+            // 跳过以/**/包裹起来的单行注释
+            if (preg_match("/^\/\*(.*?)\*\//", $line)) {
+                continue;
+            }
+            // 多行注释开始
+            if (substr($line, 0, 2) == '/*') {
+                $comment = true;
+                continue;
+            }
+            // 多行注释结束
+            if (substr($line, -2) == '*/') {
+                $comment = false;
+                continue;
+            }
+            // 多行注释没有结束，继续跳过
+            if ($comment) {
+                continue;
+            }
+            // 替换表前缀
+            if ($from != '') {
+                $line = str_replace('`'.$from, '`'.$to, $line);
+            }
+            // sql语句
+            $pure_sql[] = $line;
+        }
+        // 只返回一条语句
+        if ($string) {
+            return implode($pure_sql, "");
+        }
+        // 以数组形式返回sql语句
+        $pure_sql = implode($pure_sql, "\n");
+        $pure_sql = explode(";\n", $pure_sql);
+    }
+    return $pure_sql;
 }

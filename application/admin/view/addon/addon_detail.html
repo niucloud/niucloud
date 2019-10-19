@@ -24,9 +24,9 @@
     </div>
     <div class="nc-module-operation">
         {if $info.status elt 0}
-        <a class="nc-item-btn layui-btn" href="javascript:install('{$info.name}')">安装</a>
+        <a class="layui-btn" href="javascript:install('{$info.name}')">安装</a>
         {else/}
-        <a class="nc-item-btn layui-btn" href="javascript:uninstall('{$info.name}')">卸载</a>
+        <a class="layui-btn" href="javascript:uninstall('{$info.name}')">卸载</a>
         {/if}
     </div>
 </div>

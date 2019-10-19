@@ -84,7 +84,7 @@ class Visit
 		//加入防止写入过多无效访问
 		$now_time = time();
 		$today_date = date("Ymd");
-		$expire_time = 600;//过期的周期时长
+		$expire_time = 1800;//过期的周期时长
 		$visit_session_name = "visit_" . $param["site_id"] . "_" . $param["type"] . "_" . $param["module"] . "_" . $param["addon"] . "_" . $today_date;
 		if (!empty(Session::get($visit_session_name)) && (Session::get($visit_session_name) + $expire_time) > $now_time) {
 			return success();
@@ -346,7 +346,10 @@ class Visit
 		}
 		
 		$visit_count = $visit_model->getSum($condition, "count");
-		$visit_ip_count = $visit_model->getSum($condition, "ip_count");
+//		$visit_ip_count = $visit_model->getSum($condition, "ip_count");
+        $visit_ip_model = model("nc_visit_ip");//访问统计记录表
+        $visit_ip_result = $visit_ip_model->getInfo($condition, "count( DISTINCT ip ) as ip_count");
+        $visit_ip_count = $visit_ip_result["ip_count"];
 		$data = array(
 			"visit_count" => $visit_count,
 			"visit_ip_count" => $visit_ip_count

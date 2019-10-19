@@ -1,0 +1,294 @@
+{extend name="sitehome@style/base"/}
+{block name="main"}
+<style>
+    .phone-input {
+        border: 1px solid #bbb;
+        border-radius: 2px;
+        padding: 6px 11px 9px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 260px;
+    }
+
+    .phone-input textarea {
+        border: 0;
+        resize: none;
+        height: 83px;
+        display: block;
+        padding: 0;
+        width: 100%;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
+.layui-label {
+    height:30px;
+    line-height: 30px;
+}
+    .bottom {
+         text-align: center;
+   		 margin: 20px 0;
+    }
+    .layui-form-checkbox[lay-skin=primary] i {
+        font-weight: bold;
+        width: 15px;
+        height: 15px;
+    }
+    .message-template-content {
+        display: inline-block;
+        position: absolute;
+        right: 78px;
+        margin-bottom: 12px;
+        padding: 8px 15px;
+        width: 206px;
+        word-break: break-all;
+        font-size: 16px;
+        line-height: 1.25;
+        color: #000;
+        background: #e5e5ea;
+        border-radius: 17px;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        top: 140px;
+        max-height: 273px;
+        min-height: 30px;
+        text-align: left;
+    }
+    .message-template-content:after{
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 30px;
+        width: 10px;
+        height: 20px;
+        background: #e5e5ea;
+        border-bottom-right-radius: 10px;
+        -webkit-transform: translate(-30px,-2px);
+        -moz-transform: translate(-30px,-2px);
+        -ms-transform: translate(-30px,-2px);
+        transform: translate(-30px,-2px);
+    }
+    .preview>form>div {
+
+    }
+    .select-template {
+	    text-align: left;
+	    margin-bottom: 5px;
+	    border-bottom: 1px solid #f3f3f3;
+	    padding: 5px 0;
+	    cursor: pointer;
+    }
+    textarea#sms_content {
+        padding-top: 5px;
+    }
+   .laytable-cell-1-sms_content {
+	    display: block;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+    }
+</style>
+<div class="layui-row">
+    <div class="layui-col-md4 preview " style="text-align: right">
+        <!--短信start-->
+        <div class="layui-form">
+            <div style="width:320px;position: relative;">
+                <img class="effect" src="https://b.yzcdn.cn/v2/wsc/img/pages/apps/messagepush/img/message-v3.png">
+                <div class="message-template-content">【<label>牛云</label>】<span></span> 退订回TD</div>
+            </div>
+        </div>
+        <!--短信end-->
+    </div>
+    <div class="layui-col-md4 layui-form" style="text-align: left">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>群发对象</label>
+            <div class="layui-input-block">
+                <input type="radio" name="type" value="0" title="输入手机号" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <div class="phone-input"><textarea  onkeyup="smsCode(this)" name="sms_code" id="sms_code" lay-filter="sms_code" class="layui-textarea" placeholder="仅支持大陆手机号，多个手机号请换行"> </textarea></div>
+                <label class="layui-word-aux">发送给<span class="send_num">0</span>人，仅支持大陆手机号，多个手机号请换行</label>
+            </div>
+        </div>
+        <br>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>短信内容</label>
+            <div class="layui-input-block">
+                <div class="phone-input">
+                    <div style="" class="select-template">
+                        <label class="layui-word-aux" lay-submit lay-filter="select-temp">选择模板</label><label class="layui-word-aux"></label>
+                    </div>
+                    <textarea placeholder="请选择模板" readonly name="sms_content" style="height: 100px;" id="sms_content"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>短信签名</label>
+            【<label class="layui-label" name="sms_sign" id="sms_sign">牛云</label>】
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="required">*</span>发送时间</label>
+            <div class="layui-input-block">
+                <input type="radio" name="time" value="0" title="立即发送" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input id="select_terms" value="1" type="checkbox" name="" title="同意《短信服务协议》" lay-skin="primary"  lay-filter="select_terms">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-form-item bottom">
+    <button class="layui-btn" id="save" lay-submit lay-filter="save">保存</button>
+    <button class="layui-btn layui-btn-primary" onclick="javascript:history.back(-1);">取消</button>
+</div>
+<div class="clear"></div>
+
+<div id="layer_content" style="display:none">
+    <div class="layui-tab">
+        <table  id="sms_msg_list" lay-filter="sms_msg_list"></table>
+    </div>
+</div>
+
+<script type="text/html" id="select_radio">
+     <input type="radio" name="temp" lay-filter="save-temp" value="">
+</script>
+<script type="text/html" id="sms_status">
+     {{d.sms_is_enabled==1 ? '已启用' : '未启用' }}
+</script>
+<input type="hidden" value="" id="hidden_sms_temp_id">
+<input type="hidden" value="" id="hidden_sms_is_enabled">
+<input type="hidden" value="" id="hidden_sms_signature">
+{/block}
+{block name="script"}
+<script>
+layui.use(['form'], function() {
+    var form = layui.form;
+    $('#sms_content').bind('input propertychange', function() {
+        if ($(".textareachange").val() != "") {
+            var content = $('#sms_content').val();
+            $('.message-template-content span').text(content);
+        }
+    });
+/*       form.on('checkbox(select_terms)', function(data) {
+        if(data.elem.checked) {
+            $('#save').removeClass('layui-btn-disabled');
+        }else {
+            $('#save').addClass('layui-btn-disabled');
+        }
+    }) */
+	
+	var repeat_flag = false;//防重复标识
+    form.on('submit(save)', function(data){
+        var sms_sign = $('#sms_sign').text();
+        var temp_id = $('#hidden_sms_temp_id').val();
+        var sms_signature = $('#hidden_sms_signature').val();
+        data.field.temp_id = temp_id;
+        data.field.sms_signature = sms_signature;
+        var field = data.field;
+
+        var sms_code = $('#sms_code').val();
+        var sms_code_arr = sms_code.split("\n");
+        if(sms_code == '') {
+            layer.msg('请输入手机号');
+            return;
+        }
+        $.each(sms_code_arr, function(){
+             if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(this))){
+                 layer.msg('输入的手机号不符合规则');
+                 return false;
+             }
+        });
+        if($('#hidden_sms_is_enabled').val() == 0) {
+            layer.msg('该模板配置未开启');
+            return;
+        }
+
+        var is_checked =  $("#select_terms[type='checkbox']").prop('checked');//false
+        if(!(is_checked)) {
+            layer.msg('需同意短信服务协议');
+            return;
+        }
+
+        if(repeat_flag) return;
+		repeat_flag = true;
+        $.ajax({
+            url : '{:addon_url("Message://sitehome/Sendsms/send")}',
+            type : 'post',
+            data : {
+                'field' : JSON.stringify(field),
+            },
+            dataType : "JSON",
+            success : function(res) {
+				repeat_flag = false;
+            }
+
+        })
+    });
+        
+var table = new Table({
+    elem: "#sms_msg_list",
+    url : '{:addon_url("Message://sitehome/Sendsms/getSmsMsgList")}',
+    cols :[
+        [
+            {field : 'id', width : '8%', title : '选择', templet : '#select_radio' },
+            {field : 'title', width : '8%', title : '模板名称'},
+            {field : 'sms_signature', width : '8%',  title : '短信签名' } ,
+            {field : 'sms_template_id', width : '8%',  title : '模板id' },
+            {field : '', width : '8%',  title : '是否启用', templet:"#sms_status" } ,
+            {field : 'sms_content', width : '16%',  title : '内容' }
+        ]
+    ],
+});
+
+form.on('submit(select-temp)', function() {
+      layer.open({
+          type: 1,
+          move: '.mine-move'
+          ,title: '短信模板' //不显示标题栏
+          ,closeBtn: false
+          ,btn: ['确定', '关闭']
+          ,area: ['50%', '50%'], //宽高
+          content: $('#layer_content'),
+          success: function(layero, index){
+              var mask = $(".layui-layer-shade");
+                 mask.appendTo(layero.parent());
+          }
+      });
+});
+
+form.on('radio(save-temp)', function(data) {
+      var id = $(data.elem).parent().parent().attr('data-content');
+      $.ajax({
+          url : '{:addon_url("Message://sitehome/Sendsms/getSmsMsgInfo")}',
+          type : 'post',
+          data : {id},
+          dataType : "JSON",
+          success : function(data) {
+              if(data.data.sms_content != '') {
+                $('#sms_content').val(data.data.sms_content);
+              }else {
+                $('#sms_content').val(' ');
+              }
+              $('#hidden_sms_temp_id').val(data.data.sms_template_id);
+              $('#hidden_sms_signature').val(data.data.sms_signature);
+              $('.message-template-content label').text(data.data.sms_signature);
+			  $('.message-template-content span').text(data.data.sms_content);
+			  $('#sms_sign').text(data.data.sms_signature);
+              $('#hidden_sms_is_enabled').val(data.data.sms_is_enabled);
+          }
+      })
+})
+
+});
+function smsCode(obj) {
+    $(obj).val($(obj).val().replace(/[^\r\n0-9]/g,''));
+    var areaRows = $(obj).val().split("\n").length; //获取行数
+    $('.send_num').text(areaRows);
+}
+</script>
+{/block}

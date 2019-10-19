@@ -45,8 +45,8 @@
 {if condition = "count($site_list) neq 0 "}
 <div id="site_list" class="nc-item-block-parent">
     {volist name = "site_list" id = "vo"}
-    <div class="nc-item-block fl size-lg">
-        <a class="nc-item-block-wrap" href="{:url( 'sitehome/index/index','site_id='.$vo['site_id'])}">
+    <a class="nc-item-block fl size-lg" href="{:url( 'sitehome/index/index','site_id='.$vo['site_id'])}">
+        <div class="nc-item-block-wrap">
             <div class="nc-item-pic">
                 {empty name="$vo['icon']"}
                 <img src="__ROOT__{$vo['app_icon']}" title="{if condition="$vo['title']"}{$vo['title']}{/if}" onerror="this.src='SITEHOME_IMG/site_img.png'"/>
@@ -55,34 +55,34 @@
                 {/empty}
             </div>
             <div class="nc-item-content">
-                <div class="nc-content-title">
-                    {$vo['site_name']}
-<!--                    {notempty name="$vo['style']"}-->
-<!--                    <span class="label" style="background-color:{$vo['style']['background']} !important; color:{$vo['style']['color']} !important;">{if condition="$vo['title']"}{$vo['title']}{/if}</span>-->
-<!--                    {/notempty}-->
+
+                <div class="nc-item-content-title">{$vo['site_name']}</div>
+                <div class="nc-item-content-desc">
+                    <span class="label">微信小程序</span>
+                    <span class="label">微信公众号</span>
                 </div>
-                <p class="nc-content-desc">创建日期：{:time_to_date($vo['create_time'])}</p>
-                <div class="nc-icon">
-                    {foreach $vo["support_app_type"] as $k => $v}
-                    <img src="__ROOT__/{$v['logo']}" title="{$v['name']}">
-                    {/foreach}
-                </div>
-            </div>
-        </a>
-        <div class="nc-item-float">
-            <div style=" text-align: center;">
-                <a href="javascript:copySite({$vo.site_id});" style="display:inline-block; width: 45%;">复制</a>
-                <span style="color: #999;">|</span>
-                <a href="javascript:delSite({$vo.site_id});" style="display:inline-block; width: 45%;">删除</a>
+                <p class="nc-item-content-desc">创建日期：{:time_to_date($vo['create_time'])}</p>
             </div>
         </div>
-    </div>
+        <div class="nc-item-float-wrap">
+            <div class="nc-item-float" style=" text-align: center;">
+                <div onclick="copySite({$vo.site_id})" style="display:inline-block; width: 45%;color: #333;">复制</div>
+                <span style="color: #999;">|</span>
+                <div onclick="delSite({$vo.site_id})" style="display:inline-block; width: 45%;color: #333;">删除</div>
+            </div>
+        </div>
+    </a>
     {/volist}
 </div>
 {/if}
 {/block}
 {block name='script'}
 <script>
+    $(".nc-item-float").click(function(event){
+        event.preventDefault();
+        event.stopPropagation();
+    });
+
 	function delSite(site_id) {
 		layer.confirm('确定要删除站点？', {icon: 3, title: '提示'}, function (index) {
 			$.ajax({
@@ -135,8 +135,9 @@
 						for (var i = 0; i < res['data'].length; i++) {
 							var data = res['data'][i],
 								dataPort = data['support_app_type'];
-							html += '<div class="nc-item-block fl size-lg">';
-							html += '<a class="nc-item-block-wrap" href=' + nc.url('sitehome/index/index', {site_id: data.site_id}) + '>';
+							html += '<a class="nc-item-block fl size-lg" href=' + nc.url('sitehome/index/index', {site_id: data.site_id}) + '>';
+
+							html += '<div class="nc-item-block-wrap">';
 							html += '<div class="nc-item-pic">';
 							if (data.icon == '') {
 								html += '<img src="__ROOT__' + data.app_icon + '" title="' + data.title + '" onerror="this.src=\'SITEHOME_IMG/site_img.png\'" />';
@@ -145,30 +146,36 @@
 							}
 							html += '</div>';
 							html += '<div class="nc-item-content">';
-							html += '<div class="nc-content-title">';
+							html += '<div class="nc-item-content-title">';
 							html += data.site_name;
 							// if(data.style){
 							// 	html += '<span class="label" style="background-color:'+ data.style.background +' !important;color:' + data.style["border-color"] + ' !important;">'+ data.title +'</span>';
 							// }
+                            html += '</div>';
+                            html += '<div class="nc-item-content-desc">';
+                            html += '<span class="label">微信小程序</span> ';
+                            html += '<span class="label">微信公众号</span>';
+                            html += '</div>';
+							html += '<div class="nc-item-content-desc">创建日期：' + nc.time_to_date(data.create_time);
 							html += '</div>';
-							html += '<div class="nc-content-desc">创建日期：' + nc.time_to_date(data.create_time);
+							// html += '<div class="nc-icon">';
+							// for (var item in dataPort)
+							// {
+							// 	html += '<img src="__ROOT__/'+dataPort[item].logo+'">';
+							// }
+							// html += '</div>';
 							html += '</div>';
-							html += '<div class="nc-icon">';
-							for (var item in dataPort)
-							{
-								html += '<img src="__ROOT__/'+dataPort[item].logo+'">';
-							}
 							html += '</div>';
-							html += '</div>';
-							html += '</a>';
-							html += '<div class="nc-item-float">';
-							html += '<div style=" text-align: center;">';
-							html += '<a style="display:inline-block; width: 45%;" href="javascript:copySite(' + data.site_id + ');">复制</a>';
+
+							html += '<div class="nc-item-float-wrap">';
+							html += '<div class="nc-item-float" style=" text-align: center;">';
+							html += '<div style="display:inline-block; width: 45%; color: #333;" onclick="copySite(' + data.site_id + ')">复制</div>';
 							html += '<span style="color: #999;">|</span>';
-							html += '<a style="display:inline-block; width: 45%;" href="javascript:delSite(' + data.site_id + ');">删除</a>';
+							html += '<div style="display:inline-block; width: 45%; color: #333;" onclick="delSite(' + data.site_id + ')">删除</div>';
 							html += '</div>';
 							html += '</div>';
-							html += '</div>';
+
+							html += '</a>';
 						}
 						$('#site_list').html(html);
 						$(".empty-site").hide();

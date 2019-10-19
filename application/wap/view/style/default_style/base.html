@@ -10,12 +10,19 @@
     <meta name="keywords" content="{$seo['data']['keywords']}" />
     <meta name="description" content="{$seo['data']['description']}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-    <title>{$title ? $title.'-' : '' } {$seo['data']['title']}</title>
+    <title>{$title ? $title.'-' : '' } {$site_info['site_name']}</title>
 
     <link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
     <link rel="stylesheet" href="__STATIC__/ext/hui/css/hui.css">
 <!--    <link rel="stylesheet" href="__STATIC__/css/normalize.css">-->
-    <link rel="stylesheet" href="WAP_ADDON_CSS/base.css">
+    <style>
+        * {
+            font-family: 微软雅黑, "Microsoft YaHei";
+            font-size: 14px;
+        }
+    </style>
+    <link rel="stylesheet" href="WAP_ADDON_CSS/common.css">
+    <link rel="stylesheet" href="WAP_ADDON_CSS/theme.css">
 
     <script src="__STATIC__/js/jquery-2.2.js"></script>
     <script src="STATIC_JS/jquery.cookie.js"></script>

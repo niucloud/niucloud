@@ -76,6 +76,7 @@ class Index extends BaseAdmin
 			$this->assign('app_list', $apps);
 			
 			$this->assign('site_list', $list_new['data']);
+			$this->assign("title", "站点列表");
 			return $this->fetch('index/index');
 		}
 	}
@@ -91,7 +92,7 @@ class Index extends BaseAdmin
 			$new_pass = input('new_pass', '');
 			$user_model = new UserModel();
 			$res = $user_model->modifyUserPassword($uid, $old_pass, $new_pass);
-			$user_model->refreshUserInfoSession($uid);
+//			$user_model->refreshUserInfoSession($uid);
 			return $res;
 		}
 	}
@@ -185,7 +186,7 @@ class Index extends BaseAdmin
 
             $user_model = new UserModel();
             $res = $user_model->bindMobile($mobile, UID);
-	        $user_model->refreshUserInfoSession(UID);
+//	        $user_model->refreshUserInfoSession(UID);
             return $res;
         }
     }

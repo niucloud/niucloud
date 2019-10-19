@@ -163,7 +163,7 @@ layui.use(['laytpl', 'form'], function () {
 	//是否开启日志
 	form.on('switch(log_status)', function (obj) {
 		var log_status = '';
-		obj.elem.checked ? log_status = true : log_status = false;
+		obj.elem.checked ? log_status = "File" : log_status = "false";
 		$.ajax({
 			type: "post",
 			url: nc.url("admin/config/siteconfig"),

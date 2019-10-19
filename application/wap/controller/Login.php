@@ -11,6 +11,7 @@
 namespace app\wap\controller;
 
 use app\common\controller\BaseSite;
+use think\Session;
 
 /**
  * 登录注册
@@ -23,7 +24,7 @@ class Login extends BaseSite
 	public function __construct()
 	{
 		parent::__construct();
-
+		
 	}
 	
 	/**
@@ -31,8 +32,24 @@ class Login extends BaseSite
 	 */
 	public function login()
 	{
-	    hook("login");
-		return $this->fetch("style/".$this->wap_style.'/login/login', [], $this->replace);
+		if (IS_AJAX) {
+			
+			$username = input("username", "");
+			$password = input("password", "");
+			$res = api("System.Login.login", [ 'username' => $username, 'password' => $password ]);
+			if ($res['code'] == 0) {
+				Session::set("access_token_" . request()->siteid(), $res['data']['access_token']);
+				$res['data']['redirect_login_url'] = Session::get("redirect_login_url");
+			}
+			return $res;
+		} else {
+			$res = hook("login", [ 'addon' => request()->siteAddon() ]);
+			if (!empty($res)) {
+				return $res[0];
+			}
+			return $this->fetch("style/" . $this->wap_style . '/login/login', [], $this->replace);
+		}
+		
 	}
 	
 	/**
@@ -40,21 +57,57 @@ class Login extends BaseSite
 	 */
 	public function register()
 	{
-        hook("login");
-		$register_config = api("System.Login.registerConfig", [ 'site_id' => SITE_ID ]);
-		$register_config = $register_config['data'];
-		if (!isset($register_config['is_allow_register'])) {
-			$this->error('站点未启用注册功能');
+		if (IS_AJAX) {
+			
+			$username = input("username", "");
+			$mobile = input("mobile", "");
+			$email = input("email", "");
+			$password = input("password", "");
+			$tag = input("tag", "");//第三方登录标识
+			
+			$register_res = api("System.Login.register", [ 'username' => $username, 'mobile' => $mobile, 'email' => $email, 'password' => $password ]);
+			if ($register_res['code'] == 0) {
+				$res = api("System.Login.login", [ 'username' => $username, 'password' => $password ]);
+				if ($res['code'] == 0) {
+					Session::set("access_token_" . request()->siteid(), $res['data']['access_token']);
+					$res['data']['redirect_login_url'] = Session::get("redirect_login_url");
+					
+					//第三方登录
+					if (!empty($tag)) {
+						$openid = input("openid", "");
+						$nick_name = input("nick_name", "");
+						$head_img = input("head_img", "");
+						$res = api("System.Login.bindAccount", [ 'username' => $username, 'password' => $password, 'tag' => $tag, 'openid' => $openid, 'nick_name' => $nick_name, 'head_img' => $head_img ]);
+					}
+					
+				}
+				return $res;
+			} else {
+				return $register_res;
+			}
+			
+		} else {
+			$res = hook("register", [ 'addon' => request()->siteAddon() ]);
+			if (!empty($res)) {
+				return $res[0];
+			}
+			$register_config = api("System.Login.registerConfig", [ 'site_id' => SITE_ID ]);
+			$register_config = $register_config['data'];
+			if (!isset($register_config['is_allow_register'])) {
+				$this->error('站点未启用注册功能');
+			}
+			
+			$this->assign("register_config", $register_config);
+			return $this->fetch("style/" . $this->wap_style . '/login/register', [], $this->replace);
 		}
-		$this->assign("register_config",$register_config);
-		return $this->fetch("style/".$this->wap_style.'/login/register', [], $this->replace);
+		
 	}
 	
 	//忘记密码
 	public function findPwd()
 	{
 		$this->assign("title", "忘记密码");
-		return $this->fetch("style/".$this->wap_style.'/login/find_pwd', [], $this->replace);
+		return $this->fetch("style/" . $this->wap_style . '/login/find_pwd', [], $this->replace);
 	}
 	
 	/**
@@ -62,7 +115,7 @@ class Login extends BaseSite
 	 */
 	public function agreement()
 	{
-		return $this->fetch("style/".$this->wap_style.'/login/agreement', [], $this->replace);
+		return $this->fetch("style/" . $this->wap_style . '/login/agreement', [], $this->replace);
 	}
 	
 	/**
@@ -81,7 +134,7 @@ class Login extends BaseSite
 		
 		$this->assign('data', $data);
 		$this->assign('tag', $tag);
-		return $this->fetch("style/".$this->wap_style.'/login/perfectInfo_or_bindaccount', [], $this->replace);
+		return $this->fetch("style/" . $this->wap_style . '/login/perfectInfo_or_bindaccount', [], $this->replace);
 	}
 	
 }

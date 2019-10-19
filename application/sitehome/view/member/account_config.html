@@ -1,0 +1,256 @@
+{extend name="style/base"/}
+{block name="resources"}
+<style>
+	.layui-table-body tr td:last-of-type{text-align: right;}
+	.layui-form{margin-bottom: 20px;}
+	.layui-form-box{padding: 0 20px;}
+</style>
+{/block}
+{block name="main"}
+<div class="layui-form-box">
+<div class="layui-form">
+		<table class="layui-table">
+			<colgroup>
+				<col width="10%">
+				<col width="30%">
+				<col width="20%">
+				<col width="15%">
+			</colgroup>
+			<thead>
+			<tr>
+				<th><div class="layui-table-cell">账户配置</div></th>
+				<th><div class="layui-table-cell">名称</div></th>
+				<th><div class="layui-table-cell">是否启用</div></th>
+				<th><div class="layui-table-cell" style="text-align: right;">编辑</div></th>
+			</tr>
+			</thead>
+			<tbody class="layui-table-body">
+			{foreach name="$list['data']['value']" item="vo" key="k"}
+			<tr>
+				<td>
+					<div class="layui-table-cell">
+						<span>{$vo.key}</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<span>{$vo['name']}</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<input type="checkbox" disabled class="layui-input layui-disabled" lay-skin="switch" value='1' {if condition="$vo['is_use'] == 1"}checked{/if}>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<a class="default" href='javascript:edit({$vo|json_encode});'>编辑</a>
+					</div>
+				</td>
+			</tr>
+			{/foreach}
+			</tbody>
+		</table>
+	</div>
+	<div class="layui-form">
+		<table class="layui-table">
+			<thead>
+			<tr>
+				<th><div class="layui-table-cell">账户策略</div></th>
+				<th><div class="layui-table-cell">账户类型</div></th>
+				<th><div class="layui-table-cell" style="text-align: right;">操作</div></th>
+			</tr>
+			</thead>
+			<tbody class="layui-table-body">
+			<tr>
+				<td>
+					<div class="layui-table-cell">
+						<span>营销和基础业务</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<span>{$basic_tactics_config.value_info.name}</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<a class="default" href='javascript:tactics("{$basic_tactics_config.value}", "basic");'>编辑</a>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="layui-table-cell">
+						<span>交易业务和支付</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<span>{$pay_tactics_config.value_info.name}</span>
+					</div>
+				</td>
+				<td>
+					<div class="layui-table-cell">
+						<a class="default" href='javascript:tactics("{$pay_tactics_config.value}", "pay");'>编辑</a>
+					</div>
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- 账户编辑弹框 -->
+<script type="text/html" id="account_html">
+	<div class="layui-form account-form" lay-filter="account_config_edit">
+
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">名称</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" required lay-verify="required" placeholder="请输入{{ d.name }}" autocomplete="off" class="layui-input nc-len-mid" value="{{ d.name }}">
+			</div>
+		</div>
+		{{# if(d.key !="credit1" && d.key != "credit2" && d.key != "credit3" ){ }}
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">是否启用</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="is_use" autocomplete="off" class="layui-input" lay-skin="switch" value='1' {{# if(d.is_use ==1){ }}checked{{# } }}>
+			</div>
+		</div>
+		{{# } }}
+
+		<div class="nc-form-row sm">
+			<input type="hidden" name="key" value="{{ d.key }}">
+			<button class="layui-btn" lay-submit lay-filter="save">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+
+	</div>
+</script>
+
+<!-- 账户策略弹框 -->
+<script type="text/html" id="tactics_html">
+	<div class="layui-form account-form" lay-filter="tactics_config">
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label sm">选择框</label>
+			<div class="layui-input-inline">
+				<select name="tactics_value" lay-verify="required">
+					{foreach $list['data']['value'] as $k => $v}
+					{if $v['is_use'] == 1}
+					<option value="{$v.key}" {{#  if('{$v.key}' == d.value){ }}selected {{#  } }}>{$v.name}</option>
+					{/if}
+					{/foreach}
+				</select>
+			</div>
+		</div>
+		<div class="nc-form-row sm">
+			<input type="hidden" name="tag" value="{{ d.tag }}">
+			<button class="layui-btn" lay-submit lay-filter="tactics_save">保存</button>
+			<button class="layui-btn layui-btn-primary" onclick="back()">返回</button>
+		</div>
+
+	</div>
+</script>
+{/block}
+{block name="script"}
+<script>
+	var laytpl;
+	var layer_index;
+	var form;
+	$(function () {
+		layui.use(['form','laytpl','element'], function(){
+			form = layui.form;
+			laytpl = layui.laytpl;
+			var repeat_flag = false;//防重复标识
+			form.verify({
+				rate : function (value) {
+					if(!new RegExp("^(([1-9]{1}\\d*)|([0]{1}))(\\.(\\d){0,2})?$").test(value)){
+						return '格式错误';
+					}
+				}
+			});
+			form.on('submit(save)', function(data){
+				var field = data.field;
+				if(repeat_flag) return false;
+				repeat_flag = true;
+				$.ajax({
+					type : "post",
+					url : '{:addon_url("sitehome/member/accountconfig")}',
+					dataType: 'json',
+					data : field,
+					success : function(data){
+						layer.msg(data.message);
+						layer.close(layer_index);
+						location.reload();
+					}
+				});
+				return false;
+			});
+
+			form.on('submit(tactics_save)', function(data){
+				var field = data.field;
+				if(repeat_flag) return;
+				repeat_flag = true;
+				var url = "";
+				if(field.tag == "basic"){
+					url = '{:addon_url("sitehome/member/basictacticsconfig")}';
+				}else{
+					url = '{:addon_url("sitehome/member/paytacticsconfig")}';
+				}
+				$.ajax({
+					type : "post",
+					url : url,
+					dataType: 'json',
+					data : field,
+					success : function(data){
+						layer.msg(data.message);
+						layer.close(layer_index);
+						location.reload();
+					}
+				});
+				return false;
+			});
+
+		});
+	});
+
+	function edit(obj) {
+		var tpl_html = $("#account_html").html();
+		laytpl(tpl_html).render(obj, function(html){
+			layer_index = layer.open({
+				title: "编辑账户配置信息",
+				type: 1,
+				area: ['450px'],
+				content: html,
+				success : function (layero, index) {
+					form.render();
+				}
+			});
+		});
+	}
+
+	/**
+	 * 策略
+	 */
+	function tactics(value, tag){
+		var tpl_data = {
+			"value":value,
+			"tag":tag
+		};
+		var tpl_html = $("#tactics_html").html();
+		laytpl(tpl_html).render(tpl_data, function(html){
+			layer_index = layer.open({
+				title: "账户策略",
+				type: 1,
+				area: ['450px',],
+				content: html,
+				success : function (layero, index) {
+					form.render();
+				}
+			});
+		});
+	}
+</script>
+{/block}

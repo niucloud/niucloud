@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="renderer" content="webkit">
+	<title>{$title} - {$system_site_config_info['title']}</title>
+	<meta name="keywords" content="{$system_site_config_info['keywords']}">
+	<meta name="description" content="{$system_site_config_info['description']}">
+	<meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1"/>
+	<link rel="icon" type="image/x-icon" href="__STATIC__/img/bitbug_favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="__STATIC__/ext/layui/css/layui.css"/>
+	<link rel="stylesheet" type="text/css" href="__STATIC__/ext/font-awesome/css/font-awesome.css"/>
+	<link rel="stylesheet" href="SITEHOME_CSS/common.css">
+	<link rel="stylesheet" href="SITEHOME_STYLE/applet2/theme.css">
+	<link rel="stylesheet" href="SITEHOME_STYLE/applet2/common.css">
+	<script src="__STATIC__/js/jquery-2.2.js"></script>
+	<script src="__STATIC__/ext/layui/layui.js"></script>
+	<script>
+		layui.use(['layer','element'], function () {
+		});
+		window.nc_url = {
+			baseUrl: "{:request()->root(true)}/",
+			route: ['{:request()->siteid()}', '{:request()->addon()}', '{:request()->module()}', '{:request()->controller()}', '{:request()->action()}'],
+		};
+	</script>
+	<script src="__STATIC__/js/common.js"></script>
+	{block name="resources"}{/block}
+</head>
+
+<body>
+{block name='body'}
+<div class="layui-layout layui-layout-admin">
+	<div class="layui-header">
+		<div class="layui-header-box">
+<!--			<div class="layui-logo">-->
+<!--				<a href="https://www.niucloud.com" target="_black">-->
+<!--					<img src="SITEHOME_IMG/logo.png" class="layui-logo-icon"/>-->
+<!--				</a>-->
+<!--			</div>-->
+<!--			<ul class="layui-nav layui-layout-left niu-side-nav">-->
+<!--				&lt;!&ndash;<li class="layui-nav-item {if condition="strpos($current_url,'sitehome/index/index') !== false"}layui-this{/if}">&ndash;&gt;-->
+<!--					&lt;!&ndash;<a href="{:addon_url('applet2://sitehome/index/index')}">&ndash;&gt;-->
+<!--						&lt;!&ndash;&lt;!&ndash;<img src="__ROOT__/application/sitehome/view/public/img/menu_icon/menu_overview.png"/>&ndash;&gt;&ndash;&gt;-->
+<!--						&lt;!&ndash;<span>首页</span>&ndash;&gt;-->
+<!--					&lt;!&ndash;</a>&ndash;&gt;-->
+<!--				&lt;!&ndash;</li>&ndash;&gt;-->
+<!--			</ul>-->
+			<h1>{$site_info['site_name']}</h1>
+
+			{if condition="$bread_crumb"}
+			<span class="layui-breadcrumb">
+				{foreach name="$bread_crumb" item="vo" key="k"}
+					{if ($k+1)==count($bread_crumb)}
+					<a href="javascript:;"><cite>{$vo['title']}</cite></a>
+					{else/}
+					<a href="{:addon_url($vo['url'])}">{$vo['title']}</a>
+					{/if}
+				{/foreach}
+			</span>
+			{else/}
+			<div class="nc-tab-title" style="padding: 10px;"></div>
+			{/if}
+			<div class="layui-layout-right nc-user-info" id="nc-user-info">
+                <div class="user-name">
+					<div class="headframe" style="display:inline-block;vertical-align:middle;">
+                    {if condition="$user_info['headimg'] neq ''"}
+                    	<img src="{:img($user_info['headimg'])}" />
+                    {else/}
+                    	<img src="SITEHOME_IMG/personal_4.png"/>
+                    {/if}
+					</div>
+                    <span>{$user_info['username']}</span>
+                </div>
+                <div class="user-dropdown">
+                    <div class="user-dropdown-meta nc-bg-color-f9">
+                        <div>{$user_info['username']}</div>
+                        <div>{$user_info['mobile']}</div>
+                    </div>
+                    <div class="user-dropdown-select">
+                        <a href="{:url('admin/index/security', ['site_id' => 0])}">帐号设置</a>
+                        <a href="{:url('admin/index/index', ['site_id' => 0])}">切换站点</a>
+                        <a href="{:url('home/login/logout')}">退出登录</a>
+                    </div>
+                </div>
+			</div>
+		</div>
+	</div>
+	<div class="niu-box">
+
+		{block name="sidebar"}
+		<!-- 左侧菜单 -->
+		{notempty name='$menu'}
+			<dl class="layui-nav layui-nav-tree layui-children-menu layui-layout-left nc-one-menu">
+				<dt class="nc-head-portrait">
+
+					{if condition="$site_info.icon neq ''"}
+					<img src="{:img($site_info.icon)}" />
+					{else/}
+					<img src="{$icon}"/>
+					{/if}
+<!--					<img src="SITEHOME_IMG/default_avatar.png" alt="">-->
+				</dt>
+				{foreach name="$menu" item="vo"}
+				<dd {if condition="$vo['name'] != 'MY_APP_ROOT' && $vo['name'] != 'INDEX_ROOT'"}data-name="{$vo['name']}"{/if} class="nc-menu-item {if condition="(!empty($current_menu) && $current_menu[0]['name'] == $vo['name'] && $current_menu[0]['selected']) "} layui-this{/if}">
+					<a href="{if condition="$vo['url']"}{:addon_url($vo['url'])}{else/}javascript:;{/if}" >
+					<div class="nc-menu-pic">
+					{notempty name="$vo['icon']"}
+					<img class="nc-menu-pic-select" src="__ROOT__/{$vo['icon']}" alt="">
+					<img class="nc-menu-pic-float" src="__ROOT__/{$vo['icon_selected']}" style="display: none;" alt="">
+					{else/}
+					<img class="nc-menu-pic-select" src="SITEHOME_IMG/application.png" alt="">
+					<img class="nc-menu-pic-float" src="SITEHOME_IMG/application_select.png" style="display: none;" alt="">
+					{/notempty}
+					</div>
+						<span class="nc-menu-title">{$vo['title']}</span>
+					</a>
+				</dd>
+				{/foreach}
+	<!--			<dd class="nc-menu-item">-->
+	<!--				<div class="nc-menu-pic">-->
+	<!--					<img src="SITEHOME_IMG/member.png" alt="">-->
+	<!--				</div>-->
+	<!--				<span class="nc-menu-title">会员列表</span>-->
+	<!--			</dd>-->
+	<!--			<dd class="nc-menu-item">-->
+	<!--				<div class="nc-menu-pic">-->
+	<!--					<img src="SITEHOME_IMG/small_procedures.png" alt="">-->
+	<!--				</div>-->
+	<!--				<span class="nc-menu-title">小程序</span>-->
+	<!--			</dd>-->
+	<!--			<dd class="nc-menu-item">-->
+	<!--				<div class="nc-menu-pic">-->
+	<!--					<img src="SITEHOME_IMG/set_up.png" alt="">-->
+	<!--				</div>-->
+	<!--				<span class="nc-menu-title">设置</span>-->
+	<!--			</dd>-->
+			</dl>
+		{/notempty}
+
+		{/block}
+		<div class="nc-children-menu">
+			{notempty name='$menu'}
+<!--				<li class="nc-site-info">-->
+<!--					<div class="site-img">-->
+<!--						<a href="{:addon_url('applet2://sitehome/index/index')}">-->
+<!--							{notempty name="$app_addon_info"}-->
+<!--							<img src="{:img($app_addon_info.icon)}" class="layui-logo-icon"/>-->
+<!--							{else/}-->
+<!--							{if condition="$site_info.icon neq ''"}-->
+<!--							<img src="{:img($site_info.icon)}" class="layui-logo-icon"/>-->
+<!--							{else/}-->
+<!--							<img src="{$icon}" class="layui-logo-icon"/>-->
+<!--							{/if}-->
+<!--							{/notempty}-->
+<!--						</a>-->
+<!--					</div>-->
+
+<!--					{notempty name="$app_addon_info"}-->
+<!--					<div class="site-name nc-text-color-black">{$app_addon_info['title']}</div>-->
+<!--					<div class="nc-support-port">-->
+<!--						{foreach $app_addon_info["support_app_type"] as $k => $v}-->
+<!--						<img src="__ROOT__/{$v['logo']}" title="{$v['name']}">-->
+<!--						{/foreach}-->
+<!--					</div>-->
+<!--					{else/}-->
+<!--						<div class="site-name nc-text-color-black">{$current_menu[0]['title']}</div>-->
+<!--					{/notempty}-->
+
+<!--				</li>-->
+
+				{foreach name="$menu" item="vo"}
+				<div class="nc-menu-box layui-nav layui-nav-tree layui-children-menu layui-layout-left" data-name="{$vo['name']}" {if condition="$current_menu[0]['name']!=$vo['name']"}style="display:none;"{/if} {if condition="($current_menu[0]['name'] == 'MY_APP_ROOT' && empty($addon_name) ) || $current_menu[0]['name'] == 'INDEX_ROOT'"} style="display:none;"{/if}>
+					<div class="nc-site-info" data-length="{notempty name="$vo['child_list']"}{$vo['child_list']|count}{else/}0{/notempty}">
+						<div class="site-img">
+							<a href="{:addon_url('applet2://sitehome/index/index')}">
+								{if condition="!empty($app_addon_info) && $current_menu[0]['name'] == 'MY_APP_ROOT' && $vo['name'] == 'MY_APP_ROOT'"}
+									<img src="{:img($app_addon_info.icon)}" class="layui-logo-icon"/>
+								{else/}
+									{if condition="$vo.icon_selected neq ''"}
+									<img src="{:img($vo.icon_selected)}" class="layui-logo-icon"/>
+									{else/}
+									<img src="{$icon}" class="layui-logo-icon"/>
+									{/if}
+								{/if}
+							</a>
+						</div>
+
+						{if condition="!empty($app_addon_info) && $current_menu[0]['name'] == 'MY_APP_ROOT' && $vo['name'] == 'MY_APP_ROOT' "}
+							<div class="site-name nc-text-color-black">{$app_addon_info['title']}</div>
+						{else/}
+							<div class="site-name nc-text-color-black">{$vo['title']}</div>
+						{/if}
+
+					</div>
+
+					<div class="layui-nav-item layui-nav-itemed {if condition="$current_menu[0]['name']!=$vo['name']"} no-select{/if}" data-length="{notempty name="$vo['child_list']"}{$vo['child_list']|count}{else/}0{/notempty}">
+
+						{notempty name="$vo['child_list']"}
+						<dl class="layui-nav-child">
+							{foreach name="$vo['child_list']" item="child"}
+							<!--二级菜单-->
+							<dd {if condition="!empty($current_menu[1]) && $current_menu[1]['name'] == $child['name'] && $current_menu[1]['selected'] && empty($child['child_list']) "}class='layui-this'{/if}>
+								<a href="{:addon_url($child['url'])}" {if condition="$child['is_blank'] eq 1" }target="_blank"{/if}>
+									<span>{$child['title']}</span>
+								</a>
+							</dd>
+
+							<!--三级菜单-->
+							{notempty name="$child['child_list']"}
+							{foreach name="$child['child_list']" item="third_child"}
+							<dd
+								{notempty name="$current_menu[1]['child_list']"}
+								{foreach name="$current_menu[1]['child_list']" item="current_vo"}
+								{if condition="$current_vo['selected'] && $current_vo['name'] == $third_child['name']"}class='layui-this'{/if}
+							{/foreach}
+							{/notempty}
+							>
+							<a href="{:addon_url($third_child['url'])}" {if condition="$third_child['is_blank'] eq 1" }target="_blank"{/if}>
+							<div class="icon">
+								{notempty name="$third_child['icon']"}
+								<img src="__ROOT__/{$third_child['icon']}" alt="">
+								{else/}
+								<img src="SITEHOME_IMG/menu.png" alt="">
+								{/notempty}
+							</div>
+							<span>{$third_child['title']}</span>
+							</a>
+							</dd>
+							{/foreach}
+							{/notempty}
+							{/foreach}
+						</dl>
+						{/notempty}
+
+						{if condition="!empty($app_addon_info) && $current_menu[0]['name'] == 'MY_APP_ROOT' && $vo['name'] == 'MY_APP_ROOT' "}
+						<div class="nc-support-port">
+							<!--端口-->
+							{foreach $app_addon_info["support_app_type"] as $k => $v}
+							<div class="nc-support-port-item">
+								<div class="nc-support-port-pic">
+									<img src="__ROOT__/{$v['logo']}" title="{$v['name']}">
+								</div>
+								<span class="nc-support-port-desc">{$v['name']}</span>
+							</div>
+							{/foreach}
+						</div>
+						{/if}
+					</div>
+
+				</div>
+				{/foreach}
+			{/notempty}
+			<div class="{notempty name='$menu'}niu-side-right{/notempty}">
+				<div class="nc-side-right-box">
+					<div class='layui-fluid'>
+						{block name='main'}{/block}
+					</div>
+				</div>
+				<div class='nui-footer'>
+					<a href='https://www.niucloud.com' target="_black">
+						<img src="SITEHOME_IMG/logo-gray.png"/>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+
+	$(".layui-children-menu .nc-menu-item").mouseenter(function(e){
+		if($(this).hasClass('layui-this')) return false;
+		$(this).find('.nc-menu-title').css('color','#68abfe');
+		$(this).find(".nc-menu-pic-float").show();
+		$(this).find(".nc-menu-pic-select").hide();
+
+		var name = $(this).attr("data-name");
+		if(name) {
+			menu_float();
+			$(".layui-layout-admin .nc-menu-box[data-name='" + name + "']").addClass('menu-float-select').mouseleave(function(){
+				menu_float();
+			});
+		}
+	}).mouseleave(function(e){
+		$(this).find('.nc-menu-title').css('color','#fff');
+		$(this).find(".nc-menu-pic-float").hide();
+		$(this).find(".nc-menu-pic-select").show();
+
+		var x = e.pageX || e.clientX + document.body.scrollLeft;
+		var y = e.pageY || e.clientY + document.body.scrollTop;
+		var ele = document.elementFromPoint(x,y);
+		if ($(ele).hasClass('nc-one-menu')){
+			menu_float();
+		}
+	});
+	function menu_float(){
+		$(".layui-layout-admin .nc-menu-box").removeClass('menu-float-select');
+	}
+</script>
+{/block}
+{block name="script"}
+{/block}
+</body>
+</html>

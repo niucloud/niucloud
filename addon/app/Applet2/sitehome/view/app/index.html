@@ -1,0 +1,84 @@
+{extend name="sitehome@style/base"/}
+{block name="resources"}
+<link rel="stylesheet" href="NIU_APPLET_CSS/app_index.css">
+<style>
+    .nc-item-block .nc-content-title{position: relative;}
+    .nc-item-tow-title{font-size: 14px;}
+    .nc-item-block .nc-item-tow-icon{position: absolute;width: 20px;height: 20px;top: -4px;right: -10px;}
+    .nc-item-block .nc-item-tow-icon:after{content: "";position: absolute;top: 5px;width: 7px;height: 7px;border: 1px solid #999;border-top-color: transparent;border-left-color: transparent;left: 2px;transform: rotate(-45deg);}
+</style>
+{/block}
+
+{block name="main"}
+<div class="nc-quote-box graphic">
+    <blockquote class="layui-elem-quote layui-quote-nm">应用入口</blockquote>
+    {notempty name="$quick_entry"}
+    <ul class="nc-item-block-parent">
+        {foreach name="$quick_entry" item="vo"}
+        <li class="nc-item-block btn size-lg" onclick='nc.page_promote({$vo|json_encode});'>
+            <div class="nc-item-pic">
+                {notempty name="$vo['icon']"}
+                <img src="__ROOT__/{$vo['icon']}">
+                {else/}
+                <img src="NIU_APPLET_IMG/icon.png">
+                {/notempty}
+            </div>
+            <div class="nc-item-content">
+                <div class="nc-content-title">
+                    <span class="nc-item-tow-title">{$vo['title']}</span>
+                    <div class="nc-item-tow-icon"></div>
+                </div>
+            </div>
+        </li>
+        {/foreach}
+    </ul>
+    {else/}
+    <p class="empty nc-text-color-gray-darken-30">暂无应用入口</p>
+    {/notempty}
+</div>
+
+{foreach name="$addon_diy_view_list" item="vo"}
+{if condition="$vo['addon_info']['name'] == $addon_name"}
+<div class="nc-quote-box graphic">
+    <blockquote class="layui-elem-quote layui-quote-nm">页面装修</blockquote>
+    {notempty name="$vo['view_list']"}
+    <ul class="nc-item-block-parent">
+        {foreach name="$vo['view_list']" item="child"}
+        <li class="nc-item-block size-lg" onclick="location.href='{:addon_url(\'diyView://sitehome/design/diyview\',[\'name\'=>strtolower($child[\'name\']),\'addon_name\'=>$vo[\'addon_info\'][\'name\']])}'">
+            <div class="nc-item-pic">
+                {notempty name="$child['icon']"}
+                <img src="__ROOT__/{$child['icon']}">
+                {else/}
+                <img src="NIU_APPLET_IMG/icon.png">
+                {/notempty}
+            </div>
+            <div class="nc-item-content">
+                <div class="nc-item-content-title">{$child['title']}</div>
+            </div>
+        </li>
+        {/foreach}
+    </ul>
+    {else/}
+    <p class="empty nc-text-color-gray-darken-30">暂无页面装修</p>
+    {/notempty}
+</div>
+{/if}
+{/foreach}
+
+<!--<div class="nc-quote-box notice">-->
+    <!--<blockquote class="layui-elem-quote layui-quote-nm">系统公告</blockquote>-->
+    <!--<ul>-->
+        <!--{foreach name="$notice_list['list']" item="vo"}-->
+        <!--<li>-->
+            <!--<a href="javascript:;">-->
+                <!--<label>{$vo['title']}</label>-->
+                <!--<span class="nc-text-color-gray-darken-30 system-notice-time" >{:time_to_date($vo['create_time'])}</span>-->
+            <!--</a>-->
+        <!--</li>-->
+        <!--{/foreach}-->
+    <!--</ul>-->
+<!--</div>-->
+{/block}
+
+{block name="script"}
+{/block}

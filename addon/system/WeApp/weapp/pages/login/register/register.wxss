@@ -1,0 +1,97 @@
+/* pages/login/register/register.wxss */
+.register {
+  position: relative;
+}
+
+.register .logo {
+  width: 68px;
+  margin: 0 auto 20px;
+  padding-top: 40px;
+}
+
+.logo-img {
+  width: 68px;
+  height: 68px;
+}
+
+.register .item, .register .item-input {
+  margin: 0 20px;
+  position: relative;
+}
+
+.register .item-input .mui-input {
+  border: 0;
+  border-bottom: 1px solid #ff5000;
+  border-radius: 0;
+  padding: 10px 0;
+  width: 100%;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.register .item-input .clear {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: 0;
+  top: 16px;
+  z-index: 10;
+}
+
+.register .other-link {
+  overflow: hidden;
+}
+
+.register .item-btn {
+  margin: 0 30px;
+}
+
+.register .btn-register {
+  margin: 30px 0 0;
+  background: #ff5000;
+  background: -webkit-linear-gradient(left, #ff9000, #ff5000) no-repeat;
+  color: #fff;
+  box-shadow: 0 0.08rem 0.16rem #f7c7b1;
+  width: 100%;
+  border-radius: 20px;
+  text-align: center;
+  border: 0;
+  padding: 10px 12px;
+  line-height: 20px;
+  font-size: 14px;
+}
+
+.register .other-link .a {
+  font-size: 12px;
+  color: #000;
+}
+
+.register .go-login {
+  margin-top: 30px;
+  text-align: center;
+  display: block;
+  color: #ff5000;
+  font-size: 14px;
+}
+
+.regsiter-agreement {
+  margin: 20px;
+  font-size: 12px;
+  line-height: 22px;
+  height: 21px;
+}
+
+.agreement-checkbox {
+  vertical-align: middle;
+}
+
+.agreement-checkbox .checkbox {
+  zoom: 0.7;
+  vertical-align: top;
+  margin-top: -3px;
+  margin-right: 5px;
+}
+
+.regsiter-agreement .a, .regsiter-agreement .span {
+  display: inline;
+}

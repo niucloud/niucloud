@@ -119,7 +119,6 @@ function formSubmit(event){
 			if(res.code == 0){
 				nc.api("System.Login.oauthLogin",{ 'openid_tag':"{$tag}", 'openid':"{$data['openid']}" },function(data){
                     if(data['code'] == 0){
-                        $.cookie('access_token_{$site_info['site_id']}', data.data.access_token, { expires: 1 });//expires：有效期
                         location.href= "{:addon_url('ncactive://web/index/index')}";
                     }
                 });

@@ -1,0 +1,25 @@
+@CHARSET "UTF-8";
+/*底部菜单组件*/
+.draggable-element .bottom-menu .preview-draggable{padding: 10px 0;}
+.bottom-menu .preview-draggable ul{overflow: hidden;}
+.bottom-menu .preview-draggable ul li{float: left;text-align: center;}
+.bottom-menu .preview-draggable ul li div{margin-bottom: 2px;}
+.bottom-menu .preview-draggable ul li img{width: 30px;}
+.bottom-menu .preview-draggable ul li span{text-overflow: ellipsis;white-space: nowrap;overflow: hidden;display: block;}
+
+.bottom-menu .bottom-menu-config>ul>li{padding:10px;background: #ffffff;border:1px dashed #e5e5e5;position:relative;margin-top:10px;}
+.bottom-menu .bottom-menu-config>ul>li:first-child{margin-top:0;}
+.bottom-menu .bottom-menu-config>ul>li .image-block{float:left;}
+.bottom-menu .bottom-menu-config>ul>li .content-block{display:inline-block;width:71%;}
+.bottom-menu .bottom-menu-config>ul>li .content-block .layui-form-item{margin:0;}
+.bottom-menu .bottom-menu-config>ul>li .content-block .layui-form-label{width:60px;padding:9px 0;}
+.bottom-menu .bottom-menu-config>ul>li .content-block .layui-input-block{margin-left:80px;}
+.bottom-menu .bottom-menu-config>ul>li .content-block div{margin-top:10px;}
+.bottom-menu .bottom-menu-config>ul>li .content-block div:last-child{margin-top:0;}
+.bottom-menu .bottom-menu-config>ul>li:hover .del{display:block;}
+
+.bottom-menu .add-item{color: #0d73f9;padding: 10px;border: 1px dashed #e5e5e5;margin: 10px 0;cursor: pointer;}
+.bottom-menu .add-item i{font-size: 18px;vertical-align: middle;margin-right: 10px;}
+.bottom-menu p.hint{font-size: 12px;color: #999;margin: 10px;}
+
+.bottom-menu .error-msg {margin-top: 5px;color: #f44;display: none;}

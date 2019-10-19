@@ -18,12 +18,12 @@ namespace app\common\model;
  */
 class Login
 {
-    public $site_model;
-
-    public function __construct()
-    {
-        $this->site_model = new Site();
-    }
+	public $site_model;
+	
+	public function __construct()
+	{
+		$this->site_model = new Site();
+	}
 	/******************************************注册********************************************************************/
 	/**
 	 * 注册方法
@@ -226,69 +226,64 @@ class Login
 		];
 		return $data;
 	}
-
-
-
-
-
-
-    /**
-     * 注册协议
-     * @param unknown $site_id
-     * @param unknown $name
-     * @param unknown $value
-     */
-    public function setRegisterAgreementConfig($data)
-    {
-        $data["name"] = 'SITE_REGISTER_AGREEMENT';
-        $res = $this->site_model->setSiteConfig($data);
-        return $res;
-    }
-
-    /**
-     * 查询注册协议
-     * @param unknown $where
-     * @param unknown $field
-     * @param unknown $value
-     */
-    public function getRegisterAgreementConfig($site_id)
-    {
-        $config = $this->site_model->getSiteConfigInfo([ 'name' => 'SITE_REGISTER_AGREEMENT', 'site_id' => $site_id ]);
-        $value = [];
-        if (!empty($config["data"]["value"])) {
-            $value = json_decode($config["data"]["value"], true);
-        }
-        $config["data"]["value"] = $value;
-        return $config;
-    }
-
-    /**
-     * 注册规则
-     * @param unknown $site_id
-     * @param unknown $name
-     * @param unknown $value
-     */
-    public function setRegisterConfig($data)
-    {
-        $data["name"] = 'SITE_REGISTER_CONFIG';
-        $res = $this->site_model->setSiteConfig($data);
-        return $res;
-    }
-
-    /**
-     * 查询注册规则
-     * @param unknown $where
-     * @param unknown $field
-     * @param unknown $value
-     */
-    public function getRegisterConfig($site_id)
-    {
-        $config = $this->site_model->getSiteConfigInfo([ 'name' => 'SITE_REGISTER_CONFIG', 'site_id' => $site_id ]);
-        $value = [];
-        if (!empty($config["data"]["value"])) {
-            $value = json_decode($config["data"]["value"], true);
-        }
-        $config["data"]["value"] = $value;
-        return $config;
-    }
+	
+	/**
+	 * 注册协议
+	 * @param unknown $site_id
+	 * @param unknown $name
+	 * @param unknown $value
+	 */
+	public function setRegisterAgreementConfig($data)
+	{
+		$data["name"] = 'SITE_REGISTER_AGREEMENT';
+		$res = $this->site_model->setSiteConfig($data);
+		return $res;
+	}
+	
+	/**
+	 * 查询注册协议
+	 * @param unknown $where
+	 * @param unknown $field
+	 * @param unknown $value
+	 */
+	public function getRegisterAgreementConfig($site_id)
+	{
+		$config = $this->site_model->getSiteConfigInfo([ 'name' => 'SITE_REGISTER_AGREEMENT', 'site_id' => $site_id ]);
+		$value = [];
+		if (!empty($config["data"]["value"])) {
+			$value = json_decode($config["data"]["value"], true);
+		}
+		$config["data"]["value"] = $value;
+		return $config;
+	}
+	
+	/**
+	 * 注册规则
+	 * @param unknown $site_id
+	 * @param unknown $name
+	 * @param unknown $value
+	 */
+	public function setRegisterConfig($data)
+	{
+		$data["name"] = 'SITE_REGISTER_CONFIG';
+		$res = $this->site_model->setSiteConfig($data);
+		return $res;
+	}
+	
+	/**
+	 * 查询注册规则
+	 * @param unknown $where
+	 * @param unknown $field
+	 * @param unknown $value
+	 */
+	public function getRegisterConfig($site_id)
+	{
+		$config = $this->site_model->getSiteConfigInfo([ 'name' => 'SITE_REGISTER_CONFIG', 'site_id' => $site_id ]);
+		$value = [];
+		if (!empty($config["data"]["value"])) {
+			$value = json_decode($config["data"]["value"], true);
+		}
+		$config["data"]["value"] = $value;
+		return $config;
+	}
 }

@@ -33,9 +33,6 @@ class InitBase
 		
 		// 注册命名空间
 		$this->registerNamespace();
-		
-		//执行系统事件
-		$this->loadTask();
 	}
 	
 	/**
@@ -130,34 +127,6 @@ class InitBase
 		$addon_model = new Addon();
 		$addon_model->getAddonCategory($const);
 		
-	}
-	
-	/**
-	 * 执行系统事件
-	 */
-	private function loadTask()
-	{
-		if (defined('BIND_MODULE') && BIND_MODULE === 'install') {
-			return;
-		}
-		//执行事件
-		$cache = Cache::tag('config')->get('load_task');
-		$last_time = cache("last_load_time");
-		if (empty($last_time)) {
-			$last_time = 0;
-		}
-		if (empty($cache) || time() - $last_time > 300) {
-			Cache::tag('config')->set('load_task', 1);
-			$url = url('cron/task/phpCron');
-			$ch = curl_init();
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_HEADER, true);
-			curl_setopt($ch, CURLOPT_URL, $url);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 1);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-			curl_exec($ch);
-		}
 	}
 	
 	/**
