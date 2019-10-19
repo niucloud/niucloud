@@ -399,13 +399,13 @@ class File extends BaseSiteHome
         $param['category_list'] = $category_list['data'];
         switch ($type){
             case "IMAGE":
-                $view = $this->fetch("file/file_manage", $param, $this->replace);
+                $view = $this->fetch("File/file_manage", $param, $this->replace);
                 break;
             case "AUDIO":
-                $view = $this->fetch("file/audio_manage", $param, $this->replace);
+                $view = $this->fetch("File/audio_manage", $param, $this->replace);
                 break;
             case "VIDEO":
-                $view = $this->fetch("file/video_manage", $param, $this->replace);
+                $view = $this->fetch("File/video_manage", $param, $this->replace);
                 break;
         }
         return $view;
