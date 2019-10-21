@@ -149,7 +149,7 @@ class Index extends Controller
                     die("<script>alert('创建数据库失败，请确认是否有足够的权限!');history.go(-1);</script>");
                 }
             } else {
-                die("<script>alert('数据库已存在!');history.go(-1);</script>");
+                //die("<script>alert('数据库已存在!');history.go(-1);</script>");
             }
             //链接数据库
             @mysqli_select_db($conn, $dbname);
